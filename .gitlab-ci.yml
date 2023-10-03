@@ -1,7 +1,8 @@
 image: node:latest
 
 stages:
-- lint
+- lint:commit
+- lint:code
 - test
 - release
 
@@ -18,12 +19,12 @@ cache:
     - .npm/
 
 lint:commit:
-  stage: lint
+  stage: lint:commit
   script:
     - echo "${CI_COMMIT_MESSAGE}" | npx commitlint
 
 lint:code:
-  stage: lint
+  stage: lint:code
   script:
     - ./node_modules/eslint/bin/eslint.js $(git diff --name-only HEAD | grep -E 'src/.*\.ts|test/.*\.ts$' | xargs)
 
