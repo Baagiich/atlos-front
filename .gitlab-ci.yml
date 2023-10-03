@@ -30,6 +30,8 @@ lint:code:
 
 sast:
   stage: test
+  before_script: []
+
 include:
 - template: Security/SAST.gitlab-ci.yml
 
