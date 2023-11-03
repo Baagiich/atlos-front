@@ -2,6 +2,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import contracttemplateRoutes from "./contracttemplate";
 import countryRoutes from "./country";
+import adminUserRoutes from "./adminUser";
 
 const routes = [
   {
@@ -21,6 +22,7 @@ const routes = [
   },
   ...contracttemplateRoutes,
   ...countryRoutes,
+  ...adminUserRoutes,
 ];
 
 const router = createRouter({

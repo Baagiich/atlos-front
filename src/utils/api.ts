@@ -36,6 +36,12 @@ export default async function (id: string, options: any = {}) {
   const response = await fetch(new URL(id, ENTRYPOINT), options);
 
   if (!response.ok) {
+    console.log(response);
+
+    if (response.status === 401) {
+      alert("401");
+    }
+
     const data = await response.json();
     const error = data["hydra:description"] || response.statusText;
     if (!data.violations) throw Error(error);
