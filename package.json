@@ -11,7 +11,9 @@
   "dependencies": {
     "@api-platform/create-client": "^0.10.0",
     "@mdi/font": "7.0.96",
+    "@rushstack/eslint-patch": "^1.5.1",
     "@types/qs": "^6.9.9",
+    "@vue/eslint-config-prettier": "^8.0.0",
     "core-js": "^3.29.0",
     "dayjs": "^1.11.10",
     "pinia": "^2.0.0",

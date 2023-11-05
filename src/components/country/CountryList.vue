@@ -70,7 +70,7 @@
             <template #item.createdAt="{ item }">
         {{ formatDateTime(item.raw.createdAt) }}
       </template>
-          </v-data-table-server>
+    </v-data-table-server>
   </v-container>
 </template>
 
