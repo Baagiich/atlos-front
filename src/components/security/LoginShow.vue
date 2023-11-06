@@ -4,29 +4,32 @@
       {{ error }}
     </v-alert>
 
-    <LoginForm />
+    <LoginForm :errors="violations" @submit="login" />
   </v-container>
+  <Loading :visible="isLoading" />
 </template>
 
 <script setup lang="ts">
-import { ref} from "vue";
+import { onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import LoginForm from './LoginForm.vue'
+import { useSecurityLoginStore } from "@/store/security/login";
+import { Auth } from "@/types/auth";
+import { storeToRefs } from "pinia";
 
 const { t } = useI18n();
 const router = useRouter();
 
-const page = ref("1");
-const order = ref({});
+const securityLoginStore = useSecurityLoginStore();
 
-async function sendRequest() {
-  await countryListStore.getItems({
-    page: page.value,
-    order: order.value,
-  });
+const { isLoading, violations, error } = storeToRefs(securityLoginStore);
+
+async function login(item: Auth) {
+  await securityLoginStore.login(item);
 }
 
-// sendRequest();
-
+onBeforeUnmount(() => {
+  securityLoginStore.$reset();
+});
 </script>

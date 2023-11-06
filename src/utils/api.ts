@@ -14,6 +14,10 @@ export default async function (id: string, options: any = {}) {
     options.headers.set("Accept", MIME_TYPE);
   }
 
+  if (options.headers.get("deviceId") === null) {
+    options.headers.set("deviceId", "uuid-uuid-uuid-0");
+  }
+
   if (
     options.body !== undefined &&
     !(options.body instanceof FormData) &&
@@ -50,7 +54,7 @@ export default async function (id: string, options: any = {}) {
     data.violations.forEach(
       (violation: { propertyPath: string; message: string }) => {
         errors[violation.propertyPath] = violation.message;
-      }
+      },
     );
 
     throw new SubmissionError(errors);
