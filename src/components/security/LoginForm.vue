@@ -47,8 +47,8 @@
 </template>
 
 <script setup lang="ts">
-import {ref, toRef, Ref} from "vue";
-import type {Auth} from "@/types/auth";
+import { ref, toRef, Ref } from "vue";
+import type { Auth } from "@/types/auth";
 import type { SubmissionErrors } from "@/types/error";
 import { VForm } from "vuetify/components";
 
@@ -71,7 +71,6 @@ const emit = defineEmits<{
 }>();
 
 function emitSubmit() {
-  console.log(item)
   emit("submit", item.value);
 }
 

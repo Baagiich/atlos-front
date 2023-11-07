@@ -2,10 +2,14 @@ import qs from "qs";
 import type { SubmissionErrors } from "../types/error";
 import { SubmissionError } from "./error";
 import { ENTRYPOINT } from "./config";
+import { useSecurityLoginStore } from "@/store/security/login";
+import { useRouter } from "vue-router";
 
 const MIME_TYPE = "application/ld+json";
 
-export default async function (id: string, options: any = {}) {
+export default async function api(id: string, options: any = {}) {
+  const securityLoginStore = useSecurityLoginStore();
+  const router = useRouter();
   if (typeof options.headers === "undefined") {
     Object.assign(options, { headers: new Headers() });
   }
@@ -16,6 +20,18 @@ export default async function (id: string, options: any = {}) {
 
   if (options.headers.get("deviceId") === null) {
     options.headers.set("deviceId", "uuid-uuid-uuid-0");
+  }
+
+  if (typeof options.auth === "undefined") {
+    options.auth = true;
+  }
+
+  const { token, refreshToken } = securityLoginStore.getToken();
+
+  if (options.auth) {
+    if (token) {
+      options.headers.set("Authorization", `Bearer ${token}`);
+    }
   }
 
   if (
@@ -40,14 +56,24 @@ export default async function (id: string, options: any = {}) {
   const response = await fetch(new URL(id, ENTRYPOINT), options);
 
   if (!response.ok) {
-    console.log(response);
-
     if (response.status === 401) {
-      alert("401");
+      if (options.auth) {
+        if (!securityLoginStore.isRefreshTokenAlive()) {
+          if (router.currentRoute.value.name !== "Login");
+          {
+            return router.push({ name: "Login" });
+          }
+        } else {
+          securityLoginStore.refresh();
+
+          return api(id, options);
+        }
+      }
     }
 
     const data = await response.json();
-    const error = data["hydra:description"] || response.statusText;
+    const error =
+      data["hydra:description"] || data.message || response.statusText;
     if (!data.violations) throw Error(error);
 
     const errors: SubmissionErrors = { _error: error };

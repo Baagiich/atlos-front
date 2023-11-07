@@ -13,7 +13,7 @@
 import { onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import LoginForm from './LoginForm.vue'
+import LoginForm from "./LoginForm.vue";
 import { useSecurityLoginStore } from "@/store/security/login";
 import { Auth } from "@/types/auth";
 import { storeToRefs } from "pinia";
@@ -27,6 +27,12 @@ const { isLoading, violations, error } = storeToRefs(securityLoginStore);
 
 async function login(item: Auth) {
   await securityLoginStore.login(item);
+
+  if (typeof error.value === "undefined") {
+    router.push({
+      name: "CountryList",
+    });
+  }
 }
 
 onBeforeUnmount(() => {
