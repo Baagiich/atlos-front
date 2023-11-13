@@ -18,6 +18,7 @@
       {{ error }}
     </v-alert>
 
+
     <v-data-table-server
       :headers="headers"
       :items="items"
@@ -37,35 +38,24 @@
       </template>
 
       <template #item.@id="{ item }">
-        <router-link :to="{ name: 'CountryShow', params: { id: item['@id'] } }">
+        <router-link
+          :to="{ name: 'AdminUserShow', params: { id: item['@id'] } }"
+        >
           {{ item["@id"] }}
         </router-link>
       </template>
 
-      <template #item.states="{ item }">
-        <template v-if="router.hasRoute('StateShow')">
-          <router-link
-            v-for="state in item.states"
-            :to="{ name: 'StateShow', params: { id: state } }"
-            :key="state"
-          >
-            {{ state }}
+      <template #item.driver="{ item }">
+        <router-link
+          v-if="router.hasRoute('DriverShow')"
+          :to="{ name: 'DriverShow', params: { id: item.driver } }"
+        >
+          {{ item.driver }}
+        </router-link>
 
-            <br />
-          </router-link>
-        </template>
-
-        <template v-else>
-          <p v-for="state in item.states" :key="state">
-            {{ state }}
-          </p>
-        </template>
-      </template>
-      <template #item.updatedAt="{ item }">
-        {{ formatDateTime(item.updatedAt) }}
-      </template>
-      <template #item.createdAt="{ item }">
-        {{ formatDateTime(item.createdAt) }}
+        <p v-else>
+          {{ item.driver }}
+        </p>
       </template>
     </v-data-table-server>
   </v-container>
@@ -76,37 +66,36 @@ import { ref, onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import { useCountryListStore } from "@/store/country/list";
-import { useCountryDeleteStore } from "@/store/country/delete";
+import { useAdminUserListStore } from "@/store/adminuser/list";
+import { useAdminUserDeleteStore } from "@/store/adminuser/delete";
 import Toolbar from "@/components/common/Toolbar.vue";
 import ActionCell from "@/components/common/ActionCell.vue";
-import { formatDateTime } from "@/utils/date";
 import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { VuetifyOrder } from "@/types/list";
-import type { Country } from "@/types/country";
+import type { AdminUser } from "@/types/adminuser";
 
 const { t } = useI18n();
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
-const countryDeleteStore = useCountryDeleteStore();
-const { deleted, mercureDeleted } = storeToRefs(countryDeleteStore);
+const adminuserDeleteStore = useAdminUserDeleteStore();
+const { deleted, mercureDeleted } = storeToRefs(adminuserDeleteStore);
 
-const countryListStore = useCountryListStore();
-const { items, totalItems, error, isLoading } = storeToRefs(countryListStore);
+const adminuserListStore = useAdminUserListStore();
+const { items, totalItems, error, isLoading } = storeToRefs(adminuserListStore);
 
 const page = ref("1");
 const order = ref({});
 
 async function sendRequest() {
-  await countryListStore.getItems({
+  await adminuserListStore.getItems({
     page: page.value,
     order: order.value,
   });
 }
 
-useMercureList({ store: countryListStore, deleteStore: countryDeleteStore });
+useMercureList({ store: adminuserListStore, deleteStore: adminuserDeleteStore });
 
 sendRequest();
 
@@ -118,28 +107,53 @@ const headers = [
   },
   { title: t("id"), key: "@id" },
   {
-    title: t("country.isoCode3"),
-    key: "isoCode3",
+    title: t("adminuser.firstName"),
+    key: "firstName",
     sortable: false,
   },
   {
-    title: t("country.name"),
-    key: "name",
+    title: t("adminuser.lastName"),
+    key: "lastName",
     sortable: false,
   },
   {
-    title: t("country.states"),
-    key: "states",
+    title: t("adminuser.userType"),
+    key: "userType",
     sortable: false,
   },
   {
-    title: t("country.updatedAt"),
-    key: "updatedAt",
+    title: t("adminuser.roles"),
+    key: "roles",
     sortable: false,
   },
   {
-    title: t("country.createdAt"),
-    key: "createdAt",
+    title: t("adminuser.email"),
+    key: "email",
+    sortable: false,
+  },
+  {
+    title: t("adminuser.phoneNumber"),
+    key: "phoneNumber",
+    sortable: false,
+  },
+  {
+    title: t("adminuser.plainPassword"),
+    key: "plainPassword",
+    sortable: false,
+  },
+  {
+    title: t("adminuser.status"),
+    key: "status",
+    sortable: false,
+  },
+  {
+    title: t("adminuser.verified"),
+    key: "verified",
+    sortable: false,
+  },
+  {
+    title: t("adminuser.driver"),
+    key: "driver",
     sortable: false,
   },
 ];
@@ -157,33 +171,34 @@ function updateOrder(newOrders: VuetifyOrder[]) {
   sendRequest();
 }
 
-function goToShowPage(item: Country) {
+
+function goToShowPage(item: AdminUser) {
   router.push({
-    name: "CountryShow",
+    name: "AdminUserShow",
     params: { id: item["@id"] },
   });
 }
 
 function goToCreatePage() {
   router.push({
-    name: "CountryCreate",
+    name: "AdminUserCreate",
   });
 }
 
-function goToUpdatePage(item: Country) {
+function goToUpdatePage(item: AdminUser) {
   router.push({
-    name: "CountryUpdate",
+    name: "AdminUserUpdate",
     params: { id: item["@id"] },
   });
 }
 
-async function deleteItem(item: Country) {
-  await countryDeleteStore.deleteItem(item);
+async function deleteItem(item: AdminUser) {
+  await adminuserDeleteStore.deleteItem(item);
 
   sendRequest();
 }
 
 onBeforeUnmount(() => {
-  countryDeleteStore.$reset();
+  adminuserDeleteStore.$reset();
 });
 </script>

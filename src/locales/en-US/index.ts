@@ -1,4 +1,5 @@
 import country from "./country";
+import adminuser from "./adminuser";
 
 export default {
   home: "Home",
@@ -24,4 +25,5 @@ export default {
   confirmDelete: "Are you sure you want to delete this item?",
   loading: "Loading...",
   country,
+  adminuser,
 };
