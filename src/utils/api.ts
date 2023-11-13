@@ -2,16 +2,67 @@ import qs from "qs";
 import type { SubmissionErrors } from "../types/error";
 import { SubmissionError } from "./error";
 import { ENTRYPOINT } from "./config";
+import { useRouter } from "vue-router";
+import * as apiToken from "@/utils/apiToken";
 
 const MIME_TYPE = "application/ld+json";
 
-export default async function (id: string, options: any = {}) {
+export default async function api(id: string, options: any = {}) {
+  const router = useRouter();
+
   if (typeof options.headers === "undefined") {
     Object.assign(options, { headers: new Headers() });
   }
 
+  if (!options.auth) {
+    options.auth = true;
+  }
+
+  if (options.auth) {
+    const { token } = apiToken.get() || { token: null };
+    if (token) {
+      options.headers.set("Authorization", `Bearer ${token}`);
+    }
+  }
+
+  let isRefreshed = false;
+
+  for (let i = 0; i < 2; i++) {
+    try {
+      return await internalApi(id, { ...options });
+    } catch (e) {
+      if (options.auth) {
+        if (e === 401) {
+          const tokenData = apiToken.get();
+
+          if (
+            !isRefreshed &&
+            tokenData &&
+            apiToken.isRefreshTokenAlive(tokenData)
+          ) {
+            await apiToken.refreshToken();
+            isRefreshed = true;
+            continue;
+          }
+
+          if (router.currentRoute.value.name !== "Login") {
+            return router.push({ name: "Login" });
+          }
+        }
+      }
+
+      throw e;
+    }
+  }
+}
+
+async function internalApi(id: string, options: any = {}) {
   if (options.headers.get("Accept") === null) {
     options.headers.set("Accept", MIME_TYPE);
+  }
+
+  if (options.headers.get("deviceId") === null) {
+    options.headers.set("deviceId", "uuid-uuid-uuid-0");
   }
 
   if (
@@ -36,15 +87,20 @@ export default async function (id: string, options: any = {}) {
   const response = await fetch(new URL(id, ENTRYPOINT), options);
 
   if (!response.ok) {
+    if (response.status === 401) {
+      throw 401;
+    }
+
     const data = await response.json();
-    const error = data["hydra:description"] || response.statusText;
+    const error =
+      data["hydra:description"] || data.message || response.statusText;
     if (!data.violations) throw Error(error);
 
     const errors: SubmissionErrors = { _error: error };
     data.violations.forEach(
       (violation: { propertyPath: string; message: string }) => {
         errors[violation.propertyPath] = violation.message;
-      }
+      },
     );
 
     throw new SubmissionError(errors);
