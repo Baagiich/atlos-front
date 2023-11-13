@@ -14,7 +14,7 @@ export default async function api(id: string, options: any = {}) {
     Object.assign(options, { headers: new Headers() });
   }
 
-  if (typeof options.auth === "undefined") {
+  if (!options.auth) {
     options.auth = true;
   }
 
@@ -31,21 +31,24 @@ export default async function api(id: string, options: any = {}) {
     try {
       return await internalApi(id, { ...options });
     } catch (e) {
-      if (e === 401) {
-        const tokenData = apiToken.get();
+      if (options.auth) {
+        if (e === 401) {
+          const tokenData = apiToken.get();
 
-        if (
-          isRefreshed ||
-          !tokenData ||
-          !apiToken.isRefreshTokenAlive(tokenData)
-        ) {
+          if (
+            !isRefreshed &&
+            tokenData &&
+            apiToken.isRefreshTokenAlive(tokenData)
+          ) {
+            await apiToken.refreshToken();
+            isRefreshed = true;
+            continue;
+          }
+
           if (router.currentRoute.value.name !== "Login") {
             return router.push({ name: "Login" });
           }
         }
-        await apiToken.refreshToken();
-        isRefreshed = true;
-        continue;
       }
 
       throw e;

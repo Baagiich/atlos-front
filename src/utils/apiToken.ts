@@ -4,11 +4,11 @@ import { ENTRYPOINT } from "./config";
 
 const TOKEN_KEY = "API_TOKEN";
 
-let _tokenData: TokenResponse | null = null;
+let _tokenData: TokenResponse | undefined = undefined;
 
 export function save(tokenResponse: TokenResponse) {
   _tokenData = tokenResponse;
-  localStorage.setItem(TOKEN_KEY, JSON.stringify(tokenData));
+  localStorage.setItem(TOKEN_KEY, JSON.stringify(_tokenData));
 }
 
 export function get(): TokenResponse | undefined {
@@ -20,13 +20,14 @@ export function get(): TokenResponse | undefined {
     _tokenData = JSON.parse(localStorage.getItem(TOKEN_KEY) || "?");
   } catch (e) {
     remove();
+    return undefined;
   }
 
-  return undefined;
+  return _tokenData;
 }
 
 export function remove() {
-  _tokenData = null;
+  _tokenData = undefined;
   localStorage.removeItem(TOKEN_KEY);
 }
 
@@ -55,13 +56,16 @@ export async function refreshToken() {
 }
 
 export async function callAuth(payload: Auth) {
+  const deviceId = payload.deviceId;
+  delete payload.deviceId;
+
   const response = await fetch(ENTRYPOINT + "auth", {
     method: "POST",
     body: JSON.stringify(payload),
     headers: {
       "Content-Type": "application/json",
       Accept: "application/ld+json",
-      deviceId: "uuid-uuid-uuid-0",
+      deviceId,
     },
   });
 

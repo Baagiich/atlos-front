@@ -5,6 +5,10 @@ import type { Auth, TokenResponse } from "@/types/auth";
 import type { SubmissionErrors } from "@/types/error";
 import * as dayjs from "dayjs";
 import * as apiToken from "@/utils/apiToken";
+import { useDeviceShowStore } from "@/store/device/show";
+import { useDeviceCreateStore } from "@/store/device/create";
+import UAParser from "ua-parser-js";
+import { v4 as uuidv4 } from "uuid";
 
 interface State {
   isLoading: boolean;
@@ -26,6 +30,29 @@ export const useSecurityLoginStore = defineStore("securityLogin", {
       this.toggleLoading();
 
       try {
+        const deviceShow = useDeviceShowStore();
+        const deviceCreate = useDeviceCreateStore();
+
+        deviceShow.retrieveFromLocal();
+        if (!deviceShow.retrieved) {
+          const parser = new UAParser();
+          await deviceCreate.create({
+            name: parser.getDevice().model,
+            deviceId: uuidv4(),
+            model: parser.getBrowser().name,
+            version: parser.getBrowser().version,
+            os: parser.getOS().name,
+          });
+
+          if (deviceCreate.error) {
+            this.setError(deviceCreate.error);
+            this.setViolations(deviceCreate.violations);
+            return;
+          }
+
+          deviceShow.retrieveFromLocal();
+        }
+        payload.deviceId = deviceShow.retrieved.deviceId;
         await apiToken.setToken(payload);
 
         this.toggleLoading();

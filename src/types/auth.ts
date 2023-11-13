@@ -3,6 +3,7 @@ import { Dayjs } from "dayjs";
 export interface Auth {
   email?: string;
   password?: string;
+  deviceId?: string;
 }
 
 export interface TokenResponse {
