@@ -4,17 +4,25 @@ import { SubmissionError } from "./error";
 import { ENTRYPOINT } from "./config";
 import { useRouter } from "vue-router";
 import * as apiToken from "@/utils/apiToken";
+import { useDeviceShowStore } from "@/store/device/show";
+import { useDeviceCreateStore } from "@/store/device/create";
+import { storeToRefs } from "pinia";
 
 const MIME_TYPE = "application/ld+json";
 
 export default async function api(id: string, options: any = {}) {
   const router = useRouter();
+  const deviceShowStore = useDeviceShowStore();
+  const deviceCreateStore = useDeviceCreateStore();
+
+  deviceShowStore.retrieveFromLocal();
+  const { retrieved, error, isLoading } = storeToRefs(deviceShowStore);
 
   if (typeof options.headers === "undefined") {
     Object.assign(options, { headers: new Headers() });
   }
 
-  if (!options.auth) {
+  if (options.auth !== false) {
     options.auth = true;
   }
 
@@ -38,9 +46,11 @@ export default async function api(id: string, options: any = {}) {
           if (
             !isRefreshed &&
             tokenData &&
-            apiToken.isRefreshTokenAlive(tokenData)
+            apiToken.isRefreshTokenAlive(tokenData) &&
+            retrieved.value
           ) {
-            await apiToken.refreshToken();
+            await apiToken.refreshToken(retrieved.value.deviceId);
+            deviceCreateStore.setCreated(retrieved.value);
             isRefreshed = true;
             continue;
           }

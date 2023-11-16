@@ -35,7 +35,7 @@ export function isRefreshTokenAlive(tokenData: TokenResponse): boolean {
   const now = dayjs();
 
   return (
-    (tokenData && now.isBefore(dayjs(tokenData.refreshTokenExpiration))) ||
+    (tokenData && now.isBefore(dayjs.unix(tokenData.refreshTokenExpiration))) ||
     false
   );
 }
@@ -45,14 +45,14 @@ export async function setToken(payload: Auth) {
   save(await callAuth(payload));
 }
 
-export async function refreshToken() {
+export async function refreshToken(deviceId: string) {
   const tokenData = get();
 
   if (!tokenData || !isRefreshTokenAlive(tokenData)) {
     throw new Error("no token data");
   }
 
-  save(await callRefreshToken(tokenData));
+  save(await callRefreshToken(deviceId, tokenData));
 }
 
 export async function callAuth(payload: Auth) {
@@ -80,7 +80,10 @@ export async function callAuth(payload: Auth) {
   return response.json();
 }
 
-export async function callRefreshToken(tokenData: TokenResponse) {
+export async function callRefreshToken(
+  deviceId: string,
+  tokenData: TokenResponse,
+) {
   if (!isRefreshTokenAlive(tokenData)) {
     throw new Error("refresh token is dead");
   }
@@ -93,6 +96,7 @@ export async function callRefreshToken(tokenData: TokenResponse) {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/ld+json",
+      deviceId,
     },
   });
 
