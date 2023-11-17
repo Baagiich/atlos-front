@@ -49,10 +49,14 @@ export default async function api(id: string, options: any = {}) {
             apiToken.isRefreshTokenAlive(tokenData) &&
             retrieved.value
           ) {
-            await apiToken.refreshToken(retrieved.value.deviceId);
-            deviceCreateStore.setCreated(retrieved.value);
-            isRefreshed = true;
-            continue;
+            try {
+              await apiToken.refreshToken(retrieved.value.deviceId);
+              deviceCreateStore.setCreated(retrieved.value);
+              isRefreshed = true;
+              continue;
+            } catch (e) {
+              console.error(e);
+            }
           }
 
           if (router.currentRoute.value.name !== "Login") {
