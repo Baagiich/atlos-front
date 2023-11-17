@@ -36,58 +36,33 @@
       <template #item.actions="{ item }">
         <ActionCell
           :actions="['show', 'update', 'delete']"
-          @show="goToShowPage(item)"
-          @update="goToUpdatePage(item)"
-          @delete="deleteItem(item)"
+          @show="goToShowPage(item.raw)"
+          @update="goToUpdatePage(item.raw)"
+          @delete="deleteItem(item.raw)"
         />
       </template>
 
       <template #item.@id="{ item }">
         <router-link
-          :to="{ name: 'CityShow', params: { id: item['@id'] } }"
+          :to="{ name: 'VehicleShow', params: { id: item.raw['@id'] } }"
         >
-          {{ item["@id"] }}
+          {{ item.raw["@id"] }}
         </router-link>
       </template>
 
-      <template #item.state="{ item }">
+      <template #item.adminuser="{ item }">
         <router-link
-          v-if="router.hasRoute('StateShow')"
-          :to="{ name: 'StateShow', params: { id: item.state } }"
+          v-if="router.hasRoute('AdminUserShow')"
+          :to="{ name: 'AdminUserShow', params: { id: item.raw.adminuser } }"
         >
-          {{ item.state }}
+          {{ item.raw.adminuser }}
         </router-link>
 
         <p v-else>
-          {{ item.state }}
+          {{ item.raw.adminuser }}
         </p>
       </template>
-      <template #item.addresses="{ item }">
-        <template v-if="router.hasRoute('AddressShow')">
-          <router-link
-            v-for="address in item.addresses"
-            :to="{ name: 'AddressShow', params: { id: address } }"
-            :key="address"
-          >
-            {{ address }}
-
-            <br />
-          </router-link>
-        </template>
-
-        <template v-else>
-          <p v-for="address in item.addresses" :key="address">
-            {{ address }}
-          </p>
-        </template>
-      </template>
-      <template #item.updatedAt="{ item }">
-        {{ formatDateTime(item.updatedAt) }}
-      </template>
-            <template #item.createdAt="{ item }">
-        {{ formatDateTime(item.createdAt) }}
-      </template>
-          </v-data-table-server>
+    </v-data-table-server>
   </v-container>
 </template>
 
@@ -96,41 +71,40 @@ import { ref, onBeforeUnmount, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import { useCityListStore } from "@/store/city/list";
-import { useCityDeleteStore } from "@/store/city/delete";
+import { useVehicleListStore } from "@/store/vehicle/list";
+import { useVehicleDeleteStore } from "@/store/vehicle/delete";
 import Toolbar from "@/components/common/Toolbar.vue";
 import DataFilter from "@/components/common/DataFilter.vue";
-import Filter from "@/components/city/CityFilter.vue";
+import Filter from "@/components/vehicle/VehicleFilter.vue";
 import ActionCell from "@/components/common/ActionCell.vue";
-import { formatDateTime } from "@/utils/date";
 import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { Filters, VuetifyOrder } from "@/types/list";
-import type { City } from "@/types/city";
+import type { Vehicle } from "@/types/vehicle";
 
 const { t } = useI18n();
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
-const cityDeleteStore = useCityDeleteStore();
-const { deleted, mercureDeleted } = storeToRefs(cityDeleteStore);
+const vehicleDeleteStore = useVehicleDeleteStore();
+const { deleted, mercureDeleted } = storeToRefs(vehicleDeleteStore);
 
-const cityListStore = useCityListStore();
-const { items, totalItems, error, isLoading } = storeToRefs(cityListStore);
+const vehicleListStore = useVehicleListStore();
+const { items, totalItems, error, isLoading } = storeToRefs(vehicleListStore);
 
 const page = ref("1");
 const filters: Ref<Filters> = ref({});
 const order = ref({});
 
 async function sendRequest() {
-  await cityListStore.getItems({
+  await vehicleListStore.getItems({
     page: page.value,
     order: order.value,
     ...filters.value,
   });
 }
 
-useMercureList({ store: cityListStore, deleteStore: cityDeleteStore });
+useMercureList({ store: vehicleListStore, deleteStore: vehicleDeleteStore });
 
 sendRequest();
 
@@ -142,33 +116,23 @@ const headers = [
   },
   { title: t("id"), key: "@id" },
   {
-    title: t("city.name"),
-    key: "name",
+    title: t("vehicle.plateNumber"),
+    key: "plateNumber",
     sortable: false,
   },
   {
-    title: t("city.state"),
-    key: "state",
+    title: t("vehicle.shipper"),
+    key: "shipper",
     sortable: false,
   },
   {
-    title: t("city.capital"),
-    key: "capital",
+    title: t("vehicle.vehicleType"),
+    key: "vehicleType",
     sortable: false,
   },
   {
-    title: t("city.addresses"),
-    key: "addresses",
-    sortable: false,
-  },
-  {
-    title: t("city.updatedAt"),
-    key: "updatedAt",
-    sortable: false,
-  },
-  {
-    title: t("city.createdAt"),
-    key: "createdAt",
+    title: t("vehicle.vehicleCapacity"),
+    key: "vehicleCapacity",
     sortable: false,
   },
 ];
@@ -196,33 +160,33 @@ function resetFilter() {
   sendRequest();
 }
 
-function goToShowPage(item: City) {
+function goToShowPage(item: Vehicle) {
   router.push({
-    name: "CityShow",
+    name: "VehicleShow",
     params: { id: item["@id"] },
   });
 }
 
 function goToCreatePage() {
   router.push({
-    name: "CityCreate",
+    name: "VehicleCreate",
   });
 }
 
-function goToUpdatePage(item: City) {
+function goToUpdatePage(item: Vehicle) {
   router.push({
-    name: "CityUpdate",
+    name: "VehicleUpdate",
     params: { id: item["@id"] },
   });
 }
 
-async function deleteItem(item: City) {
-  await cityDeleteStore.deleteItem(item);
+async function deleteItem(item: Vehicle) {
+  await vehicleDeleteStore.deleteItem(item);
 
   sendRequest();
 }
 
 onBeforeUnmount(() => {
-  cityDeleteStore.$reset();
+  vehicleDeleteStore.$reset();
 });
 </script>

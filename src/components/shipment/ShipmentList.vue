@@ -29,10 +29,50 @@
       :items="items"
       :items-length="totalItems"
       :loading="isLoading"
-      :items-per-page="items.length"
+      :items-per-page="itemsPerPage"
       @update:page="updatePage"
       @update:sortBy="updateOrder"
     >
+
+
+      <template #item.@id="{ item }">
+        <router-link
+          :to="{ name: 'ShipmentShow', params: { id: item['@id'] } }"
+        >
+          {{ item["@id"] }}
+        </router-link>
+      </template>
+      <template #item.adminuser="{ item }">
+        <router-link
+          v-if="router.hasRoute('AdminUserShow')"
+          :to="{ name: 'AdminUserShow', params: { id: item.adminuser } }"
+        >
+          {{ item.adminuser }}
+          
+        </router-link>
+
+        <p v-else>
+          {{ item.adminuser }}
+        </p>
+      </template>
+      <template #item.address="{ item }">
+        <router-link
+          v-if="router.hasRoute('AddressShow')"
+          :to="{ name: 'AddressShow', params: { id: item.address } }"
+        >
+          {{ item.address }}
+        </router-link>
+
+        <p v-else>
+          {{ item.address }}
+        </p>
+      </template>
+      <template #item.loadAt="{ item }">
+        {{ formatDateTime(item.loadAt) }}
+      </template>
+            <template #item.unloadAt="{ item }">
+        {{ formatDateTime(item.unloadAt) }}
+      </template>
       <template #item.actions="{ item }">
         <ActionCell
           :actions="['show', 'update', 'delete']"
@@ -40,52 +80,6 @@
           @update="goToUpdatePage(item)"
           @delete="deleteItem(item)"
         />
-      </template>
-
-      <template #item.@id="{ item }">
-        <router-link
-          :to="{ name: 'CityShow', params: { id: item['@id'] } }"
-        >
-          {{ item["@id"] }}
-        </router-link>
-      </template>
-
-      <template #item.state="{ item }">
-        <router-link
-          v-if="router.hasRoute('StateShow')"
-          :to="{ name: 'StateShow', params: { id: item.state } }"
-        >
-          {{ item.state }}
-        </router-link>
-
-        <p v-else>
-          {{ item.state }}
-        </p>
-      </template>
-      <template #item.addresses="{ item }">
-        <template v-if="router.hasRoute('AddressShow')">
-          <router-link
-            v-for="address in item.addresses"
-            :to="{ name: 'AddressShow', params: { id: address } }"
-            :key="address"
-          >
-            {{ address }}
-
-            <br />
-          </router-link>
-        </template>
-
-        <template v-else>
-          <p v-for="address in item.addresses" :key="address">
-            {{ address }}
-          </p>
-        </template>
-      </template>
-      <template #item.updatedAt="{ item }">
-        {{ formatDateTime(item.updatedAt) }}
-      </template>
-            <template #item.createdAt="{ item }">
-        {{ formatDateTime(item.createdAt) }}
       </template>
           </v-data-table-server>
   </v-container>
@@ -96,79 +90,66 @@ import { ref, onBeforeUnmount, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import { useCityListStore } from "@/store/city/list";
-import { useCityDeleteStore } from "@/store/city/delete";
+import { useShipmentListStore } from "@/store/shipment/list";
+import { useShipmentDeleteStore } from "@/store/shipment/delete";
 import Toolbar from "@/components/common/Toolbar.vue";
 import DataFilter from "@/components/common/DataFilter.vue";
-import Filter from "@/components/city/CityFilter.vue";
+import Filter from "@/components/shipment/ShipmentFilter.vue";
 import ActionCell from "@/components/common/ActionCell.vue";
 import { formatDateTime } from "@/utils/date";
 import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { Filters, VuetifyOrder } from "@/types/list";
-import type { City } from "@/types/city";
+import type { Shipment } from "@/types/shipment";
 
 const { t } = useI18n();
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
-const cityDeleteStore = useCityDeleteStore();
-const { deleted, mercureDeleted } = storeToRefs(cityDeleteStore);
+const shipmentDeleteStore = useShipmentDeleteStore();
+const { deleted, mercureDeleted } = storeToRefs(shipmentDeleteStore);
 
-const cityListStore = useCityListStore();
-const { items, totalItems, error, isLoading } = storeToRefs(cityListStore);
+const shipmentListStore = useShipmentListStore();
+const { items, totalItems, error, isLoading } = storeToRefs(shipmentListStore);
 
 const page = ref("1");
 const filters: Ref<Filters> = ref({});
 const order = ref({});
+const itemsPerPage = ref("10");
 
 async function sendRequest() {
-  await cityListStore.getItems({
+  await shipmentListStore.getItems({
     page: page.value,
     order: order.value,
+    page_size: itemsPerPage.value,
     ...filters.value,
   });
 }
 
-useMercureList({ store: cityListStore, deleteStore: cityDeleteStore });
+useMercureList({ store: shipmentListStore, deleteStore: shipmentDeleteStore });
 
 sendRequest();
 
 const headers = [
+  { title: t("id"), key: "@id" },
+  {
+    title: t("shipment.fromAddress"),
+    key: "fromAddress",
+    sortable: false,
+  },
+  {
+    title: t("shipment.toAddress"),
+    key: "toAddress",
+    sortable: false,
+  },
+  {
+    title: t("shipment.createdAt"),
+    key: "createdAt",
+    sortable: false,
+  },
   {
     title: t("actions"),
     key: "actions",
-    sortable: false,
-  },
-  { title: t("id"), key: "@id" },
-  {
-    title: t("city.name"),
-    key: "name",
-    sortable: false,
-  },
-  {
-    title: t("city.state"),
-    key: "state",
-    sortable: false,
-  },
-  {
-    title: t("city.capital"),
-    key: "capital",
-    sortable: false,
-  },
-  {
-    title: t("city.addresses"),
-    key: "addresses",
-    sortable: false,
-  },
-  {
-    title: t("city.updatedAt"),
-    key: "updatedAt",
-    sortable: false,
-  },
-  {
-    title: t("city.createdAt"),
-    key: "createdAt",
     sortable: false,
   },
 ];
@@ -196,33 +177,33 @@ function resetFilter() {
   sendRequest();
 }
 
-function goToShowPage(item: City) {
+function goToShowPage(item: Shipment) {
   router.push({
-    name: "CityShow",
+    name: "ShipmentShow",
     params: { id: item["@id"] },
   });
 }
 
 function goToCreatePage() {
   router.push({
-    name: "CityCreate",
+    name: "ShipmentCreate",
   });
 }
 
-function goToUpdatePage(item: City) {
+function goToUpdatePage(item: Shipment) {
   router.push({
-    name: "CityUpdate",
+    name: "ShipmentUpdate",
     params: { id: item["@id"] },
   });
 }
 
-async function deleteItem(item: City) {
-  await cityDeleteStore.deleteItem(item);
+async function deleteItem(item: Shipment) {
+  await shipmentDeleteStore.deleteItem(item);
 
   sendRequest();
 }
 
 onBeforeUnmount(() => {
-  cityDeleteStore.$reset();
+  shipmentDeleteStore.$reset();
 });
 </script>

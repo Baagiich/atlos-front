@@ -37,7 +37,7 @@ export const useSecurityLoginStore = defineStore("securityLogin", {
         if (!deviceShow.retrieved) {
           const parser = new UAParser();
           await deviceCreate.create({
-            name: parser.getDevice().model,
+            name: parser.getDevice().model??'undefined',
             deviceId: uuidv4(),
             model: parser.getBrowser().name,
             version: parser.getBrowser().version,

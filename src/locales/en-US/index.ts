@@ -1,5 +1,7 @@
 import country from "./country";
 import adminuser from "./adminuser";
+import shipment from "./shipment";
+import requests from "./requests";
 
 export default {
   home: "Home",
@@ -26,4 +28,6 @@ export default {
   loading: "Loading...",
   country,
   adminuser,
+  shipment,
+  requests,
 };
