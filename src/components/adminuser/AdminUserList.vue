@@ -68,6 +68,9 @@
       <template #item.status="{ item }">
         {{ UserStatusType[item.status] }}
       </template>
+      <template #item.verified="{ item }">
+        <v-chip>{{ item.verified ? 'verified': 'pending' }}</v-chip>
+      </template>
     </v-data-table-server>
   </v-container>
 </template>
@@ -141,21 +144,21 @@ const headers = [
     key: "userType",
     sortable: false,
   },
-  {
-    title: t("adminuser.roles"),
-    key: "roles",
-    sortable: false,
-  },
+  // {
+  //   title: t("adminuser.roles"),
+  //   key: "roles",
+  //   sortable: false,
+  // },
   {
     title: t("adminuser.email"),
     key: "email",
     sortable: false,
   },
-  {
-    title: t("adminuser.phoneNumber"),
-    key: "phoneNumber",
-    sortable: false,
-  },
+  // {
+  //   title: t("adminuser.phoneNumber"),
+  //   key: "phoneNumber",
+  //   sortable: false,
+  // },
   // {
   //   title: t("adminuser.plainPassword"),
   //   key: "plainPassword",

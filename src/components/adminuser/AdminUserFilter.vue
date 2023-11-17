@@ -1,23 +1,35 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="12" sm="6" md="6">
+      <v-col cols="12" sm="4" md="4">
         <v-select
           v-model="item.userType"
-          :label="$t('adminUser.userType')"
+          :label="$t('adminuser.userType')"
           :items="userTypes"
-          item-title="value"
-          item-value="key"
+          item-title="key"
+          item-value="value"
         />
       </v-col>
-      <v-col cols="12" sm="6" md="6">
+      <v-col cols="12" sm="4" md="4">
         <v-select
           v-model="item.status"
-          :label="$t('adminUser.status')"
+          :label="$t('adminuser.status')"
           :items="userStatusTypes"
-          item-title="value"
-          item-value="key"
+          item-title="key"
+          item-value="value"
         />
+      </v-col>
+      <v-col cols="12" sm="4" md="4">
+        <v-text-field
+          v-model="item.firstName"
+          :label="$t('adminuser.firstName')"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="4" md="4">
+        <v-text-field
+          v-model="item.lastName"
+          :label="$t('adminuser.lastName')"
+        ></v-text-field>
       </v-col>
     </v-row>
   </v-container>

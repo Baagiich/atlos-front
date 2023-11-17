@@ -1,5 +1,5 @@
 export function getKeys(type: any) {
-  return Object.keys(type).filter((v) => !isNaN(Number(v)));
+  return Object.keys(type).filter((v) => isNaN(Number(v)));
 }
 
 export function getValues(type: any) {
