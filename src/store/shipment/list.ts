@@ -31,12 +31,10 @@ export const useShipmentListStore = defineStore("shipmentList", {
         const response = await api("shipments", { params });
         const data: PagedCollection<Shipment> = await response.json();
         const hubUrl = extractHubURL(response);
-
         this.toggleLoading();
 
         this.setItems(data["hydra:member"]);
         this.setTotalItems(data["hydra:totalItems"] ?? 0);
-
         if (hubUrl) {
           this.setHubUrl(hubUrl);
         }

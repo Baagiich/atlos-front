@@ -33,38 +33,19 @@
       @update:page="updatePage"
       @update:sortBy="updateOrder"
     >
-
-
       <template #item.@id="{ item }">
-        <router-link
-          :to="{ name: 'ShipmentShow', params: { id: item['@id'] } }"
-        >
-          {{ item["@id"] }}
-        </router-link>
-      </template>
-      <template #item.adminuser="{ item }">
-        <router-link
-          v-if="router.hasRoute('AdminUserShow')"
-          :to="{ name: 'AdminUserShow', params: { id: item.adminuser } }"
-        >
-          {{ item.adminuser }}
-          
-        </router-link>
-
-        <p v-else>
-          {{ item.adminuser }}
+        <p>
+          {{ item.shipmentCode }}
         </p>
       </template>
-      <template #item.address="{ item }">
-        <router-link
-          v-if="router.hasRoute('AddressShow')"
-          :to="{ name: 'AddressShow', params: { id: item.address } }"
-        >
-          {{ item.address }}
-        </router-link>
-
-        <p v-else>
-          {{ item.address }}
+      <template #item.fromAddress="{ item }">
+        <p>
+          {{ item.fromAddress.city.name }}
+        </p>
+      </template>
+      <template #item.toAddress="{ item }">
+        <p>
+          {{ item.toAddress.city.name }}
         </p>
       </template>
       <template #item.loadAt="{ item }">
@@ -74,12 +55,14 @@
         {{ formatDateTime(item.unloadAt) }}
       </template>
       <template #item.actions="{ item }">
-        <ActionCell
-          :actions="['show', 'update', 'delete']"
-          @show="goToShowPage(item)"
-          @update="goToUpdatePage(item)"
-          @delete="deleteItem(item)"
-        />
+        <v-btn
+          color="secondary"
+          size="small"
+          class="ma-2"
+          @click="createPriceBidding"
+        >
+        {{ t("shipment.sendBid") }}
+        </v-btn>
       </template>
           </v-data-table-server>
   </v-container>
@@ -101,6 +84,8 @@ import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { Filters, VuetifyOrder } from "@/types/list";
 import type { Shipment } from "@/types/shipment";
+import { UserType } from "@/types/usertype";
+import * as apiToken from "@/utils/apiToken";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -114,14 +99,18 @@ const { items, totalItems, error, isLoading } = storeToRefs(shipmentListStore);
 
 const page = ref("1");
 const filters: Ref<Filters> = ref({});
+  if(apiToken.getDecodedToken().user_type != UserType.ADMIN) {
+    filters.value.state = 'created';
+  }
 const order = ref({});
 const itemsPerPage = ref("10");
-
+const userTypes = ref(UserType);
 async function sendRequest() {
   await shipmentListStore.getItems({
     page: page.value,
     order: order.value,
     page_size: itemsPerPage.value,
+    groups: ["shipment:list"],
     ...filters.value,
   });
 }
@@ -143,8 +132,13 @@ const headers = [
     sortable: false,
   },
   {
-    title: t("shipment.createdAt"),
-    key: "createdAt",
+    title: t("shipment.loadAt"),
+    key: "loadAt",
+    sortable: false,
+  },
+  {
+    title: t("shipment.unloadAt"),
+    key: "unloadAt",
     sortable: false,
   },
   {
@@ -206,4 +200,7 @@ async function deleteItem(item: Shipment) {
 onBeforeUnmount(() => {
   shipmentDeleteStore.$reset();
 });
+function createPriceBidding() {
+  emit("update");
+}
 </script>

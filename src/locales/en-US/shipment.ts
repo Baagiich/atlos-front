@@ -19,4 +19,5 @@ export default {
   updatedAt: "UpdatedAt",
   createdAt: "CreatedAt",
   shipmentTypeCode: "ShipmentTypeCode",
+  sendBid: "Send bid"
 };

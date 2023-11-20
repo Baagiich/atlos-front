@@ -1,6 +1,7 @@
 import { Auth, TokenResponse } from "@/types/auth";
 import * as dayjs from "dayjs";
 import { ENTRYPOINT } from "./config";
+import { jwtDecode } from "jwt-decode";
 
 const TOKEN_KEY = "API_TOKEN";
 
@@ -109,4 +110,11 @@ export async function callRefreshToken(
   }
 
   return response.json();
+}
+export function getDecodedToken() {
+  const tokenData = get();
+  if (!tokenData || !isRefreshTokenAlive(tokenData)) {
+    throw new Error("no token data");
+  }
+  return jwtDecode(tokenData.token);
 }

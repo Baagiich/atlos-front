@@ -1,0 +1,23 @@
+export default {
+  shipmentImages: "Тээврийн зургууд",
+  state: "Төлөв",
+  driver: "Жолооч",
+  action: "Үйлдлүүд",
+  consignor: "Ачаа илгээгч",
+  shipmentCode: "ShipmentCode",
+  shipmentType: "ShipmentType",
+  shipmentShipperDeals: "ShipmentShipperDeals",
+  reviews: "Үнэлгээ",
+  shipper: "Ачаа тээвэрлэгч",
+  fromAddress: "Хаанаас",
+  toAddress: "Хаашаа",
+  loadAt: "Ачих огноо",
+  unloadAt: "Буулгах огноо",
+  prePayment: "Ачихад олгох хувь",
+  postPayment: "Буулгасаны дараа олгох хувь",
+  price: "Үнэ",
+  updatedAt: "Шинэчлэсэн огноо",
+  createdAt: "Үүссэн огноо",
+  shipmentTypeCode: "ShipmentTypeCode",
+  sendBid: "Үнийн санал өгөх"
+};

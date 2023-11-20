@@ -16,4 +16,5 @@ export interface ListParams {
   filters?: Filters;
   order?: Order;
   page_size?: number;
+  groups?: Array<string>;
 }

@@ -1,4 +1,5 @@
 import adminuser from "./adminuser";
+import shipment from "./shipment";
 export default {
   home: "Нүүр",
   submit: "Илгээх",
@@ -23,4 +24,5 @@ export default {
   confirmDelete: "Устгахдаа итгэлтэй байна уу?",
   loading: "Ачаалж байна...",
   adminuser,
+  shipment,
 };
