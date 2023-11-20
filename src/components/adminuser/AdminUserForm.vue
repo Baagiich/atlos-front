@@ -36,38 +36,16 @@
         </v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="6">
-        <v-text-field
+        <v-select
           v-model="item.userType"
+          :label="$t('adminuser.userType')"
+          :items="userTypes"
+          item-title="key"
+          item-value="value"
           :error="Boolean(violations?.userType)"
           :error-messages="violations?.userType"
-          :label="$t('adminuser.userType')"
         >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.userType = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="6">
-        <v-text-field
-          v-model="item.roles"
-          :error="Boolean(violations?.roles)"
-          :error-messages="violations?.roles"
-          :label="$t('adminuser.roles')"
-        >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.roles = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
+        </v-select>
       </v-col>
       <v-col cols="12" sm="6" md="6">
         <v-text-field
@@ -121,55 +99,16 @@
         </v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="6">
-        <v-text-field
+        <v-select
           v-model="item.status"
           :error="Boolean(violations?.status)"
           :error-messages="violations?.status"
+          :items="userStatusTypes"
+          item-title="key"
+          item-value="value"
           :label="$t('adminuser.status')"
         >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.status = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="6">
-        <v-text-field
-          v-model="item.verified"
-          :error="Boolean(violations?.verified)"
-          :error-messages="violations?.verified"
-          :label="$t('adminuser.verified')"
-        >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.verified = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="6">
-        <v-text-field
-          v-model="item.driver"
-          :error="Boolean(violations?.driver)"
-          :error-messages="violations?.driver"
-          :label="$t('adminuser.driver')"
-        >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.driver = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
+        </v-select>
       </v-col>
     </v-row>
 
@@ -190,6 +129,10 @@ import { ref, Ref, toRef } from "vue";
 import { VForm } from "vuetify/components";
 import type { AdminUser } from "@/types/adminuser";
 import type { SubmissionErrors } from "@/types/error";
+import { UserStatusType } from "@/types/user_status_type";
+import * as enumHelper from "@/utils/enumHelper";
+import { UserType } from "@/types/usertype";
+
 const props = defineProps<{
   values?: AdminUser;
   errors?: SubmissionErrors;
@@ -204,6 +147,12 @@ if (props.values) {
     ...props.values,
   };
 }
+
+const userTypes = enumHelper.getMap(UserType);
+userTypes.unshift({ key: "", value: "" });
+
+const userStatusTypes = enumHelper.getMap(UserStatusType);
+userStatusTypes.unshift({ key: "", value: "" });
 
 const emit = defineEmits<{
   (e: "submit", item: AdminUser): void;

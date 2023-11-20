@@ -19,6 +19,7 @@
         </v-text-field>
         <v-text-field
           v-model="item.password"
+          type="password"
           :label="$t('password')"
           :error="Boolean(violations?.password)"
           :error-messages="violations?.password"

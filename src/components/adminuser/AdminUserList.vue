@@ -18,6 +18,11 @@
       {{ error }}
     </v-alert>
 
+    <DataFilter @filter="onSendFilter" @reset="resetFilter">
+      <template #filter>
+        <Filter :values="filters" />
+      </template>
+    </DataFilter>
 
     <v-data-table-server
       :headers="headers"
@@ -57,12 +62,21 @@
           {{ item.driver }}
         </p>
       </template>
+      <template #item.userType="{ item }">
+        {{ UserType[item.userType] }}
+      </template>
+      <template #item.status="{ item }">
+        {{ UserStatusType[item.status] }}
+      </template>
+      <template #item.verified="{ item }">
+        <v-chip>{{ item.verified ? 'verified': 'pending' }}</v-chip>
+      </template>
     </v-data-table-server>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from "vue";
+import { ref, onBeforeUnmount, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
@@ -72,8 +86,12 @@ import Toolbar from "@/components/common/Toolbar.vue";
 import ActionCell from "@/components/common/ActionCell.vue";
 import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
-import type { VuetifyOrder } from "@/types/list";
+import type { VuetifyOrder, Filters } from "@/types/list";
 import type { AdminUser } from "@/types/adminuser";
+import DataFilter from "@/components/common/DataFilter.vue";
+import Filter from "@/components/adminuser/AdminUserFilter.vue";
+import { UserType } from "@/types/usertype";
+import { UserStatusType } from "@/types/user_status_type";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -86,16 +104,21 @@ const adminuserListStore = useAdminUserListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(adminuserListStore);
 
 const page = ref("1");
+const filters: Ref<Filters> = ref({});
 const order = ref({});
 
 async function sendRequest() {
   await adminuserListStore.getItems({
     page: page.value,
     order: order.value,
+    ...filters.value,
   });
 }
 
-useMercureList({ store: adminuserListStore, deleteStore: adminuserDeleteStore });
+useMercureList({
+  store: adminuserListStore,
+  deleteStore: adminuserDeleteStore,
+});
 
 sendRequest();
 
@@ -121,26 +144,26 @@ const headers = [
     key: "userType",
     sortable: false,
   },
-  {
-    title: t("adminuser.roles"),
-    key: "roles",
-    sortable: false,
-  },
+  // {
+  //   title: t("adminuser.roles"),
+  //   key: "roles",
+  //   sortable: false,
+  // },
   {
     title: t("adminuser.email"),
     key: "email",
     sortable: false,
   },
-  {
-    title: t("adminuser.phoneNumber"),
-    key: "phoneNumber",
-    sortable: false,
-  },
-  {
-    title: t("adminuser.plainPassword"),
-    key: "plainPassword",
-    sortable: false,
-  },
+  // {
+  //   title: t("adminuser.phoneNumber"),
+  //   key: "phoneNumber",
+  //   sortable: false,
+  // },
+  // {
+  //   title: t("adminuser.plainPassword"),
+  //   key: "plainPassword",
+  //   sortable: false,
+  // },
   {
     title: t("adminuser.status"),
     key: "status",
@@ -171,7 +194,6 @@ function updateOrder(newOrders: VuetifyOrder[]) {
   sendRequest();
 }
 
-
 function goToShowPage(item: AdminUser) {
   router.push({
     name: "AdminUserShow",
@@ -194,6 +216,16 @@ function goToUpdatePage(item: AdminUser) {
 
 async function deleteItem(item: AdminUser) {
   await adminuserDeleteStore.deleteItem(item);
+
+  sendRequest();
+}
+
+function onSendFilter() {
+  sendRequest();
+}
+
+function resetFilter() {
+  filters.value = {};
 
   sendRequest();
 }
