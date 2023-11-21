@@ -1,6 +1,7 @@
 import adminuser from "./adminuser";
 import shipment from "./shipment";
 import driverrequest from "./driverrequest";
+import shipmentloadinfos from "./shipmentloadinfos";
 export default {
   home: "Нүүр",
   submit: "Илгээх",
@@ -27,4 +28,5 @@ export default {
   adminuser,
   shipment,
   driverrequest,
+  shipmentloadinfos,
 };

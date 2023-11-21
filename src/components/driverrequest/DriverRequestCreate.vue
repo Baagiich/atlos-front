@@ -16,8 +16,8 @@
       <v-col cols="12" sm="6" md="6">
         <ShipmentInfo/>
       </v-col>
-        <v-col class="driver-request-shipment-code" md="12">
-          <ShipmentLoadInfos :id="item['@id']"/>
+        <v-col md="12">
+          <ShipmentLoadInfos/>
     </v-col>
     </v-row>
   </v-container>

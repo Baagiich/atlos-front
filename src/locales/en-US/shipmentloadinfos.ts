@@ -8,4 +8,5 @@ export default {
   shipment: "Shipment",
   isPileUp: "IsPileUp",
   packageType: "PackageType",
+  kube: "Kube",
 };
