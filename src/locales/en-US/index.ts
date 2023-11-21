@@ -2,7 +2,7 @@ import country from "./country";
 import adminuser from "./adminuser";
 import shipment from "./shipment";
 import requests from "./requests";
-
+import driverrequest from "./driverrequest";
 export default {
   home: "Home",
   submit: "Submit",
@@ -30,4 +30,5 @@ export default {
   adminuser,
   shipment,
   requests,
+  driverrequest,
 };

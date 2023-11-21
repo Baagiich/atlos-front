@@ -1,5 +1,6 @@
 import adminuser from "./adminuser";
 import shipment from "./shipment";
+import driverrequest from "./driverrequest";
 export default {
   home: "Нүүр",
   submit: "Илгээх",
@@ -25,4 +26,5 @@ export default {
   loading: "Ачаалж байна...",
   adminuser,
   shipment,
+  driverrequest,
 };

@@ -59,7 +59,7 @@
           color="secondary"
           size="small"
           class="ma-2"
-          @click="createPriceBidding"
+          @click="createPriceBidding(item)"
         >
         {{ t("shipment.sendBid") }}
         </v-btn>
@@ -200,7 +200,10 @@ async function deleteItem(item: Shipment) {
 onBeforeUnmount(() => {
   shipmentDeleteStore.$reset();
 });
-function createPriceBidding() {
-  emit("update");
+function createPriceBidding(item: Shipment) {
+  router.push({
+    name: "DriverRequestCreate",
+    params: { id: item["@id"] },
+  });
 }
 </script>
