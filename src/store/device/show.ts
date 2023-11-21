@@ -54,7 +54,10 @@ export const useDeviceShowStore = defineStore("deviceShow", {
       this.isLoading = !this.isLoading;
     },
 
-    setRetrieved(retrieved: Device) {
+    setRetrieved(retrieved?: Device) {
+      if (retrieved === undefined) {
+        localStorage.removeItem("device");
+      }
       this.retrieved = retrieved;
     },
 

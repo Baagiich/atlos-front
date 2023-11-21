@@ -29,14 +29,12 @@ export const useSecurityLoginStore = defineStore("securityLogin", {
       this.setViolations(undefined);
       this.toggleLoading();
 
+      const deviceShow = useDeviceShowStore();
+      const deviceCreate = useDeviceCreateStore();
       try {
-        const deviceShow = useDeviceShowStore();
-        const deviceCreate = useDeviceCreateStore();
-
         deviceShow.retrieveFromLocal();
         if (!deviceShow.retrieved) {
           const parser = new UAParser();
-          console.log(parser);
           await deviceCreate.create({
             name: parser.getBrowser().name,
             deviceId: uuidv4(),
@@ -67,6 +65,9 @@ export const useSecurityLoginStore = defineStore("securityLogin", {
         }
 
         if (error instanceof Error) {
+          if (error.message === "Бүртгэлгүй төхөөрөмж байна") {
+            deviceShow.setRetrieved(undefined);
+          }
           this.setError(error.message);
         }
       }
