@@ -7,5 +7,5 @@
 </template>
 
 <script setup lang="ts">
-import Create from "@/components/driverrequest/DriverRequestCreate.vue";
+import Create from "@/components/driverrequest/DriverRequestDashboard.vue";
 </script>

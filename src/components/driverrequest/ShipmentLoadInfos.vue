@@ -22,8 +22,8 @@
       @update:sortBy="updateOrder"
       class="shipment-load-infos-table"
     >
-      <template #item.id="{ item }">
-          {{ item.count }}
+      <template #item.id="{ index, item }">
+          {{ index + 1 }}
       </template>
       <template #item.name="{ item }">
         <p>
@@ -52,7 +52,7 @@
       </template>
       <template #item.length="{ item }">
         <p>
-          {{ item.height }} * {{ item.length }} * {{ item.width }}
+          {{calculateCube(item)}}
         </p>
       </template>
     </v-data-table-server>
@@ -81,12 +81,13 @@ const { items, totalItems, error, isLoading } = storeToRefs(shipmentloadinfosLis
 
 const page = ref("1");
 const order = ref({});
-
+const itemsPerPage = ref("10");
 async function sendRequest() {
   await shipmentloadinfosListStore.getItems({
     page: page.value,
     order: order.value,
     shipment: route.params.id,
+    page_size: itemsPerPage.value,
     groups: ["read:ShipmentLoadInfos"],
   });
 }
@@ -96,7 +97,7 @@ useMercureList({ store: shipmentloadinfosListStore, deleteStore: shipmentloadinf
 sendRequest();
 
 const headers = [
-  { title: t("id"), key: "@id" },
+  { title: t("id"), key: "id" },
   {
     title: t("shipmentloadinfos.name"),
     key: "name",
@@ -105,7 +106,7 @@ const headers = [
 
   {
     title: t("shipmentloadinfos.packageType"),
-    key: "packageType",
+    key: "shipmentpackagetype",
     sortable: false,
   },
   {
@@ -119,8 +120,8 @@ const headers = [
     sortable: false,
   },
   {
-    title: t("shipmentloadinfos.kube"),
-    key: "kube",
+    title: t("shipmentloadinfos.cube"),
+    key: "length",
     sortable: false,
   },
 ];
@@ -137,7 +138,9 @@ function updateOrder(newOrders: VuetifyOrder[]) {
 
   sendRequest();
 }
-
+function calculateCube(item: any) {
+  return item.length * item.width * item.height
+}
 onBeforeUnmount(() => {
   shipmentloadinfosDeleteStore.$reset();
 });
@@ -146,6 +149,7 @@ onBeforeUnmount(() => {
 .shipment-load-infos-table {
   background: #F8F8F8;
   text-align: center;
+  color: #000;
   thead{
     th{
       div{

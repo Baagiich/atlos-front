@@ -202,7 +202,7 @@ onBeforeUnmount(() => {
 });
 function createPriceBidding(item: Shipment) {
   router.push({
-    name: "DriverRequestCreate",
+    name: "DriverRequestDashboard",
     params: { id: item["@id"] },
   });
 }

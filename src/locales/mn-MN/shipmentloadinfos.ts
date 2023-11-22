@@ -8,5 +8,5 @@ export default {
   shipment: "Shipment",
   isPileUp: "Давхарлаж ачиж болно",
   packageType: "Баглаа боодол",
-  kube: "Нийт овор хэмжээ/Мкуб",
+  cube: "Нийт овор хэмжээ/Мкуб",
 };

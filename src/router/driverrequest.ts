@@ -1,6 +1,6 @@
 const names = {
   show: "DriverRequestShow",
-  create: "DriverRequestCreate",
+  dahsboard: "DriverRequestDashboard",
 };
 const breadcrumbs = {
   create: { title: names.create, to: { name: names.create } },
@@ -16,9 +16,9 @@ export default [
     },
   },
   {
-    name: names.create,
-    path: "/driver_request/create/:id",
-    component: () => import("@/views/driverrequest/DriverRequestCreate.vue"),
+    name: names.dahsboard,
+    path: "/driver_request/dashboard/:id",
+    component: () => import("@/views/driverrequest/DriverRequestDashboard.vue"),
     meta: {
       breadcrumb: [],
     },
