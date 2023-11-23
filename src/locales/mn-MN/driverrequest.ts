@@ -6,4 +6,7 @@ export default {
   totalItemError: "Нэг ачаан дээр зөвхөн нэг жолооч бүртгэнэ",
   pending: "Хүсэлт илгээсэн",
   approved: "Хүсэлт баталгаажсан",
+  plateNumber: "Улсын дугаар",
+  vehicleType: "Төрөл",
+  vehicleCapacity: "Даац"
 };

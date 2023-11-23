@@ -228,8 +228,8 @@ function createRequest(item: AdminUser): Requests {
   const req: Requests = {
     fromUser: apiToken.getDecodedToken().iri,
     toUser: item["@id"],
-    code: "shpper_to_driver",
-    type: "pending",
+    code: RequestsCodeType.SHIPPER_TO_DRIVER,
+    type: RequestsType.PENDING,
     targetEntityId: getTargetEntityId()
   }
   return req;
