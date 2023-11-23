@@ -1,136 +1,185 @@
 <template>
-    <v-row>
-      <v-col cols="12" sm="4" md="4">
-        <v-text-field
-        v-model="filters.email"
-          :label="$t('adminuser.email')"
-          type="string"
-          @change="onSendFilter"
-        />
-      </v-col>
-    </v-row>
-    <v-container fluid>
-      <v-alert v-if="deleted" type="success" class="mb-4" closable="true">
-        {{ $t("itemDeleted", [deleted["@id"]]) }}
-      </v-alert>
-      <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable="true">
-        {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
-      </v-alert>
-  
-      <v-alert v-if="error" type="error" class="mb-4" closable="true">
-        {{ error }}
-      </v-alert>
-  
-      <v-data-table-server
-        :headers="headers"
-        :items="items"
-        :items-length="totalItems"
-        :loading="isLoading"
-        :items-per-page="items.length"
-        @update:page="updatePage"
-        @update:sortBy="updateOrder"
-      >
-        <template #item.name="{ item }">
-          {{ item.name }}
-        </template>
-        <template #item.actions="{ item }">
-        <v-btn
-          color="secondary"
-          size="small"
-          class="ma-2"
-          @click="sendRequestToDriver(item)"
-        >
-        {{ t("driverrequest.sendRequest") }}
-        </v-btn>
+  <v-row>
+    <v-col cols="12" sm="4" md="4">
+      <v-text-field
+      v-model="filters.email"
+        :label="$t('driverrequest.pickDriver')"
+        type="string"
+        @change="onSendFilter"
+      />
+    </v-col>
+  </v-row>
+  <v-container fluid>
+    <v-alert v-if="deleted" type="success" class="mb-4" closable="true">
+      {{ $t("itemDeleted", [deleted["@id"]]) }}
+    </v-alert>
+    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable="true">
+      {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
+    </v-alert>
+
+    <v-alert v-if="error" type="error" class="mb-4" closable="true">
+      {{ error }}
+    </v-alert>
+
+    <v-data-table-server
+      :headers="headers"
+      :items="items"
+      :items-length="totalItems"
+      :loading="isLoading"
+      :items-per-page="items.length"
+      @update:page="updatePage"
+      @update:sortBy="updateOrder"
+    >
+      <template #item.lastName="{ item }">
+        {{ item.lastName }}
       </template>
-      </v-data-table-server>
-    </v-container>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref, onBeforeUnmount, Ref } from "vue";
-  import { useI18n } from "vue-i18n";
-  import { useRouter } from "vue-router";
-  import { storeToRefs } from "pinia";
-  import { useAdminUserListStore } from "@/store/adminuser/list";
-  import { useAdminUserDeleteStore } from "@/store/adminuser/delete";
-  import { useMercureList } from "@/composables/mercureList";
-  import { useBreadcrumb } from "@/composables/breadcrumb";
-  import type { VuetifyOrder, Filters } from "@/types/list";
-  import type { AdminUser } from "@/types/adminuser";
-  import { useRequestsCreateStore } from "@/store/requests/create";
+      <template #item.firstName="{ item }">
+        {{ item.firstName }}
+      </template>
+      <template #item.email="{ item }">
+        {{ item.email }}
+      </template>
+      <template #item.actions="{ item }">
+      <v-btn
+        color="secondary"
+        size="small"
+        class="ma-2"
+        @click="sendRequestToDriver(item)"
+      >
+      {{ t("driverrequest.sendRequest") }}
+      </v-btn>
+    </template>
+    </v-data-table-server>
+  </v-container>
+</template>
 
-  
-  const { t } = useI18n();
-  const router = useRouter();
-  const breadcrumb = useBreadcrumb();
-  
-  const adminuserDeleteStore = useAdminUserDeleteStore();
-  const { deleted, mercureDeleted } = storeToRefs(adminuserDeleteStore);
-  
-  const adminuserListStore = useAdminUserListStore();
-  const { items, totalItems, error, isLoading } = storeToRefs(adminuserListStore);
+<script setup lang="ts">
+import { ref, onBeforeUnmount, Ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useAdminUserListStore } from "@/store/adminuser/list";
+import { useAdminUserDeleteStore } from "@/store/adminuser/delete";
+import { useMercureList } from "@/composables/mercureList";
+import { useBreadcrumb } from "@/composables/breadcrumb";
+import type { VuetifyOrder, Filters } from "@/types/list";
+import type { AdminUser } from "@/types/adminuser";
+import { useRequestsCreateStore } from "@/store/requests/create";
+import * as apiToken from "@/utils/apiToken";
+import type { Requests } from "@/types/requests";
+import { useRoute } from "vue-router";
+import { useRequestsListStore } from "@/store/requests/list";
 
-  const requestsCreateStore = useRequestsCreateStore();
-  const { created, violations } = storeToRefs(requestsCreateStore);
-  const page = ref("1");
-  const filters: Ref<Filters> = ref({ email: "" });
-  const order = ref({});
+const { t } = useI18n();
+const breadcrumb = useBreadcrumb();
+const route = useRoute();
 
-  async function sendRequest() {
-    await adminuserListStore.getItems({
-      page: page.value,
-      order: order.value,
-      ...(filters.value || {}),
-    });
-  }
-  
-  useMercureList({
-    store: adminuserListStore,
-    deleteStore: adminuserDeleteStore,
-  });
-  
-  sendRequest();
-  
-  const headers = [
-    {
-      title: t("adminuser.firstName"),
-      key: "firstName",
-      sortable: false,
-    },
-    {
-    title: t("actions"),
-    key: "actions",
-    sortable: false,
-  },
-  ];
-  
-  function updatePage(newPage: string) {
-    page.value = newPage;
-  
-    sendRequest();
-  }
-  
-  function updateOrder(newOrders: VuetifyOrder[]) {
-    const newOrder = newOrders[0];
-    order.value = { [newOrder.key]: newOrder.order };
-  
-    sendRequest();
-  }
-  
-  function onSendFilter() {
-    sendRequest();
-  }
+const adminuserDeleteStore = useAdminUserDeleteStore();
+const { deleted, mercureDeleted } = storeToRefs(adminuserDeleteStore);
 
-  
-  onBeforeUnmount(() => {
-    adminuserDeleteStore.$reset();
-  });
-  function sendRequestToDriver(item: AdminUser) {
-  router.push({
-    name: "DriverRequestDashboard",
-    params: { id: item["@id"] },
+const adminuserListStore = useAdminUserListStore();
+const { items: adminUserItems, totalItems: adminUserI, error, isLoading } = storeToRefs(adminuserListStore);
+
+const requestsListStore = useRequestsListStore();
+const { requestItems } = storeToRefs(requestsListStore);
+
+const requestsCreateStore = useRequestsCreateStore();
+const { created } = storeToRefs(requestsCreateStore);
+const page = ref("1");
+const filters: Ref<Filters> = ref({ email: "" });
+const order = ref({});
+const filtersRequest: Ref<Filters> = ref({});
+  filtersRequest.value.fromUser = apiToken.getDecodedToken().iri;
+  filtersRequest.value.targetEntityId = getTargetEntityId();
+async function sendRequest() {
+  await adminuserListStore.getItems({
+    page: page.value,
+    order: order.value,
+    ...(filters.value || {}),
   });
 }
-  </script>
-  
+async function checkRequest() {
+  await requestsListStore.getItems({
+    page: page.value,
+    order: order.value,
+    ...filtersRequest.value,
+  });
+}
+useMercureList({
+  store: adminuserListStore,
+  deleteStore: adminuserDeleteStore,
+});
+
+sendRequest();
+checkRequest();
+console.log(requestItems);
+const headers = [
+{
+    title: t("adminuser.lastName"),
+    key: "lastName",
+    sortable: false,
+  },
+  {
+    title: t("adminuser.firstName"),
+    key: "firstName",
+    sortable: false,
+  },
+  {
+    title: t("adminuser.email"),
+    key: "email",
+    sortable: false,
+  },
+  {
+  title: t("actions"),
+  key: "actions",
+  sortable: false,
+},
+];
+
+function updatePage(newPage: string) {
+  page.value = newPage;
+
+  sendRequest();
+}
+
+function updateOrder(newOrders: VuetifyOrder[]) {
+  const newOrder = newOrders[0];
+  order.value = { [newOrder.key]: newOrder.order };
+
+  sendRequest();
+}
+
+function onSendFilter() {
+  sendRequest();
+}
+async function createRequests(item: Requests) {
+  await requestsCreateStore.create(item);
+
+  if (!created?.value) {
+    return;
+  }
+
+}
+
+onBeforeUnmount(() => {
+  adminuserDeleteStore.$reset();
+});
+function sendRequestToDriver(item: AdminUser) {
+  createRequests(createRequest(item));
+}
+function createRequest(item: AdminUser): Requests {
+  const req: Requests = {
+    fromUser: apiToken.getDecodedToken().iri,
+    toUser: item["@id"],
+    code: "shpper_to_driver",
+    type: "pending",
+    targetEntityId: getTargetEntityId()
+  }
+  return req;
+}
+function getTargetEntityId(): number {
+  const routeParam = route.params.id
+  const targetEntityId = routeParam.replace('/api/shipments/','')
+  return +targetEntityId
+}
+</script>
