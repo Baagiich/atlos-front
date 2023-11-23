@@ -3,4 +3,7 @@ export default {
   sendRequest: "Хүсэлт илгээх",
   pickDriver: "Жолооч сонгох",
   pickVehicle: "Тээврийн хэрэгсэл сонгох",
+  totalItemError: "Нэг ачаан дээр зөвхөн нэг жолооч бүртгэнэ",
+  pending: "Хүсэлт илгээсэн",
+  approved: "Хүсэлт баталгаажсан",
 };

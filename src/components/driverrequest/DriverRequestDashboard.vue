@@ -22,6 +22,9 @@
       <v-col md="6">
           <DriverRequest/>
       </v-col>
+      <v-col md="6">
+          <VehicleRequest/>
+      </v-col>
     </v-row>
   </v-container>
 
@@ -42,6 +45,7 @@ import { useBreadcrumb } from "@/composables/breadcrumb";
 import ShipmentInfo from "@/components/driverrequest/ShipmentInfo.vue"
 import ShipmentLoadInfos from "@/components/driverrequest/ShipmentLoadInfos.vue"
 import DriverRequest from "./DriverRequest.vue";
+import VehicleRequest from "./VehicleRequest.vue";
 
 const { t } = useI18n();
 const route = useRoute();

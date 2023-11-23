@@ -73,7 +73,6 @@
 <script setup lang="ts">
 import { ref, onBeforeUnmount, Ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAdminUserListStore } from "@/store/adminuser/list";
 import { useAdminUserDeleteStore } from "@/store/adminuser/delete";
@@ -108,7 +107,7 @@ const page = ref("1");
 const filters: Ref<Filters> = ref({});
   filters.value.email = ""
 const order = ref({});
-const filtersRequest: Ref<Filters> = ref({fromUser:apiToken.getDecodedToken().iri , targetEntityId: getTargetEntityId(), type: RequestsType.PENDING , code: RequestsCodeType.SHIPPER_TO_DRIVER});
+const filtersRequest: Ref<Filters> = ref({fromUser:apiToken.getDecodedToken().iri , targetEntityId: getTargetEntityId(), type: RequestsType.PENDING , code: RequestsCodeType.SHIPPER_TO_VEHICLE});
 var showCreateAlert = ref(false);
 var showCreateBtn = ref(false);
 var showFendingBtn = ref(false);
