@@ -93,7 +93,7 @@ const vehicleListStore = useVehicleListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(vehicleListStore);
 
 const requestsListStore = useRequestsListStore();
-const { items:requestItems, totalItems:requestTotalItems, error: requestError, isLoading: requsetisLoading } = storeToRefs(requestsListStore);
+const { items:requestVehicleItems, totalItems:requestVehicleTotalItems, error: requestError, isLoading: requsetisLoading } = storeToRefs(requestsListStore);
 
 const requestsCreateStore = useRequestsCreateStore();
 const { created } = storeToRefs(requestsCreateStore);
@@ -101,7 +101,7 @@ const page = ref("1");
 const filters: Ref<Filters> = ref({});
   filters.value.plateNumber = ""
 const order = ref({});
-const filtersRequest: Ref<Filters> = ref({fromUser:apiToken.getDecodedToken().iri , targetEntityId: getTargetEntityId(), type: RequestsType.PENDING , code: RequestsCodeType.SHIPPER_TO_VEHICLE});
+const filtersRequest: Ref<Filters> = ref({fromUser:apiToken.getDecodedToken().iri , targetEntityId: getTargetEntityId() , code: RequestsCodeType.SHIPPER_TO_VEHICLE});
 var showCreateAlert = ref(false);
 var showCreateBtn = ref(false);
 var showFendingBtn = ref(false);
@@ -126,17 +126,17 @@ useMercureList({
   deleteStore: vehicleDeleteStore,
 });
 async function toggleBtns() {
-  if( requestTotalItems.value != 0){
+  if( requestVehicleTotalItems.value != 0){
     showCreateBtn = ref(false);
-    if(requestItems.value[0].type == RequestsType.REJECTED)
+    if(requestVehicleItems.value[0].type == RequestsType.REJECTED)
   {
     showCreateBtn = ref(true);
   }
-  if(requestItems.value[0].type == RequestsType.PENDING)
+  if(requestVehicleItems.value[0].type == RequestsType.PENDING)
   {
     showFendingBtn = ref(true);
   }
-  if(requestItems.value[0].type == RequestsType.APPROVED)
+  if(requestVehicleItems.value[0].type == RequestsType.APPROVED)
   {
     showApproveBtn = ref(true);
   }
@@ -149,9 +149,9 @@ async function toggleBtns() {
 async function setup() {
   await checkRequest();
 
-  if (requestTotalItems.value >= 1) {
+  if (requestVehicleTotalItems.value >= 1) {
   filters.value = {}
-    filters.value.plateNumber = requestItems.value[0].params.plateNumber;
+    filters.value.plateNumber = requestVehicleItems.value[0].params.plateNumber;
     await sendRequest();
   }
   await toggleBtns();
@@ -197,8 +197,8 @@ function updateOrder(newOrders: VuetifyOrder[]) {
 function onSendFilter() {
   sendRequest();
 }
-async function createRequests(item: Requests) {
-  if(requestTotalItems.value >= 1)
+async function createVehicleRequests(item: Requests) {
+  if(requestVehicleTotalItems.value >= 1)
   {
     showCreateAlert = ref(true);
     sendRequest();
@@ -216,9 +216,9 @@ onBeforeUnmount(() => {
   vehicleDeleteStore.$reset();
 });
 function sendRequestToVehicle(item: Vehicle) {
-  createRequests(createRequest(item));
+  createVehicleRequests(createVehicleRequest(item));
 }
-function createRequest(item: Vehicle): Requests {
+function createVehicleRequest(item: Vehicle): Requests {
   const req: Requests = {
     fromUser: apiToken.getDecodedToken().iri,
     toUser: item.shipper,

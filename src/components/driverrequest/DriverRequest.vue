@@ -21,7 +21,7 @@
       {{ error }}
     </v-alert>
 
-    <v-alert v-if="showCreateAlert" type="error" class="mb-4" closable="true">
+    <v-alert v-if="showCreateVehicleAlert" type="error" class="mb-4" closable="true">
       {{ $t('driverrequest.totalItemError') }}
     </v-alert>
     <v-data-table-server
@@ -43,7 +43,7 @@
         {{ item.email }}
       </template>
       <template #item.actions="{ item }">
-      <v-btn v-if="showCreateBtn"
+      <v-btn v-if="showCreateVehicleBtn"
         color="secondary"
         size="small"
         class="ma-2"
@@ -51,14 +51,14 @@
       >
       {{ t("driverrequest.sendRequest") }}
       </v-btn>
-      <v-btn v-if="showFendingBtn"
+      <v-btn v-if="showFendingVehicleBtn"
         color="blue-grey-lighten-2"
         size="small"
         class="ma-2"
       >
       {{ t("driverrequest.pending") }}
       </v-btn>
-      <v-btn v-if="showApproveBtn"
+      <v-btn v-if="showApproveVehicleBtn"
         color="light-green-lighten-2"
         size="small"
         class="ma-2"
@@ -73,7 +73,6 @@
 <script setup lang="ts">
 import { ref, onBeforeUnmount, Ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAdminUserListStore } from "@/store/adminuser/list";
 import { useAdminUserDeleteStore } from "@/store/adminuser/delete";
@@ -108,11 +107,11 @@ const page = ref("1");
 const filters: Ref<Filters> = ref({});
   filters.value.email = ""
 const order = ref({});
-const filtersRequest: Ref<Filters> = ref({fromUser:apiToken.getDecodedToken().iri , targetEntityId: getTargetEntityId(), type: RequestsType.PENDING , code: RequestsCodeType.SHIPPER_TO_DRIVER});
-var showCreateAlert = ref(false);
-var showCreateBtn = ref(false);
-var showFendingBtn = ref(false);
-var showApproveBtn = ref(false);
+const filtersRequest: Ref<Filters> = ref({fromUser:apiToken.getDecodedToken().iri , targetEntityId: getTargetEntityId() , code: RequestsCodeType.SHIPPER_TO_DRIVER});
+var showCreateVehicleAlert = ref(false);
+var showCreateVehicleBtn = ref(false);
+var showFendingVehicleBtn = ref(false);
+var showApproveVehicleBtn = ref(false);
 async function sendRequest() {
   await adminuserListStore.getItems({
     page: page.value,
@@ -134,21 +133,21 @@ useMercureList({
 });
 async function toggleBtns() {
   if( requestTotalItems.value != 0){
-    showCreateBtn = ref(false);
+    showCreateVehicleBtn = ref(false);
     if(requestItems.value[0].type == RequestsType.REJECTED)
   {
-    showCreateBtn = ref(true);
+    showCreateVehicleBtn = ref(true);
   }
   if(requestItems.value[0].type == RequestsType.PENDING)
   {
-    showFendingBtn = ref(true);
+    showFendingVehicleBtn = ref(true);
   }
   if(requestItems.value[0].type == RequestsType.APPROVED)
   {
-    showApproveBtn = ref(true);
+    showApproveVehicleBtn = ref(true);
   }
   }else{
-    showCreateBtn = ref(true);
+    showCreateVehicleBtn = ref(true);
   }
   sendRequest();
 
@@ -206,7 +205,7 @@ function onSendFilter() {
 async function createRequests(item: Requests) {
   if(requestTotalItems.value >= 1)
   {
-    showCreateAlert = ref(true);
+    showCreateVehicleAlert = ref(true);
     sendRequest();
     return
   }
