@@ -21,7 +21,7 @@
       {{ error }}
     </v-alert>
 
-    <v-alert v-if="showCreateVehicleAlert" type="error" class="mb-4" closable="true">
+    <v-alert v-if="showCreateAlert" type="error" class="mb-4" closable="true">
       {{ $t('driverrequest.totalItemError') }}
     </v-alert>
     <v-data-table-server
@@ -43,7 +43,7 @@
         {{ item.email }}
       </template>
       <template #item.actions="{ item }">
-      <v-btn v-if="showCreateVehicleBtn"
+      <v-btn v-if="showCreateBtn"
         color="secondary"
         size="small"
         class="ma-2"
@@ -51,14 +51,14 @@
       >
       {{ t("driverrequest.sendRequest") }}
       </v-btn>
-      <v-btn v-if="showFendingVehicleBtn"
+      <v-btn v-if="showFendingBtn"
         color="blue-grey-lighten-2"
         size="small"
         class="ma-2"
       >
       {{ t("driverrequest.pending") }}
       </v-btn>
-      <v-btn v-if="showApproveVehicleBtn"
+      <v-btn v-if="showApproveBtn"
         color="light-green-lighten-2"
         size="small"
         class="ma-2"
@@ -108,10 +108,10 @@ const filters: Ref<Filters> = ref({});
   filters.value.email = ""
 const order = ref({});
 const filtersRequest: Ref<Filters> = ref({fromUser:apiToken.getDecodedToken().iri , targetEntityId: getTargetEntityId() , code: RequestsCodeType.SHIPPER_TO_DRIVER});
-var showCreateVehicleAlert = ref(false);
-var showCreateVehicleBtn = ref(false);
-var showFendingVehicleBtn = ref(false);
-var showApproveVehicleBtn = ref(false);
+var showCreateAlert = ref(false);
+var showCreateBtn = ref(false);
+var showFendingBtn = ref(false);
+var showApproveBtn = ref(false);
 async function sendRequest() {
   await adminuserListStore.getItems({
     page: page.value,
@@ -133,21 +133,21 @@ useMercureList({
 });
 async function toggleBtns() {
   if( requestTotalItems.value != 0){
-    showCreateVehicleBtn = ref(false);
+    showCreateBtn = ref(false);
     if(requestItems.value[0].type == RequestsType.REJECTED)
   {
-    showCreateVehicleBtn = ref(true);
+    showCreateBtn = ref(true);
   }
   if(requestItems.value[0].type == RequestsType.PENDING)
   {
-    showFendingVehicleBtn = ref(true);
+    showFendingBtn = ref(true);
   }
   if(requestItems.value[0].type == RequestsType.APPROVED)
   {
-    showApproveVehicleBtn = ref(true);
+    showApproveBtn = ref(true);
   }
   }else{
-    showCreateVehicleBtn = ref(true);
+    showCreateBtn = ref(true);
   }
   sendRequest();
 
@@ -205,7 +205,7 @@ function onSendFilter() {
 async function createRequests(item: Requests) {
   if(requestTotalItems.value >= 1)
   {
-    showCreateVehicleAlert = ref(true);
+    showCreateAlert = ref(true);
     sendRequest();
     return
   }
