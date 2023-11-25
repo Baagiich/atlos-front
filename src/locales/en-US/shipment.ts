@@ -1,0 +1,23 @@
+export default {
+  shipmentImages: "ShipmentImages",
+  state: "State",
+  driver: "Driver",
+  action: "Action",
+  consignor: "Consignor",
+  shipmentCode: "ShipmentCode",
+  shipmentType: "ShipmentType",
+  shipmentShipperDeals: "ShipmentShipperDeals",
+  reviews: "Reviews",
+  shipper: "Shipper",
+  fromAddress: "FromAddress",
+  toAddress: "ToAddress",
+  loadAt: "LoadAt",
+  unloadAt: "UnloadAt",
+  prePayment: "PrePayment",
+  postPayment: "PostPayment",
+  price: "Price",
+  updatedAt: "UpdatedAt",
+  createdAt: "CreatedAt",
+  shipmentTypeCode: "ShipmentTypeCode",
+  sendBid: "Send bid"
+};

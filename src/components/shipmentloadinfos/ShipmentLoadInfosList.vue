@@ -18,11 +18,6 @@
       {{ error }}
     </v-alert>
 
-    <DataFilter @filter="onSendFilter" @reset="resetFilter">
-      <template #filter>
-        <Filter :values="filters" />
-      </template>
-    </DataFilter>
 
     <v-data-table-server
       :headers="headers"
@@ -44,93 +39,75 @@
 
       <template #item.@id="{ item }">
         <router-link
-          :to="{ name: 'CityShow', params: { id: item['@id'] } }"
+          :to="{ name: 'ShipmentLoadInfosShow', params: { id: item['@id'] } }"
         >
           {{ item["@id"] }}
         </router-link>
       </template>
 
-      <template #item.state="{ item }">
+      <template #item.shipment="{ item }">
         <router-link
-          v-if="router.hasRoute('StateShow')"
-          :to="{ name: 'StateShow', params: { id: item.state } }"
+          v-if="router.hasRoute('ShipmentShow')"
+          :to="{ name: 'ShipmentShow', params: { id: item.shipment } }"
         >
-          {{ item.state }}
+          {{ item.shipment }}
         </router-link>
 
         <p v-else>
-          {{ item.state }}
+          {{ item.shipment }}
         </p>
       </template>
-      <template #item.addresses="{ item }">
-        <template v-if="router.hasRoute('AddressShow')">
-          <router-link
-            v-for="address in item.addresses"
-            :to="{ name: 'AddressShow', params: { id: address } }"
-            :key="address"
-          >
-            {{ address }}
+      <template #item.shipmentpackagetype="{ item }">
+        <router-link
+          v-if="router.hasRoute('ShipmentPackageTypeShow')"
+          :to="{ name: 'ShipmentPackageTypeShow', params: { id: item.shipmentpackagetype } }"
+        >
+          {{ item.shipmentpackagetype }}
+        </router-link>
 
-            <br />
-          </router-link>
-        </template>
-
-        <template v-else>
-          <p v-for="address in item.addresses" :key="address">
-            {{ address }}
-          </p>
-        </template>
+        <p v-else>
+          {{ item.shipmentpackagetype }}
+        </p>
       </template>
-      <template #item.updatedAt="{ item }">
-        {{ formatDateTime(item.updatedAt) }}
-      </template>
-            <template #item.createdAt="{ item }">
-        {{ formatDateTime(item.createdAt) }}
-      </template>
-          </v-data-table-server>
+    </v-data-table-server>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount, Ref } from "vue";
+import { ref, onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import { useCityListStore } from "@/store/city/list";
-import { useCityDeleteStore } from "@/store/city/delete";
+import { useShipmentLoadInfosListStore } from "@/store/shipmentloadinfos/list";
+import { useShipmentLoadInfosDeleteStore } from "@/store/shipmentloadinfos/delete";
 import Toolbar from "@/components/common/Toolbar.vue";
-import DataFilter from "@/components/common/DataFilter.vue";
-import Filter from "@/components/city/CityFilter.vue";
 import ActionCell from "@/components/common/ActionCell.vue";
-import { formatDateTime } from "@/utils/date";
 import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
-import type { Filters, VuetifyOrder } from "@/types/list";
-import type { City } from "@/types/city";
+import type { VuetifyOrder } from "@/types/list";
+import type { ShipmentLoadInfos } from "@/types/shipmentloadinfos";
 
 const { t } = useI18n();
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
-const cityDeleteStore = useCityDeleteStore();
-const { deleted, mercureDeleted } = storeToRefs(cityDeleteStore);
+const shipmentloadinfosDeleteStore = useShipmentLoadInfosDeleteStore();
+const { deleted, mercureDeleted } = storeToRefs(shipmentloadinfosDeleteStore);
 
-const cityListStore = useCityListStore();
-const { items, totalItems, error, isLoading } = storeToRefs(cityListStore);
+const shipmentloadinfosListStore = useShipmentLoadInfosListStore();
+const { items, totalItems, error, isLoading } = storeToRefs(shipmentloadinfosListStore);
 
 const page = ref("1");
-const filters: Ref<Filters> = ref({});
 const order = ref({});
 
 async function sendRequest() {
-  await cityListStore.getItems({
+  await shipmentloadinfosListStore.getItems({
     page: page.value,
     order: order.value,
-    ...filters.value,
   });
 }
 
-useMercureList({ store: cityListStore, deleteStore: cityDeleteStore });
+useMercureList({ store: shipmentloadinfosListStore, deleteStore: shipmentloadinfosDeleteStore });
 
 sendRequest();
 
@@ -142,33 +119,48 @@ const headers = [
   },
   { title: t("id"), key: "@id" },
   {
-    title: t("city.name"),
+    title: t("shipmentloadinfos.name"),
     key: "name",
     sortable: false,
   },
   {
-    title: t("city.state"),
-    key: "state",
+    title: t("shipmentloadinfos.count"),
+    key: "count",
     sortable: false,
   },
   {
-    title: t("city.capital"),
-    key: "capital",
+    title: t("shipmentloadinfos.length"),
+    key: "length",
     sortable: false,
   },
   {
-    title: t("city.addresses"),
-    key: "addresses",
+    title: t("shipmentloadinfos.width"),
+    key: "width",
     sortable: false,
   },
   {
-    title: t("city.updatedAt"),
-    key: "updatedAt",
+    title: t("shipmentloadinfos.height"),
+    key: "height",
     sortable: false,
   },
   {
-    title: t("city.createdAt"),
-    key: "createdAt",
+    title: t("shipmentloadinfos.weight"),
+    key: "weight",
+    sortable: false,
+  },
+  {
+    title: t("shipmentloadinfos.shipment"),
+    key: "shipment",
+    sortable: false,
+  },
+  {
+    title: t("shipmentloadinfos.isPileUp"),
+    key: "isPileUp",
+    sortable: false,
+  },
+  {
+    title: t("shipmentloadinfos.packageType"),
+    key: "packageType",
     sortable: false,
   },
 ];
@@ -186,43 +178,34 @@ function updateOrder(newOrders: VuetifyOrder[]) {
   sendRequest();
 }
 
-function onSendFilter() {
-  sendRequest();
-}
 
-function resetFilter() {
-  filters.value = {};
-
-  sendRequest();
-}
-
-function goToShowPage(item: City) {
+function goToShowPage(item: ShipmentLoadInfos) {
   router.push({
-    name: "CityShow",
+    name: "ShipmentLoadInfosShow",
     params: { id: item["@id"] },
   });
 }
 
 function goToCreatePage() {
   router.push({
-    name: "CityCreate",
+    name: "ShipmentLoadInfosCreate",
   });
 }
 
-function goToUpdatePage(item: City) {
+function goToUpdatePage(item: ShipmentLoadInfos) {
   router.push({
-    name: "CityUpdate",
+    name: "ShipmentLoadInfosUpdate",
     params: { id: item["@id"] },
   });
 }
 
-async function deleteItem(item: City) {
-  await cityDeleteStore.deleteItem(item);
+async function deleteItem(item: ShipmentLoadInfos) {
+  await shipmentloadinfosDeleteStore.deleteItem(item);
 
   sendRequest();
 }
 
 onBeforeUnmount(() => {
-  cityDeleteStore.$reset();
+  shipmentloadinfosDeleteStore.$reset();
 });
 </script>

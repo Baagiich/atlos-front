@@ -4,7 +4,12 @@ import contracttemplateRoutes from "./contracttemplate";
 import countryRoutes from "./country";
 import adminUserRoutes from "./adminuser";
 import securityRoutes from "./security";
-
+import shipmentRoutes from "./shipment";
+import requestsRoutes from "./requests";
+import addressRoutes from "./address";
+import vehicleRoutes from "./vehicle";
+import cityRoutes from "./city";
+import driverrequest from "./driverrequest";
 const routes = [
   {
     path: "/",
@@ -25,6 +30,12 @@ const routes = [
   ...countryRoutes,
   ...adminUserRoutes,
   ...securityRoutes,
+  ...shipmentRoutes,
+  ...requestsRoutes,
+  ...addressRoutes,
+  ...vehicleRoutes,
+  ...cityRoutes,
+  ...driverrequest,
 ];
 
 const router = createRouter({
