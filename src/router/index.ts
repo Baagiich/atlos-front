@@ -4,6 +4,7 @@ import contracttemplateRoutes from "./contracttemplate";
 import countryRoutes from "./country";
 import adminUserRoutes from "./adminuser";
 import securityRoutes from "./security";
+import shippercompany from "./shippercompany";
 
 const routes = [
   {
@@ -25,6 +26,7 @@ const routes = [
   ...countryRoutes,
   ...adminUserRoutes,
   ...securityRoutes,
+  ...shippercompany,
 ];
 
 const router = createRouter({
