@@ -1,4 +1,7 @@
 import adminuser from "./adminuser";
+import shipment from "./shipment";
+import driverrequest from "./driverrequest";
+import shipmentloadinfos from "./shipmentloadinfos";
 export default {
   home: "Нүүр",
   submit: "Илгээх",
@@ -23,4 +26,7 @@ export default {
   confirmDelete: "Устгахдаа итгэлтэй байна уу?",
   loading: "Ачаалж байна...",
   adminuser,
+  shipment,
+  driverrequest,
+  shipmentloadinfos,
 };

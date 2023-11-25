@@ -36,36 +36,36 @@
       <template #item.actions="{ item }">
         <ActionCell
           :actions="['show', 'update', 'delete']"
-          @show="goToShowPage(item.raw)"
-          @update="goToUpdatePage(item.raw)"
-          @delete="deleteItem(item.raw)"
+          @show="goToShowPage(item)"
+          @update="goToUpdatePage(item)"
+          @delete="deleteItem(item)"
         />
       </template>
 
       <template #item.@id="{ item }">
         <router-link
-          :to="{ name: 'CityShow', params: { id: item.raw['@id'] } }"
+          :to="{ name: 'CityShow', params: { id: item['@id'] } }"
         >
-          {{ item.raw["@id"] }}
+          {{ item["@id"] }}
         </router-link>
       </template>
 
       <template #item.state="{ item }">
         <router-link
           v-if="router.hasRoute('StateShow')"
-          :to="{ name: 'StateShow', params: { id: item.raw.state } }"
+          :to="{ name: 'StateShow', params: { id: item.state } }"
         >
-          {{ item.raw.state }}
+          {{ item.state }}
         </router-link>
 
         <p v-else>
-          {{ item.raw.state }}
+          {{ item.state }}
         </p>
       </template>
       <template #item.addresses="{ item }">
         <template v-if="router.hasRoute('AddressShow')">
           <router-link
-            v-for="address in item.raw.addresses"
+            v-for="address in item.addresses"
             :to="{ name: 'AddressShow', params: { id: address } }"
             :key="address"
           >
@@ -76,16 +76,16 @@
         </template>
 
         <template v-else>
-          <p v-for="address in item.raw.addresses" :key="address">
+          <p v-for="address in item.addresses" :key="address">
             {{ address }}
           </p>
         </template>
       </template>
       <template #item.updatedAt="{ item }">
-        {{ formatDateTime(item.raw.updatedAt) }}
+        {{ formatDateTime(item.updatedAt) }}
       </template>
             <template #item.createdAt="{ item }">
-        {{ formatDateTime(item.raw.createdAt) }}
+        {{ formatDateTime(item.createdAt) }}
       </template>
           </v-data-table-server>
   </v-container>
