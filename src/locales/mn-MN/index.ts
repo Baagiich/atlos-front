@@ -2,6 +2,10 @@ import adminuser from "./adminuser";
 import shipment from "./shipment";
 import driverrequest from "./driverrequest";
 import shipmentloadinfos from "./shipmentloadinfos";
+import driver from "./driver";
+import driverimage from "./driverimage";
+import mediaobject from "./mediaobject";
+
 export default {
   home: "Нүүр",
   submit: "Илгээх",
@@ -29,4 +33,7 @@ export default {
   shipment,
   driverrequest,
   shipmentloadinfos,
+  driver,
+  driverimage,
+  mediaobject,
 };

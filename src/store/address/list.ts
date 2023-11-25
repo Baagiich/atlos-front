@@ -71,7 +71,7 @@ export const useAddressListStore = defineStore("addressList", {
 
     updateItem(updatedItem: Address) {
       const item: Address | undefined = this.items.find(
-        (i) => i["@id"] === updatedItem["@id"]
+        (i) => i["@id"] === updatedItem["@id"],
       );
 
       if (!item) return;

@@ -7,14 +7,14 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="deleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="deleted" type="success" class="mb-4" :closable="true">
       {{ $t("itemDeleted", [deleted["@id"]]) }}
     </v-alert>
-    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="mercureDeleted" type="success" class="mb-4" :closable="true">
       {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
     </v-alert>
 
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">
+    <v-alert v-if="error" type="error" class="mb-4" :closable="true">
       {{ error }}
     </v-alert>
 
@@ -31,7 +31,7 @@
       :loading="isLoading"
       :items-per-page="items.length"
       @update:page="updatePage"
-      @update:sortBy="updateOrder"
+      @update:sorty="updateOrder"
     >
       <template #item.actions="{ item }">
         <ActionCell
@@ -52,7 +52,7 @@
 
       <template #item.driver="{ item }">
         <router-link
-          v-if="router.hasRoute('DriverShow')"
+          v-if="router.hasRoute('DriverShow') && item.driver"
           :to="{ name: 'DriverShow', params: { id: item.driver } }"
         >
           {{ item.driver }}
@@ -69,7 +69,7 @@
         {{ UserStatusType[item.status] }}
       </template>
       <template #item.verified="{ item }">
-        <v-chip>{{ item.verified ? 'verified': 'pending' }}</v-chip>
+        <v-chip>{{ item.verified ? "verified" : "pending" }}</v-chip>
       </template>
     </v-data-table-server>
   </v-container>
@@ -103,7 +103,7 @@ const { deleted, mercureDeleted } = storeToRefs(adminuserDeleteStore);
 const adminuserListStore = useAdminUserListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(adminuserListStore);
 
-const page = ref("1");
+const page = ref(1);
 const filters: Ref<Filters> = ref({});
 const order = ref({});
 

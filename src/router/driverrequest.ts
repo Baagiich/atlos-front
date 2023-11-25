@@ -1,9 +1,6 @@
 const names = {
   dahsboard: "DriverRequestDashboard",
 };
-const breadcrumbs = {
-  create: { title: names.dahsboard, to: { name: names.dahsboard } },
-};
 export default [
   {
     name: names.dahsboard,

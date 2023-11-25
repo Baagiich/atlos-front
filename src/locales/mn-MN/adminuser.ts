@@ -9,4 +9,5 @@ export default {
   status: "Статус",
   verified: "Баталгаажсан",
   driver: "Жолооч",
+  edit: "Админы хэрэглэгч засах",
 };

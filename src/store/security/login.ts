@@ -1,9 +1,7 @@
 import { defineStore } from "pinia";
 import { SubmissionError } from "@/utils/error";
-import api from "@/utils/api";
-import type { Auth, TokenResponse } from "@/types/auth";
+import type { Auth } from "@/types/auth";
 import type { SubmissionErrors } from "@/types/error";
-import * as dayjs from "dayjs";
 import * as apiToken from "@/utils/apiToken";
 import { useDeviceShowStore } from "@/store/device/show";
 import { useDeviceCreateStore } from "@/store/device/create";

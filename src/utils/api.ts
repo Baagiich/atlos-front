@@ -10,13 +10,16 @@ import { storeToRefs } from "pinia";
 
 const MIME_TYPE = "application/ld+json";
 
-export default async function api(id: string, options: any = {}) {
+export default async function api(
+  id: string,
+  options: any = {},
+): Promise<Response> {
   const router = useRouter();
   const deviceShowStore = useDeviceShowStore();
   const deviceCreateStore = useDeviceCreateStore();
 
   deviceShowStore.retrieveFromLocal();
-  const { retrieved, error, isLoading } = storeToRefs(deviceShowStore);
+  const { retrieved } = storeToRefs(deviceShowStore);
 
   if (typeof options.headers === "undefined") {
     Object.assign(options, { headers: new Headers() });
@@ -47,6 +50,7 @@ export default async function api(id: string, options: any = {}) {
             !isRefreshed &&
             tokenData &&
             apiToken.isRefreshTokenAlive(tokenData) &&
+            retrieved &&
             retrieved.value
           ) {
             try {
@@ -60,7 +64,7 @@ export default async function api(id: string, options: any = {}) {
           }
 
           if (router.currentRoute.value.name !== "Login") {
-            return router.push({ name: "Login" });
+            router.push({ name: "Login" });
           }
         }
       }
@@ -68,6 +72,8 @@ export default async function api(id: string, options: any = {}) {
       throw e;
     }
   }
+
+  throw "failed api";
 }
 
 async function internalApi(id: string, options: any = {}) {

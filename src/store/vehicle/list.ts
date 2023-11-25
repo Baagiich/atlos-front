@@ -71,7 +71,7 @@ export const useVehicleListStore = defineStore("vehicleList", {
 
     updateItem(updatedItem: Vehicle) {
       const item: Vehicle | undefined = this.items.find(
-        (i) => i["@id"] === updatedItem["@id"]
+        (i) => i["@id"] === updatedItem["@id"],
       );
 
       if (!item) return;

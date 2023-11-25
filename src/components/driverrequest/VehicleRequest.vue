@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12" sm="4" md="4">
       <v-text-field
-      v-model="filters.plateNumber"
+        v-model="filters.plateNumber"
         :label="$t('driverrequest.pickVehicle')"
         type="string"
         @change="onSendFilter"
@@ -14,8 +14,13 @@
       {{ error }}
     </v-alert>
 
-    <v-alert v-if="showCreateVehicleAlert" type="error" class="mb-4" closable="true">
-      {{ $t('driverrequest.totalItemError') }}
+    <v-alert
+      v-if="showCreateVehicleAlert"
+      type="error"
+      class="mb-4"
+      closable="true"
+    >
+      {{ $t("driverrequest.totalItemError") }}
     </v-alert>
     <v-data-table-server
       :headers="headers"
@@ -36,29 +41,32 @@
         {{ item.vehicleCapacity }}
       </template>
       <template #item.actions="{ item }">
-      <v-btn v-if="showCreateVehicleBtn"
-        color="secondary"
-        size="small"
-        class="ma-2"
-        @click="sendRequestToVehicle(item)"
-      >
-      {{ t("driverrequest.sendRequest") }}
-      </v-btn>
-      <v-btn v-if="showFendingVehicleBtn"
-        color="blue-grey-lighten-2"
-        size="small"
-        class="ma-2"
-      >
-      {{ t("driverrequest.pending") }}
-      </v-btn>
-      <v-btn v-if="showApproveVehicleBtn"
-        color="light-green-lighten-2"
-        size="small"
-        class="ma-2"
-      >
-      {{ t("driverrequest.approved") }}
-      </v-btn>
-    </template>
+        <v-btn
+          v-if="showCreateVehicleBtn"
+          color="secondary"
+          size="small"
+          class="ma-2"
+          @click="sendRequestToVehicle(item)"
+        >
+          {{ t("driverrequest.sendRequest") }}
+        </v-btn>
+        <v-btn
+          v-if="showFendingVehicleBtn"
+          color="blue-grey-lighten-2"
+          size="small"
+          class="ma-2"
+        >
+          {{ t("driverrequest.pending") }}
+        </v-btn>
+        <v-btn
+          v-if="showApproveVehicleBtn"
+          color="light-green-lighten-2"
+          size="small"
+          class="ma-2"
+        >
+          {{ t("driverrequest.approved") }}
+        </v-btn>
+      </template>
     </v-data-table-server>
   </v-container>
 </template>
@@ -69,7 +77,6 @@ import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { useVehicleDeleteStore } from "@/store/vehicle/delete";
 import { useMercureList } from "@/composables/mercureList";
-import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { VuetifyOrder, Filters } from "@/types/list";
 import { useRequestsCreateStore } from "@/store/requests/create";
 import * as apiToken from "@/utils/apiToken";
@@ -82,26 +89,29 @@ import { useVehicleListStore } from "@/store/vehicle/list";
 import { Vehicle } from "@/types/vehicle";
 
 const { t } = useI18n();
-const breadcrumb = useBreadcrumb();
 const route = useRoute();
 
 const vehicleDeleteStore = useVehicleDeleteStore();
-const { deleted, mercureDeleted } = storeToRefs(vehicleDeleteStore);
 
 const vehicleListStore = useVehicleListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(vehicleListStore);
 
 const requestsVehicleListStore = useRequestsListStore();
-const { items:requestVehicleItems, totalItems:requestVehicleTotalItems, error: requestError, isLoading: requsetisLoading } = storeToRefs(requestsVehicleListStore);
+const { items: requestVehicleItems, totalItems: requestVehicleTotalItems } =
+  storeToRefs(requestsVehicleListStore);
 
 const requestsCreateStore = useRequestsCreateStore();
 const { created } = storeToRefs(requestsCreateStore);
 const page = ref("1");
 const filters: Ref<Filters> = ref({});
-  filters.value.plateNumber = ""
+filters.value.plateNumber = "";
 const order = ref({});
-const filtersVehicleRequest: Ref<Filters> = ref({fromUser:apiToken.getDecodedToken().iri , targetEntityId: getTargetEntityId() , code: RequestsCodeType.SHIPPER_TO_VEHICLE});
-  var showCreateVehicleAlert = ref(false);
+const filtersVehicleRequest: Ref<Filters> = ref({
+  fromUser: apiToken.getDecodedToken().iri,
+  targetEntityId: getTargetEntityId(),
+  code: RequestsCodeType.SHIPPER_TO_VEHICLE,
+});
+var showCreateVehicleAlert = ref(false);
 var showCreateVehicleBtn = ref(false);
 var showFendingVehicleBtn = ref(false);
 var showApproveVehicleBtn = ref(false);
@@ -125,31 +135,27 @@ useMercureList({
   deleteStore: vehicleDeleteStore,
 });
 async function toggleBtns() {
-  if( requestVehicleTotalItems.value != 0){
+  if (requestVehicleTotalItems.value != 0) {
     showCreateVehicleBtn = ref(false);
-    if(requestVehicleItems.value[0].type == RequestsType.REJECTED)
-  {
-    showCreateVehicleBtn = ref(true);
-  }
-  if(requestVehicleItems.value[0].type == RequestsType.PENDING)
-  {
-    showFendingVehicleBtn = ref(true);
-  }
-  if(requestVehicleItems.value[0].type == RequestsType.APPROVED)
-  {
-    showApproveVehicleBtn = ref(true);
-  }
-  }else{
+    if (requestVehicleItems.value[0].type == RequestsType.REJECTED) {
+      showCreateVehicleBtn = ref(true);
+    }
+    if (requestVehicleItems.value[0].type == RequestsType.PENDING) {
+      showFendingVehicleBtn = ref(true);
+    }
+    if (requestVehicleItems.value[0].type == RequestsType.APPROVED) {
+      showApproveVehicleBtn = ref(true);
+    }
+  } else {
     showCreateVehicleBtn = ref(true);
   }
   sendRequest();
-
 }
 async function setup() {
   await checkRequest();
 
   if (requestVehicleTotalItems.value >= 1) {
-  filters.value = {}
+    filters.value = {};
     filters.value.plateNumber = requestVehicleItems.value[0].params.plateNumber;
     await sendRequest();
   }
@@ -158,7 +164,7 @@ async function setup() {
 
 setup();
 const headers = [
-{
+  {
     title: t("driverrequest.plateNumber"),
     key: "plateNumber",
     sortable: false,
@@ -174,10 +180,10 @@ const headers = [
     sortable: false,
   },
   {
-  title: t("actions"),
-  key: "actions",
-  sortable: false,
-},
+    title: t("actions"),
+    key: "actions",
+    sortable: false,
+  },
 ];
 
 function updatePage(newPage: string) {
@@ -197,18 +203,17 @@ function onSendFilter() {
   sendRequest();
 }
 async function createVehicleRequests(item: Requests) {
-  if(requestVehicleTotalItems.value >= 1)
-  {
+  if (requestVehicleTotalItems.value >= 1) {
     showCreateVehicleAlert = ref(true);
     sendRequest();
-    return
+    return;
   }
   await requestsCreateStore.create(item);
 
   if (!created?.value) {
     return;
   }
-  setup()
+  setup();
 }
 
 onBeforeUnmount(() => {
@@ -226,13 +231,13 @@ function createVehicleRequest(item: Vehicle): Requests {
     targetEntityId: getTargetEntityId(),
     params: {
       plateNumber: item.plateNumber,
-    }
-  }
+    },
+  };
   return req;
 }
 function getTargetEntityId(): number {
-  const routeParam = route.params.id
-  const targetEntityId = routeParam.replace('/api/shipments/','')
-  return +targetEntityId
+  const routeParam = route.params.id;
+  const targetEntityId = routeParam.replace("/api/shipments/", "");
+  return +targetEntityId;
 }
 </script>

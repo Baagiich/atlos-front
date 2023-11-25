@@ -60,5 +60,5 @@ export const useShipmentLoadInfosShowStore = defineStore(
         this.error = error;
       },
     },
-  }
+  },
 );

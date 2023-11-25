@@ -39,10 +39,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useI18n } from "vue-i18n";
 import ConfirmDelete from "@/components/common/ConfirmDelete.vue";
-
-const { t } = useI18n();
 
 defineProps<{
   actions?: ("show" | "update" | "delete")[];

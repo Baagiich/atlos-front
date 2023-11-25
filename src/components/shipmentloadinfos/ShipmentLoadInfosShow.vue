@@ -7,7 +7,12 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable="true">
+    <v-alert
+      v-if="error || deleteError"
+      type="error"
+      class="mb-4"
+      closable="true"
+    >
       {{ error || deleteError }}
     </v-alert>
 
@@ -27,7 +32,7 @@
 
           <td>
             {{ item.name }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -36,7 +41,7 @@
 
           <td>
             {{ item.count }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -45,7 +50,7 @@
 
           <td>
             {{ item.length }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -54,7 +59,7 @@
 
           <td>
             {{ item.width }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -63,7 +68,7 @@
 
           <td>
             {{ item.height }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -72,7 +77,7 @@
 
           <td>
             {{ item.weight }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -99,7 +104,7 @@
 
           <td>
             {{ item.isPileUp }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -109,7 +114,10 @@
           <td>
             <router-link
               v-if="router.hasRoute('ShipmentPackageTypeShow')"
-              :to="{ name: 'ShipmentPackageTypeShow', params: { id: item.shipmentpackagetype } }"
+              :to="{
+                name: 'ShipmentPackageTypeShow',
+                params: { id: item.shipmentpackagetype },
+              }"
             >
               {{ item.shipmentpackagetype }}
             </router-link>
@@ -144,10 +152,16 @@ const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
 const shipmentloadinfosShowStore = useShipmentLoadInfosShowStore();
-const { retrieved: item, isLoading, error } = storeToRefs(shipmentloadinfosShowStore);
+const {
+  retrieved: item,
+  isLoading,
+  error,
+} = storeToRefs(shipmentloadinfosShowStore);
 
 const shipmentloadinfosDeleteStore = useShipmentLoadInfosDeleteStore();
-const { deleted, error: deleteError } = storeToRefs(shipmentloadinfosDeleteStore);
+const { deleted, error: deleteError } = storeToRefs(
+  shipmentloadinfosDeleteStore,
+);
 
 useMercureItem({
   store: shipmentloadinfosShowStore,
@@ -155,7 +169,9 @@ useMercureItem({
   redirectRouteName: "ShipmentLoadInfosList",
 });
 
-await shipmentloadinfosShowStore.retrieve(decodeURIComponent(route.params.id as string));
+await shipmentloadinfosShowStore.retrieve(
+  decodeURIComponent(route.params.id as string),
+);
 
 async function deleteItem() {
   if (!item?.value) {

@@ -60,5 +60,5 @@ export const useShipmentLoadInfosDeleteStore = defineStore(
         this.error = error;
       },
     },
-  }
+  },
 );

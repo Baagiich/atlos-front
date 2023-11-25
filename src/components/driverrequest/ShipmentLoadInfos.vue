@@ -11,19 +11,18 @@
       {{ error }}
     </v-alert>
 
-
     <v-data-table-server
       :headers="headers"
       :items="items"
       :items-length="totalItems"
       :loading="isLoading"
       :items-per-page="items.length"
+      class="shipment-load-infos-table"
       @update:page="updatePage"
       @update:sortBy="updateOrder"
-      class="shipment-load-infos-table"
     >
-      <template #item.id="{ index, item }">
-          {{ index + 1 }}
+      <template #item.id="{ item }">
+        {{ item.id }}
       </template>
       <template #item.name="{ item }">
         <p>
@@ -52,7 +51,7 @@
       </template>
       <template #item.length="{ item }">
         <p>
-          {{calculateCube(item)}}
+          {{ calculateCube(item) }}
         </p>
       </template>
     </v-data-table-server>
@@ -72,12 +71,13 @@ import type { VuetifyOrder } from "@/types/list";
 const { t } = useI18n();
 const route = useRoute();
 
-
 const shipmentloadinfosDeleteStore = useShipmentLoadInfosDeleteStore();
 const { deleted, mercureDeleted } = storeToRefs(shipmentloadinfosDeleteStore);
 
 const shipmentloadinfosListStore = useShipmentLoadInfosListStore();
-const { items, totalItems, error, isLoading } = storeToRefs(shipmentloadinfosListStore);
+const { items, totalItems, error, isLoading } = storeToRefs(
+  shipmentloadinfosListStore,
+);
 
 const page = ref("1");
 const order = ref({});
@@ -92,7 +92,10 @@ async function sendRequest() {
   });
 }
 
-useMercureList({ store: shipmentloadinfosListStore, deleteStore: shipmentloadinfosDeleteStore });
+useMercureList({
+  store: shipmentloadinfosListStore,
+  deleteStore: shipmentloadinfosDeleteStore,
+});
 
 sendRequest();
 
@@ -139,7 +142,7 @@ function updateOrder(newOrders: VuetifyOrder[]) {
   sendRequest();
 }
 function calculateCube(item: any) {
-  return item.length * item.width * item.height
+  return item.length * item.width * item.height;
 }
 onBeforeUnmount(() => {
   shipmentloadinfosDeleteStore.$reset();
@@ -147,18 +150,16 @@ onBeforeUnmount(() => {
 </script>
 <style lang="scss">
 .shipment-load-infos-table {
-  background: #F8F8F8;
+  background: #f8f8f8;
   text-align: center;
   color: #000;
-  thead{
-    th{
-      div{
+  thead {
+    th {
+      div {
         display: flow;
         font-weight: bold;
         text-align: center;
-
       }
-     
     }
   }
 }

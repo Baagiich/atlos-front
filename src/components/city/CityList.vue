@@ -43,9 +43,7 @@
       </template>
 
       <template #item.@id="{ item }">
-        <router-link
-          :to="{ name: 'CityShow', params: { id: item['@id'] } }"
-        >
+        <router-link :to="{ name: 'CityShow', params: { id: item['@id'] } }">
           {{ item["@id"] }}
         </router-link>
       </template>
@@ -66,8 +64,8 @@
         <template v-if="router.hasRoute('AddressShow')">
           <router-link
             v-for="address in item.addresses"
-            :to="{ name: 'AddressShow', params: { id: address } }"
             :key="address"
+            :to="{ name: 'AddressShow', params: { id: address } }"
           >
             {{ address }}
 
@@ -84,10 +82,10 @@
       <template #item.updatedAt="{ item }">
         {{ formatDateTime(item.updatedAt) }}
       </template>
-            <template #item.createdAt="{ item }">
+      <template #item.createdAt="{ item }">
         {{ formatDateTime(item.createdAt) }}
       </template>
-          </v-data-table-server>
+    </v-data-table-server>
   </v-container>
 </template>
 

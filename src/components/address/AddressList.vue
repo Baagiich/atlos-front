@@ -18,7 +18,6 @@
       {{ error }}
     </v-alert>
 
-
     <v-data-table-server
       :headers="headers"
       :items="items"
@@ -38,9 +37,7 @@
       </template>
 
       <template #item.@id="{ item }">
-        <router-link
-          :to="{ name: 'AddressShow', params: { id: item['@id'] } }"
-        >
+        <router-link :to="{ name: 'AddressShow', params: { id: item['@id'] } }">
           {{ item["@id"] }}
         </router-link>
       </template>
@@ -130,7 +127,6 @@ function updateOrder(newOrders: VuetifyOrder[]) {
 
   sendRequest();
 }
-
 
 function goToShowPage(item: Address) {
   router.push({

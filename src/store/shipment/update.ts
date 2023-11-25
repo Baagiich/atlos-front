@@ -64,7 +64,7 @@ export const useShipmentUpdateStore = defineStore("shipmentUpdate", {
             method: "PUT",
             headers: new Headers({ "Content-Type": "application/ld+json" }),
             body: JSON.stringify(payload),
-          }
+          },
         );
         const data: Shipment = await response.json();
 

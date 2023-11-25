@@ -7,7 +7,12 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable="true">
+    <v-alert
+      v-if="error || deleteError"
+      type="error"
+      class="mb-4"
+      closable="true"
+    >
       {{ error || deleteError }}
     </v-alert>
 
@@ -27,7 +32,7 @@
 
           <td>
             {{ item.name }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -36,7 +41,7 @@
 
           <td>
             {{ item.template }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -45,7 +50,7 @@
 
           <td>
             {{ item.userType }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -56,8 +61,8 @@
             <template v-if="router.hasRoute('ContractShow')">
               <router-link
                 v-for="contract in item.contracts"
-                :to="{ name: 'ContractShow', params: { id: contract } }"
                 :key="contract"
+                :to="{ name: 'ContractShow', params: { id: contract } }"
               >
                 {{ contract }}
 
@@ -66,10 +71,7 @@
             </template>
 
             <template v-else>
-              <p
-                v-for="contract in item.contracts"
-                :key="contract"
-              >
+              <p v-for="contract in item.contracts" :key="contract">
                 {{ contract }}
               </p>
             </template>
@@ -118,7 +120,7 @@
 
           <td>
             {{ item.active }}
-                      </td>
+          </td>
         </tr>
       </tbody>
     </v-table>
@@ -146,10 +148,16 @@ const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
 const contracttemplateShowStore = useContractTemplateShowStore();
-const { retrieved: item, isLoading, error } = storeToRefs(contracttemplateShowStore);
+const {
+  retrieved: item,
+  isLoading,
+  error,
+} = storeToRefs(contracttemplateShowStore);
 
 const contracttemplateDeleteStore = useContractTemplateDeleteStore();
-const { deleted, error: deleteError } = storeToRefs(contracttemplateDeleteStore);
+const { deleted, error: deleteError } = storeToRefs(
+  contracttemplateDeleteStore,
+);
 
 useMercureItem({
   store: contracttemplateShowStore,
@@ -157,7 +165,9 @@ useMercureItem({
   redirectRouteName: "ContractTemplateList",
 });
 
-await contracttemplateShowStore.retrieve(decodeURIComponent(route.params.id as string));
+await contracttemplateShowStore.retrieve(
+  decodeURIComponent(route.params.id as string),
+);
 
 async function deleteItem() {
   if (!item?.value) {

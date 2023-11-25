@@ -7,7 +7,7 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable="true">
+    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable>
       {{ error || deleteError }}
     </v-alert>
 
@@ -27,7 +27,7 @@
 
           <td>
             {{ item.firstName }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -36,7 +36,7 @@
 
           <td>
             {{ item.lastName }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -45,7 +45,7 @@
 
           <td>
             {{ item.userType }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -54,7 +54,7 @@
 
           <td>
             {{ item.roles }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -63,7 +63,7 @@
 
           <td>
             {{ item.email }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -72,7 +72,7 @@
 
           <td>
             {{ item.phoneNumber }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -81,7 +81,7 @@
 
           <td>
             {{ item.plainPassword }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -90,7 +90,7 @@
 
           <td>
             {{ item.status }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -99,7 +99,7 @@
 
           <td>
             {{ item.verified }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -155,7 +155,9 @@ useMercureItem({
   redirectRouteName: "AdminUserList",
 });
 
-await adminuserShowStore.retrieve(decodeURIComponent(route.params.id as string));
+await adminuserShowStore.retrieve(
+  decodeURIComponent(route.params.id as string),
+);
 
 async function deleteItem() {
   if (!item?.value) {

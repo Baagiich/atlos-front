@@ -11,14 +11,12 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount } from "vue";
-import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import LoginForm from "./LoginForm.vue";
 import { useSecurityLoginStore } from "@/store/security/login";
 import { Auth } from "@/types/auth";
 import { storeToRefs } from "pinia";
 
-const { t } = useI18n();
 const router = useRouter();
 
 const securityLoginStore = useSecurityLoginStore();

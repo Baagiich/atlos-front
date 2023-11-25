@@ -66,7 +66,7 @@ export const useShipmentLoadInfosUpdateStore = defineStore(
               method: "PUT",
               headers: new Headers({ "Content-Type": "application/ld+json" }),
               body: JSON.stringify(payload),
-            }
+            },
           );
           const data: ShipmentLoadInfos = await response.json();
 
@@ -116,5 +116,5 @@ export const useShipmentLoadInfosUpdateStore = defineStore(
         this.setViolations(undefined);
       },
     },
-  }
+  },
 );

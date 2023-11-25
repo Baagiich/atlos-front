@@ -74,7 +74,7 @@ export const useShipmentLoadInfosListStore = defineStore(
 
       updateItem(updatedItem: ShipmentLoadInfos) {
         const item: ShipmentLoadInfos | undefined = this.items.find(
-          (i) => i["@id"] === updatedItem["@id"]
+          (i) => i["@id"] === updatedItem["@id"],
         );
 
         if (!item) return;
@@ -88,5 +88,5 @@ export const useShipmentLoadInfosListStore = defineStore(
         });
       },
     },
-  }
+  },
 );

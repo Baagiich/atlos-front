@@ -18,7 +18,6 @@
       {{ error }}
     </v-alert>
 
-
     <v-data-table-server
       :headers="headers"
       :items="items"
@@ -49,8 +48,8 @@
         <template v-if="router.hasRoute('ContractShow')">
           <router-link
             v-for="contract in item.contracts"
-            :to="{ name: 'ContractShow', params: { id: contract } }"
             :key="contract"
+            :to="{ name: 'ContractShow', params: { id: contract } }"
           >
             {{ contract }}
 
@@ -67,16 +66,16 @@
       <template #item.updatedAt="{ item }">
         {{ formatDateTime(item.updatedAt) }}
       </template>
-            <template #item.activeFrom="{ item }">
+      <template #item.activeFrom="{ item }">
         {{ formatDateTime(item.activeFrom) }}
       </template>
-            <template #item.activeTo="{ item }">
+      <template #item.activeTo="{ item }">
         {{ formatDateTime(item.activeTo) }}
       </template>
-            <template #item.createdAt="{ item }">
+      <template #item.createdAt="{ item }">
         {{ formatDateTime(item.createdAt) }}
       </template>
-          </v-data-table-server>
+    </v-data-table-server>
   </v-container>
 </template>
 
@@ -103,7 +102,9 @@ const contracttemplateDeleteStore = useContractTemplateDeleteStore();
 const { deleted, mercureDeleted } = storeToRefs(contracttemplateDeleteStore);
 
 const contracttemplateListStore = useContractTemplateListStore();
-const { items, totalItems, error, isLoading } = storeToRefs(contracttemplateListStore);
+const { items, totalItems, error, isLoading } = storeToRefs(
+  contracttemplateListStore,
+);
 
 const page = ref("1");
 const order = ref({});
@@ -115,7 +116,10 @@ async function sendRequest() {
   });
 }
 
-useMercureList({ store: contracttemplateListStore, deleteStore: contracttemplateDeleteStore });
+useMercureList({
+  store: contracttemplateListStore,
+  deleteStore: contracttemplateDeleteStore,
+});
 
 sendRequest();
 
@@ -185,7 +189,6 @@ function updateOrder(newOrders: VuetifyOrder[]) {
 
   sendRequest();
 }
-
 
 function goToShowPage(item: ContractTemplate) {
   router.push({

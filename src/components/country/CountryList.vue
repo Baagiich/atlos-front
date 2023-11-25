@@ -7,14 +7,14 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="deleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="deleted" type="success" class="mb-4" closable>
       {{ $t("itemDeleted", [deleted["@id"]]) }}
     </v-alert>
-    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable>
       {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
     </v-alert>
 
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">
+    <v-alert v-if="error" type="error" class="mb-4" closable>
       {{ error }}
     </v-alert>
 
@@ -46,8 +46,8 @@
         <template v-if="router.hasRoute('StateShow')">
           <router-link
             v-for="state in item.states"
-            :to="{ name: 'StateShow', params: { id: state } }"
             :key="state"
+            :to="{ name: 'StateShow', params: { id: state } }"
           >
             {{ state }}
 
@@ -96,7 +96,7 @@ const { deleted, mercureDeleted } = storeToRefs(countryDeleteStore);
 const countryListStore = useCountryListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(countryListStore);
 
-const page = ref("1");
+const page = ref(1);
 const order = ref({});
 
 async function sendRequest() {
@@ -144,7 +144,7 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
 
   sendRequest();

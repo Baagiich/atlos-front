@@ -64,7 +64,7 @@ export const useAddressUpdateStore = defineStore("addressUpdate", {
             method: "PUT",
             headers: new Headers({ "Content-Type": "application/ld+json" }),
             body: JSON.stringify(payload),
-          }
+          },
         );
         const data: Address = await response.json();
 

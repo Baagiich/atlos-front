@@ -67,5 +67,5 @@ export const useShipmentLoadInfosCreateStore = defineStore(
         this.violations = violations;
       },
     },
-  }
+  },
 );

@@ -65,7 +65,10 @@
       <template #item.contracttemplate="{ item }">
         <router-link
           v-if="router.hasRoute('ContractTemplateShow')"
-          :to="{ name: 'ContractTemplateShow', params: { id: item.raw.contracttemplate } }"
+          :to="{
+            name: 'ContractTemplateShow',
+            params: { id: item.raw.contracttemplate },
+          }"
         >
           {{ item.raw.contracttemplate }}
         </router-link>
@@ -77,10 +80,10 @@
       <template #item.updatedAt="{ item }">
         {{ formatDateTime(item.raw.updatedAt) }}
       </template>
-            <template #item.createdAt="{ item }">
+      <template #item.createdAt="{ item }">
         {{ formatDateTime(item.raw.createdAt) }}
       </template>
-          </v-data-table-server>
+    </v-data-table-server>
   </v-container>
 </template>
 

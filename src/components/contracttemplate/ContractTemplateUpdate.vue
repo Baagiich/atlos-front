@@ -7,11 +7,21 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable="true">
+    <v-alert
+      v-if="error || deleteError"
+      type="error"
+      class="mb-4"
+      closable="true"
+    >
       {{ error || deleteError }}
     </v-alert>
 
-    <v-alert v-if="created || updated" type="success" class="mb-4" closable="true">
+    <v-alert
+      v-if="created || updated"
+      type="success"
+      class="mb-4"
+      closable="true"
+    >
       <template v-if="updated">
         {{ $t("itemUpdated", [updated["@id"]]) }}
       </template>
@@ -50,8 +60,9 @@ const contracttemplateCreateStore = useContractTemplateCreateStore();
 const { created } = storeToRefs(contracttemplateCreateStore);
 
 const contracttemplateDeleteStore = useContractTemplateDeleteStore();
-const { isLoading: deleteLoading, error: deleteError } =
-  storeToRefs(contracttemplateDeleteStore);
+const { isLoading: deleteLoading, error: deleteError } = storeToRefs(
+  contracttemplateDeleteStore,
+);
 
 const contracttemplateUpdateStore = useContractTemplateUpdateStore();
 const {
@@ -68,7 +79,9 @@ useMercureItem({
   redirectRouteName: "ContractTemplateList",
 });
 
-await contracttemplateUpdateStore.retrieve(decodeURIComponent(route.params.id as string));
+await contracttemplateUpdateStore.retrieve(
+  decodeURIComponent(route.params.id as string),
+);
 
 async function update(item: ContractTemplate) {
   await contracttemplateUpdateStore.update(item);

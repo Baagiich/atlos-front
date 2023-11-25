@@ -8,5 +8,5 @@ export default {
   approved: "Хүсэлт баталгаажсан",
   plateNumber: "Улсын дугаар",
   vehicleType: "Төрөл",
-  vehicleCapacity: "Даац"
+  vehicleCapacity: "Даац",
 };

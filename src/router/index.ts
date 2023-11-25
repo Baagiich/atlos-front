@@ -10,6 +10,10 @@ import addressRoutes from "./address";
 import vehicleRoutes from "./vehicle";
 import cityRoutes from "./city";
 import driverrequest from "./driverrequest";
+import driverRoutes from "./driver";
+import driverimageRoutes from "./driverimage";
+import mediaobjectRoutes from "./mediaobject";
+
 const routes = [
   {
     path: "/",
@@ -36,6 +40,9 @@ const routes = [
   ...vehicleRoutes,
   ...cityRoutes,
   ...driverrequest,
+  ...driverRoutes,
+  ...driverimageRoutes,
+  ...mediaobjectRoutes,
 ];
 
 const router = createRouter({

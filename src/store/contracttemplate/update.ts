@@ -66,7 +66,7 @@ export const useContractTemplateUpdateStore = defineStore(
               method: "PUT",
               headers: new Headers({ "Content-Type": "application/ld+json" }),
               body: JSON.stringify(payload),
-            }
+            },
           );
           const data: ContractTemplate = await response.json();
 
@@ -116,5 +116,5 @@ export const useContractTemplateUpdateStore = defineStore(
         this.setViolations(undefined);
       },
     },
-  }
+  },
 );

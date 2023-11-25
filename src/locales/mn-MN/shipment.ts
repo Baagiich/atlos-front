@@ -19,5 +19,5 @@ export default {
   updatedAt: "Шинэчлэсэн огноо",
   createdAt: "Үүссэн огноо",
   shipmentTypeCode: "ShipmentTypeCode",
-  sendBid: "Үнийн санал өгөх"
+  sendBid: "Үнийн санал өгөх",
 };

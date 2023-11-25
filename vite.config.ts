@@ -2,6 +2,7 @@
 import vue from "@vitejs/plugin-vue";
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import ViteFonts from "unplugin-fonts/vite";
+import eslintPlugin from "vite-plugin-eslint";
 
 // Utilities
 import { defineConfig } from "vite";
@@ -30,6 +31,7 @@ export default defineConfig({
         ],
       },
     }),
+    eslintPlugin(),
   ],
   define: { "process.env": {} },
   resolve: {
@@ -37,6 +39,21 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
     extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
+  },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    server: {
+      deps: {
+        inline: ["vuetify"],
+      },
+    },
+    coverage: {
+      provider: "v8",
+      all: true,
+      reporter: ["html", "text"],
+      include: ["src/**/*.{js,ts,vue}"],
+    },
   },
   server: {
     host: "0.0.0.0",

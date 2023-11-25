@@ -8,11 +8,15 @@
       <v-card-actions>
         <v-spacer />
 
-        <v-btn color="error darken-1" @click="emitDelete">
+        <v-btn color="error-darken-1" @click="emitDelete">
           {{ $t("delete") }}
         </v-btn>
 
-        <v-btn color="secondary darken-1" text @click.stop="emitCancel">
+        <v-btn
+          color="secondary-darken-1"
+          variant="text"
+          @click.stop="emitCancel"
+        >
           {{ $t("cancel") }}
         </v-btn>
       </v-card-actions>
