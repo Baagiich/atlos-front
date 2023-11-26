@@ -1,6 +1,8 @@
 import country from "./country";
 import adminuser from "./adminuser";
-
+import shipment from "./shipment";
+import requests from "./requests";
+import driverrequest from "./driverrequest";
 export default {
   home: "Home",
   submit: "Submit",
@@ -49,4 +51,7 @@ export default {
   plainPasswordNotMatch: "Passwords do not match",
   recievedCodeRequired: "Code is required",
   recievedCodeMustBe6Characters: "Code must be 6 characters",
+  shipment,
+  requests,
+  driverrequest,
 };
