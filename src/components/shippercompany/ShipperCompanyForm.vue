@@ -156,7 +156,7 @@
         <v-divider></v-divider>
 
         <div class="py-12 text-center">
-          {{ props.contractTemplate["template"] }}
+          {{ contractTemplate?.template }}
         </div>
 
         <v-divider></v-divider>
@@ -194,6 +194,10 @@ import type { ShipperCompany } from "@/types/shippercompany";
 import type { SubmissionErrors } from "@/types/error";
 import { ContractTemplate } from "@/types/contracttemplate";
 import { useI18n } from "vue-i18n";
+import { assertRequired } from "@/validations/assertRequired";
+import { assertMaxLength } from "@/validations/assertMaxLength";
+import { assertEmail } from "@/validations/assertEmail";
+import { assertChecked } from "@/validations/assertChecked";
 const { t } = useI18n();
 const props = defineProps<{
   values?: ShipperCompany;
@@ -214,36 +218,34 @@ if (props.values) {
 }
 
 const firstnameRules = [
-  (v: string) => !!v || t("firstnameRequired"),
-  (v: string) =>
-    (v && v.length <= 50) || t("firstnameMustBeLessThan50Characters"),
+  assertRequired(t("validation.firstnameRequired")),
+  assertMaxLength(t("validation.firstnameMustBeLessThan50Characters"), 50),
 ];
 const nameRules = [
-  (v: string) => !!v || t("nameRequired"),
-  (v: string) => (v && v.length <= 50) || t("nameMustBeLessThan50Characters"),
+  assertRequired(t("validation.nameRequired")),
+  assertMaxLength(t("validation.nameMustBeLessThan50Characters"), 50),
 ];
 const lastnameRules = [
-  (v: string) => !!v || t("lastnameRequired"),
-  (v: string) =>
-    (v && v.length <= 50) || t("lastnameMustBeLessThan50Characters"),
+  assertRequired(t("validation.lastnameRequired")),
+  assertMaxLength(t("validation.lastnameMustBeLessThan50Characters"), 50),
 ];
 
 const emailRules = [
-  (v: string) => !!v || t("emailRequired"),
-  (v: string) => /.+@.+\..+/.test(v) || t("emailInvalid"),
+  assertRequired(t("validation.emailRequired")),
+  assertEmail(t("validation.emailInvalid")),
 ];
 
 const phoneNumberRules = [
-  (v: string) => !!v || t("phoneNumberRequired"),
-  (v: string) =>
-    (v && v.length <= 20) || t("phoneNumberMustBeLessThan20Characters"),
+  assertRequired(t("validation.phoneNumberRequired")),
+  assertMaxLength(t("validation.phoneNumberMustBeLessThan20Characters"), 20),
 ];
 const registerNumberRules = [
-  (v: string) => !!v || t("registerNumberRequired"),
-  (v: string) =>
-    (v && v.length <= 12) || t("registerNumberMustBeLessThan12Characters"),
+  assertRequired(t("validation.registerNumberRequired")),
+  assertMaxLength(t("validation.registerNumberMustBeLessThan12Characters"), 12),
 ];
-const contractSignedRules = [(v: boolean) => !!v || t("contractTemplateError")];
+const contractSignedRules = [
+  assertChecked(t("validation.contractTemplateError")),
+];
 const emit = defineEmits<{
   (e: "submit", item: ShipperCompany): void;
 }>();

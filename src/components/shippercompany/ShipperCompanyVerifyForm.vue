@@ -80,6 +80,9 @@ import { VForm } from "vuetify/components";
 import type { SubmissionErrors } from "@/types/error";
 import { useI18n } from "vue-i18n";
 import { AdminUserVerify } from "@/types/adminuserverify";
+import { assertRequired } from "@/validations/assertRequired";
+import {assertPasswordConfirm} from "@/validations/assertPasswordConfirm";
+import {assertNumber} from "@/validations/assertNumber";
 const { t } = useI18n();
 const props = defineProps<{
   values?: AdminUserVerify;
@@ -94,12 +97,12 @@ if (props.values) {
     ...props.values,
   };
 }
-const plainPasswordRules = [(v: string) => !!v || t("plainPasswordRequired")];
+const plainPasswordRules = [assertRequired(t("validation.plainPasswordRequired"))];
 const plainPasswordConfirmRules = [
-  (v: string) => !!v || t("plainPasswordConfirmRequired"),
-  (v: string) => v === item.value.plainPassword || t("plainPasswordNotMatch"),
+assertRequired(t("validation.plainPasswordConfirmRequired")),
+assertPasswordConfirm(t("validation.plainPasswordNotMatch"), item.value.plainPassword)
 ];
-const recievedCodeRules = [(v: number) => !!v || t("recievedCodeRequired")];
+const recievedCodeRules = [assertNumber(t("validation.recievedCodeRequired"))];
 const emit = defineEmits<{
   (e: "submit", item: AdminUserVerify): void;
 }>();

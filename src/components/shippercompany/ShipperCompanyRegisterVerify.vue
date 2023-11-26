@@ -13,15 +13,12 @@
 import { onBeforeUnmount, ref } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import Toolbar from "@/components/common/Toolbar.vue";
 import Loading from "@/components/common/Loading.vue";
 import Form from "@/components/shippercompany/ShipperCompanyVerifyForm.vue";
 import { useShipperCompanyRegisterStore } from "@/store/shippercompany/register";
-import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { AdminUserVerify } from "@/types/adminuserverify";
 
 const router = useRouter();
-// const breadcrumb = useBreadcrumb();
 
 const shippercompanyRegisterStore = useShipperCompanyRegisterStore();
 const { created, isLoading, violations, error , verified} = storeToRefs(shippercompanyRegisterStore);
