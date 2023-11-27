@@ -6,7 +6,7 @@
           v-model="item.name"
           :error="Boolean(violations?.name)"
           :error-messages="violations?.name"
-          :label="$t('shipmentloadinfos.name')"
+          :label="$t('shipmentload.name')"
         >
           <template #append-inner>
             <v-icon
@@ -20,15 +20,15 @@
       </v-col>
       <v-col cols="12" sm="6" md="6">
         <v-text-field
-          v-model="item.count"
-          :error="Boolean(violations?.count)"
-          :error-messages="violations?.count"
-          :label="$t('shipmentloadinfos.count')"
+          v-model.number="item.quantity"
+          :error="Boolean(violations?.quantity)"
+          :error-messages="violations?.quantity"
+          :label="$t('shipmentload.quantity')"
         >
           <template #append-inner>
             <v-icon
               style="cursor: pointer"
-              @click.prevent.stop="item.count = undefined"
+              @click.prevent.stop="item.quantity = undefined"
             >
               mdi-close
             </v-icon>
@@ -37,10 +37,10 @@
       </v-col>
       <v-col cols="12" sm="6" md="6">
         <v-text-field
-          v-model="item.length"
+          v-model.number="item.length"
           :error="Boolean(violations?.length)"
           :error-messages="violations?.length"
-          :label="$t('shipmentloadinfos.length')"
+          :label="$t('shipmentload.length')"
         >
           <template #append-inner>
             <v-icon
@@ -54,10 +54,10 @@
       </v-col>
       <v-col cols="12" sm="6" md="6">
         <v-text-field
-          v-model="item.width"
+          v-model.number="item.width"
           :error="Boolean(violations?.width)"
           :error-messages="violations?.width"
-          :label="$t('shipmentloadinfos.width')"
+          :label="$t('shipmentload.width')"
         >
           <template #append-inner>
             <v-icon
@@ -71,10 +71,10 @@
       </v-col>
       <v-col cols="12" sm="6" md="6">
         <v-text-field
-          v-model="item.height"
+          v-model.number="item.height"
           :error="Boolean(violations?.height)"
           :error-messages="violations?.height"
-          :label="$t('shipmentloadinfos.height')"
+          :label="$t('shipmentload.height')"
         >
           <template #append-inner>
             <v-icon
@@ -88,10 +88,10 @@
       </v-col>
       <v-col cols="12" sm="6" md="6">
         <v-text-field
-          v-model="item.weight"
+          v-model.number="item.weight"
           :error="Boolean(violations?.weight)"
           :error-messages="violations?.weight"
-          :label="$t('shipmentloadinfos.weight')"
+          :label="$t('shipmentload.weight')"
         >
           <template #append-inner>
             <v-icon
@@ -108,7 +108,7 @@
           v-model="item.shipment"
           :error="Boolean(violations?.shipment)"
           :error-messages="violations?.shipment"
-          :label="$t('shipmentloadinfos.shipment')"
+          :label="$t('shipmentload.shipment')"
         >
           <template #append-inner>
             <v-icon
@@ -122,27 +122,10 @@
       </v-col>
       <v-col cols="12" sm="6" md="6">
         <v-text-field
-          v-model="item.isPileUp"
-          :error="Boolean(violations?.isPileUp)"
-          :error-messages="violations?.isPileUp"
-          :label="$t('shipmentloadinfos.isPileUp')"
-        >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.isPileUp = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="6">
-        <v-text-field
           v-model="item.packageType"
           :error="Boolean(violations?.packageType)"
           :error-messages="violations?.packageType"
-          :label="$t('shipmentloadinfos.packageType')"
+          :label="$t('shipmentload.packageType')"
         >
           <template #append-inner>
             <v-icon
@@ -171,16 +154,16 @@
 <script setup lang="ts">
 import { ref, Ref, toRef } from "vue";
 import { VForm } from "vuetify/components";
-import type { ShipmentLoadInfos } from "@/types/shipmentloadinfos";
+import type { ShipmentLoad } from "@/types/shipmentload";
 import type { SubmissionErrors } from "@/types/error";
 const props = defineProps<{
-  values?: ShipmentLoadInfos;
+  values?: ShipmentLoad;
   errors?: SubmissionErrors;
 }>();
 
 const violations = toRef(props, "errors");
 
-const item: Ref<ShipmentLoadInfos> = ref({});
+const item: Ref<ShipmentLoad> = ref({});
 
 if (props.values) {
   item.value = {
@@ -189,7 +172,7 @@ if (props.values) {
 }
 
 const emit = defineEmits<{
-  (e: "submit", item: ShipmentLoadInfos): void;
+  (e: "submit", item: ShipmentLoad): void;
 }>();
 
 function emitSubmit() {

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
-import type { ShipmentLoad } from "@/types/ShipmentLoad";
+import type { ShipmentLoad } from "@/types/shipmentload";
 import type { SubmissionErrors } from "@/types/error";
 
 interface State {
@@ -11,7 +11,7 @@ interface State {
   violations?: SubmissionErrors;
 }
 
-export const useShipmentLoadCreateStore = defineStore("ShipmentLoadCreate", {
+export const useShipmentLoadCreateStore = defineStore("shipmentloadCreate", {
   state: (): State => ({
     created: undefined,
     isLoading: false,

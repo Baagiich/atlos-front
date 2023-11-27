@@ -7,12 +7,7 @@
   />
 
   <v-container fluid>
-    <v-alert
-      v-if="error || deleteError"
-      type="error"
-      class="mb-4"
-      closable="true"
-    >
+    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable="true">
       {{ error || deleteError }}
     </v-alert>
 
@@ -27,61 +22,61 @@
       <tbody>
         <tr>
           <td>
-            {{ $t("shipmentloadinfos.name") }}
+            {{ $t("shipmentload.name") }}
           </td>
 
           <td>
             {{ item.name }}
-          </td>
+                      </td>
         </tr>
         <tr>
           <td>
-            {{ $t("shipmentloadinfos.count") }}
+            {{ $t("shipmentload.quantity") }}
           </td>
 
           <td>
-            {{ item.count }}
-          </td>
+            {{ item.quantity }}
+                      </td>
         </tr>
         <tr>
           <td>
-            {{ $t("shipmentloadinfos.length") }}
+            {{ $t("shipmentload.length") }}
           </td>
 
           <td>
             {{ item.length }}
-          </td>
+                      </td>
         </tr>
         <tr>
           <td>
-            {{ $t("shipmentloadinfos.width") }}
+            {{ $t("shipmentload.width") }}
           </td>
 
           <td>
             {{ item.width }}
-          </td>
+                      </td>
         </tr>
         <tr>
           <td>
-            {{ $t("shipmentloadinfos.height") }}
+            {{ $t("shipmentload.height") }}
           </td>
 
           <td>
             {{ item.height }}
-          </td>
+                      </td>
         </tr>
         <tr>
           <td>
-            {{ $t("shipmentloadinfos.weight") }}
+            {{ $t("shipmentload.weight") }}
           </td>
 
           <td>
             {{ item.weight }}
-          </td>
+                      </td>
         </tr>
         <tr>
           <td>
-            {{ $t("shipmentloadinfos.shipment") }}
+            {{ $t("shipmentload.shipment") }}
           </td>
 
           <td>
@@ -99,31 +94,19 @@
         </tr>
         <tr>
           <td>
-            {{ $t("shipmentloadinfos.isPileUp") }}
-          </td>
-
-          <td>
-            {{ item.isPileUp }}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            {{ $t("shipmentloadinfos.packageType") }}
+            {{ $t("shipmentload.packageType") }}
           </td>
 
           <td>
             <router-link
-              v-if="router.hasRoute('ShipmentPackageTypeShow')"
-              :to="{
-                name: 'ShipmentPackageTypeShow',
-                params: { id: item.shipmentpackagetype },
-              }"
+              v-if="router.hasRoute('PackageTypeShow')"
+              :to="{ name: 'PackageTypeShow', params: { id: item.packagetype } }"
             >
-              {{ item.shipmentpackagetype }}
+              {{ item.packagetype }}
             </router-link>
 
             <p v-else>
-              {{ item.shipmentpackagetype }}
+              {{ item.packagetype }}
             </p>
           </td>
         </tr>
@@ -142,8 +125,8 @@ import { storeToRefs } from "pinia";
 import Toolbar from "@/components/common/Toolbar.vue";
 import Loading from "@/components/common/Loading.vue";
 import { useMercureItem } from "@/composables/mercureItem";
-import { useShipmentLoadInfosDeleteStore } from "@/store/shipmentloadinfos/delete";
-import { useShipmentLoadInfosShowStore } from "@/store/shipmentloadinfos/show";
+import { useShipmentLoadDeleteStore } from "@/store/shipmentload/delete";
+import { useShipmentLoadShowStore } from "@/store/shipmentload/show";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 
 const { t } = useI18n();
@@ -151,44 +134,36 @@ const route = useRoute();
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
-const shipmentloadinfosShowStore = useShipmentLoadInfosShowStore();
-const {
-  retrieved: item,
-  isLoading,
-  error,
-} = storeToRefs(shipmentloadinfosShowStore);
+const shipmentloadShowStore = useShipmentLoadShowStore();
+const { retrieved: item, isLoading, error } = storeToRefs(shipmentloadShowStore);
 
-const shipmentloadinfosDeleteStore = useShipmentLoadInfosDeleteStore();
-const { deleted, error: deleteError } = storeToRefs(
-  shipmentloadinfosDeleteStore,
-);
+const shipmentloadDeleteStore = useShipmentLoadDeleteStore();
+const { deleted, error: deleteError } = storeToRefs(shipmentloadDeleteStore);
 
 useMercureItem({
-  store: shipmentloadinfosShowStore,
-  deleteStore: shipmentloadinfosDeleteStore,
-  redirectRouteName: "ShipmentLoadInfosList",
+  store: shipmentloadShowStore,
+  deleteStore: shipmentloadDeleteStore,
+  redirectRouteName: "ShipmentLoadList",
 });
 
-await shipmentloadinfosShowStore.retrieve(
-  decodeURIComponent(route.params.id as string),
-);
+await shipmentloadShowStore.retrieve(decodeURIComponent(route.params.id as string));
 
 async function deleteItem() {
   if (!item?.value) {
-    shipmentloadinfosDeleteStore.setError(t("itemNotFound"));
+    shipmentloadDeleteStore.setError(t("itemNotFound"));
     return;
   }
 
-  await shipmentloadinfosDeleteStore.deleteItem(item.value);
+  await shipmentloadDeleteStore.deleteItem(item.value);
 
   if (!deleted?.value) {
     return;
   }
 
-  router.push({ name: "ShipmentLoadInfosList" });
+  router.push({ name: "ShipmentLoadList" });
 }
 
 onBeforeUnmount(() => {
-  shipmentloadinfosShowStore.$reset();
+  shipmentloadShowStore.$reset();
 });
 </script>

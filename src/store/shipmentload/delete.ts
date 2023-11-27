@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import api from "@/utils/api";
-import type { ShipmentLoad } from "@/types/ShipmentLoad";
+import type { ShipmentLoad } from "@/types/shipmentload";
 
 interface State {
   deleted?: ShipmentLoad;
@@ -9,7 +9,7 @@ interface State {
   error?: string;
 }
 
-export const useShipmentLoadDeleteStore = defineStore("ShipmentLoadDelete", {
+export const useShipmentLoadDeleteStore = defineStore("shipmentloadDelete", {
   state: (): State => ({
     deleted: undefined,
     mercureDeleted: undefined,
@@ -23,7 +23,7 @@ export const useShipmentLoadDeleteStore = defineStore("ShipmentLoadDelete", {
       this.toggleLoading();
 
       if (!item?.["@id"]) {
-        this.setError("No ShipmentLoad found. Please reload");
+        this.setError("No shipmentload found. Please reload");
         return;
       }
 

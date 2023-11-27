@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
-import type { ShipmentLoad } from "@/types/ShipmentLoad";
+import type { ShipmentLoad } from "@/types/shipmentload";
 import type { SubmissionErrors } from "@/types/error";
 
 interface State {
@@ -14,7 +14,7 @@ interface State {
   violations?: SubmissionErrors;
 }
 
-export const useShipmentLoadUpdateStore = defineStore("ShipmentLoadUpdate", {
+export const useShipmentLoadUpdateStore = defineStore("shipmentloadUpdate", {
   state: (): State => ({
     retrieved: undefined,
     updated: undefined,
@@ -53,7 +53,7 @@ export const useShipmentLoadUpdateStore = defineStore("ShipmentLoadUpdate", {
       this.toggleLoading();
 
       if (!this.retrieved) {
-        this.setError("No ShipmentLoad found. Please reload");
+        this.setError("No shipmentload found. Please reload");
         return;
       }
 
@@ -64,7 +64,7 @@ export const useShipmentLoadUpdateStore = defineStore("ShipmentLoadUpdate", {
             method: "PUT",
             headers: new Headers({ "Content-Type": "application/ld+json" }),
             body: JSON.stringify(payload),
-          },
+          }
         );
         const data: ShipmentLoad = await response.json();
 

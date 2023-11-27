@@ -18,6 +18,12 @@
       {{ error }}
     </v-alert>
 
+    <DataFilter @filter="onSendFilter" @reset="resetFilter">
+      <template #filter>
+        <Filter :values="filters" />
+      </template>
+    </DataFilter>
+
     <v-data-table-server
       :headers="headers"
       :items="items"
@@ -38,7 +44,7 @@
 
       <template #item.@id="{ item }">
         <router-link
-          :to="{ name: 'ShipmentLoadInfosShow', params: { id: item['@id'] } }"
+          :to="{ name: 'ShipmentLoadShow', params: { id: item['@id'] } }"
         >
           {{ item["@id"] }}
         </router-link>
@@ -56,19 +62,16 @@
           {{ item.shipment }}
         </p>
       </template>
-      <template #item.shipmentpackagetype="{ item }">
+      <template #item.packagetype="{ item }">
         <router-link
-          v-if="router.hasRoute('ShipmentPackageTypeShow')"
-          :to="{
-            name: 'ShipmentPackageTypeShow',
-            params: { id: item.shipmentpackagetype },
-          }"
+          v-if="router.hasRoute('PackageTypeShow')"
+          :to="{ name: 'PackageTypeShow', params: { id: item.packagetype } }"
         >
-          {{ item.shipmentpackagetype }}
+          {{ item.packagetype }}
         </router-link>
 
         <p v-else>
-          {{ item.shipmentpackagetype }}
+          {{ item.packagetype }}
         </p>
       </template>
     </v-data-table-server>
@@ -76,45 +79,44 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from "vue";
+import { ref, onBeforeUnmount, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import { useShipmentLoadInfosListStore } from "@/store/shipmentloadinfos/list";
-import { useShipmentLoadInfosDeleteStore } from "@/store/shipmentloadinfos/delete";
+import { useShipmentLoadListStore } from "@/store/shipmentload/list";
+import { useShipmentLoadDeleteStore } from "@/store/shipmentload/delete";
 import Toolbar from "@/components/common/Toolbar.vue";
+import DataFilter from "@/components/common/DataFilter.vue";
+import Filter from "@/components/shipmentload/ShipmentLoadFilter.vue";
 import ActionCell from "@/components/common/ActionCell.vue";
 import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
-import type { VuetifyOrder } from "@/types/list";
-import type { ShipmentLoadInfos } from "@/types/shipmentloadinfos";
+import type { Filters, VuetifyOrder } from "@/types/list";
+import type { ShipmentLoad } from "@/types/shipmentload";
 
 const { t } = useI18n();
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
-const shipmentloadinfosDeleteStore = useShipmentLoadInfosDeleteStore();
-const { deleted, mercureDeleted } = storeToRefs(shipmentloadinfosDeleteStore);
+const shipmentloadDeleteStore = useShipmentLoadDeleteStore();
+const { deleted, mercureDeleted } = storeToRefs(shipmentloadDeleteStore);
 
-const shipmentloadinfosListStore = useShipmentLoadInfosListStore();
-const { items, totalItems, error, isLoading } = storeToRefs(
-  shipmentloadinfosListStore,
-);
+const shipmentloadListStore = useShipmentLoadListStore();
+const { items, totalItems, error, isLoading } = storeToRefs(shipmentloadListStore);
 
 const page = ref("1");
+const filters: Ref<Filters> = ref({});
 const order = ref({});
 
 async function sendRequest() {
-  await shipmentloadinfosListStore.getItems({
+  await shipmentloadListStore.getItems({
     page: page.value,
     order: order.value,
+    ...filters.value,
   });
 }
 
-useMercureList({
-  store: shipmentloadinfosListStore,
-  deleteStore: shipmentloadinfosDeleteStore,
-});
+useMercureList({ store: shipmentloadListStore, deleteStore: shipmentloadDeleteStore });
 
 sendRequest();
 
@@ -126,47 +128,42 @@ const headers = [
   },
   { title: t("id"), key: "@id" },
   {
-    title: t("shipmentloadinfos.name"),
+    title: t("shipmentload.name"),
     key: "name",
     sortable: false,
   },
   {
-    title: t("shipmentloadinfos.count"),
-    key: "count",
+    title: t("shipmentload.quantity"),
+    key: "quantity",
     sortable: false,
   },
   {
-    title: t("shipmentloadinfos.length"),
+    title: t("shipmentload.length"),
     key: "length",
     sortable: false,
   },
   {
-    title: t("shipmentloadinfos.width"),
+    title: t("shipmentload.width"),
     key: "width",
     sortable: false,
   },
   {
-    title: t("shipmentloadinfos.height"),
+    title: t("shipmentload.height"),
     key: "height",
     sortable: false,
   },
   {
-    title: t("shipmentloadinfos.weight"),
+    title: t("shipmentload.weight"),
     key: "weight",
     sortable: false,
   },
   {
-    title: t("shipmentloadinfos.shipment"),
+    title: t("shipmentload.shipment"),
     key: "shipment",
     sortable: false,
   },
   {
-    title: t("shipmentloadinfos.isPileUp"),
-    key: "isPileUp",
-    sortable: false,
-  },
-  {
-    title: t("shipmentloadinfos.packageType"),
+    title: t("shipmentload.packageType"),
     key: "packageType",
     sortable: false,
   },
@@ -185,33 +182,43 @@ function updateOrder(newOrders: VuetifyOrder[]) {
   sendRequest();
 }
 
-function goToShowPage(item: ShipmentLoadInfos) {
+function onSendFilter() {
+  sendRequest();
+}
+
+function resetFilter() {
+  filters.value = {};
+
+  sendRequest();
+}
+
+function goToShowPage(item: ShipmentLoad) {
   router.push({
-    name: "ShipmentLoadInfosShow",
+    name: "ShipmentLoadShow",
     params: { id: item["@id"] },
   });
 }
 
 function goToCreatePage() {
   router.push({
-    name: "ShipmentLoadInfosCreate",
+    name: "ShipmentLoadCreate",
   });
 }
 
-function goToUpdatePage(item: ShipmentLoadInfos) {
+function goToUpdatePage(item: ShipmentLoad) {
   router.push({
-    name: "ShipmentLoadInfosUpdate",
+    name: "ShipmentLoadUpdate",
     params: { id: item["@id"] },
   });
 }
 
-async function deleteItem(item: ShipmentLoadInfos) {
-  await shipmentloadinfosDeleteStore.deleteItem(item);
+async function deleteItem(item: ShipmentLoad) {
+  await shipmentloadDeleteStore.deleteItem(item);
 
   sendRequest();
 }
 
 onBeforeUnmount(() => {
-  shipmentloadinfosDeleteStore.$reset();
+  shipmentloadDeleteStore.$reset();
 });
 </script>

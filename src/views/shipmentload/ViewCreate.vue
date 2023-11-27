@@ -1,11 +1,11 @@
 <template>
   <Suspense>
-    <List />
+    <Create />
 
     <template #fallback>{{ $t("loading") }}</template>
   </Suspense>
 </template>
 
 <script setup lang="ts">
-import List from "@/components/shipmentloadinfos/ShipmentLoadInfosList.vue";
+import Create from "@/components/shipmentload/ShipmentLoadCreate.vue";
 </script>
