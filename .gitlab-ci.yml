@@ -51,6 +51,6 @@ release:
     - apk add --no-cache bash git openssh
   script:
     - cp .gitlab/npmrc .npmrc
-    - npx semantic-release
+    - ./node_modules/.bin/semantic-release
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
