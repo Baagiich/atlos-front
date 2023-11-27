@@ -46,6 +46,9 @@ approve:
 
 release:
   stage: release
+  before_script:
+    - apk update && apk upgrade && \
+    - apk add --no-cache bash git openssh
   script:
     - cp .gitlab/npmrc .npmrc
     - npx semantic-release
