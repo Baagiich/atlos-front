@@ -2,20 +2,20 @@ import { defineStore } from "pinia";
 import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
-import type { ShipmentLoadInfos } from "@/types/shipmentloadinfos";
+import type { ShipmentLoad } from "@/types/ShipmentLoad";
 import type { SubmissionErrors } from "@/types/error";
 
 interface State {
-  retrieved?: ShipmentLoadInfos;
-  updated?: ShipmentLoadInfos;
+  retrieved?: ShipmentLoad;
+  updated?: ShipmentLoad;
   hubUrl?: URL;
   isLoading: boolean;
   error?: string;
   violations?: SubmissionErrors;
 }
 
-export const useShipmentLoadInfosUpdateStore = defineStore(
-  "shipmentloadinfosUpdate",
+export const useShipmentLoadUpdateStore = defineStore(
+  "ShipmentLoadUpdate",
   {
     state: (): State => ({
       retrieved: undefined,
@@ -32,7 +32,7 @@ export const useShipmentLoadInfosUpdateStore = defineStore(
 
         try {
           const response = await api(id);
-          const data: ShipmentLoadInfos = await response.json();
+          const data: ShipmentLoad = await response.json();
           const hubUrl = extractHubURL(response);
 
           this.toggleLoading();
@@ -50,12 +50,12 @@ export const useShipmentLoadInfosUpdateStore = defineStore(
         }
       },
 
-      async update(payload: ShipmentLoadInfos) {
+      async update(payload: ShipmentLoad) {
         this.setError(undefined);
         this.toggleLoading();
 
         if (!this.retrieved) {
-          this.setError("No shipmentloadinfos found. Please reload");
+          this.setError("No ShipmentLoad found. Please reload");
           return;
         }
 
@@ -68,7 +68,7 @@ export const useShipmentLoadInfosUpdateStore = defineStore(
               body: JSON.stringify(payload),
             }
           );
-          const data: ShipmentLoadInfos = await response.json();
+          const data: ShipmentLoad = await response.json();
 
           this.toggleLoading();
           this.setUpdated(data);
@@ -87,11 +87,11 @@ export const useShipmentLoadInfosUpdateStore = defineStore(
         }
       },
 
-      setRetrieved(retrieved: ShipmentLoadInfos) {
+      setRetrieved(retrieved: ShipmentLoad) {
         this.retrieved = retrieved;
       },
 
-      setUpdated(updated: ShipmentLoadInfos) {
+      setUpdated(updated: ShipmentLoad) {
         this.updated = updated;
       },
 

@@ -1,20 +1,20 @@
 import { defineStore } from "pinia";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
-import type { ShipmentLoadInfos } from "@/types/shipmentloadinfos";
+import type { ShipmentLoad } from "@/types/shipmentloadinfos";
 import type { PagedCollection } from "@/types/collection";
 import type { ListParams } from "@/types/list";
 
 interface State {
-  items: ShipmentLoadInfos[];
+  items: ShipmentLoad[];
   totalItems: number;
   isLoading: boolean;
   error?: string;
   hubUrl?: URL;
 }
 
-export const useShipmentLoadInfosListStore = defineStore(
-  "shipmentloadinfosList",
+export const useShipmentLoadListStore = defineStore(
+  "ShipmentLoadList",
   {
     state: (): State => ({
       items: [],
@@ -30,8 +30,8 @@ export const useShipmentLoadInfosListStore = defineStore(
         this.toggleLoading();
 
         try {
-          const response = await api("shipment_load_infos", { params });
-          const data: PagedCollection<ShipmentLoadInfos> =
+          const response = await api("shipment_loads", { params });
+          const data: PagedCollection<ShipmentLoad> =
             await response.json();
           const hubUrl = extractHubURL(response);
 
@@ -56,7 +56,7 @@ export const useShipmentLoadInfosListStore = defineStore(
         this.isLoading = !this.isLoading;
       },
 
-      setItems(items: ShipmentLoadInfos[]) {
+      setItems(items: ShipmentLoad[]) {
         this.items = items;
       },
 
@@ -72,8 +72,8 @@ export const useShipmentLoadInfosListStore = defineStore(
         this.error = error;
       },
 
-      updateItem(updatedItem: ShipmentLoadInfos) {
-        const item: ShipmentLoadInfos | undefined = this.items.find(
+      updateItem(updatedItem: ShipmentLoad) {
+        const item: ShipmentLoad | undefined = this.items.find(
           (i) => i["@id"] === updatedItem["@id"]
         );
 
@@ -82,7 +82,7 @@ export const useShipmentLoadInfosListStore = defineStore(
         Object.assign(item, updatedItem);
       },
 
-      deleteItem(deletedItem: ShipmentLoadInfos) {
+      deleteItem(deletedItem: ShipmentLoad) {
         this.items = this.items.filter((item) => {
           return item["@id"] !== deletedItem["@id"];
         });

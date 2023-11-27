@@ -1,8 +1,8 @@
 import type { Item } from "./item";
 
-export interface ShipmentLoadInfos extends Item {
+export interface shipmentloadinfos extends Item {
   name?: string;
-  count?: string;
+  quantity?: string;
   length?: string;
   width?: string;
   height?: string;
