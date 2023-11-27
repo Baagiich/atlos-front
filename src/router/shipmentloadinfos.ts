@@ -1,8 +1,8 @@
 const names = {
-  list: "ShipmentLoadInfosList",
-  create: "ShipmentLoadInfosCreate",
-  update: "ShipmentLoadInfosUpdate",
-  show: "ShipmentLoadInfosShow",
+  list: "ShipmentLoadList",
+  create: "ShipmentLoadCreate",
+  update: "ShipmentLoadUpdate",
+  show: "ShipmentLoadShow",
 };
 
 const breadcrumbs = {
@@ -15,32 +15,32 @@ const breadcrumbs = {
 export default [
   {
     name: names.list,
-    path: "/shipment_load_infos",
-    component: () => import("@/views/shipmentloadinfos/ViewList.vue"),
+    path: "/shipment_load",
+    component: () => import("@/views/ShipmentLoad/ViewList.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list],
     },
   },
   {
     name: names.create,
-    path: "/shipment_load_infos/create",
-    component: () => import("@/views/shipmentloadinfos/ViewCreate.vue"),
+    path: "/shipment_load/create",
+    component: () => import("@/views/ShipmentLoad/ViewCreate.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list, breadcrumbs.create],
     },
   },
   {
     name: names.update,
-    path: "/shipment_load_infos/edit/:id",
-    component: () => import("@/views/shipmentloadinfos/ViewUpdate.vue"),
+    path: "/shipment_load/edit/:id",
+    component: () => import("@/views/ShipmentLoad/ViewUpdate.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list, breadcrumbs.update],
     },
   },
   {
     name: names.show,
-    path: "/shipment_load_infos/show/:id",
-    component: () => import("@/views/shipmentloadinfos/ViewShow.vue"),
+    path: "/shipment_load/show/:id",
+    component: () => import("@/views/ShipmentLoad/ViewShow.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list, breadcrumbs.show],
     },

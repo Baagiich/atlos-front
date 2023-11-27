@@ -1,18 +1,18 @@
 import { defineStore } from "pinia";
 import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
-import type { ShipmentLoadInfos } from "@/types/shipmentloadinfos";
+import type { ShipmentLoad } from "@/types/ShipmentLoad";
 import type { SubmissionErrors } from "@/types/error";
 
 interface State {
-  created?: ShipmentLoadInfos;
+  created?: ShipmentLoad;
   isLoading: boolean;
   error?: string;
   violations?: SubmissionErrors;
 }
 
-export const useShipmentLoadInfosCreateStore = defineStore(
-  "shipmentloadinfosCreate",
+export const useShipmentLoadCreateStore = defineStore(
+  "ShipmentLoadCreate",
   {
     state: (): State => ({
       created: undefined,
@@ -22,17 +22,17 @@ export const useShipmentLoadInfosCreateStore = defineStore(
     }),
 
     actions: {
-      async create(payload: ShipmentLoadInfos) {
+      async create(payload: ShipmentLoad) {
         this.setError(undefined);
         this.setViolations(undefined);
         this.toggleLoading();
 
         try {
-          const response = await api("shipment_load_infos", {
+          const response = await api("shipment_loads", {
             method: "POST",
             body: JSON.stringify(payload),
           });
-          const data: ShipmentLoadInfos = await response.json();
+          const data: ShipmentLoad = await response.json();
 
           this.toggleLoading();
           this.setCreated(data);
@@ -51,7 +51,7 @@ export const useShipmentLoadInfosCreateStore = defineStore(
         }
       },
 
-      setCreated(created: ShipmentLoadInfos) {
+      setCreated(created: ShipmentLoad) {
         this.created = created;
       },
 

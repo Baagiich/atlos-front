@@ -20,10 +20,10 @@
           <ShipmentLoadInfos/>
       </v-col>
       <v-col md="6">
-          <DriverRequest/>
+          <DriverRequest :targetEntityId="getTargetEntityId()"/>
       </v-col>
       <v-col md="6">
-          <VehicleRequest/>
+          <VehicleRequest :targetEntityId="getTargetEntityId()"/>
       </v-col>
     </v-row>
   </v-container>
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount } from "vue";
+import { ref, onBeforeUnmount, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
@@ -57,7 +57,7 @@ const { retrieved: item, isLoading, error } = storeToRefs(shipmentShowStore);
 
 const shipmentDeleteStore = useShipmentDeleteStore();
 const { deleted, error: deleteError } = storeToRefs(shipmentDeleteStore);
-
+const targetEntityId = ref(getTargetEntityId());
 useMercureItem({
   store: shipmentShowStore,
   deleteStore: shipmentDeleteStore,
@@ -65,7 +65,11 @@ useMercureItem({
 });
 
 await shipmentShowStore.retrieve(decodeURIComponent(route.params.id as string));
-
+function getTargetEntityId(): number {
+  const routeParam = route.params.id
+  const targetEntityId = routeParam.replace('/api/shipments/','')
+  return +targetEntityId
+}
 
 
 onBeforeUnmount(() => {

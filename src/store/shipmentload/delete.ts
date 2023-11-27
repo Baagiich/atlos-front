@@ -1,16 +1,16 @@
 import { defineStore } from "pinia";
 import api from "@/utils/api";
-import type { ShipmentLoadInfos } from "@/types/shipmentloadinfos";
+import type { ShipmentLoad } from "@/types/ShipmentLoad";
 
 interface State {
-  deleted?: ShipmentLoadInfos;
-  mercureDeleted?: ShipmentLoadInfos;
+  deleted?: ShipmentLoad;
+  mercureDeleted?: ShipmentLoad;
   isLoading: boolean;
   error?: string;
 }
 
-export const useShipmentLoadInfosDeleteStore = defineStore(
-  "shipmentloadinfosDelete",
+export const useShipmentLoadDeleteStore = defineStore(
+  "ShipmentLoadDelete",
   {
     state: (): State => ({
       deleted: undefined,
@@ -20,12 +20,12 @@ export const useShipmentLoadInfosDeleteStore = defineStore(
     }),
 
     actions: {
-      async deleteItem(item: ShipmentLoadInfos) {
+      async deleteItem(item: ShipmentLoad) {
         this.setError("");
         this.toggleLoading();
 
         if (!item?.["@id"]) {
-          this.setError("No shipmentloadinfos found. Please reload");
+          this.setError("No ShipmentLoad found. Please reload");
           return;
         }
 
@@ -48,11 +48,11 @@ export const useShipmentLoadInfosDeleteStore = defineStore(
         this.isLoading = !this.isLoading;
       },
 
-      setDeleted(deleted: ShipmentLoadInfos) {
+      setDeleted(deleted: ShipmentLoad) {
         this.deleted = deleted;
       },
 
-      setMercureDeleted(mercureDeleted: ShipmentLoadInfos | undefined) {
+      setMercureDeleted(mercureDeleted: ShipmentLoad | undefined) {
         this.mercureDeleted = mercureDeleted;
       },
 
