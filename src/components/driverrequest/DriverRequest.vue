@@ -44,29 +44,12 @@
       </template>
       <template #item.actions="{ item }">
         <v-btn
-          v-if="showCreateBtn"
-          color="secondary"
+          :color="currentColorState"
           size="small"
           class="ma-2"
-          @click="sendRequestToDriver(item)"
+          @click="handleButtonClick(item)"
         >
-          {{ t("driverrequest.sendRequest") }}
-        </v-btn>
-        <v-btn
-          v-if="showFendingBtn"
-          color="blue-grey-lighten-2"
-          size="small"
-          class="ma-2"
-        >
-          {{ t("driverrequest.pending") }}
-        </v-btn>
-        <v-btn
-          v-if="showApproveBtn"
-          color="light-green-lighten-2"
-          size="small"
-          class="ma-2"
-        >
-          {{ t("driverrequest.approved") }}
+          {{ t(currentTextState) }}
         </v-btn>
       </template>
     </v-data-table-server>
@@ -80,17 +63,21 @@ import { storeToRefs } from "pinia";
 import { useAdminUserListStore } from "@/store/adminuser/list";
 import { useAdminUserDeleteStore } from "@/store/adminuser/delete";
 import { useMercureList } from "@/composables/mercureList";
+import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { VuetifyOrder, Filters } from "@/types/list";
 import type { AdminUser } from "@/types/adminuser";
 import { useRequestsCreateStore } from "@/store/requests/create";
 import * as apiToken from "@/utils/apiToken";
 import type { Requests } from "@/types/requests";
 import { useRoute } from "vue-router";
-import { useRequestsListStore } from "@/store/requests/list";
+import { useDriverRequestsListStore } from "@/store/driverrequests/driverlist";
 import { RequestsCodeType } from "@/types/requests_code_type";
 import { RequestsType } from "@/types/requests_type";
 
+const props = defineProps(["targetEntityId"]);
+const targetEntityId = ref(props.targetEntityId);
 const { t } = useI18n();
+const breadcrumb = useBreadcrumb();
 const route = useRoute();
 
 const adminuserDeleteStore = useAdminUserDeleteStore();
@@ -99,9 +86,13 @@ const { deleted, mercureDeleted } = storeToRefs(adminuserDeleteStore);
 const adminuserListStore = useAdminUserListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(adminuserListStore);
 
-const requestsListStore = useRequestsListStore();
-const { items: requestItems, totalItems: requestTotalItems } =
-  storeToRefs(requestsListStore);
+const requestsListStore = useDriverRequestsListStore();
+const {
+  items: requestItems,
+  totalItems: requestTotalItems,
+  error: requestError,
+  isLoading: requsetisLoading,
+} = storeToRefs(requestsListStore);
 
 const requestsCreateStore = useRequestsCreateStore();
 const { created } = storeToRefs(requestsCreateStore);
@@ -111,13 +102,28 @@ filters.value.email = "";
 const order = ref({});
 const filtersRequest: Ref<Filters> = ref({
   fromUser: apiToken.getDecodedToken().iri,
-  targetEntityId: getTargetEntityId(),
+  targetEntityId: targetEntityId.value,
   code: RequestsCodeType.SHIPPER_TO_DRIVER,
 });
+const BUTTON_STATES = {
+  CREATE: "create",
+  PENDING: "pending",
+  APPROVED: "approved",
+};
+let currentButtonState = ref(BUTTON_STATES.CREATE);
+let currentColorState = ref("secondary");
+let currentTextState = ref("driverrequest.sendRequest");
 var showCreateAlert = ref(false);
-var showCreateBtn = ref(false);
-var showFendingBtn = ref(false);
-var showApproveBtn = ref(false);
+
+async function handleButtonClick(item: AdminUser) {
+  switch (currentButtonState.value) {
+    case BUTTON_STATES.CREATE:
+      sendRequestToDriver(item);
+      break;
+    default:
+      break;
+  }
+}
 async function sendRequest() {
   await adminuserListStore.getItems({
     page: page.value,
@@ -126,7 +132,7 @@ async function sendRequest() {
   });
 }
 async function checkRequest() {
-  await requestsListStore.getItems({
+  await requestsListStore.getDriverRequests({
     page: page.value,
     order: order.value,
     ...filtersRequest.value,
@@ -137,22 +143,27 @@ useMercureList({
   store: adminuserListStore,
   deleteStore: adminuserDeleteStore,
 });
+
 async function toggleBtns() {
   if (requestTotalItems.value != 0) {
-    showCreateBtn = ref(false);
     if (requestItems.value[0].type == RequestsType.REJECTED) {
-      showCreateBtn = ref(true);
-    }
-    if (requestItems.value[0].type == RequestsType.PENDING) {
-      showFendingBtn = ref(true);
-    }
-    if (requestItems.value[0].type == RequestsType.APPROVED) {
-      showApproveBtn = ref(true);
+      currentButtonState.value = BUTTON_STATES.CREATE;
+      currentColorState.value = "secondary";
+      currentTextState.value = "driverrequest.sendRequest";
+    } else if (requestItems.value[0].type == RequestsType.PENDING) {
+      currentButtonState.value = BUTTON_STATES.PENDING;
+      currentColorState.value = "blue-grey-lighten-2";
+      currentTextState.value = "driverrequest.pending";
+    } else if (requestItems.value[0].type == RequestsType.APPROVED) {
+      currentButtonState.value = BUTTON_STATES.APPROVED;
+      currentColorState.value = "light-green-lighten-2";
+      currentTextState.value = "driverrequest.approved";
     }
   } else {
-    showCreateBtn = ref(true);
+    currentButtonState.value = BUTTON_STATES.CREATE;
+    currentColorState.value = "secondary";
+    currentTextState.value = "driverrequest.sendRequest";
   }
-  sendRequest();
 }
 async function setup() {
   await checkRequest();
@@ -220,6 +231,8 @@ async function createRequests(item: Requests) {
 
 onBeforeUnmount(() => {
   adminuserDeleteStore.$reset();
+  adminuserListStore.$reset();
+  requestsListStore.$reset();
 });
 function sendRequestToDriver(item: AdminUser) {
   createRequests(createRequest(item));
@@ -230,13 +243,8 @@ function createRequest(item: AdminUser): Requests {
     toUser: item["@id"],
     code: RequestsCodeType.SHIPPER_TO_DRIVER,
     type: RequestsType.PENDING,
-    targetEntityId: getTargetEntityId(),
+    targetEntityId: targetEntityId.value,
   };
   return req;
-}
-function getTargetEntityId(): number {
-  const routeParam = route.params.id;
-  const targetEntityId = routeParam.replace("/api/shipments/", "");
-  return +targetEntityId;
 }
 </script>

@@ -22,7 +22,7 @@
       @update:sortBy="updateOrder"
     >
       <template #item.id="{ item }">
-        {{ item.id }}
+        {{ items.indexOf(item) + 1 }}
       </template>
       <template #item.name="{ item }">
         <p>
@@ -41,7 +41,7 @@
       </template>
       <template #item.count="{ item }">
         <p>
-          {{ item.count }}
+          {{ item.quantity }}
         </p>
       </template>
       <template #item.weight="{ item }">
@@ -63,38 +63,37 @@ import { ref, onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
-import { useShipmentLoadInfosListStore } from "@/store/shipmentloadinfos/list";
-import { useShipmentLoadInfosDeleteStore } from "@/store/shipmentloadinfos/delete";
+import { useShipmentLoadListStore } from "@/store/shipmentload/list";
+import { useShipmentLoadDeleteStore } from "@/store/shipmentload/delete";
 import { useMercureList } from "@/composables/mercureList";
 import type { VuetifyOrder } from "@/types/list";
 
 const { t } = useI18n();
 const route = useRoute();
 
-const shipmentloadinfosDeleteStore = useShipmentLoadInfosDeleteStore();
-const { deleted, mercureDeleted } = storeToRefs(shipmentloadinfosDeleteStore);
+const shipmentLoadDeleteStore = useShipmentLoadDeleteStore();
+const { deleted, mercureDeleted } = storeToRefs(shipmentLoadDeleteStore);
 
-const shipmentloadinfosListStore = useShipmentLoadInfosListStore();
+const shipmentLoadListStore = useShipmentLoadListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(
-  shipmentloadinfosListStore,
+  shipmentLoadListStore,
 );
 
 const page = ref("1");
 const order = ref({});
 const itemsPerPage = ref("10");
 async function sendRequest() {
-  await shipmentloadinfosListStore.getItems({
+  await shipmentLoadListStore.getItems({
     page: page.value,
     order: order.value,
     shipment: route.params.id,
     page_size: itemsPerPage.value,
-    groups: ["read:ShipmentLoadInfos"],
   });
 }
 
 useMercureList({
-  store: shipmentloadinfosListStore,
-  deleteStore: shipmentloadinfosDeleteStore,
+  store: shipmentLoadListStore,
+  deleteStore: shipmentLoadDeleteStore,
 });
 
 sendRequest();
@@ -145,7 +144,7 @@ function calculateCube(item: any) {
   return item.length * item.width * item.height;
 }
 onBeforeUnmount(() => {
-  shipmentloadinfosDeleteStore.$reset();
+  shipmentLoadDeleteStore.$reset();
 });
 </script>
 <style lang="scss">

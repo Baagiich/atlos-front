@@ -1,16 +1,16 @@
 import { defineStore } from "pinia";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
-import type { Shipment } from "@/types/shipment";
+import type { ShipmentLoad } from "@/types/ShipmentLoad";
 
 interface State {
-  retrieved?: Shipment;
+  retrieved?: ShipmentLoad;
   hubUrl?: URL;
   isLoading: boolean;
   error?: string;
 }
 
-export const useShipmentShowStore = defineStore("shipmentShow", {
+export const useShipmentLoadShowStore = defineStore("ShipmentLoadShow", {
   state: (): State => ({
     retrieved: undefined,
     hubUrl: undefined,
@@ -23,10 +23,8 @@ export const useShipmentShowStore = defineStore("shipmentShow", {
       this.toggleLoading();
 
       try {
-        const params = new URLSearchParams({ "groups[]": "shipment:list" });
-        const url = `${id}?${params.toString()}`;
-        const response = await api(url);
-        const data: Shipment = await response.json();
+        const response = await api(id);
+        const data: ShipmentLoad = await response.json();
         const hubUrl = extractHubURL(response);
 
         this.toggleLoading();
@@ -48,7 +46,7 @@ export const useShipmentShowStore = defineStore("shipmentShow", {
       this.isLoading = !this.isLoading;
     },
 
-    setRetrieved(retrieved: Shipment) {
+    setRetrieved(retrieved: ShipmentLoad) {
       this.retrieved = retrieved;
     },
 

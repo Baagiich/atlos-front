@@ -21,4 +21,5 @@ export interface Shipment extends Item {
   updatedAt?: string;
   createdAt?: string;
   shipmentTypeCode?: string;
+  name?: string;
 }

@@ -42,29 +42,12 @@
       </template>
       <template #item.actions="{ item }">
         <v-btn
-          v-if="showCreateVehicleBtn"
-          color="secondary"
+          :color="currentColorState"
           size="small"
           class="ma-2"
-          @click="sendRequestToVehicle(item)"
+          @click="handleButtonClick(item)"
         >
-          {{ t("driverrequest.sendRequest") }}
-        </v-btn>
-        <v-btn
-          v-if="showFendingVehicleBtn"
-          color="blue-grey-lighten-2"
-          size="small"
-          class="ma-2"
-        >
-          {{ t("driverrequest.pending") }}
-        </v-btn>
-        <v-btn
-          v-if="showApproveVehicleBtn"
-          color="light-green-lighten-2"
-          size="small"
-          class="ma-2"
-        >
-          {{ t("driverrequest.approved") }}
+          {{ t(currentTextState) }}
         </v-btn>
       </template>
     </v-data-table-server>
@@ -77,28 +60,37 @@ import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { useVehicleDeleteStore } from "@/store/vehicle/delete";
 import { useMercureList } from "@/composables/mercureList";
+import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { VuetifyOrder, Filters } from "@/types/list";
 import { useRequestsCreateStore } from "@/store/requests/create";
 import * as apiToken from "@/utils/apiToken";
 import type { Requests } from "@/types/requests";
 import { useRoute } from "vue-router";
-import { useRequestsListStore } from "@/store/requests/list";
+import { useVehicleRequestsListStore } from "@/store/driverrequests/vehiclelist";
 import { RequestsCodeType } from "@/types/requests_code_type";
 import { RequestsType } from "@/types/requests_type";
 import { useVehicleListStore } from "@/store/vehicle/list";
 import { Vehicle } from "@/types/vehicle";
 
+const props = defineProps(["targetEntityId"]);
+const targetEntityId = ref(props.targetEntityId);
 const { t } = useI18n();
+const breadcrumb = useBreadcrumb();
 const route = useRoute();
 
 const vehicleDeleteStore = useVehicleDeleteStore();
+const { deleted, mercureDeleted } = storeToRefs(vehicleDeleteStore);
 
 const vehicleListStore = useVehicleListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(vehicleListStore);
 
-const requestsVehicleListStore = useRequestsListStore();
-const { items: requestVehicleItems, totalItems: requestVehicleTotalItems } =
-  storeToRefs(requestsVehicleListStore);
+const requestsVehicleListStore = useVehicleRequestsListStore();
+const {
+  items: requestVehicleItems,
+  totalItems: requestVehicleTotalItems,
+  error: requestError,
+  isLoading: requsetisLoading,
+} = storeToRefs(requestsVehicleListStore);
 
 const requestsCreateStore = useRequestsCreateStore();
 const { created } = storeToRefs(requestsCreateStore);
@@ -108,13 +100,28 @@ filters.value.plateNumber = "";
 const order = ref({});
 const filtersVehicleRequest: Ref<Filters> = ref({
   fromUser: apiToken.getDecodedToken().iri,
-  targetEntityId: getTargetEntityId(),
+  targetEntityId: targetEntityId.value,
   code: RequestsCodeType.SHIPPER_TO_VEHICLE,
 });
+const BUTTON_STATES = {
+  CREATE: "create",
+  PENDING: "pending",
+  APPROVED: "approved",
+};
+let currentButtonState = ref(BUTTON_STATES.CREATE);
+let currentColorState = ref("secondary");
+let currentTextState = ref("driverrequest.sendRequest");
 var showCreateVehicleAlert = ref(false);
-var showCreateVehicleBtn = ref(false);
-var showFendingVehicleBtn = ref(false);
-var showApproveVehicleBtn = ref(false);
+
+async function handleButtonClick(item: Vehicle) {
+  switch (currentButtonState.value) {
+    case BUTTON_STATES.CREATE:
+      sendRequestToVehicle(item);
+      break;
+    default:
+      break;
+  }
+}
 async function sendRequest() {
   await vehicleListStore.getItems({
     page: page.value,
@@ -123,7 +130,7 @@ async function sendRequest() {
   });
 }
 async function checkRequest() {
-  await requestsVehicleListStore.getItems({
+  await requestsVehicleListStore.getVehicleRequests({
     page: page.value,
     order: order.value,
     ...filtersVehicleRequest.value,
@@ -136,20 +143,24 @@ useMercureList({
 });
 async function toggleBtns() {
   if (requestVehicleTotalItems.value != 0) {
-    showCreateVehicleBtn = ref(false);
     if (requestVehicleItems.value[0].type == RequestsType.REJECTED) {
-      showCreateVehicleBtn = ref(true);
-    }
-    if (requestVehicleItems.value[0].type == RequestsType.PENDING) {
-      showFendingVehicleBtn = ref(true);
-    }
-    if (requestVehicleItems.value[0].type == RequestsType.APPROVED) {
-      showApproveVehicleBtn = ref(true);
+      currentButtonState.value = BUTTON_STATES.CREATE;
+      currentColorState.value = "secondary";
+      currentTextState.value = "driverrequest.sendRequest";
+    } else if (requestVehicleItems.value[0].type == RequestsType.PENDING) {
+      currentButtonState.value = BUTTON_STATES.PENDING;
+      currentColorState.value = "blue-grey-lighten-2";
+      currentTextState.value = "driverrequest.pending";
+    } else if (requestVehicleItems.value[0].type == RequestsType.APPROVED) {
+      currentButtonState.value = BUTTON_STATES.APPROVED;
+      currentColorState.value = "light-green-lighten-2";
+      currentTextState.value = "driverrequest.approved";
     }
   } else {
-    showCreateVehicleBtn = ref(true);
+    currentButtonState.value = BUTTON_STATES.CREATE;
+    currentColorState.value = "secondary";
+    currentTextState.value = "driverrequest.sendRequest";
   }
-  sendRequest();
 }
 async function setup() {
   await checkRequest();
@@ -218,6 +229,8 @@ async function createVehicleRequests(item: Requests) {
 
 onBeforeUnmount(() => {
   vehicleDeleteStore.$reset();
+  vehicleListStore.$reset();
+  requestsVehicleListStore.$reset();
 });
 function sendRequestToVehicle(item: Vehicle) {
   createVehicleRequests(createVehicleRequest(item));
@@ -228,16 +241,11 @@ function createVehicleRequest(item: Vehicle): Requests {
     toUser: item.shipper,
     code: RequestsCodeType.SHIPPER_TO_VEHICLE,
     type: RequestsType.PENDING,
-    targetEntityId: getTargetEntityId(),
+    targetEntityId: targetEntityId.value,
     params: {
       plateNumber: item.plateNumber,
     },
   };
   return req;
-}
-function getTargetEntityId(): number {
-  const routeParam = route.params.id;
-  const targetEntityId = routeParam.replace("/api/shipments/", "");
-  return +targetEntityId;
 }
 </script>
