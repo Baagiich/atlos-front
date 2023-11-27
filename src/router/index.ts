@@ -10,6 +10,8 @@ import addressRoutes from "./address";
 import vehicleRoutes from "./vehicle";
 import cityRoutes from "./city";
 import driverrequest from "./driverrequest";
+import shippercompany from "./shippercompany";
+
 const routes = [
   {
     path: "/",
@@ -36,6 +38,7 @@ const routes = [
   ...vehicleRoutes,
   ...cityRoutes,
   ...driverrequest,
+  ...shippercompany,
 ];
 
 const router = createRouter({

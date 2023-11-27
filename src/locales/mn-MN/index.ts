@@ -2,6 +2,8 @@ import adminuser from "./adminuser";
 import shipment from "./shipment";
 import driverrequest from "./driverrequest";
 import shipmentloadinfos from "./shipmentloadinfos";
+import shippercompany from "./shippercompany";
+import validation from "./validation";
 export default {
   home: "Нүүр",
   submit: "Илгээх",
@@ -29,4 +31,11 @@ export default {
   shipment,
   driverrequest,
   shipmentloadinfos,
+  terms: "Үйлчилгээний нөхцөл",
+  shippercompany,
+  close: "Хаах",
+  accepted: "хүлээн зөвшөөрч байна",
+  accept: "Зөвшөөрч байна",
+  validation,
 };
+  

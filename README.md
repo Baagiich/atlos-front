@@ -3,6 +3,7 @@
 ## Project setup
 
 ```
+dcr app npm install
 # yarn
 yarn
 

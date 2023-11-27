@@ -3,6 +3,7 @@ import adminuser from "./adminuser";
 import shipment from "./shipment";
 import requests from "./requests";
 import driverrequest from "./driverrequest";
+import validation from "./validation";
 export default {
   home: "Home",
   submit: "Submit",
@@ -28,7 +29,13 @@ export default {
   loading: "Loading...",
   country,
   adminuser,
+  terms: "Terms",
+  privacy: "Privacy",
+  close: "Close",
+  accepted: "Accepted",
+  accept: "Accept",
   shipment,
   requests,
   driverrequest,
+  validation,
 };
