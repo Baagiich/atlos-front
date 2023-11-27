@@ -6,6 +6,8 @@ import driver from "./driver";
 import driverimage from "./driverimage";
 import mediaobject from "./mediaobject";
 
+import shippercompany from "./shippercompany";
+import validation from "./validation";
 export default {
   home: "Нүүр",
   submit: "Илгээх",
@@ -36,4 +38,10 @@ export default {
   driver,
   driverimage,
   mediaobject,
+  terms: "Үйлчилгээний нөхцөл",
+  shippercompany,
+  close: "Хаах",
+  accepted: "хүлээн зөвшөөрч байна",
+  accept: "Зөвшөөрч байна",
+  validation,
 };

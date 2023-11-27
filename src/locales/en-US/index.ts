@@ -7,6 +7,7 @@ import driver from "./driver";
 import driverimage from "./driverimage";
 import mediaobject from "./mediaobject";
 
+import validation from "./validation";
 export default {
   home: "Home",
   submit: "Submit",
@@ -32,10 +33,16 @@ export default {
   loading: "Loading...",
   country,
   adminuser,
+  terms: "Terms",
+  privacy: "Privacy",
+  close: "Close",
+  accepted: "Accepted",
+  accept: "Accept",
   shipment,
   requests,
   driverrequest,
   driver,
   driverimage,
   mediaobject,
+  validation,
 };

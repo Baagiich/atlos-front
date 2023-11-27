@@ -13,6 +13,7 @@ import driverrequest from "./driverrequest";
 import driverRoutes from "./driver";
 import driverimageRoutes from "./driverimage";
 import mediaobjectRoutes from "./mediaobject";
+import shippercompany from "./shippercompany";
 
 const routes = [
   {
@@ -43,6 +44,7 @@ const routes = [
   ...driverRoutes,
   ...driverimageRoutes,
   ...mediaobjectRoutes,
+  ...shippercompany,
 ];
 
 const router = createRouter({

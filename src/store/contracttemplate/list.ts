@@ -4,6 +4,7 @@ import { extractHubURL } from "@/utils/mercure";
 import type { ContractTemplate } from "@/types/contracttemplate";
 import type { PagedCollection } from "@/types/collection";
 import type { ListParams } from "@/types/list";
+import { UserType } from "@/types/usertype";
 
 interface State {
   items: ContractTemplate[];
@@ -11,6 +12,7 @@ interface State {
   isLoading: boolean;
   error?: string;
   hubUrl?: URL;
+  registrationTemplate?: ContractTemplate;
 }
 
 export const useContractTemplateListStore = defineStore(
@@ -18,6 +20,7 @@ export const useContractTemplateListStore = defineStore(
   {
     state: (): State => ({
       items: [],
+      registrationTemplate: undefined,
       totalItems: 0,
       isLoading: false,
       error: undefined,
@@ -50,7 +53,38 @@ export const useContractTemplateListStore = defineStore(
           }
         }
       },
+      async getRegistrationTemplate() {
+        const params = {
+          page: "1",
+          userType: `${UserType.SHIPPER}`,
+          name: "shipper_company_registration_term",
+          groups: ["read"],
+        };
+        this.setError("");
+        this.toggleLoading();
+        try {
+          const response = await api("contract_templates", {
+            params,
+            auth: false,
+          });
+          const data: PagedCollection<ContractTemplate> = await response.json();
+          const hubUrl = extractHubURL(response);
 
+          this.toggleLoading();
+
+          this.setRegistrationTemplate(data["hydra:member"][0]);
+
+          if (hubUrl) {
+            this.setHubUrl(hubUrl);
+          }
+        } catch (error) {
+          this.toggleLoading();
+
+          if (error instanceof Error) {
+            this.setError(error.message);
+          }
+        }
+      },
       toggleLoading() {
         this.isLoading = !this.isLoading;
       },
@@ -69,6 +103,9 @@ export const useContractTemplateListStore = defineStore(
 
       setError(error: string) {
         this.error = error;
+      },
+      setRegistrationTemplate(registrationTemplate: ContractTemplate) {
+        this.registrationTemplate = registrationTemplate;
       },
 
       updateItem(updatedItem: ContractTemplate) {
