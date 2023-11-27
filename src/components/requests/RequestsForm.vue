@@ -172,7 +172,6 @@ if (props.values) {
   item.value = {
     ...props.values,
     publicationDate: formatDateInput(props.values.publicationDate),
-    publicationDate: formatDateInput(props.values.publicationDate),
   };
 }
 

@@ -12,7 +12,7 @@ interface State {
   isLoading: boolean;
   error?: string;
   hubUrl?: URL;
-  registrationTemplate?: ContractTemplate,
+  registrationTemplate?: ContractTemplate;
 }
 
 export const useContractTemplateListStore = defineStore(
@@ -54,17 +54,19 @@ export const useContractTemplateListStore = defineStore(
         }
       },
       async getRegistrationTemplate() {
-
         const params = {
           page: "1",
           userType: `${UserType.SHIPPER}`,
-          name: 'shipper_company_registration_term',
-          groups:['read'] 
+          name: "shipper_company_registration_term",
+          groups: ["read"],
         };
         this.setError("");
         this.toggleLoading();
         try {
-          const response = await api("contract_templates", { params , auth: false,});
+          const response = await api("contract_templates", {
+            params,
+            auth: false,
+          });
           const data: PagedCollection<ContractTemplate> = await response.json();
           const hubUrl = extractHubURL(response);
 
@@ -108,7 +110,7 @@ export const useContractTemplateListStore = defineStore(
 
       updateItem(updatedItem: ContractTemplate) {
         const item: ContractTemplate | undefined = this.items.find(
-          (i) => i["@id"] === updatedItem["@id"]
+          (i) => i["@id"] === updatedItem["@id"],
         );
 
         if (!item) return;
@@ -122,5 +124,5 @@ export const useContractTemplateListStore = defineStore(
         });
       },
     },
-  }
+  },
 );

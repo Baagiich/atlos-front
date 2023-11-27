@@ -3,6 +3,10 @@ import adminuser from "./adminuser";
 import shipment from "./shipment";
 import requests from "./requests";
 import driverrequest from "./driverrequest";
+import driver from "./driver";
+import driverimage from "./driverimage";
+import mediaobject from "./mediaobject";
+
 import validation from "./validation";
 export default {
   home: "Home",
@@ -37,5 +41,8 @@ export default {
   shipment,
   requests,
   driverrequest,
+  driver,
+  driverimage,
+  mediaobject,
   validation,
 };

@@ -2,7 +2,9 @@
   <Toolbar :breadcrumb="breadcrumb" :is-loading="isLoading" />
 
   <v-container fluid>
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">{{ error }}</v-alert>
+    <v-alert v-if="error" type="error" class="mb-4" :closable="true">{{
+      error
+    }}</v-alert>
 
     <Form :errors="violations" @submit="create" />
   </v-container>
@@ -25,7 +27,8 @@ const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
 const adminuserCreateStore = useAdminUserCreateStore();
-const { created, isLoading, violations, error } = storeToRefs(adminuserCreateStore);
+const { created, isLoading, violations, error } =
+  storeToRefs(adminuserCreateStore);
 
 async function create(item: AdminUser) {
   await adminuserCreateStore.create(item);
@@ -34,7 +37,10 @@ async function create(item: AdminUser) {
     return;
   }
 
-  router.push({ name: "AdminUserUpdate", params: { id: created?.value?.["@id"] } });
+  router.push({
+    name: "AdminUserUpdate",
+    params: { id: created?.value?.["@id"] },
+  });
 }
 
 onBeforeUnmount(() => {

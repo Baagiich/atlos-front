@@ -7,7 +7,12 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable="true">
+    <v-alert
+      v-if="error || deleteError"
+      type="error"
+      class="mb-4"
+      closable="true"
+    >
       {{ error || deleteError }}
     </v-alert>
 
@@ -27,7 +32,7 @@
 
           <td>
             {{ item.isoCode3 }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -36,7 +41,7 @@
 
           <td>
             {{ item.name }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -47,8 +52,8 @@
             <template v-if="router.hasRoute('StateShow')">
               <router-link
                 v-for="state in item.states"
-                :to="{ name: 'StateShow', params: { id: state } }"
                 :key="state"
+                :to="{ name: 'StateShow', params: { id: state } }"
               >
                 {{ state }}
 
@@ -57,10 +62,7 @@
             </template>
 
             <template v-else>
-              <p
-                v-for="state in item.states"
-                :key="state"
-              >
+              <p v-for="state in item.states" :key="state">
                 {{ state }}
               </p>
             </template>

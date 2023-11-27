@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12" sm="4" md="4">
       <v-text-field
-      v-model="filters.plateNumber"
+        v-model="filters.plateNumber"
         :label="$t('driverrequest.pickVehicle')"
         type="string"
         @change="onSendFilter"
@@ -14,8 +14,13 @@
       {{ error }}
     </v-alert>
 
-    <v-alert v-if="showCreateVehicleAlert" type="error" class="mb-4" closable="true">
-      {{ $t('driverrequest.totalItemError') }}
+    <v-alert
+      v-if="showCreateVehicleAlert"
+      type="error"
+      class="mb-4"
+      closable="true"
+    >
+      {{ $t("driverrequest.totalItemError") }}
     </v-alert>
     <v-data-table-server
       :headers="headers"
@@ -36,15 +41,15 @@
         {{ item.vehicleCapacity }}
       </template>
       <template #item.actions="{ item }">
-      <v-btn
-      :color="currentColorState"
-      size="small"
-      class="ma-2"
-      @click="handleButtonClick(item)"
-    >
-      {{ t(currentTextState) }}
-    </v-btn>
-    </template>
+        <v-btn
+          :color="currentColorState"
+          size="small"
+          class="ma-2"
+          @click="handleButtonClick(item)"
+        >
+          {{ t(currentTextState) }}
+        </v-btn>
+      </template>
     </v-data-table-server>
   </v-container>
 </template>
@@ -67,8 +72,8 @@ import { RequestsType } from "@/types/requests_type";
 import { useVehicleListStore } from "@/store/vehicle/list";
 import { Vehicle } from "@/types/vehicle";
 
-const props = defineProps(['targetEntityId']);
-const targetEntityId = ref(props.targetEntityId)
+const props = defineProps(["targetEntityId"]);
+const targetEntityId = ref(props.targetEntityId);
 const { t } = useI18n();
 const breadcrumb = useBreadcrumb();
 const route = useRoute();
@@ -80,26 +85,33 @@ const vehicleListStore = useVehicleListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(vehicleListStore);
 
 const requestsVehicleListStore = useVehicleRequestsListStore();
-const { items:requestVehicleItems, totalItems:requestVehicleTotalItems, error: requestError, isLoading: requsetisLoading } = storeToRefs(requestsVehicleListStore);
+const {
+  items: requestVehicleItems,
+  totalItems: requestVehicleTotalItems,
+  error: requestError,
+  isLoading: requsetisLoading,
+} = storeToRefs(requestsVehicleListStore);
 
 const requestsCreateStore = useRequestsCreateStore();
 const { created } = storeToRefs(requestsCreateStore);
 const page = ref("1");
 const filters: Ref<Filters> = ref({});
-  filters.value.plateNumber = ""
+filters.value.plateNumber = "";
 const order = ref({});
-const filtersVehicleRequest: Ref<Filters> = ref({fromUser:apiToken.getDecodedToken().iri , targetEntityId: targetEntityId.value , code: RequestsCodeType.SHIPPER_TO_VEHICLE});
+const filtersVehicleRequest: Ref<Filters> = ref({
+  fromUser: apiToken.getDecodedToken().iri,
+  targetEntityId: targetEntityId.value,
+  code: RequestsCodeType.SHIPPER_TO_VEHICLE,
+});
 const BUTTON_STATES = {
-  CREATE: 'create',
-  PENDING: 'pending',
-  APPROVED: 'approved',
+  CREATE: "create",
+  PENDING: "pending",
+  APPROVED: "approved",
 };
 let currentButtonState = ref(BUTTON_STATES.CREATE);
-let currentColorState = ref('secondary');
-let currentTextState = ref('driverrequest.sendRequest');
+let currentColorState = ref("secondary");
+let currentTextState = ref("driverrequest.sendRequest");
 var showCreateVehicleAlert = ref(false);
-
-
 
 async function handleButtonClick(item: Vehicle) {
   switch (currentButtonState.value) {
@@ -133,28 +145,28 @@ async function toggleBtns() {
   if (requestVehicleTotalItems.value != 0) {
     if (requestVehicleItems.value[0].type == RequestsType.REJECTED) {
       currentButtonState.value = BUTTON_STATES.CREATE;
-      currentColorState.value = 'secondary'
-      currentTextState.value = 'driverrequest.sendRequest';
+      currentColorState.value = "secondary";
+      currentTextState.value = "driverrequest.sendRequest";
     } else if (requestVehicleItems.value[0].type == RequestsType.PENDING) {
       currentButtonState.value = BUTTON_STATES.PENDING;
-      currentColorState.value = 'blue-grey-lighten-2'
-      currentTextState.value = 'driverrequest.pending';
+      currentColorState.value = "blue-grey-lighten-2";
+      currentTextState.value = "driverrequest.pending";
     } else if (requestVehicleItems.value[0].type == RequestsType.APPROVED) {
       currentButtonState.value = BUTTON_STATES.APPROVED;
-      currentColorState.value = 'light-green-lighten-2'
-      currentTextState.value = 'driverrequest.approved';
+      currentColorState.value = "light-green-lighten-2";
+      currentTextState.value = "driverrequest.approved";
     }
   } else {
     currentButtonState.value = BUTTON_STATES.CREATE;
-    currentColorState.value = 'secondary'
-      currentTextState.value = 'driverrequest.sendRequest';
+    currentColorState.value = "secondary";
+    currentTextState.value = "driverrequest.sendRequest";
   }
 }
 async function setup() {
   await checkRequest();
 
   if (requestVehicleTotalItems.value >= 1) {
-  filters.value = {}
+    filters.value = {};
     filters.value.plateNumber = requestVehicleItems.value[0].params.plateNumber;
     await sendRequest();
   }
@@ -163,7 +175,7 @@ async function setup() {
 
 setup();
 const headers = [
-{
+  {
     title: t("driverrequest.plateNumber"),
     key: "plateNumber",
     sortable: false,
@@ -179,10 +191,10 @@ const headers = [
     sortable: false,
   },
   {
-  title: t("actions"),
-  key: "actions",
-  sortable: false,
-},
+    title: t("actions"),
+    key: "actions",
+    sortable: false,
+  },
 ];
 
 function updatePage(newPage: string) {
@@ -202,18 +214,17 @@ function onSendFilter() {
   sendRequest();
 }
 async function createVehicleRequests(item: Requests) {
-  if(requestVehicleTotalItems.value >= 1)
-  {
+  if (requestVehicleTotalItems.value >= 1) {
     showCreateVehicleAlert = ref(true);
     sendRequest();
-    return
+    return;
   }
   await requestsCreateStore.create(item);
 
   if (!created?.value) {
     return;
   }
-  setup()
+  setup();
 }
 
 onBeforeUnmount(() => {
@@ -233,8 +244,8 @@ function createVehicleRequest(item: Vehicle): Requests {
     targetEntityId: targetEntityId.value,
     params: {
       plateNumber: item.plateNumber,
-    }
-  }
+    },
+  };
   return req;
 }
 </script>

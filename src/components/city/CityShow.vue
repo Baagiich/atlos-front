@@ -7,7 +7,12 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable="true">
+    <v-alert
+      v-if="error || deleteError"
+      type="error"
+      class="mb-4"
+      closable="true"
+    >
       {{ error || deleteError }}
     </v-alert>
 
@@ -27,7 +32,7 @@
 
           <td>
             {{ item.name }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -54,7 +59,7 @@
 
           <td>
             {{ item.capital }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -65,8 +70,8 @@
             <template v-if="router.hasRoute('AddressShow')">
               <router-link
                 v-for="address in item.addresses"
-                :to="{ name: 'AddressShow', params: { id: address } }"
                 :key="address"
+                :to="{ name: 'AddressShow', params: { id: address } }"
               >
                 {{ address }}
 
@@ -75,10 +80,7 @@
             </template>
 
             <template v-else>
-              <p
-                v-for="address in item.addresses"
-                :key="address"
-              >
+              <p v-for="address in item.addresses" :key="address">
                 {{ address }}
               </p>
             </template>

@@ -64,7 +64,7 @@ export const useCountryUpdateStore = defineStore("countryUpdate", {
             method: "PUT",
             headers: new Headers({ "Content-Type": "application/ld+json" }),
             body: JSON.stringify(payload),
-          }
+          },
         );
         const data: Country = await response.json();
 

@@ -71,7 +71,7 @@ export const useShipperCompanyListStore = defineStore("shippercompanyList", {
 
     updateItem(updatedItem: ShipperCompany) {
       const item: ShipperCompany | undefined = this.items.find(
-        (i) => i["@id"] === updatedItem["@id"]
+        (i) => i["@id"] === updatedItem["@id"],
       );
 
       if (!item) return;

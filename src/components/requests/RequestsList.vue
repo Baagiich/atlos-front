@@ -18,7 +18,6 @@
       {{ error }}
     </v-alert>
 
-
     <v-data-table-server
       :headers="headers"
       :items="items"
@@ -72,10 +71,10 @@
       <template #item.updatedAt="{ item }">
         {{ formatDateTime(item.updatedAt) }}
       </template>
-            <template #item.createdAt="{ item }">
+      <template #item.createdAt="{ item }">
         {{ formatDateTime(item.createdAt) }}
       </template>
-          </v-data-table-server>
+    </v-data-table-server>
   </v-container>
 </template>
 
@@ -179,7 +178,6 @@ function updateOrder(newOrders: VuetifyOrder[]) {
 
   sendRequest();
 }
-
 
 function goToShowPage(item: Requests) {
   router.push({

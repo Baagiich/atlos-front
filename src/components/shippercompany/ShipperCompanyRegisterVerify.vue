@@ -1,7 +1,8 @@
 <template>
-
   <v-container fluid>
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">{{ error }}</v-alert>
+    <v-alert v-if="error" type="error" class="mb-4" closable="true">{{
+      error
+    }}</v-alert>
 
     <Form :errors="violations" @submit="verify" />
   </v-container>
@@ -21,17 +22,17 @@ import type { AdminUserVerify } from "@/types/adminuserverify";
 const router = useRouter();
 
 const shippercompanyRegisterStore = useShipperCompanyRegisterStore();
-const { created, isLoading, violations, error , verified} = storeToRefs(shippercompanyRegisterStore);
+const { created, isLoading, violations, error, verified } = storeToRefs(
+  shippercompanyRegisterStore,
+);
 async function verify(item: AdminUserVerify) {
-
   await shippercompanyRegisterStore.verify(item);
 
   if (!verified?.value) {
     return;
   }
 
-  router.push({ name: "Home"});
-  
+  router.push({ name: "Home" });
 }
 
 onBeforeUnmount(() => {

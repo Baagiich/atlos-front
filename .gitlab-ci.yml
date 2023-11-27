@@ -1,10 +1,11 @@
-image: node:latest
+image: node:20-alpine
 
 stages:
-- lint:commit
-- lint:code
-- test
-- release
+  - lint:commit
+  - lint:code
+  - test
+  - merge
+  - release
 
 variables:
   NPM_TOKEN: ${CI_JOB_TOKEN}
@@ -28,12 +29,20 @@ lint:code:
   script:
     - ./node_modules/eslint/bin/eslint.js $(git diff --name-only HEAD | grep -E 'src/.*\.ts|test/.*\.ts$' | xargs)
 
-sast:
+test:
   stage: test
-  before_script: []
+  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+  script:
+    - npm run test-ci
 
-include:
-- template: Security/SAST.gitlab-ci.yml
+approve:
+  stage: merge
+  script:
+    - echo ok
+  when: manual
+  allow_failure: false
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
 
 release:
   stage: release

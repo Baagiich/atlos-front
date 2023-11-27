@@ -71,7 +71,7 @@ export const useContractListStore = defineStore("contractList", {
 
     updateItem(updatedItem: Contract) {
       const item: Contract | undefined = this.items.find(
-        (i) => i["@id"] === updatedItem["@id"]
+        (i) => i["@id"] === updatedItem["@id"],
       );
 
       if (!item) return;

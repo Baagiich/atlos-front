@@ -51,7 +51,7 @@
       <template #item.loadAt="{ item }">
         {{ formatDateTime(item.loadAt) }}
       </template>
-            <template #item.unloadAt="{ item }">
+      <template #item.unloadAt="{ item }">
         {{ formatDateTime(item.unloadAt) }}
       </template>
       <template #item.actions="{ item }">
@@ -61,10 +61,10 @@
           class="ma-2"
           @click="createPriceBidding(item)"
         >
-        {{ t("shipment.sendBid") }}
+          {{ t("shipment.sendBid") }}
         </v-btn>
       </template>
-          </v-data-table-server>
+    </v-data-table-server>
   </v-container>
 </template>
 
@@ -78,7 +78,6 @@ import { useShipmentDeleteStore } from "@/store/shipment/delete";
 import Toolbar from "@/components/common/Toolbar.vue";
 import DataFilter from "@/components/common/DataFilter.vue";
 import Filter from "@/components/shipment/ShipmentFilter.vue";
-import ActionCell from "@/components/common/ActionCell.vue";
 import { formatDateTime } from "@/utils/date";
 import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
@@ -99,12 +98,11 @@ const { items, totalItems, error, isLoading } = storeToRefs(shipmentListStore);
 
 const page = ref("1");
 const filters: Ref<Filters> = ref({});
-  if(apiToken.getDecodedToken().user_type != UserType.ADMIN) {
-    filters.value.state = 'created';
-  }
+if (apiToken.getDecodedToken().user_type != UserType.ADMIN) {
+  filters.value.state = "created";
+}
 const order = ref({});
 const itemsPerPage = ref("10");
-const userTypes = ref(UserType);
 async function sendRequest() {
   await shipmentListStore.getItems({
     page: page.value,
@@ -171,30 +169,10 @@ function resetFilter() {
   sendRequest();
 }
 
-function goToShowPage(item: Shipment) {
-  router.push({
-    name: "ShipmentShow",
-    params: { id: item["@id"] },
-  });
-}
-
 function goToCreatePage() {
   router.push({
     name: "ShipmentCreate",
   });
-}
-
-function goToUpdatePage(item: Shipment) {
-  router.push({
-    name: "ShipmentUpdate",
-    params: { id: item["@id"] },
-  });
-}
-
-async function deleteItem(item: Shipment) {
-  await shipmentDeleteStore.deleteItem(item);
-
-  sendRequest();
 }
 
 onBeforeUnmount(() => {

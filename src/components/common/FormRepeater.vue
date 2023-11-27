@@ -11,8 +11,8 @@
     <div class="my-4">
       <v-text-field
         v-for="(field, index) in fields"
-        v-model="fields[index]"
         :key="index"
+        v-model="fields[index]"
         @update:model-value="(value: string) => updateField(index, value)"
       >
         <template #append-inner>
@@ -62,7 +62,7 @@ function removeField(index: number) {
 function emitUpdate() {
   emit(
     "update",
-    fields.value.filter((review) => review.length)
+    fields.value.filter((review) => review.length),
   );
 }
 </script>

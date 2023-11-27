@@ -2,6 +2,10 @@ import adminuser from "./adminuser";
 import shipment from "./shipment";
 import driverrequest from "./driverrequest";
 import shipmentloadinfos from "./shipmentloadinfos";
+import driver from "./driver";
+import driverimage from "./driverimage";
+import mediaobject from "./mediaobject";
+
 import shippercompany from "./shippercompany";
 import validation from "./validation";
 export default {
@@ -31,6 +35,9 @@ export default {
   shipment,
   driverrequest,
   shipmentloadinfos,
+  driver,
+  driverimage,
+  mediaobject,
   terms: "Үйлчилгээний нөхцөл",
   shippercompany,
   close: "Хаах",
@@ -38,4 +45,3 @@ export default {
   accept: "Зөвшөөрч байна",
   validation,
 };
-  

@@ -60,5 +60,5 @@ export const useContractTemplateDeleteStore = defineStore(
         this.error = error;
       },
     },
-  }
+  },
 );

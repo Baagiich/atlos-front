@@ -7,7 +7,12 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable="true">
+    <v-alert
+      v-if="error || deleteError"
+      type="error"
+      class="mb-4"
+      closable="true"
+    >
       {{ error || deleteError }}
     </v-alert>
 
@@ -27,7 +32,7 @@
 
           <td>
             {{ item.firstname }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -36,7 +41,7 @@
 
           <td>
             {{ item.lastname }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -45,7 +50,7 @@
 
           <td>
             {{ item.name }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -54,7 +59,7 @@
 
           <td>
             {{ item.email }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -63,7 +68,7 @@
 
           <td>
             {{ item.register }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -72,7 +77,7 @@
 
           <td>
             {{ item.phoneNumber }}
-                      </td>
+          </td>
         </tr>
       </tbody>
     </v-table>
@@ -99,7 +104,11 @@ const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
 const shippercompanyShowStore = useShipperCompanyShowStore();
-const { retrieved: item, isLoading, error } = storeToRefs(shippercompanyShowStore);
+const {
+  retrieved: item,
+  isLoading,
+  error,
+} = storeToRefs(shippercompanyShowStore);
 
 const shippercompanyDeleteStore = useShipperCompanyDeleteStore();
 const { deleted, error: deleteError } = storeToRefs(shippercompanyDeleteStore);
@@ -110,7 +119,9 @@ useMercureItem({
   redirectRouteName: "ShipperCompanyList",
 });
 
-await shippercompanyShowStore.retrieve(decodeURIComponent(route.params.id as string));
+await shippercompanyShowStore.retrieve(
+  decodeURIComponent(route.params.id as string),
+);
 
 async function deleteItem() {
   if (!item?.value) {

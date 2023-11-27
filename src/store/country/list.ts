@@ -71,7 +71,7 @@ export const useCountryListStore = defineStore("countryList", {
 
     updateItem(updatedItem: Country) {
       const item: Country | undefined = this.items.find(
-        (i) => i["@id"] === updatedItem["@id"]
+        (i) => i["@id"] === updatedItem["@id"],
       );
 
       if (!item) return;

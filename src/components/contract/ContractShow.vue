@@ -7,7 +7,12 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable="true">
+    <v-alert
+      v-if="error || deleteError"
+      type="error"
+      class="mb-4"
+      closable="true"
+    >
       {{ error || deleteError }}
     </v-alert>
 
@@ -46,7 +51,10 @@
           <td>
             <router-link
               v-if="router.hasRoute('ContractTemplateShow')"
-              :to="{ name: 'ContractTemplateShow', params: { id: item.contracttemplate } }"
+              :to="{
+                name: 'ContractTemplateShow',
+                params: { id: item.contracttemplate },
+              }"
             >
               {{ item.contracttemplate }}
             </router-link>
@@ -63,7 +71,7 @@
 
           <td>
             {{ item.signed }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>

@@ -7,7 +7,12 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable="true">
+    <v-alert
+      v-if="error || deleteError"
+      type="error"
+      class="mb-4"
+      closable="true"
+    >
       {{ error || deleteError }}
     </v-alert>
 
@@ -29,8 +34,11 @@
             <template v-if="router.hasRoute('ShipmentImageShow')">
               <router-link
                 v-for="shipmentimage in item.shipmentImages"
-                :to="{ name: 'ShipmentImageShow', params: { id: shipmentimage } }"
                 :key="shipmentimage"
+                :to="{
+                  name: 'ShipmentImageShow',
+                  params: { id: shipmentimage },
+                }"
               >
                 {{ shipmentimage }}
 
@@ -55,7 +63,7 @@
 
           <td>
             {{ item.state }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -82,7 +90,7 @@
 
           <td>
             {{ item.action }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -91,7 +99,7 @@
 
           <td>
             {{ item.consignor }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -100,7 +108,7 @@
 
           <td>
             {{ item.shipmentCode }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -109,7 +117,7 @@
 
           <td>
             {{ item.shipmentType }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -120,8 +128,11 @@
             <template v-if="router.hasRoute('ShipmentShipperDealShow')">
               <router-link
                 v-for="shipmentshipperdeal in item.shipmentShipperDeals"
-                :to="{ name: 'ShipmentShipperDealShow', params: { id: shipmentshipperdeal } }"
                 :key="shipmentshipperdeal"
+                :to="{
+                  name: 'ShipmentShipperDealShow',
+                  params: { id: shipmentshipperdeal },
+                }"
               >
                 {{ shipmentshipperdeal }}
 
@@ -148,8 +159,8 @@
             <template v-if="router.hasRoute('ReviewShow')">
               <router-link
                 v-for="review in item.reviews"
-                :to="{ name: 'ReviewShow', params: { id: review } }"
                 :key="review"
+                :to="{ name: 'ReviewShow', params: { id: review } }"
               >
                 {{ review }}
 
@@ -158,10 +169,7 @@
             </template>
 
             <template v-else>
-              <p
-                v-for="review in item.reviews"
-                :key="review"
-              >
+              <p v-for="review in item.reviews" :key="review">
                 {{ review }}
               </p>
             </template>
@@ -195,7 +203,7 @@
               v-if="router.hasRoute('AddressShow')"
               :to="{ name: 'AddressShow', params: { id: item.fromAddress } }"
             >
-            {{ item.fromAddress.city.name }}, {{ item.fromAddress.street }}
+              {{ item.fromAddress.city.name }}, {{ item.fromAddress.street }}
             </router-link>
 
             <p v-else>
@@ -213,12 +221,11 @@
               v-if="router.hasRoute('AddressShow')"
               :to="{ name: 'AddressShow', params: { id: item.toAddress } }"
             >
-            {{ item.toAddress.city.name }}, {{ item.toAddress.street }}
+              {{ item.toAddress.city.name }}, {{ item.toAddress.street }}
             </router-link>
 
             <p v-else>
-            {{ item.toAddress.city.name }}, {{ item.toAddress.street }}
-
+              {{ item.toAddress.city.name }}, {{ item.toAddress.street }}
             </p>
           </td>
         </tr>
@@ -247,7 +254,7 @@
 
           <td>
             {{ item.prePayment }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -256,7 +263,7 @@
 
           <td>
             {{ item.postPayment }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -265,7 +272,7 @@
 
           <td>
             {{ item.price }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -292,7 +299,7 @@
 
           <td>
             {{ item.shipmentTypeCode }}
-                      </td>
+          </td>
         </tr>
       </tbody>
     </v-table>

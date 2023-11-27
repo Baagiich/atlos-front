@@ -60,5 +60,5 @@ export const useShipperCompanyDeleteStore = defineStore(
         this.error = error;
       },
     },
-  }
+  },
 );

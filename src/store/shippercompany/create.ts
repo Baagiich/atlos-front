@@ -67,5 +67,5 @@ export const useShipperCompanyCreateStore = defineStore(
         this.violations = violations;
       },
     },
-  }
+  },
 );

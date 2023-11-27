@@ -64,7 +64,7 @@ export const useCityUpdateStore = defineStore("cityUpdate", {
             method: "PUT",
             headers: new Headers({ "Content-Type": "application/ld+json" }),
             body: JSON.stringify(payload),
-          }
+          },
         );
         const data: City = await response.json();
 

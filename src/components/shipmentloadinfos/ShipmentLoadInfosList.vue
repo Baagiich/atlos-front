@@ -18,7 +18,6 @@
       {{ error }}
     </v-alert>
 
-
     <v-data-table-server
       :headers="headers"
       :items="items"
@@ -60,7 +59,10 @@
       <template #item.shipmentpackagetype="{ item }">
         <router-link
           v-if="router.hasRoute('ShipmentPackageTypeShow')"
-          :to="{ name: 'ShipmentPackageTypeShow', params: { id: item.shipmentpackagetype } }"
+          :to="{
+            name: 'ShipmentPackageTypeShow',
+            params: { id: item.shipmentpackagetype },
+          }"
         >
           {{ item.shipmentpackagetype }}
         </router-link>
@@ -95,7 +97,9 @@ const shipmentloadinfosDeleteStore = useShipmentLoadInfosDeleteStore();
 const { deleted, mercureDeleted } = storeToRefs(shipmentloadinfosDeleteStore);
 
 const shipmentloadinfosListStore = useShipmentLoadInfosListStore();
-const { items, totalItems, error, isLoading } = storeToRefs(shipmentloadinfosListStore);
+const { items, totalItems, error, isLoading } = storeToRefs(
+  shipmentloadinfosListStore,
+);
 
 const page = ref("1");
 const order = ref({});
@@ -107,7 +111,10 @@ async function sendRequest() {
   });
 }
 
-useMercureList({ store: shipmentloadinfosListStore, deleteStore: shipmentloadinfosDeleteStore });
+useMercureList({
+  store: shipmentloadinfosListStore,
+  deleteStore: shipmentloadinfosDeleteStore,
+});
 
 sendRequest();
 
@@ -177,7 +184,6 @@ function updateOrder(newOrders: VuetifyOrder[]) {
 
   sendRequest();
 }
-
 
 function goToShowPage(item: ShipmentLoadInfos) {
   router.push({

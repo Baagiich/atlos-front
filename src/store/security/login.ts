@@ -1,9 +1,7 @@
 import { defineStore } from "pinia";
 import { SubmissionError } from "@/utils/error";
-import api from "@/utils/api";
-import type { Auth, TokenResponse } from "@/types/auth";
+import type { Auth } from "@/types/auth";
 import type { SubmissionErrors } from "@/types/error";
-import * as dayjs from "dayjs";
 import * as apiToken from "@/utils/apiToken";
 import { useDeviceShowStore } from "@/store/device/show";
 import { useDeviceCreateStore } from "@/store/device/create";
@@ -29,10 +27,9 @@ export const useSecurityLoginStore = defineStore("securityLogin", {
       this.setViolations(undefined);
       this.toggleLoading();
 
+      const deviceShow = useDeviceShowStore();
+      const deviceCreate = useDeviceCreateStore();
       try {
-        const deviceShow = useDeviceShowStore();
-        const deviceCreate = useDeviceCreateStore();
-
         deviceShow.retrieveFromLocal();
         if (!deviceShow.retrieved) {
           const parser = new UAParser();
@@ -66,6 +63,9 @@ export const useSecurityLoginStore = defineStore("securityLogin", {
         }
 
         if (error instanceof Error) {
+          if (error.message === "Бүртгэлгүй төхөөрөмж байна") {
+            deviceShow.setRetrieved(undefined);
+          }
           this.setError(error.message);
         }
       }

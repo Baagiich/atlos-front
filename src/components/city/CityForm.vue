@@ -114,7 +114,6 @@ import { ref, Ref, toRef } from "vue";
 import { VForm } from "vuetify/components";
 import { formatDateInput } from "@/utils/date";
 import FormRepeater from "@/components/common/FormRepeater.vue";
-import type { Item } from "@/types/item";
 import type { City } from "@/types/city";
 import type { SubmissionErrors } from "@/types/error";
 const props = defineProps<{
@@ -129,7 +128,6 @@ const item: Ref<City> = ref({});
 if (props.values) {
   item.value = {
     ...props.values,
-    publicationDate: formatDateInput(props.values.publicationDate),
     publicationDate: formatDateInput(props.values.publicationDate),
   };
 }

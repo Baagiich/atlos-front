@@ -18,7 +18,6 @@
       {{ error }}
     </v-alert>
 
-
     <v-data-table-server
       :headers="headers"
       :items="items"
@@ -44,7 +43,6 @@
           {{ item["@id"] }}
         </router-link>
       </template>
-
     </v-data-table-server>
   </v-container>
 </template>
@@ -71,7 +69,9 @@ const shippercompanyDeleteStore = useShipperCompanyDeleteStore();
 const { deleted, mercureDeleted } = storeToRefs(shippercompanyDeleteStore);
 
 const shippercompanyListStore = useShipperCompanyListStore();
-const { items, totalItems, error, isLoading } = storeToRefs(shippercompanyListStore);
+const { items, totalItems, error, isLoading } = storeToRefs(
+  shippercompanyListStore,
+);
 
 const page = ref("1");
 const order = ref({});
@@ -83,7 +83,10 @@ async function sendRequest() {
   });
 }
 
-useMercureList({ store: shippercompanyListStore, deleteStore: shippercompanyDeleteStore });
+useMercureList({
+  store: shippercompanyListStore,
+  deleteStore: shippercompanyDeleteStore,
+});
 
 sendRequest();
 
@@ -138,7 +141,6 @@ function updateOrder(newOrders: VuetifyOrder[]) {
 
   sendRequest();
 }
-
 
 function goToShowPage(item: ShipperCompany) {
   router.push({

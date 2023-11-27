@@ -64,7 +64,7 @@ export const useVehicleUpdateStore = defineStore("vehicleUpdate", {
             method: "PUT",
             headers: new Headers({ "Content-Type": "application/ld+json" }),
             body: JSON.stringify(payload),
-          }
+          },
         );
         const data: Vehicle = await response.json();
 

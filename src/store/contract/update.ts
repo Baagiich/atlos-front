@@ -64,7 +64,7 @@ export const useContractUpdateStore = defineStore("contractUpdate", {
             method: "PUT",
             headers: new Headers({ "Content-Type": "application/ld+json" }),
             body: JSON.stringify(payload),
-          }
+          },
         );
         const data: Contract = await response.json();
 

@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
-import type { Country } from "@/types/country";
 import { Device } from "@/types/device";
 
 interface State {
@@ -32,7 +31,7 @@ export const useDeviceShowStore = defineStore("deviceShow", {
     async retrieve(id: string, options: any = {}) {
       this.toggleLoading();
       try {
-        const response = await api(id);
+        const response = await api(id, options);
         const data: Device = await response.json();
         const hubUrl = extractHubURL(response);
 
@@ -54,7 +53,10 @@ export const useDeviceShowStore = defineStore("deviceShow", {
       this.isLoading = !this.isLoading;
     },
 
-    setRetrieved(retrieved: Device) {
+    setRetrieved(retrieved?: Device) {
+      if (retrieved === undefined) {
+        localStorage.removeItem("device");
+      }
       this.retrieved = retrieved;
     },
 

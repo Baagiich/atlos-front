@@ -55,8 +55,7 @@ export const useShipperCompanyRegisterStore = defineStore(
           }
         }
       },
-      async verify(payload: AdminUserVerify
-      ){
+      async verify(payload: AdminUserVerify) {
         this.setError(undefined);
         this.setViolations(undefined);
         this.toggleLoading();
@@ -102,8 +101,8 @@ export const useShipperCompanyRegisterStore = defineStore(
         this.violations = violations;
       },
       setVerified(status: boolean) {
-        this.verified = status
-      }
+        this.verified = status;
+      },
     },
-  }
+  },
 );

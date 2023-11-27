@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12" sm="4" md="4">
       <v-text-field
-      v-model="filters.email"
+        v-model="filters.email"
         :label="$t('driverrequest.pickDriver')"
         type="string"
         @change="onSendFilter"
@@ -22,7 +22,7 @@
     </v-alert>
 
     <v-alert v-if="showCreateAlert" type="error" class="mb-4" closable="true">
-      {{ $t('driverrequest.totalItemError') }}
+      {{ $t("driverrequest.totalItemError") }}
     </v-alert>
     <v-data-table-server
       :headers="headers"
@@ -44,14 +44,14 @@
       </template>
       <template #item.actions="{ item }">
         <v-btn
-      :color="currentColorState"
-      size="small"
-      class="ma-2"
-      @click="handleButtonClick(item)"
-    >
-      {{ t(currentTextState) }}
-    </v-btn>
-    </template>
+          :color="currentColorState"
+          size="small"
+          class="ma-2"
+          @click="handleButtonClick(item)"
+        >
+          {{ t(currentTextState) }}
+        </v-btn>
+      </template>
     </v-data-table-server>
   </v-container>
 </template>
@@ -74,8 +74,8 @@ import { useDriverRequestsListStore } from "@/store/driverrequests/driverlist";
 import { RequestsCodeType } from "@/types/requests_code_type";
 import { RequestsType } from "@/types/requests_type";
 
-const props = defineProps(['targetEntityId']);
-const targetEntityId = ref(props.targetEntityId)
+const props = defineProps(["targetEntityId"]);
+const targetEntityId = ref(props.targetEntityId);
 const { t } = useI18n();
 const breadcrumb = useBreadcrumb();
 const route = useRoute();
@@ -87,29 +87,38 @@ const adminuserListStore = useAdminUserListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(adminuserListStore);
 
 const requestsListStore = useDriverRequestsListStore();
-const { items:requestItems, totalItems:requestTotalItems, error: requestError, isLoading: requsetisLoading } = storeToRefs(requestsListStore);
+const {
+  items: requestItems,
+  totalItems: requestTotalItems,
+  error: requestError,
+  isLoading: requsetisLoading,
+} = storeToRefs(requestsListStore);
 
 const requestsCreateStore = useRequestsCreateStore();
 const { created } = storeToRefs(requestsCreateStore);
 const page = ref("1");
 const filters: Ref<Filters> = ref({});
-  filters.value.email = ""
+filters.value.email = "";
 const order = ref({});
-const filtersRequest: Ref<Filters> = ref({fromUser:apiToken.getDecodedToken().iri , targetEntityId: targetEntityId.value , code: RequestsCodeType.SHIPPER_TO_DRIVER});
-  const BUTTON_STATES = {
-  CREATE: 'create',
-  PENDING: 'pending',
-  APPROVED: 'approved',
+const filtersRequest: Ref<Filters> = ref({
+  fromUser: apiToken.getDecodedToken().iri,
+  targetEntityId: targetEntityId.value,
+  code: RequestsCodeType.SHIPPER_TO_DRIVER,
+});
+const BUTTON_STATES = {
+  CREATE: "create",
+  PENDING: "pending",
+  APPROVED: "approved",
 };
 let currentButtonState = ref(BUTTON_STATES.CREATE);
-let currentColorState = ref('secondary');
-let currentTextState = ref('driverrequest.sendRequest');
+let currentColorState = ref("secondary");
+let currentTextState = ref("driverrequest.sendRequest");
 var showCreateAlert = ref(false);
 
 async function handleButtonClick(item: AdminUser) {
   switch (currentButtonState.value) {
     case BUTTON_STATES.CREATE:
-    sendRequestToDriver(item);
+      sendRequestToDriver(item);
       break;
     default:
       break;
@@ -139,21 +148,21 @@ async function toggleBtns() {
   if (requestTotalItems.value != 0) {
     if (requestItems.value[0].type == RequestsType.REJECTED) {
       currentButtonState.value = BUTTON_STATES.CREATE;
-      currentColorState.value = 'secondary'
-      currentTextState.value = 'driverrequest.sendRequest';
+      currentColorState.value = "secondary";
+      currentTextState.value = "driverrequest.sendRequest";
     } else if (requestItems.value[0].type == RequestsType.PENDING) {
       currentButtonState.value = BUTTON_STATES.PENDING;
-      currentColorState.value = 'blue-grey-lighten-2'
-      currentTextState.value = 'driverrequest.pending';
+      currentColorState.value = "blue-grey-lighten-2";
+      currentTextState.value = "driverrequest.pending";
     } else if (requestItems.value[0].type == RequestsType.APPROVED) {
       currentButtonState.value = BUTTON_STATES.APPROVED;
-      currentColorState.value = 'light-green-lighten-2'
-      currentTextState.value = 'driverrequest.approved';
+      currentColorState.value = "light-green-lighten-2";
+      currentTextState.value = "driverrequest.approved";
     }
   } else {
     currentButtonState.value = BUTTON_STATES.CREATE;
-    currentColorState.value = 'secondary'
-      currentTextState.value = 'driverrequest.sendRequest';
+    currentColorState.value = "secondary";
+    currentTextState.value = "driverrequest.sendRequest";
   }
 }
 async function setup() {
@@ -168,7 +177,7 @@ async function setup() {
 
 setup();
 const headers = [
-{
+  {
     title: t("adminuser.lastName"),
     key: "lastName",
     sortable: false,
@@ -184,10 +193,10 @@ const headers = [
     sortable: false,
   },
   {
-  title: t("actions"),
-  key: "actions",
-  sortable: false,
-},
+    title: t("actions"),
+    key: "actions",
+    sortable: false,
+  },
 ];
 
 function updatePage(newPage: string) {
@@ -207,18 +216,17 @@ function onSendFilter() {
   sendRequest();
 }
 async function createRequests(item: Requests) {
-  if(requestTotalItems.value >= 1)
-  {
+  if (requestTotalItems.value >= 1) {
     showCreateAlert = ref(true);
     sendRequest();
-    return
+    return;
   }
   await requestsCreateStore.create(item);
 
   if (!created?.value) {
     return;
   }
-  setup()
+  setup();
 }
 
 onBeforeUnmount(() => {
@@ -235,8 +243,8 @@ function createRequest(item: AdminUser): Requests {
     toUser: item["@id"],
     code: RequestsCodeType.SHIPPER_TO_DRIVER,
     type: RequestsType.PENDING,
-    targetEntityId: targetEntityId.value
-  }
+    targetEntityId: targetEntityId.value,
+  };
   return req;
 }
 </script>

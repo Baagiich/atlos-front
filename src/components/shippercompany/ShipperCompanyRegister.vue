@@ -2,9 +2,15 @@
   <Toolbar :breadcrumb="breadcrumb" :is-loading="isLoading" />
 
   <v-container fluid>
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">{{ error }}</v-alert>
+    <v-alert v-if="error" type="error" class="mb-4" closable="true">{{
+      error
+    }}</v-alert>
 
-    <Form :errors="violations" @submit="create" :contractTemplate="registrationTemplate" />
+    <Form
+      :errors="violations"
+      :contract-template="registrationTemplate"
+      @submit="create"
+    />
   </v-container>
 
   <Loading :visible="isLoading" />
@@ -26,9 +32,16 @@ const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
 const shippercompanyRegisterStore = useShipperCompanyRegisterStore();
-const { created, isLoading, violations, error } = storeToRefs(shippercompanyRegisterStore);
+const { created, isLoading, violations, error } = storeToRefs(
+  shippercompanyRegisterStore,
+);
 const contracttemplateListStore = useContractTemplateListStore();
-const { isLoading: contractTemplateIsLoading,registrationTemplate,hubUrl,error: contractTemplateError } = storeToRefs(contracttemplateListStore);
+const {
+  isLoading: contractTemplateIsLoading,
+  registrationTemplate,
+  hubUrl,
+  error: contractTemplateError,
+} = storeToRefs(contracttemplateListStore);
 async function create(item: ShipperCompany) {
   await shippercompanyRegisterStore.create(item);
 
@@ -36,10 +49,8 @@ async function create(item: ShipperCompany) {
     return;
   }
 
-  router.push({ name: "ShipperCompanyVerify"});
-
+  router.push({ name: "ShipperCompanyVerify" });
 }
-
 
 async function sendRequest() {
   await contracttemplateListStore.getRegistrationTemplate();

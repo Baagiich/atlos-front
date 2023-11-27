@@ -7,11 +7,21 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable="true">
+    <v-alert
+      v-if="error || deleteError"
+      type="error"
+      class="mb-4"
+      closable="true"
+    >
       {{ error || deleteError }}
     </v-alert>
 
-    <v-alert v-if="created || updated" type="success" class="mb-4" closable="true">
+    <v-alert
+      v-if="created || updated"
+      type="success"
+      class="mb-4"
+      closable="true"
+    >
       <template v-if="updated">
         {{ $t("itemUpdated", [updated["@id"]]) }}
       </template>
@@ -50,8 +60,9 @@ const shippercompanyCreateStore = useShipperCompanyCreateStore();
 const { created } = storeToRefs(shippercompanyCreateStore);
 
 const shippercompanyDeleteStore = useShipperCompanyDeleteStore();
-const { isLoading: deleteLoading, error: deleteError } =
-  storeToRefs(shippercompanyDeleteStore);
+const { isLoading: deleteLoading, error: deleteError } = storeToRefs(
+  shippercompanyDeleteStore,
+);
 
 const shippercompanyUpdateStore = useShipperCompanyUpdateStore();
 const {
@@ -68,7 +79,9 @@ useMercureItem({
   redirectRouteName: "ShipperCompanyList",
 });
 
-await shippercompanyUpdateStore.retrieve(decodeURIComponent(route.params.id as string));
+await shippercompanyUpdateStore.retrieve(
+  decodeURIComponent(route.params.id as string),
+);
 
 async function update(item: ShipperCompany) {
   await shippercompanyUpdateStore.update(item);

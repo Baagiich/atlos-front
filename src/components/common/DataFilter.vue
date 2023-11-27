@@ -5,7 +5,7 @@
         {{ $t("filters") }}
 
         <template #actions>
-          <v-icon large>mdi-filter-variant</v-icon>
+          <v-icon size="large">mdi-filter-variant</v-icon>
         </template>
       </v-expansion-panel-title>
 
@@ -14,7 +14,7 @@
 
         <v-btn color="primary" @click="emitFilter">{{ $t("filter") }}</v-btn>
 
-        <v-btn color="primary" class="ml-2" text @click="emitReset">
+        <v-btn color="primary" class="ml-2" variant="text" @click="emitReset">
           {{ $t("reset") }}
         </v-btn>
       </v-expansion-panel-text>

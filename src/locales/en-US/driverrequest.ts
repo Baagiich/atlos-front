@@ -8,5 +8,5 @@ export default {
   approved: "Approved",
   plateNumber: "Plate number",
   vehicleType: "Vehicle type",
-  vehicleCapacity: "Vehicle capacity"
+  vehicleCapacity: "Vehicle capacity",
 };

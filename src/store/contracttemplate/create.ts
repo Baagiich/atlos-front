@@ -67,5 +67,5 @@ export const useContractTemplateCreateStore = defineStore(
         this.violations = violations;
       },
     },
-  }
+  },
 );

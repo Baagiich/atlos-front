@@ -64,7 +64,7 @@ export const useRequestsUpdateStore = defineStore("requestsUpdate", {
             method: "PUT",
             headers: new Headers({ "Content-Type": "application/ld+json" }),
             body: JSON.stringify(payload),
-          }
+          },
         );
         const data: Requests = await response.json();
 

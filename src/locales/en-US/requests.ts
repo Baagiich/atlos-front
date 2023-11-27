@@ -7,5 +7,4 @@ export default {
   params: "Params",
   updatedAt: "UpdatedAt",
   createdAt: "CreatedAt",
-  
 };

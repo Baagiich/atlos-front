@@ -71,7 +71,7 @@ export const useAdminUserListStore = defineStore("adminuserList", {
 
     updateItem(updatedItem: AdminUser) {
       const item: AdminUser | undefined = this.items.find(
-        (i) => i["@id"] === updatedItem["@id"]
+        (i) => i["@id"] === updatedItem["@id"],
       );
 
       if (!item) return;

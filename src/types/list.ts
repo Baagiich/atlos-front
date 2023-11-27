@@ -12,7 +12,7 @@ export interface VuetifyOrder {
 }
 
 export interface ListParams {
-  page: string;
+  page: number;
   filters?: Filters;
   order?: Order;
   page_size?: number;

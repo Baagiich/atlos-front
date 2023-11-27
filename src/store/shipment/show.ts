@@ -23,7 +23,7 @@ export const useShipmentShowStore = defineStore("shipmentShow", {
       this.toggleLoading();
 
       try {
-        const params = new URLSearchParams({'groups[]': 'shipment:list' });
+        const params = new URLSearchParams({ "groups[]": "shipment:list" });
         const url = `${id}?${params.toString()}`;
         const response = await api(url);
         const data: Shipment = await response.json();

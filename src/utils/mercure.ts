@@ -4,12 +4,12 @@ import type { Item } from "../types/item";
 export const mercureSubscribe = (
   hubURL: URL,
   topics: string[],
-  setData: <T extends Item>(data: T) => void
+  setData: <T extends Item>(data: T) => void,
 ): EventSource => {
   const url = new URL(hubURL, ENTRYPOINT);
 
   topics.forEach((topic) =>
-    url.searchParams.append("topic", new URL(topic, ENTRYPOINT).toString())
+    url.searchParams.append("topic", new URL(topic, ENTRYPOINT).toString()),
   );
 
   const eventSource = new EventSource(url.toString());
@@ -26,7 +26,7 @@ export const extractHubURL = (response: Response): URL | undefined => {
   if (!linkHeader) return undefined;
 
   const matches = linkHeader.match(
-    /<([^>]+)>;\s+rel=(?:mercure|"[^"]*mercure[^"]*")/
+    /<([^>]+)>;\s+rel=(?:mercure|"[^"]*mercure[^"]*")/,
   );
 
   return matches && matches[1] ? new URL(matches[1], ENTRYPOINT) : undefined;

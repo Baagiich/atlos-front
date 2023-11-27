@@ -13,7 +13,7 @@ npm install
 # pnpm
 pnpm install
 
-# bun 
+# bun
 bun install
 ```
 
@@ -29,7 +29,7 @@ npm run dev
 # pnpm
 pnpm dev
 
-# bun 
+# bun
 bun run dev
 ```
 
@@ -45,7 +45,7 @@ npm run build
 # pnpm
 pnpm build
 
-# bun 
+# bun
 bun run build
 ```
 
@@ -61,7 +61,7 @@ npm run lint
 # pnpm
 pnpm lint
 
-# bun 
+# bun
 bun run lint
 ```
 

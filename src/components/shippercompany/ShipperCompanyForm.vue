@@ -1,6 +1,6 @@
 <template>
   <v-sheet class="position-relative" min-height="450">
-    <v-form class="position-absolute" ref="form" @submit.prevent="emitSubmit">
+    <v-form ref="form" class="position-absolute" @submit.prevent="emitSubmit">
       <v-row>
         <v-col cols="12" sm="6" md="6">
           <v-text-field
@@ -115,11 +115,11 @@
       <v-row v-if="props.contractTemplate">
         <v-checkbox
           :model-value="contractSigned"
-          @click="contractSigned = !contractSigned"
           :rules="contractSignedRules"
           required
+          @click="contractSigned = !contractSigned"
         >
-          <template v-slot:label>
+          <template #label>
             <div>
               <v-btn variant="plain" @click="dialog = !dialog">
                 {{ $t("terms") }}
@@ -149,7 +149,7 @@
         elevation="16"
         :title="$t('terms')"
       >
-        <template v-slot:append>
+        <template #append>
           <v-btn icon="$close" variant="text" @click="dialog = false"></v-btn>
         </template>
 
