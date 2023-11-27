@@ -194,10 +194,12 @@ import type { ShipperCompany } from "@/types/shippercompany";
 import type { SubmissionErrors } from "@/types/error";
 import { ContractTemplate } from "@/types/contracttemplate";
 import { useI18n } from "vue-i18n";
-import { assertRequired } from "@/validations/assertRequired";
-import { assertMaxLength } from "@/validations/assertMaxLength";
-import { assertEmail } from "@/validations/assertEmail";
-import { assertChecked } from "@/validations/assertChecked";
+import {
+  assertRequired,
+  assertMaxLength,
+  assertEmail,
+  assertChecked,
+} from "@/validations";
 const { t } = useI18n();
 const props = defineProps<{
   values?: ShipperCompany;
@@ -217,32 +219,17 @@ if (props.values) {
   };
 }
 
-const firstnameRules = [
-  assertRequired(t("validation.firstnameRequired")),
-  assertMaxLength(t("validation.firstnameMustBeLessThan50Characters"), 50),
-];
-const nameRules = [
-  assertRequired(t("validation.nameRequired")),
-  assertMaxLength(t("validation.nameMustBeLessThan50Characters"), 50),
-];
-const lastnameRules = [
-  assertRequired(t("validation.lastnameRequired")),
-  assertMaxLength(t("validation.lastnameMustBeLessThan50Characters"), 50),
-];
+const firstnameRules = [assertRequired(), assertMaxLength(50)];
+const nameRules = [assertRequired(), assertMaxLength(50)];
+const lastnameRules = [assertRequired(), assertMaxLength(50)];
 
 const emailRules = [
-  assertRequired(t("validation.emailRequired")),
+  assertRequired(),
   assertEmail(t("validation.emailInvalid")),
 ];
 
-const phoneNumberRules = [
-  assertRequired(t("validation.phoneNumberRequired")),
-  assertMaxLength(t("validation.phoneNumberMustBeLessThan20Characters"), 20),
-];
-const registerNumberRules = [
-  assertRequired(t("validation.registerNumberRequired")),
-  assertMaxLength(t("validation.registerNumberMustBeLessThan12Characters"), 12),
-];
+const phoneNumberRules = [assertRequired(), assertMaxLength(20)];
+const registerNumberRules = [assertRequired(), assertMaxLength(12)];
 const contractSignedRules = [
   assertChecked(t("validation.contractTemplateError")),
 ];
