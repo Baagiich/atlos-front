@@ -1,7 +1,7 @@
 import adminuser from "./adminuser";
 import shipment from "./shipment";
 import driverrequest from "./driverrequest";
-import shipmentloadinfos from "./shipmentloadinfos";
+import shipmentload from "./shipmentload";
 import driver from "./driver";
 import driverimage from "./driverimage";
 import mediaobject from "./mediaobject";
@@ -34,7 +34,7 @@ export default {
   adminuser,
   shipment,
   driverrequest,
-  shipmentloadinfos,
+  shipmentload,
   driver,
   driverimage,
   mediaobject,

@@ -15,6 +15,7 @@ import driverimageRoutes from "./driverimage";
 import mediaobjectRoutes from "./mediaobject";
 import shippercompany from "./shippercompany";
 import shipmentload from "./shipmentload";
+import shipmentLoadCreate from "./shipmentLoadCreate";
 const routes = [
   {
     path: "/",
@@ -46,6 +47,7 @@ const routes = [
   ...mediaobjectRoutes,
   ...shippercompany,
   ...shipmentload,
+  ...shipmentLoadCreate,
 ];
 
 const router = createRouter({

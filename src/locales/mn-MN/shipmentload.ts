@@ -1,0 +1,19 @@
+export default {
+  name: "Ачааны нэр",
+  quantity: "Тоо ширхэг",
+  length: "Урт",
+  width: "Өргөн",
+  height: "Өндөр",
+  weight: "Нийт жин/кг",
+  shipment: "Shipment",
+  isPileUp: "Давхарлаж ачиж болно",
+  packageType: "Баглаа боодол",
+  cube: "Нийт овор хэмжээ/Мкуб",
+  cargo: "Карго",
+  regular: "Энгийн ачаа",
+  secureShipment: "Тээврийн компани",
+  regularShipment: "Хувь хүн",
+  choiceShipmentType: "Тээврйин төрөл сонгох",
+  choiceShipmentLoadType: "Ачааны төрөл сонгох ",
+  choiceCurrencyType: "Төлбөр төлөх валют сонгох  "
+};
