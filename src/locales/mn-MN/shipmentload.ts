@@ -14,6 +14,14 @@ export default {
   secureShipment: "Тээврийн компани",
   regularShipment: "Хувь хүн",
   choiceShipmentType: "Тээврйин төрөл сонгох",
-  choiceShipmentLoadType: "Ачааны төрөл сонгох ",
-  choiceCurrencyType: "Төлбөр төлөх валют сонгох  "
+  choiceShipmentLoadType: "Ачааны төрөл сонгох",
+  choiceCurrencyType: "Төлбөр төлөх валют сонгох",
+  loadLocation: "Ачих байршил",
+  inloadLocation: "Буулгах байршил",
+  country: "Улс",
+  city: "Хот",
+  address: " Гудамж, байр, тоот *",
+  zipCode: "Зипкод *",
+  phoneNumber: "Утасны дугаар *",
+  contactPerson: "Холбоо барих хүн *",
 };

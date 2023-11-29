@@ -11,8 +11,9 @@
       {{ error || deleteError }}
     </v-alert>
     <v-row>
-      <v-col cols="12" sm="6" md="6">
+      <v-col cols="12" sm="6" md="12">
         <ShipmentForm />
+        <ShipmentLocationCreateForm />
       </v-col>
     </v-row>
   </v-container>
@@ -30,6 +31,7 @@ import Loading from "@/components/common/Loading.vue";
 // import { useMercureItem } from "@/composables/mercureItem";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import ShipmentForm from "@/components/shipmentload/ShipmentCreateForm.vue";
+import ShipmentLocationCreateForm from "./ShipmentLocationCreateForm.vue";
 
 const { t } = useI18n();
 const route = useRoute();
