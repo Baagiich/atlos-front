@@ -9,4 +9,5 @@ export interface ShipmentLoad extends Item {
   weight?: decimal;
   shipment?: any;
   packageType?: any;
+  isPileUp: false;
 }

@@ -2,22 +2,20 @@
     <v-form ref="form" @submit.prevent="emitSubmit">
       <v-row>
         <v-col cols="12">
-
-          <v-radio-group
-          v-model="item.loadType"
-    >
-    <div>{{ $t('shipmentload.choiceShipmentLoadType') }}</div>
-        <v-radio
-          :label="$t('shipmentload.cargo')"
-          :value= ShipmentLoadType.CARGO
-          color="indigo"
-        ></v-radio>
-        <v-radio
-          :label="$t('shipmentload.regular')"
-          :value=ShipmentLoadType.REGULAR
-          color="indigo"
-        ></v-radio>
-      </v-radio-group>
+          <v-radio-group v-model="item.loadType"
+            >
+            <div>{{ $t('shipmentload.choiceShipmentLoadType') }}</div>
+                <v-radio
+                  :label="$t('shipmentload.cargo')"
+                  :value= ShipmentLoadType.CARGO
+                  color="indigo"
+                ></v-radio>
+                <v-radio
+                  :label="$t('shipmentload.regular')"
+                  :value=ShipmentLoadType.REGULAR
+                  color="indigo"
+                ></v-radio>
+            </v-radio-group>
       <hr>
     <div>{{ $t('shipmentload.choiceShipmentType') }}</div>
       <v-radio-group

@@ -14,6 +14,6 @@ export default {
   secureShipment: "Тээврийн компани",
   regularShipment: "Хувь хүн",
   choiceShipmentType: "Тээврйин төрөл сонгох",
-  choiceShipmentLoadType: "Ачааны төрөл сонгох ",
-  choiceCurrencyType: "Төлбөр төлөх валют сонгох  "
+  choiceShipmentLoadType: "Ачааны төрөл сонгох",
+  choiceCurrencyType: "Төлбөр төлөх валют сонгох",
 };
