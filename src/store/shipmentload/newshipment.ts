@@ -71,7 +71,7 @@ export const useCreateNewShipmentStore = defineStore("newShipmentItem", {
 
     updateItem(updatedItem: Shipment) {
       const item: Shipment | undefined = this.items.find(
-        (i) => i["@id"] === updatedItem["@id"]
+        (i) => i["@id"] === updatedItem["@id"],
       );
 
       if (!item) return;

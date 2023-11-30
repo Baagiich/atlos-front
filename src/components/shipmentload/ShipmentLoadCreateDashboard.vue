@@ -12,8 +12,8 @@
     </v-alert>
     <v-row>
       <v-col cols="12" sm="6" md="12">
-        <ShipmentForm />
-        <ShipmentLoadCreate />
+        <!-- <ShipmentForm />
+        <ShipmentLoadCreate /> -->
         <ShipmentLocationCreateForm />
       </v-col>
     </v-row>
@@ -40,14 +40,11 @@ const route = useRoute();
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
-
 // useMercureItem({
 //   store: shipmentShowStore,
 //   deleteStore: shipmentDeleteStore,
 //   redirectRouteName: "ShipmentList",
 // });
-
-
 
 onBeforeUnmount(() => {
   // shipmentShowStore.$reset();

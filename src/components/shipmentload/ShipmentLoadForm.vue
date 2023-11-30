@@ -121,15 +121,14 @@
         </v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="1">
-      <v-radio-group v-model="item.isPileUp"
-            >
-                <v-radio
-                  :label="$t('shipmentload.isPileUp')"
-                  :value= pileUpType
-                  color="indigo"
-                  @click="toggleIsPileUp"
-                ></v-radio>
-            </v-radio-group>
+        <v-radio-group v-model="item.isPileUp">
+          <v-radio
+            :label="$t('shipmentload.isPileUp')"
+            :value="pileUpType"
+            color="indigo"
+            @click="toggleIsPileUp"
+          ></v-radio>
+        </v-radio-group>
       </v-col>
     </v-row>
 

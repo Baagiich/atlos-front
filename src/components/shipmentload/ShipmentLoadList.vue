@@ -102,7 +102,9 @@ const shipmentloadDeleteStore = useShipmentLoadDeleteStore();
 const { deleted, mercureDeleted } = storeToRefs(shipmentloadDeleteStore);
 
 const shipmentloadListStore = useShipmentLoadListStore();
-const { items, totalItems, error, isLoading } = storeToRefs(shipmentloadListStore);
+const { items, totalItems, error, isLoading } = storeToRefs(
+  shipmentloadListStore,
+);
 
 const page = ref("1");
 const filters: Ref<Filters> = ref({});
@@ -116,7 +118,10 @@ async function sendRequest() {
   });
 }
 
-useMercureList({ store: shipmentloadListStore, deleteStore: shipmentloadDeleteStore });
+useMercureList({
+  store: shipmentloadListStore,
+  deleteStore: shipmentloadDeleteStore,
+});
 
 sendRequest();
 
