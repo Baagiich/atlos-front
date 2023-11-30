@@ -6,8 +6,8 @@ export interface Address extends Item {
   zipCode?: string;
   contactPhoneNunmber?: string;
   contactName?: string;
-  location:{
-    latitude: number;
-    longitude: number;
-  }
+  location?: {
+    latitude?: number;
+    longitude?: number;
+  };
 }

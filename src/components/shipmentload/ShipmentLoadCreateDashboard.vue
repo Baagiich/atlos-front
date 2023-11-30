@@ -14,6 +14,7 @@
       <v-col cols="12" sm="6" md="12">
         <ShipmentForm />
         <ShipmentLoadCreate />
+        <ShipmentLocationCreateForm />
       </v-col>
     </v-row>
   </v-container>
@@ -32,6 +33,8 @@ import Loading from "@/components/common/Loading.vue";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import ShipmentForm from "@/components/shipmentload/ShipmentCreateForm.vue";
 import ShipmentLoadCreate from "@/components/shipmentload/ShipmentLoadCreate.vue";
+import ShipmentLocationCreateForm from "./ShipmentLocationCreateForm.vue";
+
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
