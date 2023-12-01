@@ -35,6 +35,16 @@
         </v-text-field>
       </v-col>
     </v-row>
+
+    <v-row>
+      <v-col cols="12" sm="6" md="6">
+
+        <v-btn color="primary" variant="plain" class="ml-2" @click="handlePasswordReset">
+          {{ $t("forgotPassword") }}
+        </v-btn>
+      </v-col>
+    </v-row>
+
     <v-row>
       <v-col cols="12" sm="6" md="6">
         <v-btn color="primary" type="submit">{{ $t("submit") }}</v-btn>
@@ -52,7 +62,8 @@ import { ref, toRef, Ref } from "vue";
 import type { Auth } from "@/types/auth";
 import type { SubmissionErrors } from "@/types/error";
 import { VForm } from "vuetify/components";
-
+import { useRouter } from "vue-router";
+const router = useRouter();
 const props = defineProps<{
   values?: Auth;
   errors?: SubmissionErrors;
@@ -81,5 +92,11 @@ function resetForm() {
   if (!form.value) return;
 
   form.value.reset();
+}
+
+function handlePasswordReset(){
+  router.push({
+    name: "AdminUserPasswordReset",
+  });
 }
 </script>

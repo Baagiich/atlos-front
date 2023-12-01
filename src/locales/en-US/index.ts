@@ -45,4 +45,9 @@ export default {
   driverimage,
   mediaobject,
   validation,
+  forgotPassword: 'Forgot password',
+  checkEmail: 'PLease check your email',
+  successfull: 'Successfull',
+  enterNewPassword: 'Please enter new password',
+  submitAgain: 'Submit again',
 };

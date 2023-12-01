@@ -44,4 +44,9 @@ export default {
   accepted: "хүлээн зөвшөөрч байна",
   accept: "Зөвшөөрч байна",
   validation,
+  forgotPassword: "Нууц үгээ мартсан",
+  checkEmail: 'Та и-мэйлээ шалгана уу',
+  successfull: 'Амжилттай',
+  enterNewPassword: 'Шинэ нууц үгээ оруулна уу',
+  submitAgain: 'Дахин илгээх'
 };
