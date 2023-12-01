@@ -24,4 +24,6 @@ export default {
   zipCode: "Зипкод *",
   phoneNumber: "Утасны дугаар *",
   contactPerson: "Холбоо барих хүн *",
+  loadDate: "Ачих огноо *",
+  unloadDate: "Буулгах огноо *",
 };

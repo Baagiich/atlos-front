@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" @submit.prevent="emitSubmit">
+  <v-form ref="form">
     <v-row>
       <v-col cols="12">
         <v-radio-group v-model="item.loadType">
@@ -42,16 +42,8 @@
         variant="outlined"
         clearable
         v-model="selectedCurrency"
+        @update:modelValue="onCurrencySelect"
       ></v-select>
-    </v-row>
-    <v-row>
-      <v-col cols="12" sm="6" md="6">
-        <v-btn color="primary" type="submit">{{ $t("submit") }}</v-btn>
-
-        <v-btn color="primary" variant="text" class="ml-2" @click="resetForm">
-          {{ $t("reset") }}
-        </v-btn>
-      </v-col>
     </v-row>
   </v-form>
 </template>
@@ -75,25 +67,19 @@ const { t } = useI18n();
 
 const violations = toRef(props, "errors");
 
-const item: Ref<Shipment> = ref({});
 const currencyTypes = ["MNT", "CNY", "RUB", "USD"];
 const selectedCurrency = ref("");
-
-const newShipmentStore = useCreateNewShipmentStore();
-const { items, totalItems, error, isLoading } = storeToRefs(newShipmentStore);
-const emit = defineEmits<{
-  (e: "submit", item: Shipment): void;
-}>();
-
-function emitSubmit() {
+const onCurrencySelect = () => {
   item.value.price = {
     amount: 0,
     currency: selectedCurrency.value,
   };
-  newShipmentStore.setItems([item.value]);
-
-  emit("submit", item.value);
-}
+};
+const newShipmentStore = useCreateNewShipmentStore();
+const { item } = storeToRefs(newShipmentStore);
+const emit = defineEmits<{
+  (e: "submit", item: Shipment): void;
+}>();
 
 const form: Ref<VForm | null> = ref(null);
 

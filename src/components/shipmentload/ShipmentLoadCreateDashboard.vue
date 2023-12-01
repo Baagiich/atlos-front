@@ -12,9 +12,12 @@
     </v-alert>
     <v-row>
       <v-col cols="12" sm="6" md="12">
-        <!-- <ShipmentForm />
-        <ShipmentLoadCreate /> -->
-        <ShipmentLocationCreateForm />
+        <ShipmentForm />
+        <ShipmentLocationCreateForm :address = "fromAddress" />
+        <ShipmentLocationCreateForm :address = "toAddress" />
+        <ShipmentCreateDatePicker :date="loadDate" :title = "t('shipmentload.loadDate')" />
+        <ShipmentCreateDatePicker :date="unloadDate" :title = "t('shipmentload.unloadDate')"/>
+        <ShipmentLoadCreate />
       </v-col>
     </v-row>
   </v-container>
@@ -34,7 +37,8 @@ import { useBreadcrumb } from "@/composables/breadcrumb";
 import ShipmentForm from "@/components/shipmentload/ShipmentCreateForm.vue";
 import ShipmentLoadCreate from "@/components/shipmentload/ShipmentLoadCreate.vue";
 import ShipmentLocationCreateForm from "./ShipmentLocationCreateForm.vue";
-
+import ShipmentCreateDatePicker from "./ShipmentCreateDatePicker.vue";
+import { Address } from "@/types/address";
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -45,6 +49,10 @@ const breadcrumb = useBreadcrumb();
 //   deleteStore: shipmentDeleteStore,
 //   redirectRouteName: "ShipmentList",
 // });
+const fromAddress: Ref<Address> = ref({});
+const toAddress: Ref<Address> = ref({});
+const loadDate: Ref<Date> = ref(new Date());
+const unloadDate: Ref<Date> = ref(new Date());
 
 onBeforeUnmount(() => {
   // shipmentShowStore.$reset();

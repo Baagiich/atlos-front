@@ -24,7 +24,9 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
-            :error="Boolean(violations?.register)"
+            v-model="address.street"
+            :error="Boolean(123
+             ?.register)"
             :error-messages="violations?.register"
             :label="$t('shipmentload.address')"
           >
@@ -41,6 +43,7 @@
         <v-row>
           <v-col cols="4">
             <v-text-field
+            v-model="address.zipCode"
             :error="Boolean(violations?.register)"
             :error-messages="violations?.register"
             :label="$t('shipmentload.zipCode')"
@@ -56,6 +59,7 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
+            v-model="address.contactPhoneNunmber"
             :error="Boolean(violations?.register)"
             :error-messages="violations?.register"
             :label="$t('shipmentload.phoneNumber')"
@@ -71,6 +75,7 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
+            v-model="address.contactName"
             :error="Boolean(violations?.register)"
             :error-messages="violations?.register"
             :label="$t('shipmentload.contactPerson')"
@@ -94,6 +99,7 @@
           :center="center"
           :zoom="15"
           @click="onMapClick"
+          :key="mapKey"
         >
           <CustomMarker
             :options="{ position: center, anchorPoint: 'BOTTOM_CENTER' }"
@@ -115,44 +121,39 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, toRef } from "vue";
-import { VForm } from "vuetify/components";
+import { ref, Ref, toRef, reactive  } from "vue";
 import type { Shipment } from "@/types/shipment";
 import type { SubmissionErrors } from "@/types/error";
 import { useI18n } from "vue-i18n";
-import { useCreateNewShipmentStore } from "@/store/shipmentload/newshipment";
 import { useCountryListStore } from "@/store/shipmentload/countrylist";
 import { storeToRefs } from "pinia";
 import { GoogleMap, CustomMarker } from "vue3-google-map";
 import { Filters } from "@/types/list";
+import {Address} from "@/types/address"
 
-const props = defineProps<{
-  values?: Shipment;
-  errors?: SubmissionErrors;
-}>();
 
 const { t } = useI18n();
-const violations = toRef(props, "errors");
 
 const center = ref({ lat: 47.923293, lng: 106.928076 });
 const showMarker = ref(false);
 
 const selectedCountry = ref(null);
 const selectedCity = ref(null);
-const newShipmentStore = useCreateNewShipmentStore();
 const page = ref(1);
 const order = ref({});
 const countryFilters: Ref<Filters> = ref({});
 const countryListStore = useCountryListStore();
+const mapKey = ref(0);
 const {
   items: countryItems,
   totalItems: countryTotalItems,
   error: countryError,
   isLoading: countryIsLoading,
 } = storeToRefs(countryListStore);
-
+const props = defineProps(["address"]);
+const address = ref(props.address);
 const onCountrySelect = () => {
-  console.log("Selected Country:", selectedCountry.value);
+  selectedCity.value = null;
 };
 
 const getCountryNames = () => {
@@ -193,8 +194,16 @@ const setCityLocations = () => {
   if (selectedCityItem && selectedCityItem.location) {
     center.value.lat = selectedCityItem.location.latitude;
     center.value.lng = selectedCityItem.location.longitude;
+    address.value = address.value || {};
+    address.value.location = address.value.location || {};
+    address.value.location.latitude = selectedCityItem.location.latitude
+    address.value.location.longitude = selectedCityItem.location.longitude
     showMarker.value = true;
   }
+  if(selectedCityItem["@id"]){
+    address.value.city = selectedCityItem["@id"]
+  }
+  mapKey.value += 1;
 };
 async function getCountry() {
   await countryListStore.getItems({
@@ -208,23 +217,25 @@ getCountry();
 const onMapClick = (event: google.maps.MouseEvent) => {
   center.value.lat = event.latLng.lat();
   center.value.lng = event.latLng.lng();
-  console.log("Clicked LatLng:", center.value);
   showMarker.value = true;
+  mapKey.value += 1;
 };
+
+
+const emit = defineEmits<{
+  (e: "submit", item: Address): void;
+}>();
 
 const emitSubmit = () => {
-  // Your submission logic
-  // ...
-
-  // Reset the marker state
   showMarker.value = false;
+  emit("submit", address.value);
 };
+const form: Ref<VForm | null> = ref(null);
 
 const resetForm = () => {
-  // Your form reset logic
-  // ...
+  if (!form.value) return;
 
-  // Reset the marker state
+  form.value.reset();
   showMarker.value = false;
 };
 </script>
