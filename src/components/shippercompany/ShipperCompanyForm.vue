@@ -225,7 +225,7 @@ const lastnameRules = [assertRequired(), assertMaxLength(50)];
 
 const emailRules = [
   assertRequired(),
-  assertEmail(t("validation.emailInvalid")),
+  assertEmail(),
 ];
 
 const phoneNumberRules = [assertRequired(), assertMaxLength(20)];
