@@ -8,42 +8,48 @@
             :label="$t('shipmentload.cargo')"
             :value="ShipmentLoadType.CARGO"
             color="indigo"
+            class="black-text"
           ></v-radio>
           <v-radio
             :label="$t('shipmentload.regular')"
             :value="ShipmentLoadType.REGULAR"
             color="indigo"
+            class="black-text"
           ></v-radio>
         </v-radio-group>
-        <hr />
         <div>{{ $t("shipmentload.choiceShipmentType") }}</div>
         <v-radio-group v-model="item.shipmentType">
           <v-radio
             :label="$t('shipmentload.secureShipment')"
             :value="ShipmentType.SECURE"
             color="indigo"
+            class="black-text"
           ></v-radio>
           <v-radio
             :label="$t('shipmentload.regularShipment')"
             :value="ShipmentType.REGULAR"
             color="indigo"
+            class="black-text"
           ></v-radio>
         </v-radio-group>
       </v-col>
     </v-row>
     <v-row>
-      <div>
-        {{ $t("shipmentload.choiceCurrencyType") }}
-      </div>
-      <v-select
-        :items="currencyTypes"
-        density="compact"
-        label="Label"
-        variant="outlined"
-        clearable
-        v-model="selectedCurrency"
-        @update:modelValue="onCurrencySelect"
-      ></v-select>
+      <v-col cols="2">
+        <v-sheet class="d-inline-flex" height="40">
+          {{ $t("shipmentload.choiceCurrencyType") }}
+        </v-sheet>
+
+        <v-select
+          :items="currencyTypes"
+          density="compact"
+          :label="$t('shipmentload.currencyType')"
+          variant="outlined"
+          clearable
+          v-model="selectedCurrency"
+          @update:modelValue="onCurrencySelect"
+        ></v-select>
+      </v-col>
     </v-row>
   </v-form>
 </template>
@@ -89,3 +95,8 @@ function resetForm() {
   form.value.reset();
 }
 </script>
+<style lang="scss">
+.black-text label {
+  opacity: unset;
+}
+</style>

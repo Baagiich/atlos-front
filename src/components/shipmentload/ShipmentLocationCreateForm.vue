@@ -1,101 +1,99 @@
 <template>
   <v-form ref="form" @submit.prevent="emitSubmit">
     <v-row>
-      <v-col cols="12">
-        <div>{{ $t("shipmentload.loadLocation") }}</div>
-      </v-col>
       <v-col cols="6">
+        <v-sheet class="d-flex align-end mb-6" height="100">
+          <p class="text-uppercase" color="black">
+            {{ title }}
+          </p>
+        </v-sheet>
         <v-row>
           <v-col cols="4">
             <v-select
-              label="Country"
+              :label="$t('shipmentload.country')"
               v-model="selectedCountry"
               :items="getCountryNames()"
               @update:modelValue="onCountrySelect"
+              variant="outlined"
+              clearable
             ></v-select>
           </v-col>
           <v-col cols="4">
             <v-select
-              label="city"
+              :label="$t('shipmentload.city')"
               v-model="selectedCity"
               :items="getCityNames()"
               @update:model-value="setCityLocations"
+              variant="outlined"
+              clearable
             ></v-select>
           </v-col>
           <v-col cols="4">
             <v-text-field
-            v-model="address.street"
-            :error="Boolean(123
-             ?.register)"
-            :error-messages="violations?.register"
-            :label="$t('shipmentload.address')"
-          >
-            <template #append-inner>
-              <v-icon
-                style="cursor: pointer"
-              >
-                mdi-close
-              </v-icon>
-            </template>
-          </v-text-field>
+              v-model="address.street"
+              :error="Boolean(123?.register)"
+              :error-messages="violations?.register"
+              :label="$t('shipmentload.address')"
+              variant="outlined"
+              clearable
+            >
+              <template #append-inner>
+                <v-icon style="cursor: pointer"> mdi-close </v-icon>
+              </template>
+            </v-text-field>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="4">
             <v-text-field
-            v-model="address.zipCode"
-            :error="Boolean(violations?.register)"
-            :error-messages="violations?.register"
-            :label="$t('shipmentload.zipCode')"
-          >
-            <template #append-inner>
-              <v-icon
-                style="cursor: pointer"
-              >
-                mdi-close
-              </v-icon>
-            </template>
-          </v-text-field>
+              v-model="address.zipCode"
+              :error="Boolean(violations?.register)"
+              :error-messages="violations?.register"
+              :label="$t('shipmentload.zipCode')"
+              variant="outlined"
+              clearable
+            >
+              <template #append-inner>
+                <v-icon style="cursor: pointer"> mdi-close </v-icon>
+              </template>
+            </v-text-field>
           </v-col>
           <v-col cols="4">
             <v-text-field
-            v-model="address.contactPhoneNunmber"
-            :error="Boolean(violations?.register)"
-            :error-messages="violations?.register"
-            :label="$t('shipmentload.phoneNumber')"
-          >
-            <template #append-inner>
-              <v-icon
-                style="cursor: pointer"
-              >
-                mdi-close
-              </v-icon>
-            </template>
-          </v-text-field>
+              v-model="address.contactPhoneNunmber"
+              :error="Boolean(violations?.register)"
+              :error-messages="violations?.register"
+              :label="$t('shipmentload.phoneNumber')"
+              variant="outlined"
+              clearable
+            >
+              <template #append-inner>
+                <v-icon style="cursor: pointer"> mdi-close </v-icon>
+              </template>
+            </v-text-field>
           </v-col>
           <v-col cols="4">
             <v-text-field
-            v-model="address.contactName"
-            :error="Boolean(violations?.register)"
-            :error-messages="violations?.register"
-            :label="$t('shipmentload.contactPerson')"
-          >
-            <template #append-inner>
-              <v-icon
-                style="cursor: pointer"
-              >
-                mdi-close
-              </v-icon>
-            </template>
-          </v-text-field>
+              v-model="address.contactName"
+              :error="Boolean(violations?.register)"
+              :error-messages="violations?.register"
+              :label="$t('shipmentload.contactPerson')"
+              variant="outlined"
+              clearable
+            >
+              <template #append-inner>
+                <v-icon style="cursor: pointer"> mdi-close </v-icon>
+              </template>
+            </v-text-field>
           </v-col>
         </v-row>
       </v-col>
 
       <v-col cols="6">
         <GoogleMap
-          api-key="AIzaSyDElKHA_psEg_DqGl5m84Dx7fpJk2H-eHg"
-          style="width: 100%; height: 500px"
+          class="rounded-xl overflow-hidden"
+          :api-key="googleMapsApiKey"
+          style="width: 100%; height: 400px; margin: 10px"
           :center="center"
           :zoom="15"
           @click="onMapClick"
@@ -121,7 +119,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, toRef, reactive  } from "vue";
+import { ref, Ref, toRef, reactive } from "vue";
 import type { Shipment } from "@/types/shipment";
 import type { SubmissionErrors } from "@/types/error";
 import { useI18n } from "vue-i18n";
@@ -129,11 +127,9 @@ import { useCountryListStore } from "@/store/shipmentload/countrylist";
 import { storeToRefs } from "pinia";
 import { GoogleMap, CustomMarker } from "vue3-google-map";
 import { Filters } from "@/types/list";
-import {Address} from "@/types/address"
-
 
 const { t } = useI18n();
-
+const googleMapsApiKey = process.env.VUE_APP_GOOGLE_MAPS_API_KEY;
 const center = ref({ lat: 47.923293, lng: 106.928076 });
 const showMarker = ref(false);
 
@@ -150,8 +146,9 @@ const {
   error: countryError,
   isLoading: countryIsLoading,
 } = storeToRefs(countryListStore);
-const props = defineProps(["address"]);
+const props = defineProps(["address", "title"]);
 const address = ref(props.address);
+const title = ref(props.title);
 const onCountrySelect = () => {
   selectedCity.value = null;
 };
@@ -196,12 +193,12 @@ const setCityLocations = () => {
     center.value.lng = selectedCityItem.location.longitude;
     address.value = address.value || {};
     address.value.location = address.value.location || {};
-    address.value.location.latitude = selectedCityItem.location.latitude
-    address.value.location.longitude = selectedCityItem.location.longitude
+    address.value.location.latitude = selectedCityItem.location.latitude;
+    address.value.location.longitude = selectedCityItem.location.longitude;
     showMarker.value = true;
   }
-  if(selectedCityItem["@id"]){
-    address.value.city = selectedCityItem["@id"]
+  if (selectedCityItem["@id"]) {
+    address.value.city = selectedCityItem["@id"];
   }
   mapKey.value += 1;
 };
@@ -220,7 +217,6 @@ const onMapClick = (event: google.maps.MouseEvent) => {
   showMarker.value = true;
   mapKey.value += 1;
 };
-
 
 const emit = defineEmits<{
   (e: "submit", item: Address): void;

@@ -17,7 +17,7 @@ export default {
   choiceShipmentLoadType: "Ачааны төрөл сонгох",
   choiceCurrencyType: "Төлбөр төлөх валют сонгох",
   loadLocation: "Ачих байршил",
-  inloadLocation: "Буулгах байршил",
+  unloadLocation: "Буулгах байршил",
   country: "Улс",
   city: "Хот",
   address: " Гудамж, байр, тоот *",
@@ -26,4 +26,5 @@ export default {
   contactPerson: "Холбоо барих хүн *",
   loadDate: "Ачих огноо *",
   unloadDate: "Буулгах огноо *",
+  currencyType: "Валютын төрөл *",
 };

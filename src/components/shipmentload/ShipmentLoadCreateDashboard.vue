@@ -13,10 +13,17 @@
     <v-row>
       <v-col cols="12" sm="6" md="12">
         <ShipmentForm />
-        <ShipmentLocationCreateForm :address = "fromAddress" />
-        <ShipmentLocationCreateForm :address = "toAddress" />
-        <ShipmentCreateDatePicker :date="loadDate" :title = "t('shipmentload.loadDate')" />
-        <ShipmentCreateDatePicker :date="unloadDate" :title = "t('shipmentload.unloadDate')"/>
+        <ShipmentLocationCreateForm :address = "fromAddress" :title = "t('shipmentload.loadLocation')" />
+        <ShipmentLocationCreateForm :address = "toAddress" :title = "t('shipmentload.unloadLocation')" />
+        <v-row>
+      <v-col cols="2">
+        <ShipmentCreateDatePicker :datedata="loadDate" :title = "t('shipmentload.loadDate')" />
+      </v-col>
+      <v-col cols="2">
+
+      <ShipmentCreateDatePicker :datedata="unloadDate" :title = "t('shipmentload.unloadDate')"/>
+      </v-col>
+      </v-row>
         <ShipmentLoadCreate />
       </v-col>
     </v-row>

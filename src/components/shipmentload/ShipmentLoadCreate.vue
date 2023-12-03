@@ -1,5 +1,4 @@
 <template>
-  <Toolbar :breadcrumb="breadcrumb" :is-loading="isLoading" />
 
   <v-container fluid>
     <v-alert v-if="error" type="error" class="mb-4" closable="true">{{

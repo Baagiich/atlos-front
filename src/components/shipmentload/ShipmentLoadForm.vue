@@ -7,6 +7,8 @@
           :error="Boolean(violations?.name)"
           :error-messages="violations?.name"
           :label="$t('shipmentload.name')"
+          variant="outlined"
+          clearable
         >
           <template #append-inner>
             <v-icon
@@ -24,6 +26,8 @@
           :error="Boolean(violations?.packageType)"
           :error-messages="violations?.packageType"
           :label="$t('shipmentload.packageType')"
+          variant="outlined"
+          clearable
         >
           <template #append-inner>
             <v-icon
@@ -41,6 +45,8 @@
           :error="Boolean(violations?.quantity)"
           :error-messages="violations?.quantity"
           :label="$t('shipmentload.quantity')"
+          variant="outlined"
+          clearable
         >
           <template #append-inner>
             <v-icon
@@ -58,6 +64,8 @@
           :error="Boolean(violations?.length)"
           :error-messages="violations?.length"
           :label="$t('shipmentload.length')"
+          variant="outlined"
+          clearable
         >
           <template #append-inner>
             <v-icon
@@ -75,6 +83,8 @@
           :error="Boolean(violations?.width)"
           :error-messages="violations?.width"
           :label="$t('shipmentload.width')"
+          variant="outlined"
+          clearable
         >
           <template #append-inner>
             <v-icon
@@ -92,6 +102,8 @@
           :error="Boolean(violations?.height)"
           :error-messages="violations?.height"
           :label="$t('shipmentload.height')"
+          variant="outlined"
+          clearable
         >
           <template #append-inner>
             <v-icon
@@ -109,6 +121,8 @@
           :error="Boolean(violations?.weight)"
           :error-messages="violations?.weight"
           :label="$t('shipmentload.weight')"
+          variant="outlined"
+          clearable
         >
           <template #append-inner>
             <v-icon
@@ -127,6 +141,8 @@
             :value="pileUpType"
             color="indigo"
             @click="toggleIsPileUp"
+            variant="outlined"
+            clearable
           ></v-radio>
         </v-radio-group>
       </v-col>
