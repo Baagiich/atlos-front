@@ -24,18 +24,9 @@
         </v-text-field>
       </v-col>
       <v-col cols="2">
-        <!-- <v-sheet class="d-inline-flex" height="40">
-          {{ $t("shipmentload.choiceCurrencyType") }}
-        </v-sheet> -->
-
-        <v-select
-          :items="currencyTypes"
-          :label="$t('shipmentload.currencyType')"
-          variant="outlined"
-          clearable
-          v-model="selectedCurrency"
-          @update:modelValue="onPriceWrited"
-        ></v-select>
+        <v-sheet class="d-inline-flex" height="40">
+          {{ item.currency }}
+        </v-sheet>
       </v-col>
       <v-col cols="12" sm="6" md="1">
         <v-text-field
@@ -110,8 +101,6 @@ const props = defineProps<{
 }>();
 const price = ref();
 const { t } = useI18n();
-const currencyTypes = ["MNT", "CNY", "RUB", "USD"];
-const selectedCurrency = ref("");
 
 const violations = toRef(props, "errors");
 const percentNumberRules = [assertRequired(), assertMaxLengthNumber(2)];
@@ -120,7 +109,7 @@ var pileUpType = ref(false);
 const onPriceWrited = () => {
   item.value.price = {
     amount: price,
-    currency: selectedCurrency.value,
+    currency: item.value.currency,
   };
 };
 const emit = defineEmits<{

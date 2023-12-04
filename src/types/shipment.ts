@@ -26,4 +26,5 @@ export interface Shipment extends Item {
   shipmentTypeCode?: string;
   name?: string;
   loadType?: any;
+  currency?: string;
 }

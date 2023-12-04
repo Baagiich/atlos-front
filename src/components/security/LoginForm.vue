@@ -7,6 +7,7 @@
           :label="$t('email')"
           :error="Boolean(violations?.email)"
           :error-messages="violations?.email"
+          type="email"
         >
           <template #append-inner>
             <v-icon

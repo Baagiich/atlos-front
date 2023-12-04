@@ -1,7 +1,7 @@
 <template>
   <v-form ref="form" @submit.prevent="emitSubmit">
     <v-text-field
-      v-model="datedata"
+      v-model="date"
       :label="title"
       prepend-icon="event"
       readonly
@@ -25,14 +25,15 @@ import { useI18n } from "vue-i18n";
 import { useCreateNewShipmentStore } from "@/store/shipmentload/newshipment";
 
 import { storeToRefs } from "pinia";
+import dayjs from "dayjs";
 
-const props = defineProps(["datedata", "title"]);
-const datedata = ref(props.datedata);
+const props = defineProps(["isStartDate", "title"]);
+const isStartDate = ref(props.isStartDate);
 const title = ref(props.title);
 const { t } = useI18n();
-
 const newShipmentStore = useCreateNewShipmentStore();
 const { item } = storeToRefs(newShipmentStore);
+const date: Ref<Date> = ref(new Date());
 
 const showDatePickerDialog = ref(false);
 const datePickerModel = ref(new Date());
@@ -48,7 +49,12 @@ function closeDatePicker() {
 }
 
 function saveDatePicker() {
-  datedata.value = datePickerModel.value;
+  date.value = datePickerModel.value;
+  if(isStartDate.value){
+    item.value.loadAt =dayjs(date.value).format('YYYY/MM/DD');
+  }else{
+    item.value.unloadAt =dayjs(date.value).format('YYYY/MM/DD');
+  }
   showDatePickerDialog.value = false;
 }
 

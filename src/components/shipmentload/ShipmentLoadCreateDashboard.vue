@@ -12,20 +12,20 @@
     </v-alert>
     <v-row>
       <v-col cols="12" sm="6" md="12">
-        <ShipmentForm disabled :shipment="shipment"/>
-        <ShipmentLocationCreateForm :address = "fromAddress" :title = "t('shipmentload.loadLocation')" />
-        <ShipmentLocationCreateForm :address = "toAddress" :title = "t('shipmentload.unloadLocation')" />
+        <ShipmentForm :disabled="firstStepDisabled" @next-step="emitFirstStep"/>
+        <ShipmentLocationCreateForm v-if="secondStepShow" :address = "fromAddress" :title = "t('shipmentload.loadLocation')" />
+        <ShipmentLocationCreateForm v-if="secondStepShow" :address = "toAddress" :title = "t('shipmentload.unloadLocation')" />
         <v-row>
       <v-col cols="2">
-        <ShipmentCreateDatePicker :datedata="loadDate" :title = "t('shipmentload.loadDate')" />
+        <ShipmentCreateDatePicker v-if="secondStepShow" :isStartDate=true :title = "t('shipmentload.loadDate')" />
       </v-col>
       <v-col cols="2">
 
-      <ShipmentCreateDatePicker :datedata="unloadDate" :title = "t('shipmentload.unloadDate')"/>
+      <ShipmentCreateDatePicker v-if="secondStepShow" :isStartDate=false :title = "t('shipmentload.unloadDate')"/>
       </v-col>
       </v-row>
-      <ShipmentPriceForm/>
-        <ShipmentLoadCreate />
+      <ShipmentPriceForm v-if="secondStepShow" />
+        <ShipmentLoadCreate v-if="thirdStepShow" />
       </v-col>
     </v-row>
   </v-container>
@@ -62,10 +62,16 @@ const breadcrumb = useBreadcrumb();
 // });
 const fromAddress: Ref<Address> = ref({});
 const toAddress: Ref<Address> = ref({});
-const loadDate: Ref<Date> = ref(new Date());
-const unloadDate: Ref<Date> = ref(new Date());
   const newShipmentStore = useCreateNewShipmentStore();
 const { shipment } = storeToRefs(newShipmentStore);
+const firstStepDisabled: Ref<boolean> = ref(false);
+const secondStepShow: Ref<boolean> = ref(false);
+const thirdStepShow: Ref<boolean> = ref(false);
+
+function emitFirstStep(){
+  secondStepShow.value = true;
+  firstStepDisabled.value = true;
+}
 </script>
 <style lang="scss">
 .driver-request-shipment-code {

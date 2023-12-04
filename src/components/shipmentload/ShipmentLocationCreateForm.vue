@@ -217,7 +217,7 @@ async function getCountry() {
     page: page.value,
     order: order.value,
     ...countryFilters.value,
-    groups: ["country:list"],
+    groups: ["city:list"],
   });
 }
 getCountry();

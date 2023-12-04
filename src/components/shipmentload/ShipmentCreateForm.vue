@@ -2,7 +2,7 @@
   <v-form ref="form">
     <v-row>
       <v-col cols="12">
-        <v-radio-group v-model="item.loadType">
+        <v-radio-group v-model="item.loadType" :rules="requireRules">
           <div>{{ $t("shipmentload.choiceShipmentLoadType") }}</div>
           <v-radio
             :label="$t('shipmentload.cargo')"
@@ -18,7 +18,7 @@
           ></v-radio>
         </v-radio-group>
         <div>{{ $t("shipmentload.choiceShipmentType") }}</div>
-        <v-radio-group v-model="item.shipmentType">
+        <v-radio-group v-model="item.shipmentType" :rules="requireRules">
           <v-radio
             :label="$t('shipmentload.secureShipment')"
             :value="ShipmentType.SECURE"
@@ -42,15 +42,24 @@
 
         <v-select
           :items="currencyTypes"
-          density="compact"
           :label="$t('shipmentload.currencyType')"
           variant="outlined"
           clearable
           v-model="selectedCurrency"
           @update:modelValue="onCurrencySelect"
+          :rules="requireRules"
         ></v-select>
       </v-col>
     </v-row>
+    <v-row>
+        <v-col cols="12" sm="6" md="6">
+          <v-btn color="primary" variant="text" @click="emitNextStep">{{ $t("nextStep") }}</v-btn>
+
+          <v-btn color="primary" variant="text" class="ml-2" @click="resetForm">
+            {{ $t("reset") }}
+          </v-btn>
+        </v-col>
+      </v-row>
   </v-form>
 </template>
 
@@ -65,28 +74,31 @@ import { ShipmentLoadType } from "@/types/shipment_load_type";
 import { ShipmentType } from "@/types/shipment_type";
 
 import { storeToRefs } from "pinia";
+import { assertRequired } from "@/validations";
 const props = defineProps<{
-  values?: Shipment;
   errors?: SubmissionErrors;
 }>();
+
 const { t } = useI18n();
 
-const violations = toRef(props, "errors");
-
+const requireRules = [assertRequired()];
 const currencyTypes = ["MNT", "CNY", "RUB", "USD"];
 const selectedCurrency = ref("");
 const newShipmentStore = useCreateNewShipmentStore();
 const { item } = storeToRefs(newShipmentStore);
 const onCurrencySelect = () => {
-  item.value.price = {
-    currency: selectedCurrency.value,
-  };
+  item.value.currency =  selectedCurrency.value;
 };
 
 const emit = defineEmits<{
-  (e: "submit", item: Shipment): void;
+  (e: "next-step"): void;
 }>();
-
+async function emitNextStep() {
+  const v = await form.value.validate();
+  if (v.valid) {
+    emit("next-step");
+  }
+}
 const form: Ref<VForm | null> = ref(null);
 
 function resetForm() {
