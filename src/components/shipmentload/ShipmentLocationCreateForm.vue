@@ -13,6 +13,7 @@
               :label="$t('shipmentload.country')"
               v-model="selectedCountry"
               :items="getCountryNames()"
+              :rules="requireRules"
               @update:modelValue="onCountrySelect"
               variant="outlined"
               clearable
@@ -23,6 +24,7 @@
               :label="$t('shipmentload.city')"
               v-model="selectedCity"
               :items="getCityNames()"
+              :rules="requireRules"
               @update:model-value="setCityLocations"
               variant="outlined"
               clearable
@@ -31,9 +33,10 @@
           <v-col cols="4">
             <v-text-field
               v-model="address.street"
-              :error="Boolean(123?.register)"
+              :error="Boolean(violations?.register)"
               :error-messages="violations?.register"
               :label="$t('shipmentload.address')"
+              :rules="requireRules"
               variant="outlined"
               clearable
             >
@@ -50,6 +53,7 @@
               :error="Boolean(violations?.register)"
               :error-messages="violations?.register"
               :label="$t('shipmentload.zipCode')"
+              :rules="requireRules"
               variant="outlined"
               clearable
             >
@@ -64,6 +68,7 @@
               :error="Boolean(violations?.register)"
               :error-messages="violations?.register"
               :label="$t('shipmentload.phoneNumber')"
+              :rules="requireRules"
               variant="outlined"
               clearable
             >
@@ -78,6 +83,7 @@
               :error="Boolean(violations?.register)"
               :error-messages="violations?.register"
               :label="$t('shipmentload.contactPerson')"
+              :rules="requireRules"
               variant="outlined"
               clearable
             >
@@ -127,6 +133,8 @@ import { useCountryListStore } from "@/store/shipmentload/countrylist";
 import { storeToRefs } from "pinia";
 import { GoogleMap, CustomMarker } from "vue3-google-map";
 import { Filters } from "@/types/list";
+import { assertRequired } from "@/validations";
+
 
 const { t } = useI18n();
 const googleMapsApiKey = process.env.VUE_APP_GOOGLE_MAPS_API_KEY;
@@ -147,11 +155,13 @@ const {
   isLoading: countryIsLoading,
 } = storeToRefs(countryListStore);
 const props = defineProps(["address", "title"]);
+const violations = toRef(props, "errors");
 const address = ref(props.address);
 const title = ref(props.title);
 const onCountrySelect = () => {
   selectedCity.value = null;
 };
+const requireRules = [assertRequired()];
 
 const getCountryNames = () => {
   return countryItems.value.map((country) => country.name);

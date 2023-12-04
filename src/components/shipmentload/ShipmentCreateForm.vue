@@ -75,14 +75,14 @@ const violations = toRef(props, "errors");
 
 const currencyTypes = ["MNT", "CNY", "RUB", "USD"];
 const selectedCurrency = ref("");
+const newShipmentStore = useCreateNewShipmentStore();
+const { item } = storeToRefs(newShipmentStore);
 const onCurrencySelect = () => {
   item.value.price = {
-    amount: 0,
     currency: selectedCurrency.value,
   };
 };
-const newShipmentStore = useCreateNewShipmentStore();
-const { item } = storeToRefs(newShipmentStore);
+
 const emit = defineEmits<{
   (e: "submit", item: Shipment): void;
 }>();

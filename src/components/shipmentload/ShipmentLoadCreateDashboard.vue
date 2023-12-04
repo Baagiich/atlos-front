@@ -12,7 +12,7 @@
     </v-alert>
     <v-row>
       <v-col cols="12" sm="6" md="12">
-        <ShipmentForm />
+        <ShipmentForm disabled :shipment="shipment"/>
         <ShipmentLocationCreateForm :address = "fromAddress" :title = "t('shipmentload.loadLocation')" />
         <ShipmentLocationCreateForm :address = "toAddress" :title = "t('shipmentload.unloadLocation')" />
         <v-row>
@@ -24,6 +24,7 @@
       <ShipmentCreateDatePicker :datedata="unloadDate" :title = "t('shipmentload.unloadDate')"/>
       </v-col>
       </v-row>
+      <ShipmentPriceForm/>
         <ShipmentLoadCreate />
       </v-col>
     </v-row>
@@ -46,6 +47,9 @@ import ShipmentLoadCreate from "@/components/shipmentload/ShipmentLoadCreate.vue
 import ShipmentLocationCreateForm from "./ShipmentLocationCreateForm.vue";
 import ShipmentCreateDatePicker from "./ShipmentCreateDatePicker.vue";
 import { Address } from "@/types/address";
+import { useCreateNewShipmentStore } from "@/store/shipmentload/newshipment";
+import ShipmentPriceForm from "./ShipmentPriceForm.vue";
+
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -60,10 +64,8 @@ const fromAddress: Ref<Address> = ref({});
 const toAddress: Ref<Address> = ref({});
 const loadDate: Ref<Date> = ref(new Date());
 const unloadDate: Ref<Date> = ref(new Date());
-
-onBeforeUnmount(() => {
-  // shipmentShowStore.$reset();
-});
+  const newShipmentStore = useCreateNewShipmentStore();
+const { shipment } = storeToRefs(newShipmentStore);
 </script>
 <style lang="scss">
 .driver-request-shipment-code {
