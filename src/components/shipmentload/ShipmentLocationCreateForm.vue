@@ -96,29 +96,69 @@
       </v-col>
 
       <v-col cols="6">
-        <GoogleMap
-          class="rounded-xl overflow-hidden"
-          :api-key="googleMapsApiKey"
-          style="width: 100%; height: 400px; margin: 10px"
-          :center="center"
-          :zoom="15"
-          @click="onMapClick"
-          :key="mapKey"
-        >
-          <CustomMarker
-            :options="{ position: center, anchorPoint: 'BOTTOM_CENTER' }"
-          >
-            <div style="text-align: center">
-              <div style="font-size: 1.125rem">Vuejs Amsterdam</div>
-              <img
-                src="https://vuejs.org/images/logo.png"
-                width="50"
-                height="50"
-                style="margin-top: 8px"
-              />
-            </div>
-          </CustomMarker>
-        </GoogleMap>
+        <v-card>
+          <v-tabs v-model="tab" bg-color="primary">
+            <v-tab value="one">Item One</v-tab>
+            <v-tab value="two">Item Two</v-tab>
+          </v-tabs>
+
+          <v-card-text>
+            <v-window v-model="tab">
+              <v-window-item value="one">
+                <GoogleMap
+                  class="rounded-xl overflow-hidden"
+                  :api-key="googleMapsApiKey"
+                  style="width: 100%; height: 400px; margin: 10px"
+                  :center="center"
+                  :zoom="15"
+                  @click="onMapClick"
+                  :key="mapKey"
+                >
+                  <CustomMarker
+                    :options="{
+                      position: center,
+                      anchorPoint: 'BOTTOM_CENTER',
+                    }"
+                  >
+                    <div style="text-align: center">
+                      <div style="font-size: 1.125rem">Vuejs Amsterdam</div>
+                      <img
+                        src="https://vuejs.org/images/logo.png"
+                        width="50"
+                        height="50"
+                        style="margin-top: 8px"
+                      />
+                    </div>
+                  </CustomMarker>
+                </GoogleMap>
+              </v-window-item>
+
+              <v-window-item value="two">
+                <BaiduMap
+                  class="rounded-xl overflow-hidden"
+                  :api-key="baiduMapsApiKey"
+                  style="width: 100%; height: 400px; margin: 10px"
+                  :center="center"
+                  :zoom="15"
+                  @click="onBaiduMapClick"
+                  :key="mapKey"
+                >
+                  <CustomMarker
+                    :options="{
+                      position: center,
+                      anchorPoint: 'BOTTOM_CENTER',
+                    }"
+                  >
+                    <div style="text-align: center">
+                      <div style="font-size: 1.125rem">Baidu Map Marker</div>
+                      <!-- Customize the content of the marker as needed -->
+                    </div>
+                  </CustomMarker>
+                </BaiduMap>
+              </v-window-item>
+            </v-window>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
   </v-form>
@@ -135,12 +175,12 @@ import { GoogleMap, CustomMarker } from "vue3-google-map";
 import { Filters } from "@/types/list";
 import { assertRequired } from "@/validations";
 
-
 const { t } = useI18n();
 const googleMapsApiKey = process.env.VUE_APP_GOOGLE_MAPS_API_KEY;
+const baiduMapsApiKey = process.env.VUE_APP_BAIDU_MAPS_API_KEY;
 const center = ref({ lat: 47.923293, lng: 106.928076 });
 const showMarker = ref(false);
-
+const tab = ref("two");
 const selectedCountry = ref(null);
 const selectedCity = ref(null);
 const page = ref(1);
@@ -162,7 +202,9 @@ const onCountrySelect = () => {
   selectedCity.value = null;
 };
 const requireRules = [assertRequired()];
-
+const onBaiduMapClick = (event: any) => {
+  // Handle Baidu Map click event as needed
+};
 const getCountryNames = () => {
   return countryItems.value.map((country) => country.name);
 };

@@ -27,8 +27,8 @@ import { useCreateNewShipmentStore } from "@/store/shipmentload/newshipment";
 import { storeToRefs } from "pinia";
 import dayjs from "dayjs";
 
-const props = defineProps(["isStartDate", "title"]);
-const isStartDate = ref(props.isStartDate);
+const props = defineProps(["isstartdate", "title"]);
+const isStartDate = ref(props.isstartdate);
 const title = ref(props.title);
 const { t } = useI18n();
 const newShipmentStore = useCreateNewShipmentStore();

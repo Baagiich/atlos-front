@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" @submit.prevent="emitSubmit">
+  <v-form ref="form">
     <v-row>
       <v-col cols="12" sm="6" md="2">
         <v-text-field
@@ -13,14 +13,14 @@
           clearable
           @update:model-value="onPriceWrited"
         >
-          <!-- <template #append-inner>
+          <template #append-inner>
             <v-icon
               style="cursor: pointer"
-              @click.prevent.stop="item.price = undefined"
+              @click.prevent.stop="price = undefined"
             >
               mdi-close
             </v-icon>
-          </template> -->
+          </template>
         </v-text-field>
       </v-col>
       <v-col cols="2">
@@ -74,10 +74,7 @@
 
     <v-row>
       <v-col cols="12" sm="6" md="6">
-        <v-btn color="primary" type="add">{{ $t("add") }}</v-btn>
-
-        <v-btn color="primary" type="submit">{{ $t("submit") }}</v-btn>
-
+        <v-btn color="primary" @click="emitNextStep">{{ $t("add") }}</v-btn>
         <v-btn color="primary" variant="text" class="ml-2" @click="resetForm">
           {{ $t("reset") }}
         </v-btn>
@@ -99,7 +96,7 @@ const { item } = storeToRefs(newShipmentStore);
 const props = defineProps<{
   errors?: SubmissionErrors;
 }>();
-const price = ref();
+const price: Ref<number> = ref();
 const { t } = useI18n();
 
 const violations = toRef(props, "errors");
@@ -108,16 +105,20 @@ const priceRules = [assertRequired(), assertNumber(t("shipmentload.shipmentPrice
 var pileUpType = ref(false);
 const onPriceWrited = () => {
   item.value.price = {
-    amount: price,
+    amount: price.value,
     currency: item.value.currency,
   };
 };
 const emit = defineEmits<{
+  (e: "second-step"): void;
 }>();
 
-function emitSubmit() {
+async function emitNextStep() {
+  const v = await form.value.validate();
+  if (v.valid) {
+    emit("second-step");
+  }
 }
-
 const form: Ref<VForm | null> = ref(null);
 
 function resetForm() {

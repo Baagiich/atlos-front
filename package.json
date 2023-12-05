@@ -17,6 +17,7 @@
     "@api-platform/create-client": "^0.10.0",
     "@mdi/font": "7.0.96",
     "@rushstack/eslint-patch": "^1.5.1",
+    "@types/baidumap-web-sdk": "^0.0.10",
     "@types/qs": "^6.9.9",
     "@types/ua-parser-js": "^0.7.39",
     "@vue/eslint-config-prettier": "^8.0.0",

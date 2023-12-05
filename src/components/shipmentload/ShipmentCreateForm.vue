@@ -54,7 +54,6 @@
     <v-row>
         <v-col cols="12" sm="6" md="6">
           <v-btn color="primary" variant="text" @click="emitNextStep">{{ $t("nextStep") }}</v-btn>
-
           <v-btn color="primary" variant="text" class="ml-2" @click="resetForm">
             {{ $t("reset") }}
           </v-btn>
