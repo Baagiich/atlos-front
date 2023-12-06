@@ -1,5 +1,6 @@
 export default {
   name: "Ачааны нэр",
+  loadName: "Барааны нэр *",
   quantity: "Тоо ширхэг",
   length: "Урт",
   width: "Өргөн",

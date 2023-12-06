@@ -94,80 +94,39 @@
           </v-col>
         </v-row>
       </v-col>
-
       <v-col cols="6">
-        <v-card>
-          <v-tabs v-model="tab" bg-color="primary">
-            <v-tab value="one">Item One</v-tab>
-            <v-tab value="two">Item Two</v-tab>
-          </v-tabs>
-
-          <v-card-text>
-            <v-window v-model="tab">
-              <v-window-item value="one">
-                <GoogleMap
-                  class="rounded-xl overflow-hidden"
-                  :api-key="googleMapsApiKey"
-                  style="width: 100%; height: 400px; margin: 10px"
-                  :center="center"
-                  :zoom="15"
-                  @click="onMapClick"
-                  :key="mapKey"
-                >
-                  <CustomMarker
-                    :options="{
-                      position: center,
-                      anchorPoint: 'BOTTOM_CENTER',
-                    }"
-                  >
-                    <div style="text-align: center">
-                      <div style="font-size: 1.125rem">Vuejs Amsterdam</div>
-                      <img
-                        src="https://vuejs.org/images/logo.png"
-                        width="50"
-                        height="50"
-                        style="margin-top: 8px"
-                      />
-                    </div>
-                  </CustomMarker>
-                </GoogleMap>
-              </v-window-item>
-
-              <v-window-item value="two">
-                <BaiduMap
-                  class="rounded-xl overflow-hidden"
-                  :api-key="baiduMapsApiKey"
-                  style="width: 100%; height: 400px; margin: 10px"
-                  :center="center"
-                  :zoom="15"
-                  @click="onBaiduMapClick"
-                  :key="mapKey"
-                >
-                  <CustomMarker
-                    :options="{
-                      position: center,
-                      anchorPoint: 'BOTTOM_CENTER',
-                    }"
-                  >
-                    <div style="text-align: center">
-                      <div style="font-size: 1.125rem">Baidu Map Marker</div>
-                      <!-- Customize the content of the marker as needed -->
-                    </div>
-                  </CustomMarker>
-                </BaiduMap>
-              </v-window-item>
-            </v-window>
-          </v-card-text>
-        </v-card>
+        <GoogleMap
+          class="rounded-xl overflow-hidden"
+          :api-key="googleMapsApiKey"
+          style="width: 100%; height: 400px; margin: 10px"
+          :center="{ lat, lng }"
+          :zoom="15"
+          @click="onMapClick"
+        >
+          <CustomMarker
+            :options="{
+              position: { lat, lng },
+              anchorPoint: 'BOTTOM_CENTER',
+            }"
+          >
+            <div style="text-align: center">
+              <div style="font-size: 1.125rem">Vuejs Amsterdam</div>
+              <img
+                src="https://vuejs.org/images/logo.png"
+                width="50"
+                height="50"
+                style="margin-top: 8px"
+              />
+            </div>
+          </CustomMarker>
+        </GoogleMap>
       </v-col>
     </v-row>
   </v-form>
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, toRef, reactive } from "vue";
-import type { Shipment } from "@/types/shipment";
-import type { SubmissionErrors } from "@/types/error";
+import { ref, Ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useCountryListStore } from "@/store/shipmentload/countrylist";
 import { storeToRefs } from "pinia";
@@ -176,18 +135,16 @@ import { Filters } from "@/types/list";
 import { assertRequired } from "@/validations";
 
 const { t } = useI18n();
-const googleMapsApiKey = process.env.VUE_APP_GOOGLE_MAPS_API_KEY;
-const baiduMapsApiKey = process.env.VUE_APP_BAIDU_MAPS_API_KEY;
-const center = ref({ lat: 47.923293, lng: 106.928076 });
+const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+const lat = ref(47.923293);
+const lng = ref(106.928076);
 const showMarker = ref(false);
-const tab = ref("two");
 const selectedCountry = ref(null);
 const selectedCity = ref(null);
 const page = ref(1);
 const order = ref({});
 const countryFilters: Ref<Filters> = ref({});
 const countryListStore = useCountryListStore();
-const mapKey = ref(0);
 const {
   items: countryItems,
   totalItems: countryTotalItems,
@@ -202,9 +159,6 @@ const onCountrySelect = () => {
   selectedCity.value = null;
 };
 const requireRules = [assertRequired()];
-const onBaiduMapClick = (event: any) => {
-  // Handle Baidu Map click event as needed
-};
 const getCountryNames = () => {
   return countryItems.value.map((country) => country.name);
 };
@@ -241,8 +195,8 @@ const setCityLocations = () => {
     .find((city) => city.name === selectedCity.value);
 
   if (selectedCityItem && selectedCityItem.location) {
-    center.value.lat = selectedCityItem.location.latitude;
-    center.value.lng = selectedCityItem.location.longitude;
+    lat.value = selectedCityItem.location.latitude;
+    lng.value = selectedCityItem.location.longitude;
     address.value = address.value || {};
     address.value.location = address.value.location || {};
     address.value.location.latitude = selectedCityItem.location.latitude;
@@ -252,7 +206,6 @@ const setCityLocations = () => {
   if (selectedCityItem["@id"]) {
     address.value.city = selectedCityItem["@id"];
   }
-  mapKey.value += 1;
 };
 async function getCountry() {
   await countryListStore.getItems({
@@ -264,10 +217,13 @@ async function getCountry() {
 }
 getCountry();
 const onMapClick = (event: google.maps.MouseEvent) => {
-  center.value.lat = event.latLng.lat();
-  center.value.lng = event.latLng.lng();
+  lat.value = event.latLng.lat();
+  lng.value = event.latLng.lng();
+  address.value = address.value || {};
+    address.value.location = address.value.location || {};
+  address.value.location.latitude = event.latLng.lat();
+  address.value.location.longitude = event.latLng.lng();
   showMarker.value = true;
-  mapKey.value += 1;
 };
 
 const emit = defineEmits<{

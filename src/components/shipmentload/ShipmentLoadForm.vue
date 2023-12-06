@@ -6,7 +6,7 @@
           v-model="item.name"
           :error="Boolean(violations?.name)"
           :error-messages="violations?.name"
-          :label="$t('shipmentload.name')"
+          :label="$t('shipmentload.loadName')"
           variant="outlined"
           clearable
         >

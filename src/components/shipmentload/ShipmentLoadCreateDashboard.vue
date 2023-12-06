@@ -17,6 +17,7 @@
           @next-step="emitFirstStep"
         /> -->
         <ShipmentLocationCreateForm
+
           :disabled="secondStepDisabled"
           :address="fromAddress"
           :title="t('shipmentload.loadLocation')"
@@ -26,8 +27,8 @@
           :disabled="secondStepDisabled"
           :address="toAddress"
           :title="t('shipmentload.unloadLocation')"
-        /> -->
-        <!-- <v-row>
+        />
+        <v-row>
           <v-col cols="2">
             <ShipmentCreateDatePicker
               v-if="secondStepShow"
@@ -103,9 +104,9 @@ function emitFirstStep() {
   firstStepDisabled.value = true;
 }
 async function emitSecondStep() {
-  saveFromAddress();
-  saveToAddress();
-  createNewShipment();
+  await saveFromAddress();
+  await saveToAddress();
+  await createNewShipment();
 }
 async function saveFromAddress() {
   if (fromAddress.value) {

@@ -3,6 +3,28 @@
     <v-row>
       <v-col cols="12" sm="6" md="2">
         <v-text-field
+          v-model="item.name"
+          :error="Boolean(violations?.name)"
+          :error-messages="violations?.name"
+          :label="$t('shipmentload.name')"
+          :rules="priceRules"
+          type="string"
+          variant="outlined"
+          clearable
+          @update:model-value="onPriceWrited"
+        >
+          <template #append-inner>
+            <v-icon
+              style="cursor: pointer"
+              @click.prevent.stop="item.name = undefined"
+            >
+              mdi-close
+            </v-icon>
+          </template>
+        </v-text-field>
+      </v-col>
+      <v-col cols="12" sm="6" md="2">
+        <v-text-field
           v-model="price"
           :error="Boolean(violations?.name)"
           :error-messages="violations?.name"
@@ -105,7 +127,7 @@ const priceRules = [assertRequired(), assertNumber(t("shipmentload.shipmentPrice
 var pileUpType = ref(false);
 const onPriceWrited = () => {
   item.value.price = {
-    amount: price.value,
+    amount: +price.value,
     currency: item.value.currency,
   };
 };
