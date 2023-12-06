@@ -12,17 +12,17 @@
     </v-alert>
     <v-row>
       <v-col cols="12" sm="6" md="12">
-        <!-- <ShipmentForm
+        <ShipmentForm
           :disabled="firstStepDisabled"
           @next-step="emitFirstStep"
-        /> -->
+        />
         <ShipmentLocationCreateForm
-
+          v-if="secondStepShow"
           :disabled="secondStepDisabled"
           :address="fromAddress"
           :title="t('shipmentload.loadLocation')"
         />
-        <!-- <ShipmentLocationCreateForm
+        <ShipmentLocationCreateForm
           v-if="secondStepShow"
           :disabled="secondStepDisabled"
           :address="toAddress"
@@ -51,7 +51,7 @@
           :disabled="secondStepDisabled"
           @second-step="emitSecondStep"
         />
-        <ShipmentLoadCreate v-if="thirdStepShow" /> -->
+        <ShipmentLoadCreate v-if="thirdStepShow" />
       </v-col>
     </v-row>
   </v-container>
@@ -88,7 +88,7 @@ const breadcrumb = useBreadcrumb();
 const fromAddress: Ref<Address> = ref({});
 const toAddress: Ref<Address> = ref({});
 const newShipmentStore = useCreateNewShipmentStore();
-const  {item}  = storeToRefs(newShipmentStore);
+const { item } = storeToRefs(newShipmentStore);
 const firstStepDisabled: Ref<boolean> = ref(false);
 const secondStepDisabled: Ref<boolean> = ref(false);
 const secondStepShow: Ref<boolean> = ref(false);
@@ -97,8 +97,11 @@ const addressCreateStore = useAddressCreateStore();
 const { created, isLoading, error } = storeToRefs(addressCreateStore);
 
 const shipmentCreateStore = useShipmentCreateStore();
-const { created: createdShipment, isLoading: isLoadingShipment, error: errorShipment } =
-  storeToRefs(shipmentCreateStore);
+const {
+  created: createdShipment,
+  isLoading: isLoadingShipment,
+  error: errorShipment,
+} = storeToRefs(shipmentCreateStore);
 function emitFirstStep() {
   secondStepShow.value = true;
   firstStepDisabled.value = true;
@@ -126,7 +129,7 @@ async function saveToAddress() {
 }
 async function createNewShipment() {
   await shipmentCreateStore.create(item.value);
-  if(createdShipment?.value) {
+  if (createdShipment?.value) {
     secondStepDisabled.value = true;
     thirdStepShow.value = true;
   }
