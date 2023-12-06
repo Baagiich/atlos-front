@@ -6,6 +6,8 @@ import driverrequest from "./driverrequest";
 import driver from "./driver";
 import driverimage from "./driverimage";
 import mediaobject from "./mediaobject";
+import vehicle from "./vehicle";
+import vehicleimage from "./vehicleimage";
 
 import validation from "./validation";
 export default {
@@ -50,4 +52,6 @@ export default {
   successfull: 'Successfull',
   enterNewPassword: 'Please enter new password',
   submitAgain: 'Submit again',
+  vehicleimage,
+  vehicle,
 };

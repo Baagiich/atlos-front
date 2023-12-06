@@ -3,4 +3,5 @@ export default {
   shipper: "Shipper",
   vehicleType: "VehicleType",
   vehicleCapacity: "VehicleCapacity",
+  status: "Status",
 };

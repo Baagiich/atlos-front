@@ -7,14 +7,14 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="deleted" type="success" class="mb-4" closable>
+    <v-alert v-if="deleted" type="success" class="mb-4" closable="true">
       {{ $t("itemDeleted", [deleted["@id"]]) }}
     </v-alert>
-    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable>
+    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable="true">
       {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
     </v-alert>
 
-    <v-alert v-if="error" type="error" class="mb-4" closable>
+    <v-alert v-if="error" type="error" class="mb-4" closable="true">
       {{ error }}
     </v-alert>
 
@@ -29,7 +29,7 @@
       :items="items"
       :items-length="totalItems"
       :loading="isLoading"
-      :items-per-page="itemsPerPage"
+      :items-per-page="items.length"
       @update:page="updatePage"
       @update:sortBy="updateOrder"
     >
@@ -44,12 +44,43 @@
 
       <template #item.@id="{ item }">
         <router-link
-          :to="{ name: 'VehicleShow', params: { id: item['@id'] } }"
+          :to="{ name: 'VehicleImageShow', params: { id: item['@id'] } }"
         >
           {{ item["@id"] }}
         </router-link>
       </template>
-    </v-data-table-server>
+
+      <template #item.mediaobject="{ item }">
+        <router-link
+          v-if="router.hasRoute('MediaObjectShow')"
+          :to="{ name: 'MediaObjectShow', params: { id: item.mediaobject } }"
+        >
+          {{ item.mediaobject }}
+        </router-link>
+
+        <p v-else>
+          {{ item.mediaobject }}
+        </p>
+      </template>
+      <template #item.vehicle="{ item }">
+        <router-link
+          v-if="router.hasRoute('VehicleShow')"
+          :to="{ name: 'VehicleShow', params: { id: item.vehicle } }"
+        >
+          {{ item.vehicle }}
+        </router-link>
+
+        <p v-else>
+          {{ item.vehicle }}
+        </p>
+      </template>
+      <template #item.updatedAt="{ item }">
+        {{ formatDateTime(item.updatedAt) }}
+      </template>
+            <template #item.createdAt="{ item }">
+        {{ formatDateTime(item.createdAt) }}
+      </template>
+          </v-data-table-server>
   </v-container>
 </template>
 
@@ -58,42 +89,41 @@ import { ref, onBeforeUnmount, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import { useVehicleListStore } from "@/store/vehicle/list";
-import { useVehicleDeleteStore } from "@/store/vehicle/delete";
+import { useVehicleImageListStore } from "@/store/vehicleimage/list";
+import { useVehicleImageDeleteStore } from "@/store/vehicleimage/delete";
 import Toolbar from "@/components/common/Toolbar.vue";
 import DataFilter from "@/components/common/DataFilter.vue";
-import Filter from "@/components/vehicle/VehicleFilter.vue";
+import Filter from "@/components/vehicleimage/VehicleImageFilter.vue";
 import ActionCell from "@/components/common/ActionCell.vue";
+import { formatDateTime } from "@/utils/date";
 import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { Filters, VuetifyOrder } from "@/types/list";
-import type { Vehicle } from "@/types/vehicle";
+import type { VehicleImage } from "@/types/vehicleimage";
 
 const { t } = useI18n();
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
-const itemsPerPage = ref("10");
 
-const vehicleDeleteStore = useVehicleDeleteStore();
-const { deleted, mercureDeleted } = storeToRefs(vehicleDeleteStore);
+const vehicleimageDeleteStore = useVehicleImageDeleteStore();
+const { deleted, mercureDeleted } = storeToRefs(vehicleimageDeleteStore);
 
-const vehicleListStore = useVehicleListStore();
-const { items, totalItems, error, isLoading } = storeToRefs(vehicleListStore);
+const vehicleimageListStore = useVehicleImageListStore();
+const { items, totalItems, error, isLoading } = storeToRefs(vehicleimageListStore);
 
 const page = ref("1");
 const filters: Ref<Filters> = ref({});
 const order = ref({});
 
 async function sendRequest() {
-  await vehicleListStore.getItems({
+  await vehicleimageListStore.getItems({
     page: page.value,
     order: order.value,
-    page_size: itemsPerPage.value,
     ...filters.value,
   });
 }
 
-useMercureList({ store: vehicleListStore, deleteStore: vehicleDeleteStore });
+useMercureList({ store: vehicleimageListStore, deleteStore: vehicleimageDeleteStore });
 
 sendRequest();
 
@@ -105,23 +135,28 @@ const headers = [
   },
   { title: t("id"), key: "@id" },
   {
-    title: t("vehicle.plateNumber"),
-    key: "plateNumber",
+    title: t("vehicleimage.image"),
+    key: "image",
     sortable: false,
   },
   {
-    title: t("vehicle.shipper"),
-    key: "shipper",
+    title: t("vehicleimage.vehicle"),
+    key: "vehicle",
     sortable: false,
   },
   {
-    title: t("vehicle.vehicleType"),
-    key: "vehicleType",
+    title: t("vehicleimage.tag"),
+    key: "tag",
     sortable: false,
   },
   {
-    title: t("vehicle.vehicleCapacity"),
-    key: "vehicleCapacity",
+    title: t("vehicleimage.updatedAt"),
+    key: "updatedAt",
+    sortable: false,
+  },
+  {
+    title: t("vehicleimage.createdAt"),
+    key: "createdAt",
     sortable: false,
   },
 ];
@@ -149,33 +184,33 @@ function resetFilter() {
   sendRequest();
 }
 
-function goToShowPage(item: Vehicle) {
+function goToShowPage(item: VehicleImage) {
   router.push({
-    name: "VehicleShow",
+    name: "VehicleImageShow",
     params: { id: item["@id"] },
   });
 }
 
 function goToCreatePage() {
   router.push({
-    name: "VehicleCreate",
+    name: "VehicleImageCreate",
   });
 }
 
-function goToUpdatePage(item: Vehicle) {
+function goToUpdatePage(item: VehicleImage) {
   router.push({
-    name: "VehicleUpdate",
+    name: "VehicleImageUpdate",
     params: { id: item["@id"] },
   });
 }
 
-async function deleteItem(item: Vehicle) {
-  await vehicleDeleteStore.deleteItem(item);
+async function deleteItem(item: VehicleImage) {
+  await vehicleimageDeleteStore.deleteItem(item);
 
   sendRequest();
 }
 
 onBeforeUnmount(() => {
-  vehicleDeleteStore.$reset();
+  vehicleimageDeleteStore.$reset();
 });
 </script>

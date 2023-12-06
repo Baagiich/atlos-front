@@ -15,6 +15,7 @@ import driverimageRoutes from "./driverimage";
 import mediaobjectRoutes from "./mediaobject";
 import shippercompany from "./shippercompany";
 import passwordresetRoutes from "./passwordreset";
+import vehicleimagesRoutes from "./vehicleimage";
 
 const routes = [
   {
@@ -46,7 +47,8 @@ const routes = [
   ...driverimageRoutes,
   ...mediaobjectRoutes,
   ...shippercompany,
-  ...passwordresetRoutes
+  ...passwordresetRoutes,
+  ...vehicleimagesRoutes,
 ];
 
 const router = createRouter({

@@ -8,6 +8,9 @@ import mediaobject from "./mediaobject";
 
 import shippercompany from "./shippercompany";
 import validation from "./validation";
+import vehicle from "./vehicle";
+import vehicleimage from "./vehicleimage";
+
 export default {
   home: "Нүүр",
   submit: "Илгээх",
@@ -48,5 +51,7 @@ export default {
   checkEmail: 'Та и-мэйлээ шалгана уу',
   successfull: 'Амжилттай',
   enterNewPassword: 'Шинэ нууц үгээ оруулна уу',
-  submitAgain: 'Дахин илгээх'
+  submitAgain: 'Дахин илгээх',
+  vehicle,
+  vehicleimage,
 };
