@@ -4,6 +4,8 @@ import { extractHubURL } from "@/utils/mercure";
 import type { Vehicle } from "@/types/vehicle";
 import type { PagedCollection } from "@/types/collection";
 import type { ListParams } from "@/types/list";
+import { VehicleType } from "@/types/vehicletype";
+import { VehicleCapacityType } from "@/types/vehiclecapacitytype";
 
 interface State {
   items: Vehicle[];
@@ -54,6 +56,11 @@ export const useVehicleListStore = defineStore("vehicleList", {
     },
 
     setItems(items: Vehicle[]) {
+      items.map((item) => {
+        item.shipper = item.shipper ? item.shipper.firstName + " " + item.shipper.lastName : {};
+        item.vehicleType = item.vehicleType ? VehicleType[item.vehicleType] : {};
+        item.vehicleCapacity = item.vehicleCapacity ? VehicleCapacityType[item.vehicleCapacity] : {};
+      });
       this.items = items;
     },
 
@@ -71,7 +78,7 @@ export const useVehicleListStore = defineStore("vehicleList", {
 
     updateItem(updatedItem: Vehicle) {
       const item: Vehicle | undefined = this.items.find(
-        (i) => i["@id"] === updatedItem["@id"],
+        (i) => i["@id"] === updatedItem["@id"]
       );
 
       if (!item) return;

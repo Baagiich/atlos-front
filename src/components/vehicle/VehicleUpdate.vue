@@ -7,21 +7,11 @@
   />
 
   <v-container fluid>
-    <v-alert
-      v-if="error || deleteError"
-      type="error"
-      class="mb-4"
-      closable="true"
-    >
+    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable="true">
       {{ error || deleteError }}
     </v-alert>
 
-    <v-alert
-      v-if="created || updated"
-      type="success"
-      class="mb-4"
-      closable="true"
-    >
+    <v-alert v-if="created || updated" type="success" class="mb-4" closable="true">
       <template v-if="updated">
         {{ $t("itemUpdated", [updated["@id"]]) }}
       </template>
@@ -78,9 +68,7 @@ useMercureItem({
   redirectRouteName: "VehicleList",
 });
 
-await vehicleUpdateStore.retrieve(
-  decodeURIComponent(route.params.id as string),
-);
+await vehicleUpdateStore.retrieve(decodeURIComponent(route.params.id as string));
 
 async function update(item: Vehicle) {
   await vehicleUpdateStore.update(item);

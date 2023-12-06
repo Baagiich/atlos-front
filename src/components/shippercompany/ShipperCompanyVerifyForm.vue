@@ -21,8 +21,7 @@
             </template>
           </v-text-field>
         </v-col>
-      </v-row>
-      <v-row>
+      
         <v-col cols="12" sm="6" md="6">
           <v-text-field
             v-model="item.plainPassword"
@@ -103,11 +102,11 @@ const plainPasswordRules = [assertRequired()];
 const plainPasswordConfirmRules = [
   assertRequired(),
   assertPasswordConfirm(
-    t("validation.plainPasswordNotMatch"),
-    item.value.plainPassword,
+    "validation.plainPasswordNotMatch",
+    function(){return item.value.plainPassword}
   ),
 ];
-const recievedCodeRules = [assertNumber(t("validation.recievedCodeRequired"))];
+const recievedCodeRules = [assertNumber("validation.recievedCodeRequired")];
 const emit = defineEmits<{
   (e: "submit", item: AdminUserVerify): void;
 }>();

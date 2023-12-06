@@ -7,14 +7,14 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="deleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="deleted" type="success" class="mb-4" closable>
       {{ $t("itemDeleted", [deleted["@id"]]) }}
     </v-alert>
-    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable>
       {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
     </v-alert>
 
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">
+    <v-alert v-if="error" type="error" class="mb-4" closable>
       {{ error }}
     </v-alert>
 
@@ -29,38 +29,25 @@
       :items="items"
       :items-length="totalItems"
       :loading="isLoading"
-      :items-per-page="items.length"
+      :items-per-page="itemsPerPage"
       @update:page="updatePage"
       @update:sortBy="updateOrder"
     >
       <template #item.actions="{ item }">
         <ActionCell
           :actions="['show', 'update', 'delete']"
-          @show="goToShowPage(item.raw)"
-          @update="goToUpdatePage(item.raw)"
-          @delete="deleteItem(item.raw)"
+          @show="goToShowPage(item)"
+          @update="goToUpdatePage(item)"
+          @delete="deleteItem(item)"
         />
       </template>
 
       <template #item.@id="{ item }">
         <router-link
-          :to="{ name: 'VehicleShow', params: { id: item.raw['@id'] } }"
+          :to="{ name: 'VehicleShow', params: { id: item['@id'] } }"
         >
-          {{ item.raw["@id"] }}
+          {{ item["@id"] }}
         </router-link>
-      </template>
-
-      <template #item.adminuser="{ item }">
-        <router-link
-          v-if="router.hasRoute('AdminUserShow')"
-          :to="{ name: 'AdminUserShow', params: { id: item.raw.adminuser } }"
-        >
-          {{ item.raw.adminuser }}
-        </router-link>
-
-        <p v-else>
-          {{ item.raw.adminuser }}
-        </p>
       </template>
     </v-data-table-server>
   </v-container>
@@ -85,6 +72,7 @@ import type { Vehicle } from "@/types/vehicle";
 const { t } = useI18n();
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
+const itemsPerPage = ref("10");
 
 const vehicleDeleteStore = useVehicleDeleteStore();
 const { deleted, mercureDeleted } = storeToRefs(vehicleDeleteStore);
@@ -100,6 +88,7 @@ async function sendRequest() {
   await vehicleListStore.getItems({
     page: page.value,
     order: order.value,
+    page_size: itemsPerPage.value,
     ...filters.value,
   });
 }
