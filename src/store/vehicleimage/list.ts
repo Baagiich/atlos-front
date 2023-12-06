@@ -1,21 +1,19 @@
 import { defineStore } from "pinia";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
-import type { Vehicle } from "@/types/vehicle";
+import type { VehicleImage } from "@/types/vehicleimage";
 import type { PagedCollection } from "@/types/collection";
-import type { ListParams } from "@/types/list";
-import { VehicleType } from "@/types/vehicletype";
-import { VehicleCapacityType } from "@/types/vehiclecapacitytype";
+import type { VehicleImageListParams } from "@/types/vehicleimage";
 
 interface State {
-  items: Vehicle[];
+  items: VehicleImage[];
   totalItems: number;
   isLoading: boolean;
   error?: string;
   hubUrl?: URL;
 }
 
-export const useVehicleListStore = defineStore("vehicleList", {
+export const useVehicleImageListStore = defineStore("vehicleimageList", {
   state: (): State => ({
     items: [],
     totalItems: 0,
@@ -25,13 +23,13 @@ export const useVehicleListStore = defineStore("vehicleList", {
   }),
 
   actions: {
-    async getItems(params: ListParams) {
+    async getItems(params: VehicleImageListParams) {
       this.setError("");
       this.toggleLoading();
 
       try {
-        const response = await api("vehicles", { params });
-        const data: PagedCollection<Vehicle> = await response.json();
+        const response = await api("vehicle_images", { params });
+        const data: PagedCollection<VehicleImage> = await response.json();
         const hubUrl = extractHubURL(response);
 
         this.toggleLoading();
@@ -55,12 +53,7 @@ export const useVehicleListStore = defineStore("vehicleList", {
       this.isLoading = !this.isLoading;
     },
 
-    setItems(items: Vehicle[]) {
-      items.map((item) => {
-        item.shipper = item.shipper ? item.shipper.firstName + " " + item.shipper.lastName : {};
-        item.vehicleType = item.vehicleType ? VehicleType[item.vehicleType] : {};
-        item.vehicleCapacity = item.vehicleCapacity ? VehicleCapacityType[item.vehicleCapacity] : {};
-      });
+    setItems(items: VehicleImage[]) {
       this.items = items;
     },
 
@@ -76,8 +69,8 @@ export const useVehicleListStore = defineStore("vehicleList", {
       this.error = error;
     },
 
-    updateItem(updatedItem: Vehicle) {
-      const item: Vehicle | undefined = this.items.find(
+    updateItem(updatedItem: VehicleImage) {
+      const item: VehicleImage | undefined = this.items.find(
         (i) => i["@id"] === updatedItem["@id"]
       );
 
@@ -86,7 +79,7 @@ export const useVehicleListStore = defineStore("vehicleList", {
       Object.assign(item, updatedItem);
     },
 
-    deleteItem(deletedItem: Vehicle) {
+    deleteItem(deletedItem: VehicleImage) {
       this.items = this.items.filter((item) => {
         return item["@id"] !== deletedItem["@id"];
       });

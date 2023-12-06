@@ -16,28 +16,28 @@ import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import Toolbar from "@/components/common/Toolbar.vue";
 import Loading from "@/components/common/Loading.vue";
-import Form from "@/components/vehicle/VehicleForm.vue";
-import { useVehicleCreateStore } from "@/store/vehicle/create";
+import Form from "@/components/vehicleimage/VehicleImageForm.vue";
+import { useVehicleImageCreateStore } from "@/store/vehicleimage/create";
 import { useBreadcrumb } from "@/composables/breadcrumb";
-import type { Vehicle } from "@/types/vehicle";
+import type { VehicleImage } from "@/types/vehicleimage";
 
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
-const vehicleCreateStore = useVehicleCreateStore();
-const { created, isLoading, violations, error } = storeToRefs(vehicleCreateStore);
+const vehicleimageCreateStore = useVehicleImageCreateStore();
+const { created, isLoading, violations, error } = storeToRefs(vehicleimageCreateStore);
 
-async function create(item: Vehicle) {
-  await vehicleCreateStore.create(item);
+async function create(item: VehicleImage) {
+  await vehicleimageCreateStore.create(item);
 
   if (!created?.value) {
     return;
   }
 
-  router.push({ name: "VehicleUpdate", params: { id: created?.value?.["@id"] } });
+  router.push({ name: "VehicleImageUpdate", params: { id: created?.value?.["@id"] } });
 }
 
 onBeforeUnmount(() => {
-  vehicleCreateStore.$reset();
+  vehicleimageCreateStore.$reset();
 });
 </script>

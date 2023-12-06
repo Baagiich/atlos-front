@@ -2,21 +2,19 @@ import { defineStore } from "pinia";
 import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
-import type { Vehicle } from "@/types/vehicle";
+import type { VehicleImage } from "@/types/vehicleimage";
 import type { SubmissionErrors } from "@/types/error";
-import * as apiToken from "@/utils/apiToken";
-import { UserType } from "@/types/usertype";
 
 interface State {
-  retrieved?: Vehicle;
-  updated?: Vehicle;
+  retrieved?: VehicleImage;
+  updated?: VehicleImage;
   hubUrl?: URL;
   isLoading: boolean;
   error?: string;
   violations?: SubmissionErrors;
 }
 
-export const useVehicleUpdateStore = defineStore("vehicleUpdate", {
+export const useVehicleImageUpdateStore = defineStore("vehicleimageUpdate", {
   state: (): State => ({
     retrieved: undefined,
     updated: undefined,
@@ -32,7 +30,7 @@ export const useVehicleUpdateStore = defineStore("vehicleUpdate", {
 
       try {
         const response = await api(id);
-        const data: Vehicle = await response.json();
+        const data: VehicleImage = await response.json();
         const hubUrl = extractHubURL(response);
 
         this.toggleLoading();
@@ -50,12 +48,12 @@ export const useVehicleUpdateStore = defineStore("vehicleUpdate", {
       }
     },
 
-    async update(payload: Vehicle) {
+    async update(payload: VehicleImage) {
       this.setError(undefined);
       this.toggleLoading();
 
       if (!this.retrieved) {
-        this.setError("No vehicle found. Please reload");
+        this.setError("No vehicleimage found. Please reload");
         return;
       }
 
@@ -68,7 +66,7 @@ export const useVehicleUpdateStore = defineStore("vehicleUpdate", {
             body: JSON.stringify(payload),
           }
         );
-        const data: Vehicle = await response.json();
+        const data: VehicleImage = await response.json();
 
         this.toggleLoading();
         this.setUpdated(data);
@@ -87,16 +85,11 @@ export const useVehicleUpdateStore = defineStore("vehicleUpdate", {
       }
     },
 
-    setRetrieved(retrieved: Vehicle) {
-      retrieved.adminEditable = true
-      if(apiToken.getDecodedToken().user_type !== UserType.ADMIN){
-        retrieved.adminEditable = false
-      }
-      
+    setRetrieved(retrieved: VehicleImage) {
       this.retrieved = retrieved;
     },
 
-    setUpdated(updated: Vehicle) {
+    setUpdated(updated: VehicleImage) {
       this.updated = updated;
     },
 

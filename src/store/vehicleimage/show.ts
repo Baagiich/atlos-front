@@ -1,16 +1,16 @@
 import { defineStore } from "pinia";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
-import type { Vehicle } from "@/types/vehicle";
+import type { VehicleImage } from "@/types/vehicleimage";
 
 interface State {
-  retrieved?: Vehicle;
+  retrieved?: VehicleImage;
   hubUrl?: URL;
   isLoading: boolean;
   error?: string;
 }
 
-export const useVehicleShowStore = defineStore("vehicleShow", {
+export const useVehicleImageShowStore = defineStore("vehicleimageShow", {
   state: (): State => ({
     retrieved: undefined,
     hubUrl: undefined,
@@ -24,7 +24,7 @@ export const useVehicleShowStore = defineStore("vehicleShow", {
 
       try {
         const response = await api(id);
-        const data: Vehicle = await response.json();
+        const data: VehicleImage = await response.json();
         const hubUrl = extractHubURL(response);
 
         this.toggleLoading();
@@ -46,8 +46,7 @@ export const useVehicleShowStore = defineStore("vehicleShow", {
       this.isLoading = !this.isLoading;
     },
 
-    setRetrieved(retrieved: Vehicle) {
-      retrieved.shipper = retrieved.shipper ? retrieved.shipper.firstName + " " + retrieved.shipper.lastName : {};
+    setRetrieved(retrieved: VehicleImage) {
       this.retrieved = retrieved;
     },
 

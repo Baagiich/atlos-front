@@ -32,62 +32,62 @@ import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import Toolbar from "@/components/common/Toolbar.vue";
-import Form from "@/components/vehicle/VehicleForm.vue";
+import Form from "@/components/vehicleimage/VehicleImageForm.vue";
 import Loading from "@/components/common/Loading.vue";
-import { useVehicleDeleteStore } from "@/store/vehicle/delete";
-import { useVehicleUpdateStore } from "@/store/vehicle/update";
+import { useVehicleImageDeleteStore } from "@/store/vehicleimage/delete";
+import { useVehicleImageUpdateStore } from "@/store/vehicleimage/update";
 import { useMercureItem } from "@/composables/mercureItem";
-import { useVehicleCreateStore } from "@/store/vehicle/create";
+import { useVehicleImageCreateStore } from "@/store/vehicleimage/create";
 import { useBreadcrumb } from "@/composables/breadcrumb";
-import type { Vehicle } from "@/types/vehicle";
+import type { VehicleImage } from "@/types/vehicleimage";
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
-const vehicleCreateStore = useVehicleCreateStore();
-const { created } = storeToRefs(vehicleCreateStore);
+const vehicleimageCreateStore = useVehicleImageCreateStore();
+const { created } = storeToRefs(vehicleimageCreateStore);
 
-const vehicleDeleteStore = useVehicleDeleteStore();
+const vehicleimageDeleteStore = useVehicleImageDeleteStore();
 const { isLoading: deleteLoading, error: deleteError } =
-  storeToRefs(vehicleDeleteStore);
+  storeToRefs(vehicleimageDeleteStore);
 
-const vehicleUpdateStore = useVehicleUpdateStore();
+const vehicleimageUpdateStore = useVehicleImageUpdateStore();
 const {
   retrieved: item,
   updated,
   isLoading,
   error,
   violations,
-} = storeToRefs(vehicleUpdateStore);
+} = storeToRefs(vehicleimageUpdateStore);
 
 useMercureItem({
-  store: vehicleUpdateStore,
-  deleteStore: vehicleDeleteStore,
-  redirectRouteName: "VehicleList",
+  store: vehicleimageUpdateStore,
+  deleteStore: vehicleimageDeleteStore,
+  redirectRouteName: "VehicleImageList",
 });
 
-await vehicleUpdateStore.retrieve(decodeURIComponent(route.params.id as string));
+await vehicleimageUpdateStore.retrieve(decodeURIComponent(route.params.id as string));
 
-async function update(item: Vehicle) {
-  await vehicleUpdateStore.update(item);
+async function update(item: VehicleImage) {
+  await vehicleimageUpdateStore.update(item);
 }
 
 async function deleteItem() {
   if (!item?.value) {
-    vehicleUpdateStore.setError(t("itemNotFound"));
+    vehicleimageUpdateStore.setError(t("itemNotFound"));
     return;
   }
 
-  await vehicleDeleteStore.deleteItem(item?.value);
+  await vehicleimageDeleteStore.deleteItem(item?.value);
 
-  router.push({ name: "VehicleList" });
+  router.push({ name: "VehicleImageList" });
 }
 
 onBeforeUnmount(() => {
-  vehicleUpdateStore.$reset();
-  vehicleCreateStore.$reset();
-  vehicleDeleteStore.$reset();
+  vehicleimageUpdateStore.$reset();
+  vehicleimageCreateStore.$reset();
+  vehicleimageDeleteStore.$reset();
 });
 </script>

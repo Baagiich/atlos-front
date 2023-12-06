@@ -7,15 +7,14 @@
   />
 
   <v-container fluid>
-    <v-alert
-      v-if="error || deleteError"
-      type="error"
-      class="mb-4"
-      closable="true"
-    >
-      {{ error || deleteError }}
+    <v-alert v-if="error || deleteError || vehicleImagesError" type="error" class="mb-4" closable>
+      {{ error || deleteError || vehicleImagesError}}
     </v-alert>
-
+    <ActionCell
+      v-if="item"
+      :actions="['update']"
+      @update="goToUpdatePage(item)"
+    />
     <v-table v-if="item">
       <thead>
         <tr>
@@ -38,18 +37,8 @@
           <td>
             {{ $t("vehicle.shipper") }}
           </td>
-
           <td>
-            <router-link
-              v-if="router.hasRoute('AdminUserShow')"
-              :to="{ name: 'AdminUserShow', params: { id: item.adminuser } }"
-            >
-              {{ item.adminuser }}
-            </router-link>
-
-            <p v-else>
-              {{ item.adminuser }}
-            </p>
+            {{ item.shipper }}
           </td>
         </tr>
         <tr>
@@ -59,7 +48,7 @@
 
           <td>
             {{ item.vehicleType }}
-          </td>
+                      </td>
         </tr>
         <tr>
           <td>
@@ -68,12 +57,12 @@
 
           <td>
             {{ item.vehicleCapacity }}
-          </td>
+                      </td>
         </tr>
       </tbody>
     </v-table>
   </v-container>
-
+  <SimpleVehicleImageList :items="vehicleImages"></SimpleVehicleImageList>
   <Loading :visible="isLoading" />
 </template>
 
@@ -88,6 +77,12 @@ import { useMercureItem } from "@/composables/mercureItem";
 import { useVehicleDeleteStore } from "@/store/vehicle/delete";
 import { useVehicleShowStore } from "@/store/vehicle/show";
 import { useBreadcrumb } from "@/composables/breadcrumb";
+import SimpleVehicleImageList from "@/components/vehicleimage/SimpleVehicleImageList.vue";
+import { useVehicleImageListStore } from "@/store/vehicleimage/list";
+import { Vehicle } from "@/types/vehicle";
+import ActionCell from "../common/ActionCell.vue";
+import { UserType } from "@/types/usertype";
+
 
 const { t } = useI18n();
 const route = useRoute();
@@ -100,6 +95,8 @@ const { retrieved: item, isLoading, error } = storeToRefs(vehicleShowStore);
 const vehicleDeleteStore = useVehicleDeleteStore();
 const { deleted, error: deleteError } = storeToRefs(vehicleDeleteStore);
 
+const vehicleImagesStore = useVehicleImageListStore();
+const { items: vehicleImages, error: vehicleImagesError } = storeToRefs(vehicleImagesStore);
 useMercureItem({
   store: vehicleShowStore,
   deleteStore: vehicleDeleteStore,
@@ -108,6 +105,10 @@ useMercureItem({
 
 await vehicleShowStore.retrieve(decodeURIComponent(route.params.id as string));
 
+await vehicleImagesStore.getItems({
+  page: 1,
+  vehicle: route.params.id as string
+})
 async function deleteItem() {
   if (!item?.value) {
     vehicleDeleteStore.setError(t("itemNotFound"));
@@ -122,7 +123,12 @@ async function deleteItem() {
 
   router.push({ name: "VehicleList" });
 }
-
+function goToUpdatePage(item: Vehicle) {
+  router.push({
+    name: "VehicleUpdate",
+    params: { id: item["@id"] },
+  });
+}
 onBeforeUnmount(() => {
   vehicleShowStore.$reset();
 });
