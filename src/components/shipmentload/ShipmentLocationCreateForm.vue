@@ -23,7 +23,7 @@
             <v-select
               :label="$t('shipmentload.city')"
               v-model="selectedCity"
-              :items="citiesNames"
+              :items="cityNames"
               :rules="requireRules"
               @update:model-value="setCityLocations"
               variant="outlined"
@@ -141,7 +141,7 @@ const lng = ref(106.928076);
 const showMarker = ref(false);
 const selectedCountry = ref(null);
 const selectedCity = ref(null);
-const citiesNames = ref([]);
+const cityNames = ref([]);
 const page = ref(1);
 const order = ref({});
 const countryFilters: Ref<Filters> = ref({});
@@ -158,7 +158,7 @@ const address = ref(props.address);
 const title = ref(props.title);
 const onCountrySelect = () => {
   selectedCity.value = null;
-  citiesNames.value = countryListStore.getCityNames(selectedCountry.value);
+  cityNames.value = countryListStore.getCityNames(selectedCountry.value);
 };
 const requireRules = [assertRequired()];
 const getCountryNames = () => {
