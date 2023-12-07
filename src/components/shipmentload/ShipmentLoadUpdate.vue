@@ -42,65 +42,65 @@ import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import Toolbar from "@/components/common/Toolbar.vue";
-import Form from "@/components/shipmentloadinfos/ShipmentLoadInfosForm.vue";
+import Form from "@/components/shipmentload/ShipmentLoadForm.vue";
 import Loading from "@/components/common/Loading.vue";
-import { useShipmentLoadInfosDeleteStore } from "@/store/shipmentloadinfos/delete";
-import { useShipmentLoadInfosUpdateStore } from "@/store/shipmentloadinfos/update";
+import { useShipmentLoadDeleteStore } from "@/store/shipmentload/delete";
+import { useShipmentLoadUpdateStore } from "@/store/shipmentload/update";
 import { useMercureItem } from "@/composables/mercureItem";
-import { useShipmentLoadInfosCreateStore } from "@/store/shipmentloadinfos/create";
+import { useShipmentLoadCreateStore } from "@/store/shipmentload/create";
 import { useBreadcrumb } from "@/composables/breadcrumb";
-import type { ShipmentLoadInfos } from "@/types/shipmentloadinfos";
+import type { ShipmentLoad } from "@/types/shipmentload";
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
-const shipmentloadinfosCreateStore = useShipmentLoadInfosCreateStore();
-const { created } = storeToRefs(shipmentloadinfosCreateStore);
+const shipmentloadCreateStore = useShipmentLoadCreateStore();
+const { created } = storeToRefs(shipmentloadCreateStore);
 
-const shipmentloadinfosDeleteStore = useShipmentLoadInfosDeleteStore();
+const shipmentloadDeleteStore = useShipmentLoadDeleteStore();
 const { isLoading: deleteLoading, error: deleteError } = storeToRefs(
-  shipmentloadinfosDeleteStore,
+  shipmentloadDeleteStore,
 );
 
-const shipmentloadinfosUpdateStore = useShipmentLoadInfosUpdateStore();
+const shipmentloadUpdateStore = useShipmentLoadUpdateStore();
 const {
   retrieved: item,
   updated,
   isLoading,
   error,
   violations,
-} = storeToRefs(shipmentloadinfosUpdateStore);
+} = storeToRefs(shipmentloadUpdateStore);
 
 useMercureItem({
-  store: shipmentloadinfosUpdateStore,
-  deleteStore: shipmentloadinfosDeleteStore,
-  redirectRouteName: "ShipmentLoadInfosList",
+  store: shipmentloadUpdateStore,
+  deleteStore: shipmentloadDeleteStore,
+  redirectRouteName: "ShipmentLoadList",
 });
 
-await shipmentloadinfosUpdateStore.retrieve(
+await shipmentloadUpdateStore.retrieve(
   decodeURIComponent(route.params.id as string),
 );
 
-async function update(item: ShipmentLoadInfos) {
-  await shipmentloadinfosUpdateStore.update(item);
+async function update(item: ShipmentLoad) {
+  await shipmentloadUpdateStore.update(item);
 }
 
 async function deleteItem() {
   if (!item?.value) {
-    shipmentloadinfosUpdateStore.setError(t("itemNotFound"));
+    shipmentloadUpdateStore.setError(t("itemNotFound"));
     return;
   }
 
-  await shipmentloadinfosDeleteStore.deleteItem(item?.value);
+  await shipmentloadDeleteStore.deleteItem(item?.value);
 
-  router.push({ name: "ShipmentLoadInfosList" });
+  router.push({ name: "ShipmentLoadList" });
 }
 
 onBeforeUnmount(() => {
-  shipmentloadinfosUpdateStore.$reset();
-  shipmentloadinfosCreateStore.$reset();
-  shipmentloadinfosDeleteStore.$reset();
+  shipmentloadUpdateStore.$reset();
+  shipmentloadCreateStore.$reset();
+  shipmentloadDeleteStore.$reset();
 });
 </script>

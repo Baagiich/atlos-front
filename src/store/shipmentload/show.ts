@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
-import type { ShipmentLoad } from "@/types/ShipmentLoad";
+import type { ShipmentLoad } from "@/types/shipmentload";
 
 interface State {
   retrieved?: ShipmentLoad;
@@ -10,7 +10,7 @@ interface State {
   error?: string;
 }
 
-export const useShipmentLoadShowStore = defineStore("ShipmentLoadShow", {
+export const useShipmentLoadShowStore = defineStore("shipmentloadShow", {
   state: (): State => ({
     retrieved: undefined,
     hubUrl: undefined,

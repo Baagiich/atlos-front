@@ -47,7 +47,9 @@ export const useVehicleShowStore = defineStore("vehicleShow", {
     },
 
     setRetrieved(retrieved: Vehicle) {
-      retrieved.shipper = retrieved.shipper ? retrieved.shipper.firstName + " " + retrieved.shipper.lastName : {};
+      retrieved.shipper = retrieved.shipper
+        ? retrieved.shipper.firstName + " " + retrieved.shipper.lastName
+        : {};
       this.retrieved = retrieved;
     },
 

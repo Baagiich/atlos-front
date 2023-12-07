@@ -57,9 +57,15 @@ export const useVehicleListStore = defineStore("vehicleList", {
 
     setItems(items: Vehicle[]) {
       items.map((item) => {
-        item.shipper = item.shipper ? item.shipper.firstName + " " + item.shipper.lastName : {};
-        item.vehicleType = item.vehicleType ? VehicleType[item.vehicleType] : {};
-        item.vehicleCapacity = item.vehicleCapacity ? VehicleCapacityType[item.vehicleCapacity] : {};
+        item.shipper = item.shipper
+          ? item.shipper.firstName + " " + item.shipper.lastName
+          : {};
+        item.vehicleType = item.vehicleType
+          ? VehicleType[item.vehicleType]
+          : {};
+        item.vehicleCapacity = item.vehicleCapacity
+          ? VehicleCapacityType[item.vehicleCapacity]
+          : {};
       });
       this.items = items;
     },
@@ -78,7 +84,7 @@ export const useVehicleListStore = defineStore("vehicleList", {
 
     updateItem(updatedItem: Vehicle) {
       const item: Vehicle | undefined = this.items.find(
-        (i) => i["@id"] === updatedItem["@id"]
+        (i) => i["@id"] === updatedItem["@id"],
       );
 
       if (!item) return;

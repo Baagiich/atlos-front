@@ -71,7 +71,7 @@ export const useVehicleImageListStore = defineStore("vehicleimageList", {
 
     updateItem(updatedItem: VehicleImage) {
       const item: VehicleImage | undefined = this.items.find(
-        (i) => i["@id"] === updatedItem["@id"]
+        (i) => i["@id"] === updatedItem["@id"],
       );
 
       if (!item) return;

@@ -1,12 +1,14 @@
 <template>
   <v-form ref="form" @submit.prevent="emitSubmit">
     <v-row>
-      <v-col cols="12" sm="6" md="6">
+      <v-col cols="12" sm="6" md="2">
         <v-text-field
           v-model="item.name"
           :error="Boolean(violations?.name)"
           :error-messages="violations?.name"
-          :label="$t('shipmentloadinfos.name')"
+          :label="$t('shipmentload.loadName')"
+          variant="outlined"
+          clearable
         >
           <template #append-inner>
             <v-icon
@@ -18,131 +20,14 @@
           </template>
         </v-text-field>
       </v-col>
-      <v-col cols="12" sm="6" md="6">
-        <v-text-field
-          v-model="item.count"
-          :error="Boolean(violations?.count)"
-          :error-messages="violations?.count"
-          :label="$t('shipmentloadinfos.count')"
-        >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.count = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="6">
-        <v-text-field
-          v-model="item.length"
-          :error="Boolean(violations?.length)"
-          :error-messages="violations?.length"
-          :label="$t('shipmentloadinfos.length')"
-        >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.length = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="6">
-        <v-text-field
-          v-model="item.width"
-          :error="Boolean(violations?.width)"
-          :error-messages="violations?.width"
-          :label="$t('shipmentloadinfos.width')"
-        >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.width = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="6">
-        <v-text-field
-          v-model="item.height"
-          :error="Boolean(violations?.height)"
-          :error-messages="violations?.height"
-          :label="$t('shipmentloadinfos.height')"
-        >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.height = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="6">
-        <v-text-field
-          v-model="item.weight"
-          :error="Boolean(violations?.weight)"
-          :error-messages="violations?.weight"
-          :label="$t('shipmentloadinfos.weight')"
-        >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.weight = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="6">
-        <v-text-field
-          v-model="item.shipment"
-          :error="Boolean(violations?.shipment)"
-          :error-messages="violations?.shipment"
-          :label="$t('shipmentloadinfos.shipment')"
-        >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.shipment = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="6">
-        <v-text-field
-          v-model="item.isPileUp"
-          :error="Boolean(violations?.isPileUp)"
-          :error-messages="violations?.isPileUp"
-          :label="$t('shipmentloadinfos.isPileUp')"
-        >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.isPileUp = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="6">
+      <v-col cols="12" sm="6" md="2">
         <v-text-field
           v-model="item.packageType"
           :error="Boolean(violations?.packageType)"
           :error-messages="violations?.packageType"
-          :label="$t('shipmentloadinfos.packageType')"
+          :label="$t('shipmentload.packageType')"
+          variant="outlined"
+          clearable
         >
           <template #append-inner>
             <v-icon
@@ -154,10 +39,119 @@
           </template>
         </v-text-field>
       </v-col>
+      <v-col cols="12" sm="6" md="1">
+        <v-text-field
+          v-model.number="item.quantity"
+          :error="Boolean(violations?.quantity)"
+          :error-messages="violations?.quantity"
+          :label="$t('shipmentload.quantity')"
+          variant="outlined"
+          clearable
+        >
+          <template #append-inner>
+            <v-icon
+              style="cursor: pointer"
+              @click.prevent.stop="item.quantity = undefined"
+            >
+              mdi-close
+            </v-icon>
+          </template>
+        </v-text-field>
+      </v-col>
+      <v-col cols="12" sm="6" md="1">
+        <v-text-field
+          v-model.number="item.length"
+          :error="Boolean(violations?.length)"
+          :error-messages="violations?.length"
+          :label="$t('shipmentload.length')"
+          variant="outlined"
+          clearable
+        >
+          <template #append-inner>
+            <v-icon
+              style="cursor: pointer"
+              @click.prevent.stop="item.length = undefined"
+            >
+              mdi-close
+            </v-icon>
+          </template>
+        </v-text-field>
+      </v-col>
+      <v-col cols="12" sm="6" md="1">
+        <v-text-field
+          v-model.number="item.width"
+          :error="Boolean(violations?.width)"
+          :error-messages="violations?.width"
+          :label="$t('shipmentload.width')"
+          variant="outlined"
+          clearable
+        >
+          <template #append-inner>
+            <v-icon
+              style="cursor: pointer"
+              @click.prevent.stop="item.width = undefined"
+            >
+              mdi-close
+            </v-icon>
+          </template>
+        </v-text-field>
+      </v-col>
+      <v-col cols="12" sm="6" md="1">
+        <v-text-field
+          v-model.number="item.height"
+          :error="Boolean(violations?.height)"
+          :error-messages="violations?.height"
+          :label="$t('shipmentload.height')"
+          variant="outlined"
+          clearable
+        >
+          <template #append-inner>
+            <v-icon
+              style="cursor: pointer"
+              @click.prevent.stop="item.height = undefined"
+            >
+              mdi-close
+            </v-icon>
+          </template>
+        </v-text-field>
+      </v-col>
+      <v-col cols="12" sm="6" md="1">
+        <v-text-field
+          v-model.number="item.weight"
+          :error="Boolean(violations?.weight)"
+          :error-messages="violations?.weight"
+          :label="$t('shipmentload.weight')"
+          variant="outlined"
+          clearable
+        >
+          <template #append-inner>
+            <v-icon
+              style="cursor: pointer"
+              @click.prevent.stop="item.weight = undefined"
+            >
+              mdi-close
+            </v-icon>
+          </template>
+        </v-text-field>
+      </v-col>
+      <v-col cols="12" sm="6" md="1">
+        <v-radio-group v-model="item.isPileUp">
+          <v-radio
+            :label="$t('shipmentload.isPileUp')"
+            :value="pileUpType"
+            color="indigo"
+            @click="toggleIsPileUp"
+            variant="outlined"
+            clearable
+          ></v-radio>
+        </v-radio-group>
+      </v-col>
     </v-row>
 
     <v-row>
       <v-col cols="12" sm="6" md="6">
+        <v-btn color="primary" type="add">{{ $t("add") }}</v-btn>
+
         <v-btn color="primary" type="submit">{{ $t("submit") }}</v-btn>
 
         <v-btn color="primary" variant="text" class="ml-2" @click="resetForm">
@@ -171,17 +165,17 @@
 <script setup lang="ts">
 import { ref, Ref, toRef } from "vue";
 import { VForm } from "vuetify/components";
-import type { ShipmentLoadInfos } from "@/types/shipmentloadinfos";
+import type { ShipmentLoad } from "@/types/shipmentload";
 import type { SubmissionErrors } from "@/types/error";
 const props = defineProps<{
-  values?: ShipmentLoadInfos;
+  values?: ShipmentLoad;
   errors?: SubmissionErrors;
 }>();
 
 const violations = toRef(props, "errors");
 
-const item: Ref<ShipmentLoadInfos> = ref({});
-
+const item: Ref<ShipmentLoad> = ref({});
+var pileUpType = ref(false);
 if (props.values) {
   item.value = {
     ...props.values,
@@ -189,7 +183,7 @@ if (props.values) {
 }
 
 const emit = defineEmits<{
-  (e: "submit", item: ShipmentLoadInfos): void;
+  (e: "submit", item: ShipmentLoad): void;
 }>();
 
 function emitSubmit() {
@@ -202,5 +196,8 @@ function resetForm() {
   if (!form.value) return;
 
   form.value.reset();
+}
+function toggleIsPileUp() {
+  pileUpType.value = !pileUpType.value;
 }
 </script>

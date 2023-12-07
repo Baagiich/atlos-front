@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
-import type { ShipmentLoad } from "@/types/shipmentloadinfos";
+import type { ShipmentLoad } from "@/types/shipmentload";
 import type { PagedCollection } from "@/types/collection";
 import type { ListParams } from "@/types/list";
 
@@ -13,7 +13,7 @@ interface State {
   hubUrl?: URL;
 }
 
-export const useShipmentLoadListStore = defineStore("ShipmentLoadList", {
+export const useShipmentLoadListStore = defineStore("shipmentloadList", {
   state: (): State => ({
     items: [],
     totalItems: 0,

@@ -64,7 +64,7 @@ export const useVehicleImageUpdateStore = defineStore("vehicleimageUpdate", {
             method: "PUT",
             headers: new Headers({ "Content-Type": "application/ld+json" }),
             body: JSON.stringify(payload),
-          }
+          },
         );
         const data: VehicleImage = await response.json();
 

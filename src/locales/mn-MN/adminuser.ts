@@ -6,7 +6,7 @@ export default {
   email: "И-Мэйл",
   phoneNumber: "Утасны дугаар",
   plainPassword: "Нууц үг",
-plainPasswordConfirm: "Нууц үг баталгаажуулах",
+  plainPasswordConfirm: "Нууц үг баталгаажуулах",
   status: "Статус",
   verified: "Баталгаажсан",
   driver: "Жолооч",

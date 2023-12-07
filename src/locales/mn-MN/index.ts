@@ -1,7 +1,7 @@
 import adminuser from "./adminuser";
 import shipment from "./shipment";
 import driverrequest from "./driverrequest";
-import shipmentloadinfos from "./shipmentloadinfos";
+import shipmentload from "./shipmentload";
 import driver from "./driver";
 import driverimage from "./driverimage";
 import mediaobject from "./mediaobject";
@@ -37,7 +37,7 @@ export default {
   adminuser,
   shipment,
   driverrequest,
-  shipmentloadinfos,
+  shipmentload,
   driver,
   driverimage,
   mediaobject,
@@ -48,10 +48,10 @@ export default {
   accept: "Зөвшөөрч байна",
   validation,
   forgotPassword: "Нууц үгээ мартсан",
-  checkEmail: 'Та и-мэйлээ шалгана уу',
-  successfull: 'Амжилттай',
-  enterNewPassword: 'Шинэ нууц үгээ оруулна уу',
-  submitAgain: 'Дахин илгээх',
+  checkEmail: "Та и-мэйлээ шалгана уу",
+  successfull: "Амжилттай",
+  enterNewPassword: "Шинэ нууц үгээ оруулна уу",
+  submitAgain: "Дахин илгээх",
   vehicle,
   vehicleimage,
 };

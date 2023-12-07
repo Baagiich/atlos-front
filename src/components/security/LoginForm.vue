@@ -7,6 +7,7 @@
           :label="$t('email')"
           :error="Boolean(violations?.email)"
           :error-messages="violations?.email"
+          type="email"
         >
           <template #append-inner>
             <v-icon
@@ -38,8 +39,12 @@
 
     <v-row>
       <v-col cols="12" sm="6" md="6">
-
-        <v-btn color="primary" variant="plain" class="ml-2" @click="handlePasswordReset">
+        <v-btn
+          color="primary"
+          variant="plain"
+          class="ml-2"
+          @click="handlePasswordReset"
+        >
           {{ $t("forgotPassword") }}
         </v-btn>
       </v-col>
@@ -94,7 +99,7 @@ function resetForm() {
   form.value.reset();
 }
 
-function handlePasswordReset(){
+function handlePasswordReset() {
   router.push({
     name: "AdminUserPasswordReset",
   });

@@ -21,7 +21,7 @@
             </template>
           </v-text-field>
         </v-col>
-      
+
         <v-col cols="12" sm="6" md="6">
           <v-text-field
             v-model="item.plainPassword"
@@ -101,10 +101,9 @@ if (props.values) {
 const plainPasswordRules = [assertRequired()];
 const plainPasswordConfirmRules = [
   assertRequired(),
-  assertPasswordConfirm(
-    "validation.plainPasswordNotMatch",
-    function(){return item.value.plainPassword}
-  ),
+  assertPasswordConfirm("validation.plainPasswordNotMatch", function () {
+    return item.value.plainPassword;
+  }),
 ];
 const recievedCodeRules = [assertNumber("validation.recievedCodeRequired")];
 const emit = defineEmits<{

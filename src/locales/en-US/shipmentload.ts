@@ -1,0 +1,18 @@
+export default {
+  name: "Name",
+  quantity: "Quantity",
+  length: "Length",
+  width: "Width",
+  height: "Height",
+  weight: "Weight",
+  shipment: "Shipment",
+  packageType: "PackageType",
+  isPileUp: "IsPileUp",
+  cube: "Cube",
+  cargo: "Cargo",
+  regular: "Regular",
+  secureShipment: "Secure shipment",
+  regularShipment: "Regular shipment",
+  choiceShipmentType: "Choice shipment type",
+  choiceShipmentLoadType: "Choice shipment load type",
+};

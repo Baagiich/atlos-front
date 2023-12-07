@@ -7,7 +7,12 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable="true">
+    <v-alert
+      v-if="error || deleteError"
+      type="error"
+      class="mb-4"
+      closable="true"
+    >
       {{ error || deleteError }}
     </v-alert>
 
@@ -28,7 +33,10 @@
           <td>
             <router-link
               v-if="router.hasRoute('MediaObjectShow')"
-              :to="{ name: 'MediaObjectShow', params: { id: item.mediaobject } }"
+              :to="{
+                name: 'MediaObjectShow',
+                params: { id: item.mediaobject },
+              }"
             >
               {{ item.mediaobject }}
             </router-link>
@@ -63,7 +71,7 @@
 
           <td>
             {{ item.tag }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -109,7 +117,11 @@ const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
 const vehicleimageShowStore = useVehicleImageShowStore();
-const { retrieved: item, isLoading, error } = storeToRefs(vehicleimageShowStore);
+const {
+  retrieved: item,
+  isLoading,
+  error,
+} = storeToRefs(vehicleimageShowStore);
 
 const vehicleimageDeleteStore = useVehicleImageDeleteStore();
 const { deleted, error: deleteError } = storeToRefs(vehicleimageDeleteStore);
@@ -120,7 +132,9 @@ useMercureItem({
   redirectRouteName: "VehicleImageList",
 });
 
-await vehicleimageShowStore.retrieve(decodeURIComponent(route.params.id as string));
+await vehicleimageShowStore.retrieve(
+  decodeURIComponent(route.params.id as string),
+);
 
 async function deleteItem() {
   if (!item?.value) {

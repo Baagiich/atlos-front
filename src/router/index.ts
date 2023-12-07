@@ -14,6 +14,8 @@ import driverRoutes from "./driver";
 import driverimageRoutes from "./driverimage";
 import mediaobjectRoutes from "./mediaobject";
 import shippercompany from "./shippercompany";
+import shipmentload from "./shipmentload";
+import shipmentLoadCreate from "./shipmentLoadCreate";
 import passwordresetRoutes from "./passwordreset";
 import vehicleimagesRoutes from "./vehicleimage";
 
@@ -47,6 +49,8 @@ const routes = [
   ...driverimageRoutes,
   ...mediaobjectRoutes,
   ...shippercompany,
+  ...shipmentload,
+  ...shipmentLoadCreate,
   ...passwordresetRoutes,
   ...vehicleimagesRoutes,
 ];

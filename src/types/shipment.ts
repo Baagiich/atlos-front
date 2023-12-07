@@ -17,9 +17,14 @@ export interface Shipment extends Item {
   unloadAt?: string;
   prePayment?: number;
   postPayment?: number;
-  price?: string;
+  price: {
+    amount?: number;
+    currency?: string;
+  };
   updatedAt?: string;
   createdAt?: string;
   shipmentTypeCode?: string;
   name?: string;
+  loadType?: any;
+  currency?: string;
 }
