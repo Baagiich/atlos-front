@@ -22,19 +22,19 @@ import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import Toolbar from "@/components/common/Toolbar.vue";
 import Loading from "@/components/common/Loading.vue";
-import Form from "@/components/shippercompany/ShipperCompanyForm.vue";
-import { useShipperCompanyRegisterStore } from "@/store/shippercompany/register";
+import Form from "@/components/consignor/ConsignorForm.vue";
+import { useConsignorRegisterStore } from "@/store/consignor/register";
 import { useBreadcrumb } from "@/composables/breadcrumb";
-import type { ShipperCompany } from "@/types/shippercompany";
 import { useContractTemplateListStore } from "@/store/contracttemplate/list";
+import { Consignor } from "@/types/consignor";
 import { UserType } from "@/types/usertype";
 
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
-const shippercompanyRegisterStore = useShipperCompanyRegisterStore();
+const consignorRegisterStore = useConsignorRegisterStore();
 const { created, isLoading, violations, error } = storeToRefs(
-  shippercompanyRegisterStore,
+  consignorRegisterStore,
 );
 const contracttemplateListStore = useContractTemplateListStore();
 const {
@@ -43,8 +43,8 @@ const {
   hubUrl,
   error: contractTemplateError,
 } = storeToRefs(contracttemplateListStore);
-async function create(item: ShipperCompany) {
-  await shippercompanyRegisterStore.create(item);
+async function create(item: Consignor) {
+  await consignorRegisterStore.create(item);
 
   if (!created?.value) {
     return;
@@ -55,13 +55,13 @@ async function create(item: ShipperCompany) {
 
 async function sendRequest() {
   await contracttemplateListStore.getRegistrationTemplate(
-    UserType.SHIPPER,
-    "shipper_company_registration_term",
+    UserType.CONSIGNOR,
+    "consignor_registration_term",
   );
 }
 await sendRequest();
 
 onBeforeUnmount(() => {
-  shippercompanyRegisterStore.$reset();
+  consignorRegisterStore.$reset();
 });
 </script>

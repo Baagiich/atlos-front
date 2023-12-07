@@ -1,6 +1,7 @@
 const names = {
   login: "Login",
-  register: "Register",
+  shipperCompanyRegister: "ShipperCompanyRegister",
+  consignorRegister: "ConsignorRegister",
 };
 
 export default [
@@ -13,9 +14,17 @@ export default [
     },
   },
   {
-    name: names.register,
+    name: names.shipperCompanyRegister,
     path: "/shipper_companies/registration",
     component: () => import("@/views/shippercompany/ViewRegister.vue"),
+    meta: {
+      breadcrumb: [],
+    },
+  },
+  {
+    name: names.consignorRegister,
+    path: "/consignor/registration",
+    component: () => import("@/views/consignor/ViewRegister.vue"),
     meta: {
       breadcrumb: [],
     },

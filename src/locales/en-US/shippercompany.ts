@@ -5,7 +5,4 @@ export default {
   email: "Email",
   register: "Register",
   phoneNumber: "PhoneNumber",
-  plainPassword: "Password",
-  plainPasswordConfirm: "Password confirmation",
-  recievedCode: "Code",
 };

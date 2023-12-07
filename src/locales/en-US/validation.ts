@@ -6,4 +6,5 @@ export default {
   plainPasswordNotMatch: "Passwords do not match",
   recievedCodeMustBe6Characters: "Code must be 6 characters",
   maxlength: "Must be less than {maxlength} characters",
+  recievedCodeRequired: "Code is required",
 };

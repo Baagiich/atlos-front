@@ -4,16 +4,16 @@
       <v-row>
         <v-col cols="12" sm="6" md="6">
           <v-text-field
-            v-model="item.firstname"
-            :error="Boolean(violations?.firstname)"
-            :error-messages="violations?.firstname"
-            :label="$t('shippercompany.firstname')"
+            v-model="item.firstName"
+            :error="Boolean(violations?.firstName)"
+            :error-messages="violations?.firstName"
+            :label="$t('consignor.firstName')"
             :rules="nameRules"
           >
             <template #append-inner>
               <v-icon
                 style="cursor: pointer"
-                @click.prevent.stop="item.firstname = undefined"
+                @click.prevent.stop="item.firstName = undefined"
               >
                 mdi-close
               </v-icon>
@@ -22,16 +22,16 @@
         </v-col>
         <v-col cols="12" sm="6" md="6">
           <v-text-field
-            v-model="item.lastname"
-            :error="Boolean(violations?.lastname)"
-            :error-messages="violations?.lastname"
-            :label="$t('shippercompany.lastname')"
+            v-model="item.lastName"
+            :error="Boolean(violations?.lastName)"
+            :error-messages="violations?.lastName"
+            :label="$t('consignor.lastName')"
             :rules="nameRules"
           >
             <template #append-inner>
               <v-icon
                 style="cursor: pointer"
-                @click.prevent.stop="item.lastname = undefined"
+                @click.prevent.stop="item.lastName = undefined"
               >
                 mdi-close
               </v-icon>
@@ -43,7 +43,7 @@
             v-model="item.name"
             :error="Boolean(violations?.name)"
             :error-messages="violations?.name"
-            :label="$t('shippercompany.name')"
+            :label="$t('consignor.name')"
             :rules="nameRules"
           >
             <template #append-inner>
@@ -61,7 +61,7 @@
             v-model="item.email"
             :error="Boolean(violations?.email)"
             :error-messages="violations?.email"
-            :label="$t('shippercompany.email')"
+            :label="$t('consignor.email')"
             :rules="emailRules"
           >
             <template #append-inner>
@@ -76,28 +76,10 @@
         </v-col>
         <v-col cols="12" sm="6" md="6">
           <v-text-field
-            v-model="item.register"
-            :error="Boolean(violations?.register)"
-            :error-messages="violations?.register"
-            :label="$t('shippercompany.register')"
-            :rules="registerNumberRules"
-          >
-            <template #append-inner>
-              <v-icon
-                style="cursor: pointer"
-                @click.prevent.stop="item.register = undefined"
-              >
-                mdi-close
-              </v-icon>
-            </template>
-          </v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6" md="6">
-          <v-text-field
             v-model="item.phoneNumber"
             :error="Boolean(violations?.phoneNumber)"
             :error-messages="violations?.phoneNumber"
-            :label="$t('shippercompany.phoneNumber')"
+            :label="$t('consignor.phoneNumber')"
             :rules="phoneNumberRules"
           >
             <template #append-inner>
@@ -110,8 +92,25 @@
             </template>
           </v-text-field>
         </v-col>
+        <v-col cols="12" sm="6" md="6">
+          <v-text-field
+            v-model="item.register"
+            :error="Boolean(violations?.register)"
+            :error-messages="violations?.register"
+            :label="$t('consignor.register')"
+            :rules="registerNumberRules"
+          >
+            <template #append-inner>
+              <v-icon
+                style="cursor: pointer"
+                @click.prevent.stop="item.register = undefined"
+              >
+                mdi-close
+              </v-icon>
+            </template>
+          </v-text-field>
+        </v-col>
       </v-row>
-
       <v-row v-if="props.contractTemplate">
         <v-checkbox
           :model-value="contractSigned"
@@ -188,9 +187,9 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref, Ref, toRaw, toRef } from "vue";
+import { ref, Ref, toRef } from "vue";
 import { VForm } from "vuetify/components";
-import type { ShipperCompany } from "@/types/shippercompany";
+import type { Consignor } from "@/types/consignor";
 import type { SubmissionErrors } from "@/types/error";
 import { ContractTemplate } from "@/types/contracttemplate";
 import {
@@ -200,31 +199,30 @@ import {
   assertChecked,
 } from "@/validations";
 const props = defineProps<{
-  values?: ShipperCompany;
+  values?: Consignor;
   errors?: SubmissionErrors;
   contractTemplate?: ContractTemplate;
 }>();
 
 const violations = toRef(props, "errors");
 const contractSigned = ref(false);
-const item: Ref<ShipperCompany> = ref({});
-const dialog = ref(false);
+const item: Ref<Consignor> = ref({});
+
 if (props.values) {
   item.value = {
     ...props.values,
     ...props.contractTemplate,
   };
 }
-
 const nameRules = [assertRequired(), assertMaxLength(50)];
-
 const emailRules = [assertRequired(), assertEmail()];
 
 const phoneNumberRules = [assertRequired(), assertMaxLength(20)];
 const registerNumberRules = [assertRequired(), assertMaxLength(12)];
 const contractSignedRules = [assertChecked()];
+const dialog = ref(false);
 const emit = defineEmits<{
-  (e: "submit", item: ShipperCompany): void;
+  (e: "submit", item: Consignor): void;
 }>();
 const form: Ref<VForm | null> = ref(null);
 async function emitSubmit() {
@@ -233,7 +231,6 @@ async function emitSubmit() {
     emit("submit", item.value);
   }
 }
-
 function resetForm() {
   if (!form.value) return;
 

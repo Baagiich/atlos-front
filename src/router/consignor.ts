@@ -1,8 +1,8 @@
 const names = {
-  list: "ShipperCompanyList",
-  create: "ShipperCompanyCreate",
-  update: "ShipperCompanyUpdate",
-  show: "ShipperCompanyShow",
+  list: "ConsignorList",
+  create: "ConsignorCreate",
+  update: "ConsignorUpdate",
+  show: "ConsignorShow",
 };
 
 const breadcrumbs = {
@@ -15,32 +15,32 @@ const breadcrumbs = {
 export default [
   {
     name: names.list,
-    path: "/shipper_companies",
-    component: () => import("@/views/shippercompany/ViewList.vue"),
+    path: "/consignors",
+    component: () => import("@/views/consignor/ViewList.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list],
     },
   },
   {
     name: names.create,
-    path: "/shipper_companies/create",
-    component: () => import("@/views/shippercompany/ViewCreate.vue"),
+    path: "/consignors/create",
+    component: () => import("@/views/consignor/ViewCreate.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list, breadcrumbs.create],
     },
   },
   {
     name: names.update,
-    path: "/shipper_companies/edit/:id",
-    component: () => import("@/views/shippercompany/ViewUpdate.vue"),
+    path: "/consignors/edit/:id",
+    component: () => import("@/views/consignor/ViewUpdate.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list, breadcrumbs.update],
     },
   },
   {
     name: names.show,
-    path: "/shipper_companies/show/:id",
-    component: () => import("@/views/shippercompany/ViewShow.vue"),
+    path: "/consignors/show/:id",
+    component: () => import("@/views/consignor/ViewShow.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list, breadcrumbs.show],
     },
