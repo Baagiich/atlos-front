@@ -66,7 +66,7 @@ export const useVehicleUpdateStore = defineStore("vehicleUpdate", {
             method: "PUT",
             headers: new Headers({ "Content-Type": "application/ld+json" }),
             body: JSON.stringify(payload),
-          }
+          },
         );
         const data: Vehicle = await response.json();
 
@@ -88,11 +88,11 @@ export const useVehicleUpdateStore = defineStore("vehicleUpdate", {
     },
 
     setRetrieved(retrieved: Vehicle) {
-      retrieved.adminEditable = true
-      if(apiToken.getDecodedToken().user_type !== UserType.ADMIN){
-        retrieved.adminEditable = false
+      retrieved.adminEditable = true;
+      if (apiToken.getDecodedToken().user_type !== UserType.ADMIN) {
+        retrieved.adminEditable = false;
       }
-      
+
       this.retrieved = retrieved;
     },
 

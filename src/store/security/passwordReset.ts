@@ -17,7 +17,7 @@ export const useSecurityPasswordResetStore = defineStore("passwordReset", {
     isLoading: false,
     error: undefined,
     violations: undefined,
-    data: undefined
+    data: undefined,
   }),
 
   actions: {

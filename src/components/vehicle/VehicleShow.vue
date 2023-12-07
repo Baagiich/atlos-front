@@ -7,8 +7,13 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="error || deleteError || vehicleImagesError" type="error" class="mb-4" closable>
-      {{ error || deleteError || vehicleImagesError}}
+    <v-alert
+      v-if="error || deleteError || vehicleImagesError"
+      type="error"
+      class="mb-4"
+      closable
+    >
+      {{ error || deleteError || vehicleImagesError }}
     </v-alert>
     <ActionCell
       v-if="item"
@@ -48,7 +53,7 @@
 
           <td>
             {{ item.vehicleType }}
-                      </td>
+          </td>
         </tr>
         <tr>
           <td>
@@ -57,7 +62,7 @@
 
           <td>
             {{ item.vehicleCapacity }}
-                      </td>
+          </td>
         </tr>
       </tbody>
     </v-table>
@@ -83,7 +88,6 @@ import { Vehicle } from "@/types/vehicle";
 import ActionCell from "../common/ActionCell.vue";
 import { UserType } from "@/types/usertype";
 
-
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -96,7 +100,8 @@ const vehicleDeleteStore = useVehicleDeleteStore();
 const { deleted, error: deleteError } = storeToRefs(vehicleDeleteStore);
 
 const vehicleImagesStore = useVehicleImageListStore();
-const { items: vehicleImages, error: vehicleImagesError } = storeToRefs(vehicleImagesStore);
+const { items: vehicleImages, error: vehicleImagesError } =
+  storeToRefs(vehicleImagesStore);
 useMercureItem({
   store: vehicleShowStore,
   deleteStore: vehicleDeleteStore,
@@ -107,8 +112,8 @@ await vehicleShowStore.retrieve(decodeURIComponent(route.params.id as string));
 
 await vehicleImagesStore.getItems({
   page: 1,
-  vehicle: route.params.id as string
-})
+  vehicle: route.params.id as string,
+});
 async function deleteItem() {
   if (!item?.value) {
     vehicleDeleteStore.setError(t("itemNotFound"));

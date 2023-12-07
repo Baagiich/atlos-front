@@ -26,7 +26,6 @@
           append-icon="mdi-open-in-new"
           @click="goToShowAdminPage(item.shipper)"
         ></v-card>
-      
       </v-col>
       <v-col cols="12" sm="6" md="6">
         <v-select
@@ -36,7 +35,6 @@
           item-title="key"
           item-value="value"
         />
-        
       </v-col>
       <v-col cols="12" sm="6" md="6">
         <v-select
@@ -50,7 +48,7 @@
 
       <v-col cols="12" sm="6" md="6">
         <v-select
-        v-if="item.adminEditable"
+          v-if="item.adminEditable"
           v-model="item.status"
           :error="Boolean(violations?.status)"
           :error-messages="violations?.status"
@@ -99,7 +97,8 @@ if (props.values) {
   item.value = {
     ...props.values,
   };
-  shipperName.value = item.value.shipper.firstName + ' ' + item.value.shipper.lastName
+  shipperName.value =
+    item.value.shipper.firstName + " " + item.value.shipper.lastName;
 }
 const vehicleTypes = enumHelper.getMap(VehicleType);
 vehicleTypes.unshift({ key: "", value: "" });
@@ -110,13 +109,9 @@ vehicleCapacityTypes.unshift({ key: "", value: "" });
 const vehicleStatusTypes = enumHelper.getMap(VehicleStatus);
 vehicleStatusTypes.unshift({ key: "", value: "" });
 
-
 const emit = defineEmits<{
   (e: "submit", item: Vehicle): void;
 }>();
-
-
-
 
 function emitSubmit() {
   item.value.shipper = item.value.shipper["@id"];

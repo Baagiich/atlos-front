@@ -26,7 +26,6 @@ export const useCountryListStore = defineStore("loadCountryList", {
     async getItems(params: ListParams) {
       this.setError("");
       this.toggleLoading();
-
       try {
         const response = await api("countries", { params });
         const data: PagedCollection<Country> = await response.json();
@@ -83,6 +82,25 @@ export const useCountryListStore = defineStore("loadCountryList", {
       this.items = this.items.filter((item) => {
         return item["@id"] !== deletedItem["@id"];
       });
+    },
+    getCityNames(selectedCountry: string) {
+      if (!selectedCountry) {
+        return [];
+      }
+
+      const selectedCountryItem = this.items.find(
+        (country) => country.name === selectedCountry,
+      );
+
+      if (!selectedCountryItem) {
+        return [];
+      }
+
+      const cities = selectedCountryItem.states.flatMap((state) =>
+        state.cities.map((city) => city.name),
+      );
+
+      return cities;
     },
   },
 });

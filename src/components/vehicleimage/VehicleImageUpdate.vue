@@ -7,11 +7,21 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable="true">
+    <v-alert
+      v-if="error || deleteError"
+      type="error"
+      class="mb-4"
+      closable="true"
+    >
       {{ error || deleteError }}
     </v-alert>
 
-    <v-alert v-if="created || updated" type="success" class="mb-4" closable="true">
+    <v-alert
+      v-if="created || updated"
+      type="success"
+      class="mb-4"
+      closable="true"
+    >
       <template v-if="updated">
         {{ $t("itemUpdated", [updated["@id"]]) }}
       </template>
@@ -50,8 +60,9 @@ const vehicleimageCreateStore = useVehicleImageCreateStore();
 const { created } = storeToRefs(vehicleimageCreateStore);
 
 const vehicleimageDeleteStore = useVehicleImageDeleteStore();
-const { isLoading: deleteLoading, error: deleteError } =
-  storeToRefs(vehicleimageDeleteStore);
+const { isLoading: deleteLoading, error: deleteError } = storeToRefs(
+  vehicleimageDeleteStore,
+);
 
 const vehicleimageUpdateStore = useVehicleImageUpdateStore();
 const {
@@ -68,7 +79,9 @@ useMercureItem({
   redirectRouteName: "VehicleImageList",
 });
 
-await vehicleimageUpdateStore.retrieve(decodeURIComponent(route.params.id as string));
+await vehicleimageUpdateStore.retrieve(
+  decodeURIComponent(route.params.id as string),
+);
 
 async function update(item: VehicleImage) {
   await vehicleimageUpdateStore.update(item);

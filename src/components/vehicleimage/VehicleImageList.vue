@@ -77,10 +77,10 @@
       <template #item.updatedAt="{ item }">
         {{ formatDateTime(item.updatedAt) }}
       </template>
-            <template #item.createdAt="{ item }">
+      <template #item.createdAt="{ item }">
         {{ formatDateTime(item.createdAt) }}
       </template>
-          </v-data-table-server>
+    </v-data-table-server>
   </v-container>
 </template>
 
@@ -109,7 +109,9 @@ const vehicleimageDeleteStore = useVehicleImageDeleteStore();
 const { deleted, mercureDeleted } = storeToRefs(vehicleimageDeleteStore);
 
 const vehicleimageListStore = useVehicleImageListStore();
-const { items, totalItems, error, isLoading } = storeToRefs(vehicleimageListStore);
+const { items, totalItems, error, isLoading } = storeToRefs(
+  vehicleimageListStore,
+);
 
 const page = ref("1");
 const filters: Ref<Filters> = ref({});
@@ -123,7 +125,10 @@ async function sendRequest() {
   });
 }
 
-useMercureList({ store: vehicleimageListStore, deleteStore: vehicleimageDeleteStore });
+useMercureList({
+  store: vehicleimageListStore,
+  deleteStore: vehicleimageDeleteStore,
+});
 
 sendRequest();
 

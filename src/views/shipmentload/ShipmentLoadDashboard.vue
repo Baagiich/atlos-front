@@ -7,5 +7,5 @@
 </template>
 
 <script setup lang="ts">
-import Create from "@/components/shipmentload/ShipmentLoadCreateDashboard.vue";
+import Create from "@/components/shipmentload/ShipmentLoadDashboard.vue";
 </script>

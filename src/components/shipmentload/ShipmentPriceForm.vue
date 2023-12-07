@@ -111,7 +111,11 @@ import { VForm } from "vuetify/components";
 import type { SubmissionErrors } from "@/types/error";
 import { useCreateNewShipmentStore } from "@/store/shipmentload/newshipment";
 import { storeToRefs } from "pinia";
-import { assertMaxLengthNumber, assertNumber, assertRequired } from "@/validations";
+import {
+  assertMaxLengthNumber,
+  assertNumber,
+  assertRequired,
+} from "@/validations";
 import { useI18n } from "vue-i18n";
 const newShipmentStore = useCreateNewShipmentStore();
 const { item } = storeToRefs(newShipmentStore);
@@ -123,7 +127,10 @@ const { t } = useI18n();
 
 const violations = toRef(props, "errors");
 const percentNumberRules = [assertRequired(), assertMaxLengthNumber(2)];
-const priceRules = [assertRequired(), assertNumber(t("shipmentload.shipmentPrice"))];
+const priceRules = [
+  assertRequired(),
+  assertNumber(t("shipmentload.shipmentPrice")),
+];
 var pileUpType = ref(false);
 const onPriceWrited = () => {
   item.value.price = {

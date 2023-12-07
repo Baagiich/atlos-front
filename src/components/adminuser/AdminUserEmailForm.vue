@@ -22,8 +22,12 @@
     </v-row>
     <v-row>
       <v-col cols="12" sm="6" md="6">
-        <v-card-item v-if="canResend">  {{ countdownTimerFormatted }}</v-card-item>
-        <v-btn :disabled=canResend color="primary" type="submit">{{ $t(sendRequest) }}</v-btn>
+        <v-card-item v-if="canResend">
+          {{ countdownTimerFormatted }}</v-card-item
+        >
+        <v-btn :disabled="canResend" color="primary" type="submit">{{
+          $t(sendRequest)
+        }}</v-btn>
         <v-btn color="primary" variant="text" class="ml-2" @click="resetForm">
           {{ $t("reset") }}
         </v-btn>
@@ -40,7 +44,7 @@ import { PasswordReset } from "@/types/passwordReset";
 import { assertEmail, assertRequired } from "@/validations";
 import { useI18n } from "vue-i18n";
 import dayjs from "dayjs";
-import duration from 'dayjs/plugin/duration';
+import duration from "dayjs/plugin/duration";
 
 dayjs.extend(duration);
 
@@ -51,10 +55,7 @@ const props = defineProps<{
 const violations = toRef(props, "errors");
 const { t } = useI18n();
 const item: Ref<PasswordReset> = ref({});
-const emailRules = [
-  assertRequired(),
-  assertEmail(),
-];
+const emailRules = [assertRequired(), assertEmail()];
 if (props.values) {
   item.value = {
     ...props.values,
@@ -65,8 +66,8 @@ const canResend = ref(false);
 const emit = defineEmits<{
   (e: "submit", item: PasswordReset): void;
 }>();
-const countdownTimer = ref(120)
-const countdownTimerFormatted = ref()
+const countdownTimer = ref(120);
+const countdownTimerFormatted = ref();
 async function emitSubmit() {
   const v = await form.value.validate();
   if (v.valid) {
@@ -84,13 +85,14 @@ function resetForm() {
 
   form.value.reset();
 }
-function startTimer(){
+function startTimer() {
   if (countdownTimer.value > 0) {
-      countdownTimer.value -= 1
-      countdownTimerFormatted.value = dayjs.duration(countdownTimer.value, 'seconds').format('mm:ss')
-      setTimeout(startTimer, 1000)
-    }
-  else{
+    countdownTimer.value -= 1;
+    countdownTimerFormatted.value = dayjs
+      .duration(countdownTimer.value, "seconds")
+      .format("mm:ss");
+    setTimeout(startTimer, 1000);
+  } else {
     canResend.value = false;
   }
 }

@@ -11,7 +11,10 @@ const breadcrumbs = {
   create: { title: names.create, to: { name: names.create } },
   update: { title: names.update, to: { name: names.update } },
   show: { title: names.show, to: { name: names.show } },
-  passwordReset: { title: names.passwordReset, to: { name: names.passwordReset } },
+  passwordReset: {
+    title: names.passwordReset,
+    to: { name: names.passwordReset },
+  },
 };
 
 export default [
@@ -51,6 +54,5 @@ export default [
     name: names.passwordReset,
     path: "/admin_users/password-reset",
     component: () => import("@/views/adminuser/ViewPasswordReset.vue"),
-    
   },
 ];

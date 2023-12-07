@@ -223,10 +223,7 @@ const firstnameRules = [assertRequired(), assertMaxLength(50)];
 const nameRules = [assertRequired(), assertMaxLength(50)];
 const lastnameRules = [assertRequired(), assertMaxLength(50)];
 
-const emailRules = [
-  assertRequired(),
-  assertEmail(),
-];
+const emailRules = [assertRequired(), assertEmail()];
 
 const phoneNumberRules = [assertRequired(), assertMaxLength(20)];
 const registerNumberRules = [assertRequired(), assertMaxLength(12)];

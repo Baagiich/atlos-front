@@ -4,4 +4,4 @@ export { assertNumber } from "./assertNumber";
 export { assertEmail } from "./assertEmail";
 export { assertPasswordConfirm } from "./assertPasswordConfirm";
 export { assertMaxLength } from "./assertMaxLength";
-export { assertMaxLengthNumber } from "./assertMaxLengthNumber"
+export { assertMaxLengthNumber } from "./assertMaxLengthNumber";

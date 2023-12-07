@@ -23,7 +23,6 @@
           item-title="key"
           item-value="value"
         />
-       
       </v-col>
     </v-row>
   </v-container>

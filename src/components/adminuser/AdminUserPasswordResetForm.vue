@@ -2,7 +2,6 @@
   <v-sheet min-height="450">
     <v-form ref="form" @submit.prevent="emitSubmit">
       <v-row>
-      
         <v-col cols="12" sm="6" md="6">
           <v-text-field
             v-model="item.plainPassword"
@@ -41,7 +40,6 @@
 
       <v-row>
         <v-col cols="12" sm="6" md="6">
-          
           <v-btn color="primary" type="submit">{{ $t("submit") }}</v-btn>
 
           <v-btn color="primary" variant="text" class="ml-2" @click="resetForm">
@@ -58,10 +56,7 @@ import { ref, Ref, toRef } from "vue";
 import { VForm } from "vuetify/components";
 import type { SubmissionErrors } from "@/types/error";
 import { useI18n } from "vue-i18n";
-import {
-  assertRequired,
-  assertPasswordConfirm,
-} from "@/validations";
+import { assertRequired, assertPasswordConfirm } from "@/validations";
 import { PasswordResetVerify } from "@/types/passwordReset";
 import { useRoute } from "vue-router";
 const { t } = useI18n();
@@ -77,14 +72,14 @@ if (props.values) {
   item.value = {
     ...props.values,
   };
- 
 }
 const plainPasswordRules = [assertRequired()];
 const plainPasswordConfirmRules = [
-
   assertRequired(),
-  assertPasswordConfirm( "validation.plainPasswordNotMatch",function(){return item.value.plainPassword}),
-]
+  assertPasswordConfirm("validation.plainPasswordNotMatch", function () {
+    return item.value.plainPassword;
+  }),
+];
 const emit = defineEmits<{
   (e: "submit", item: PasswordResetVerify): void;
 }>();

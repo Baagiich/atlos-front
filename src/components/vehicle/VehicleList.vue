@@ -43,9 +43,7 @@
       </template>
 
       <template #item.@id="{ item }">
-        <router-link
-          :to="{ name: 'VehicleShow', params: { id: item['@id'] } }"
-        >
+        <router-link :to="{ name: 'VehicleShow', params: { id: item['@id'] } }">
           {{ item["@id"] }}
         </router-link>
       </template>

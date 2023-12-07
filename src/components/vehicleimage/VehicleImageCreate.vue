@@ -2,7 +2,9 @@
   <Toolbar :breadcrumb="breadcrumb" :is-loading="isLoading" />
 
   <v-container fluid>
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">{{ error }}</v-alert>
+    <v-alert v-if="error" type="error" class="mb-4" closable="true">{{
+      error
+    }}</v-alert>
 
     <Form :errors="violations" @submit="create" />
   </v-container>
@@ -25,7 +27,9 @@ const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
 const vehicleimageCreateStore = useVehicleImageCreateStore();
-const { created, isLoading, violations, error } = storeToRefs(vehicleimageCreateStore);
+const { created, isLoading, violations, error } = storeToRefs(
+  vehicleimageCreateStore,
+);
 
 async function create(item: VehicleImage) {
   await vehicleimageCreateStore.create(item);
@@ -34,7 +38,10 @@ async function create(item: VehicleImage) {
     return;
   }
 
-  router.push({ name: "VehicleImageUpdate", params: { id: created?.value?.["@id"] } });
+  router.push({
+    name: "VehicleImageUpdate",
+    params: { id: created?.value?.["@id"] },
+  });
 }
 
 onBeforeUnmount(() => {

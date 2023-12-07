@@ -5,8 +5,7 @@ export default [
   {
     name: names.dahsboard,
     path: "/shipment_loads/create/dashboard",
-    component: () =>
-      import("@/views/shipmentload/ShipmentLoadCreateDashboard.vue"),
+    component: () => import("@/views/shipmentload/ShipmentLoadDashboard.vue"),
     meta: {
       breadcrumb: [],
     },

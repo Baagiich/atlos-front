@@ -5,5 +5,5 @@ export default {
   updatedAt: "Өөрчлөгдсөн",
   createdAt: "Үүсгэсэн",
   license: "Гэрчилгээний зураг",
-  trail_license: "Тэвшний гэрчилгээний зураг"
+  trail_license: "Тэвшний гэрчилгээний зураг",
 };

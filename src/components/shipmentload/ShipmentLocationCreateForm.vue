@@ -23,7 +23,7 @@
             <v-select
               :label="$t('shipmentload.city')"
               v-model="selectedCity"
-              :items="getCityNames()"
+              :items="citiesNames"
               :rules="requireRules"
               @update:model-value="setCityLocations"
               variant="outlined"
@@ -141,6 +141,7 @@ const lng = ref(106.928076);
 const showMarker = ref(false);
 const selectedCountry = ref(null);
 const selectedCity = ref(null);
+const citiesNames = ref([]);
 const page = ref(1);
 const order = ref({});
 const countryFilters: Ref<Filters> = ref({});
@@ -157,31 +158,13 @@ const address = ref(props.address);
 const title = ref(props.title);
 const onCountrySelect = () => {
   selectedCity.value = null;
+  citiesNames.value = countryListStore.getCityNames(selectedCountry.value);
 };
 const requireRules = [assertRequired()];
 const getCountryNames = () => {
   return countryItems.value.map((country) => country.name);
 };
 
-const getCityNames = () => {
-  if (!selectedCountry.value) {
-    return [];
-  }
-
-  const selectedCountryItem = countryItems.value.find(
-    (country) => country.name === selectedCountry.value,
-  );
-
-  if (!selectedCountryItem) {
-    return [];
-  }
-
-  const cities = selectedCountryItem.states.flatMap((state) =>
-    state.cities.map((city) => city.name),
-  );
-
-  return cities;
-};
 const setCityLocations = () => {
   if (!selectedCountry.value || !selectedCity.value) {
     return;
@@ -220,7 +203,7 @@ const onMapClick = (event: google.maps.MouseEvent) => {
   lat.value = event.latLng.lat();
   lng.value = event.latLng.lng();
   address.value = address.value || {};
-    address.value.location = address.value.location || {};
+  address.value.location = address.value.location || {};
   address.value.location.latitude = event.latLng.lat();
   address.value.location.longitude = event.latLng.lng();
   showMarker.value = true;
