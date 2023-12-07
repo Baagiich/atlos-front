@@ -6,4 +6,5 @@ export default {
   plainPasswordNotMatch: "Нууц үг буруу байна",
   recievedCodeMustBe6Characters: "Баталгаажуулах код 6 оронтой тоо байх ёстой",
   maxlength: "{maxlength} тэмдэгтээс хэтэрсэн байна",
+  recievedCodeRequired: "Баталгаажуулах код байх ёстой",
 };

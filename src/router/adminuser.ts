@@ -4,6 +4,7 @@ const names = {
   update: "AdminUserUpdate",
   show: "AdminUserShow",
   passwordReset: "AdminUserPasswordReset",
+  verify: "AdminUserVerify",
 };
 
 const breadcrumbs = {
@@ -15,6 +16,7 @@ const breadcrumbs = {
     title: names.passwordReset,
     to: { name: names.passwordReset },
   },
+  verify: { title: names.verify, to: { name: names.verify } },
 };
 
 export default [
@@ -54,5 +56,13 @@ export default [
     name: names.passwordReset,
     path: "/admin_users/password-reset",
     component: () => import("@/views/adminuser/ViewPasswordReset.vue"),
+  },
+  {
+    name: names.verify,
+    path: "/admin_users/verify",
+    component: () => import("@/views/adminuser/ViewVerify.vue"),
+    meta: {
+      breadcrumb: [breadcrumbs.list, breadcrumbs.verify],
+    },
   },
 ];

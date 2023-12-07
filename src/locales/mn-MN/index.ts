@@ -10,6 +10,7 @@ import shippercompany from "./shippercompany";
 import validation from "./validation";
 import vehicle from "./vehicle";
 import vehicleimage from "./vehicleimage";
+import consignor from "./consignor";
 
 export default {
   home: "Нүүр",
@@ -54,4 +55,5 @@ export default {
   submitAgain: "Дахин илгээх",
   vehicle,
   vehicleimage,
+  consignor,
 };

@@ -1,11 +1,11 @@
 <template>
   <Suspense>
-    <Verify />
+    <Update />
 
     <template #fallback>{{ $t("loading") }}</template>
   </Suspense>
 </template>
 
 <script setup lang="ts">
-import Verify from "@/components/shippercompany/ShipperCompanyRegisterVerify.vue";
+import Update from "@/components/consignor/ConsignorUpdate.vue";
 </script>

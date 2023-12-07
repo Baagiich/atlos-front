@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">{{
+    <v-alert v-if="error" type="error" class="mb-4" closable>{{
       error
     }}</v-alert>
 
@@ -15,18 +15,17 @@ import { onBeforeUnmount, ref } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import Loading from "@/components/common/Loading.vue";
-import Form from "@/components/shippercompany/ShipperCompanyVerifyForm.vue";
-import { useShipperCompanyRegisterStore } from "@/store/shippercompany/register";
+import Form from "@/components/adminuser/AdminUserVerifyForm.vue";
+import { useAdminUserCreateStore } from "@/store/adminuser/create";
 import type { AdminUserVerify } from "@/types/adminuserverify";
 
 const router = useRouter();
 
-const shippercompanyRegisterStore = useShipperCompanyRegisterStore();
-const { created, isLoading, violations, error, verified } = storeToRefs(
-  shippercompanyRegisterStore,
-);
+const adminUserCreate = useAdminUserCreateStore();
+const { created, isLoading, violations, error, verified } =
+  storeToRefs(adminUserCreate);
 async function verify(item: AdminUserVerify) {
-  await shippercompanyRegisterStore.verify(item);
+  await adminUserCreate.verify(item);
 
   if (!verified?.value) {
     return;
@@ -36,6 +35,6 @@ async function verify(item: AdminUserVerify) {
 }
 
 onBeforeUnmount(() => {
-  shippercompanyRegisterStore.$reset();
+  adminUserCreate.$reset();
 });
 </script>

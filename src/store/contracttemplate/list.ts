@@ -53,12 +53,11 @@ export const useContractTemplateListStore = defineStore(
           }
         }
       },
-      async getRegistrationTemplate() {
+      async getRegistrationTemplate($userType: UserType, $name: string) {
         const params = {
           page: "1",
-          userType: `${UserType.SHIPPER}`,
-          name: "shipper_company_registration_term",
-          groups: ["read"],
+          userType: $userType,
+          name: $name,
         };
         this.setError("");
         this.toggleLoading();

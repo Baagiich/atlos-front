@@ -5,9 +5,10 @@ export default {
   roles: "Roles",
   email: "Email",
   phoneNumber: "PhoneNumber",
-  plainPasswordConfirm: "PlainPassword Confirm",
-  plainPassword: "PlainPassword",
   status: "Status",
   verified: "Verified",
   driver: "Driver",
+  plainPassword: "Password",
+  plainPasswordConfirm: "Password confirmation",
+  recievedCode: "Code",
 };

@@ -5,10 +5,11 @@ export default {
   roles: "Эрх",
   email: "И-Мэйл",
   phoneNumber: "Утасны дугаар",
-  plainPassword: "Нууц үг",
-  plainPasswordConfirm: "Нууц үг баталгаажуулах",
   status: "Статус",
   verified: "Баталгаажсан",
   driver: "Жолооч",
   edit: "Админы хэрэглэгч засах",
+  plainPassword: "Нууц үг",
+  plainPasswordConfirm: "Нууц үг баталгаажуулах",
+  recievedCode: "Код",
 };

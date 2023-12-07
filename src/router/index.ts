@@ -18,6 +18,7 @@ import shipmentload from "./shipmentload";
 import shipmentLoadCreate from "./shipmentLoadCreate";
 import passwordresetRoutes from "./passwordreset";
 import vehicleimagesRoutes from "./vehicleimage";
+import consignorRoutes from "./consignor";
 
 const routes = [
   {
@@ -53,6 +54,7 @@ const routes = [
   ...shipmentLoadCreate,
   ...passwordresetRoutes,
   ...vehicleimagesRoutes,
+  ...consignorRoutes,
 ];
 
 const router = createRouter({
