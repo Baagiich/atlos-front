@@ -70,7 +70,7 @@ import type { Vehicle } from "@/types/vehicle";
 const { t } = useI18n();
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
-const itemsPerPage = ref("10");
+const itemsPerPage = ref(10);
 
 const vehicleDeleteStore = useVehicleDeleteStore();
 const { deleted, mercureDeleted } = storeToRefs(vehicleDeleteStore);
@@ -78,7 +78,7 @@ const { deleted, mercureDeleted } = storeToRefs(vehicleDeleteStore);
 const vehicleListStore = useVehicleListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(vehicleListStore);
 
-const page = ref("1");
+const page = ref(1);
 const filters: Ref<Filters> = ref({});
 const order = ref({});
 
@@ -124,7 +124,7 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
 
   sendRequest();

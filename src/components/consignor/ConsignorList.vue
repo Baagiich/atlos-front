@@ -7,23 +7,29 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="deleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="deleted" type="success" class="mb-4" closable>
       {{ $t("itemDeleted", [deleted["@id"]]) }}
     </v-alert>
-    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable>
       {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
     </v-alert>
 
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">
+    <v-alert v-if="error" type="error" class="mb-4" closable>
       {{ error }}
     </v-alert>
+
+    <DataFilter @filter="onSendFilter" @reset="resetFilter">
+      <template #filter>
+        <Filter :values="filters" />
+      </template>
+    </DataFilter>
 
     <v-data-table-server
       :headers="headers"
       :items="items"
       :items-length="totalItems"
       :loading="isLoading"
-      :items-per-page="items.length"
+      :items-per-page="itemsPerPage"
       @update:page="updatePage"
       @update:sortBy="updateOrder"
     >
@@ -43,54 +49,45 @@
           {{ item["@id"] }}
         </router-link>
       </template>
-
-      <template #item.mediaobject="{ item }">
-        <router-link
-          v-if="router.hasRoute('MediaObjectShow')"
-          :to="{ name: 'MediaObjectShow', params: { id: item.mediaobject } }"
-        >
-          {{ item.mediaobject }}
-        </router-link>
-
-        <p v-else>
-          {{ item.mediaobject }}
-        </p>
-      </template>
     </v-data-table-server>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from "vue";
+import { ref, onBeforeUnmount, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useConsignorListStore } from "@/store/consignor/list";
 import { useConsignorDeleteStore } from "@/store/consignor/delete";
 import Toolbar from "@/components/common/Toolbar.vue";
+import DataFilter from "@/components/common/DataFilter.vue";
+import Filter from "@/components/consignor/ConsignorFilter.vue";
 import ActionCell from "@/components/common/ActionCell.vue";
 import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
-import type { VuetifyOrder } from "@/types/list";
+import type { Filters, VuetifyOrder } from "@/types/list";
 import type { Consignor } from "@/types/consignor";
 
 const { t } = useI18n();
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
-
+const itemsPerPage = ref(10);
 const consignorDeleteStore = useConsignorDeleteStore();
 const { deleted, mercureDeleted } = storeToRefs(consignorDeleteStore);
 
 const consignorListStore = useConsignorListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(consignorListStore);
-
-const page = ref("1");
+const filters: Ref<Filters> = ref({});
+const page = ref(1);
 const order = ref({});
 
 async function sendRequest() {
   await consignorListStore.getItems({
     page: page.value,
     order: order.value,
+    page_size: itemsPerPage.value,
+    ...filters.value,
   });
 }
 
@@ -138,14 +135,9 @@ const headers = [
     key: "register",
     sortable: false,
   },
-  {
-    title: t("consignor.certificate"),
-    key: "certificate",
-    sortable: false,
-  },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
 
   sendRequest();
@@ -158,6 +150,15 @@ function updateOrder(newOrders: VuetifyOrder[]) {
   sendRequest();
 }
 
+function onSendFilter() {
+  sendRequest();
+}
+
+function resetFilter() {
+  filters.value = {};
+
+  sendRequest();
+}
 function goToShowPage(item: Consignor) {
   router.push({
     name: "ConsignorShow",
