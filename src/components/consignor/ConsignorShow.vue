@@ -7,15 +7,16 @@
   />
 
   <v-container fluid>
-    <v-alert
-      v-if="error || deleteError"
-      type="error"
-      class="mb-4"
-      closable="true"
-    >
+    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable>
       {{ error || deleteError }}
     </v-alert>
 
+    <router-link
+      v-if="item"
+      id="adminuser-edit-link"
+      :to="{ name: 'AdminUserUpdate', params: { id: item.adminUser } }"
+      ><v-btn>{{ $t("adminuser.edit") }}</v-btn></router-link
+    >
     <v-table v-if="item">
       <thead>
         <tr>
@@ -84,21 +85,7 @@
             {{ $t("consignor.certificate") }}
           </td>
 
-          <td>
-            <router-link
-              v-if="router.hasRoute('MediaObjectShow')"
-              :to="{
-                name: 'MediaObjectShow',
-                params: { id: item.mediaobject },
-              }"
-            >
-              {{ item.mediaobject }}
-            </router-link>
-
-            <p v-else>
-              {{ item.mediaobject }}
-            </p>
-          </td>
+          <td><MediaObjectThumb :id="item.certificate"></MediaObjectThumb></td>
         </tr>
       </tbody>
     </v-table>
@@ -118,6 +105,7 @@ import { useMercureItem } from "@/composables/mercureItem";
 import { useConsignorDeleteStore } from "@/store/consignor/delete";
 import { useConsignorShowStore } from "@/store/consignor/show";
 import { useBreadcrumb } from "@/composables/breadcrumb";
+import MediaObjectThumb from "@/components/mediaobject/MediaObjectThumb.vue";
 
 const { t } = useI18n();
 const route = useRoute();

@@ -6,4 +6,5 @@ export default {
   phoneNumber: "PhoneNumber",
   register: "Register",
   certificate: "Certificate",
+  status: "Status",
 };
