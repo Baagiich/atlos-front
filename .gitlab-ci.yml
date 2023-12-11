@@ -23,26 +23,36 @@ lint:commit:
   stage: lint:commit
   script:
     - echo "${CI_COMMIT_MESSAGE}" | npx commitlint
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: on_success
+    - when: manual
+      allow_failure: false
 
 lint:code:
   stage: lint:code
   script:
     - ./node_modules/eslint/bin/eslint.js $(git diff --name-only HEAD | grep -E 'src/.*\.ts|test/.*\.ts$' | xargs)
+  rules:
+    - when: always
 
 test:
   stage: test
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
   script:
     - npm run test-ci
+  rules:
+    - when: always
 
 approve:
   stage: merge
   script:
     - echo ok
-  when: manual
-  allow_failure: false
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
+    - when: manual
+      allow_failure: false
 
 release:
   stage: release
@@ -53,4 +63,4 @@ release:
     - cp .gitlab/npmrc .npmrc
     - ./node_modules/.bin/semantic-release
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
