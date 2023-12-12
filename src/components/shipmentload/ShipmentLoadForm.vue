@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" @submit.prevent="emitSubmit">
+  <v-form ref="form">
     <v-row>
       <v-col cols="12" sm="6" md="2">
         <v-text-field
@@ -21,23 +21,14 @@
         </v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="2">
-        <v-text-field
-          v-model="item.packageType"
-          :error="Boolean(violations?.packageType)"
-          :error-messages="violations?.packageType"
+        <v-select
+          v-model="packageTypeName"
           :label="$t('shipmentload.packageType')"
+          :items="getTypeNames()"
           variant="outlined"
           clearable
-        >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.packageType = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
+          @update:modelValue="onTypeSelected"
+        ></v-select>
       </v-col>
       <v-col cols="12" sm="6" md="1">
         <v-text-field
@@ -138,7 +129,6 @@
         <v-radio-group v-model="item.isPileUp">
           <v-radio
             :label="$t('shipmentload.isPileUp')"
-            :value="pileUpType"
             color="indigo"
             @click="toggleIsPileUp"
             variant="outlined"
@@ -146,17 +136,23 @@
           ></v-radio>
         </v-radio-group>
       </v-col>
+      <v-col cols="12" sm="6" md="1">
+        <v-btn v-if="isUpdate" color="primary" @click="addPerLoad">{{
+          $t("edit")
+        }}</v-btn>
+      </v-col>
+      <v-col cols="12" sm="6" md="1">
+        <v-btn v-if="isUpdate" color="primary" @click="deleteItem">{{
+          $t("delete")
+        }}</v-btn>
+      </v-col>
     </v-row>
 
     <v-row>
       <v-col cols="12" sm="6" md="6">
-        <v-btn color="primary" type="add">{{ $t("add") }}</v-btn>
-
-        <v-btn color="primary" type="submit">{{ $t("submit") }}</v-btn>
-
-        <v-btn color="primary" variant="text" class="ml-2" @click="resetForm">
-          {{ $t("reset") }}
-        </v-btn>
+        <v-btn v-if="!isUpdate" color="primary" @click="addPerLoad">{{
+          $t("add")
+        }}</v-btn>
       </v-col>
     </v-row>
   </v-form>
@@ -167,15 +163,66 @@ import { ref, Ref, toRef } from "vue";
 import { VForm } from "vuetify/components";
 import type { ShipmentLoad } from "@/types/shipmentload";
 import type { SubmissionErrors } from "@/types/error";
+import { useShipmentLoadPackageTypeStore } from "@/store/shipmentload/packagetype";
+import { storeToRefs } from "pinia";
+import { Filters } from "@/types/list";
 const props = defineProps<{
   values?: ShipmentLoad;
   errors?: SubmissionErrors;
+  createdShipmentId?: string;
+  isUpdate?: boolean;
 }>();
+const isUpdate = toRef(props, "isUpdate");
+const packageTypeName: Ref<string> = ref("");
+const shipmentloadTypeStore = useShipmentLoadPackageTypeStore();
+const { items } = storeToRefs(shipmentloadTypeStore);
+const page = ref("1");
+const filters: Ref<Filters> = ref({});
+const order = ref({});
+
+function getTypeNames() {
+  return items.value.map((type) => type.name);
+}
+
+async function sendRequest() {
+  await shipmentloadTypeStore.getItems({
+    page: page.value,
+    order: order.value,
+    ...filters.value,
+  });
+}
 
 const violations = toRef(props, "errors");
 
 const item: Ref<ShipmentLoad> = ref({});
-var pileUpType = ref(false);
+item.value.shipment = props.createdShipmentId;
+
+function onTypeSelected(value: string | null) {
+  const selectedType = shipmentloadTypeStore.items.find(
+    (type) => type.name === value,
+  );
+  if (selectedType) {
+    item.value.packageType = selectedType["@id"];
+  }
+}
+async function setShipmentTypeName() {
+  if (item.value.packageType) {
+    const type = shipmentloadTypeStore.items.find(
+      (type) => type["@id"] === item.value.packageType,
+    );
+    if (type && type.name) {
+      packageTypeName.value = type.name;
+    }
+  }
+}
+
+async function setup() {
+  await sendRequest();
+
+  await setShipmentTypeName();
+}
+
+setup();
 if (props.values) {
   item.value = {
     ...props.values,
@@ -184,10 +231,16 @@ if (props.values) {
 
 const emit = defineEmits<{
   (e: "submit", item: ShipmentLoad): void;
+  (e: "delete", item: ShipmentLoad): void;
 }>();
 
-function emitSubmit() {
+function addPerLoad() {
   emit("submit", item.value);
+  resetForm();
+}
+function deleteItem() {
+  emit("delete", item.value);
+  resetForm();
 }
 
 const form: Ref<VForm | null> = ref(null);
@@ -197,7 +250,7 @@ function resetForm() {
 
   form.value.reset();
 }
-function toggleIsPileUp() {
-  pileUpType.value = !pileUpType.value;
+function toggleIsPileUp(value: boolean) {
+  value = !value;
 }
 </script>

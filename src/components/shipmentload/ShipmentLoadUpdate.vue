@@ -1,11 +1,4 @@
 <template>
-  <Toolbar
-    :actions="['delete']"
-    :breadcrumb="breadcrumb"
-    :is-loading="isLoading"
-    @delete="deleteItem"
-  />
-
   <v-container fluid>
     <v-alert
       v-if="error || deleteError"
@@ -30,32 +23,27 @@
       </template>
     </v-alert>
 
-    <Form v-if="item" :values="item" :errors="violations" @submit="update" />
+    <Form
+      v-if="item"
+      :values="item"
+      :isUpdate="true"
+      @delete="deleteItem"
+      @submit="update"
+    />
   </v-container>
-
-  <Loading :visible="isLoading || deleteLoading" />
 </template>
 
 <script lang="ts" setup>
-import { onBeforeUnmount } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
-import Toolbar from "@/components/common/Toolbar.vue";
 import Form from "@/components/shipmentload/ShipmentLoadForm.vue";
-import Loading from "@/components/common/Loading.vue";
 import { useShipmentLoadDeleteStore } from "@/store/shipmentload/delete";
 import { useShipmentLoadUpdateStore } from "@/store/shipmentload/update";
-import { useMercureItem } from "@/composables/mercureItem";
 import { useShipmentLoadCreateStore } from "@/store/shipmentload/create";
-import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { ShipmentLoad } from "@/types/shipmentload";
 
 const { t } = useI18n();
-const route = useRoute();
-const router = useRouter();
-const breadcrumb = useBreadcrumb();
-
 const shipmentloadCreateStore = useShipmentLoadCreateStore();
 const { created } = storeToRefs(shipmentloadCreateStore);
 
@@ -63,28 +51,16 @@ const shipmentloadDeleteStore = useShipmentLoadDeleteStore();
 const { isLoading: deleteLoading, error: deleteError } = storeToRefs(
   shipmentloadDeleteStore,
 );
-
+const props = defineProps<{
+  item: ShipmentLoad;
+}>();
+const item: Ref<ShipmentLoad> = ref(props.item);
 const shipmentloadUpdateStore = useShipmentLoadUpdateStore();
-const {
-  retrieved: item,
-  updated,
-  isLoading,
-  error,
-  violations,
-} = storeToRefs(shipmentloadUpdateStore);
 
-useMercureItem({
-  store: shipmentloadUpdateStore,
-  deleteStore: shipmentloadDeleteStore,
-  redirectRouteName: "ShipmentLoadList",
-});
-
-await shipmentloadUpdateStore.retrieve(
-  decodeURIComponent(route.params.id as string),
-);
-
+await shipmentloadUpdateStore.retrieve(getId());
 async function update(item: ShipmentLoad) {
   await shipmentloadUpdateStore.update(item);
+  emit("updatelist");
 }
 
 async function deleteItem() {
@@ -92,15 +68,18 @@ async function deleteItem() {
     shipmentloadUpdateStore.setError(t("itemNotFound"));
     return;
   }
-
   await shipmentloadDeleteStore.deleteItem(item?.value);
-
-  router.push({ name: "ShipmentLoadList" });
+  emit("updatelist");
 }
-
-onBeforeUnmount(() => {
-  shipmentloadUpdateStore.$reset();
-  shipmentloadCreateStore.$reset();
-  shipmentloadDeleteStore.$reset();
-});
+const emit = defineEmits<{
+  (e: "updatelist"): void;
+}>();
+function getId(): string {
+  const iri = item.value["@id"];
+  if (iri) {
+    iri.replace("/api/shipment_loads/", "");
+    return iri;
+  }
+  return "";
+}
 </script>

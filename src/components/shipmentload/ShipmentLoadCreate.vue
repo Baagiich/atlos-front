@@ -4,17 +4,20 @@
       error
     }}</v-alert>
 
-    <Form :errors="violations" @submit="create" />
+    <Form
+      :createdShipmentId="createdShipmentId"
+      :errors="violations"
+      @submit="create"
+    />
   </v-container>
 
   <Loading :visible="isLoading" />
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount } from "vue";
+import { onBeforeUnmount, ref } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import Toolbar from "@/components/common/Toolbar.vue";
 import Loading from "@/components/common/Loading.vue";
 import Form from "@/components/shipmentload/ShipmentLoadForm.vue";
 import { useShipmentLoadCreateStore } from "@/store/shipmentload/create";
@@ -28,20 +31,24 @@ const shipmentloadCreateStore = useShipmentLoadCreateStore();
 const { created, isLoading, violations, error } = storeToRefs(
   shipmentloadCreateStore,
 );
-
+const props = defineProps(["createdShipmentId"]);
+const createdShipmentId = ref(props.createdShipmentId);
 async function create(item: ShipmentLoad) {
   await shipmentloadCreateStore.create(item);
 
   if (!created?.value) {
     return;
   }
-
-  router.push({
-    name: "ShipmentLoadUpdate",
-    params: { id: created?.value?.["@id"] },
-  });
+  updateLoadList();
 }
+const emit = defineEmits<{
+  (e: "updatelist"): void;
+}>();
 
+function updateLoadList() {
+  emit("updatelist");
+  shipmentloadCreateStore.$reset();
+}
 onBeforeUnmount(() => {
   shipmentloadCreateStore.$reset();
 });

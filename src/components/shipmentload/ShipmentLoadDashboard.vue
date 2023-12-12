@@ -51,7 +51,20 @@
           :disabled="secondStepDisabled"
           @second-step="emitSecondStep"
         />
-        <ShipmentLoadCreate v-if="thirdStepShow" />
+        <div v-if="totalCreatedLoads > 0">
+          <div v-for="item in createdLoads" :key="item['@id']">
+            <ShipmentLoadUpdate
+              v-if="thirdStepShow"
+              :item="item"
+              @updatelist="getCreatedLoads"
+            />
+          </div>
+        </div>
+        <ShipmentLoadCreate
+          :createdShipmentId="createdShipmentId"
+          v-if="thirdStepShow"
+          @updatelist="getCreatedLoads"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -65,7 +78,6 @@ import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import Toolbar from "@/components/common/Toolbar.vue";
 import Loading from "@/components/common/Loading.vue";
-// import { useMercureItem } from "@/composables/mercureItem";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import ShipmentForm from "@/components/shipmentload/ShipmentCreateForm.vue";
 import ShipmentLoadCreate from "@/components/shipmentload/ShipmentLoadCreate.vue";
@@ -76,15 +88,13 @@ import { useCreateNewShipmentStore } from "@/store/shipmentload/newshipment";
 import ShipmentPriceForm from "./ShipmentPriceForm.vue";
 import { useAddressCreateStore } from "@/store/address/create";
 import { useShipmentCreateStore } from "@/store/shipment/create";
+import ShipmentLoadUpdate from "@/components/shipmentload/ShipmentLoadUpdate.vue";
+import { useShipmentLoadListStore } from "@/store/shipmentload/list";
+import { Filters } from "@/types/list";
 
 const { t } = useI18n();
 const breadcrumb = useBreadcrumb();
 
-// useMercureItem({
-//   store: shipmentShowStore,
-//   deleteStore: shipmentDeleteStore,
-//   redirectRouteName: "ShipmentList",
-// });
 const fromAddress: Ref<Address> = ref({});
 const toAddress: Ref<Address> = ref({});
 const newShipmentStore = useCreateNewShipmentStore();
@@ -95,13 +105,10 @@ const secondStepShow: Ref<boolean> = ref(false);
 const thirdStepShow: Ref<boolean> = ref(false);
 const addressCreateStore = useAddressCreateStore();
 const { created, isLoading, error } = storeToRefs(addressCreateStore);
-
+const createdShipmentId: Ref<string> = ref("");
 const shipmentCreateStore = useShipmentCreateStore();
-const {
-  created: createdShipment,
-  isLoading: isLoadingShipment,
-  error: errorShipment,
-} = storeToRefs(shipmentCreateStore);
+const { created: createdShipment } = storeToRefs(shipmentCreateStore);
+
 function emitFirstStep() {
   secondStepShow.value = true;
   firstStepDisabled.value = true;
@@ -129,10 +136,27 @@ async function saveToAddress() {
 }
 async function createNewShipment() {
   await shipmentCreateStore.create(item.value);
-  if (createdShipment?.value) {
+  if (createdShipment?.value && createdShipment?.value["@id"]) {
+    createdShipmentId.value = createdShipment?.value["@id"];
     secondStepDisabled.value = true;
     thirdStepShow.value = true;
+    await getCreatedLoads();
   }
+}
+const shipmentloadListStore = useShipmentLoadListStore();
+const { items: createdLoads, totalItems: totalCreatedLoads } = storeToRefs(
+  shipmentloadListStore,
+);
+const page = ref("1");
+const filters: Ref<Filters> = ref({});
+const order = ref({});
+async function getCreatedLoads() {
+  filters.value.shipment = createdShipmentId.value;
+  await shipmentloadListStore.getItems({
+    page: page.value,
+    order: order.value,
+    ...filters.value,
+  });
 }
 </script>
 <style lang="scss">
