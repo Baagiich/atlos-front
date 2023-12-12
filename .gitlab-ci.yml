@@ -4,12 +4,8 @@ stages:
   - lint:commit
   - lint:code
   - test
-  - merge
+  - approve
   - release
-
-variables:
-  NPM_TOKEN: ${CI_JOB_TOKEN}
-  GITLAB_TOKEN: ${NPM_ACCESS_TOKEN}
 
 before_script:
   - npm ci --cache .npm --prefer-offline
@@ -45,7 +41,7 @@ test:
     - when: always
 
 approve:
-  stage: merge
+  stage: approve
   script:
     - echo ok
   rules:
@@ -56,11 +52,9 @@ approve:
 
 release:
   stage: release
-  before_script:
-    - apk update && apk upgrade && \
-    - apk add --no-cache bash git openssh
   script:
+    - apk update && apk add --no-cache git ca-certificates
     - cp .gitlab/npmrc .npmrc
-    - ./node_modules/.bin/semantic-release
+    - npx semantic-release
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
