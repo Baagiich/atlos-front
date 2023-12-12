@@ -50,10 +50,10 @@ function closeDatePicker() {
 
 function saveDatePicker() {
   date.value = datePickerModel.value;
-  if(isStartDate.value){
-    item.value.loadAt =dayjs(date.value).format('YYYY/MM/DD');
-  }else{
-    item.value.unloadAt =dayjs(date.value).format('YYYY/MM/DD');
+  if (isStartDate.value) {
+    item.value.loadAt = dayjs(date.value).format("YYYY/MM/DD");
+  } else {
+    item.value.unloadAt = dayjs(date.value).format("YYYY/MM/DD");
   }
   showDatePickerDialog.value = false;
 }

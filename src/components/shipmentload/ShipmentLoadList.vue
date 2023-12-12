@@ -105,9 +105,11 @@ const shipmentloadListStore = useShipmentLoadListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(
   shipmentloadListStore,
 );
-
+const props = defineProps(["shipmentId"]);
+const shipmentId = ref(props.shipmentId);
 const page = ref("1");
 const filters: Ref<Filters> = ref({});
+filters.value.shipment = shipmentId;
 const order = ref({});
 
 async function sendRequest() {
