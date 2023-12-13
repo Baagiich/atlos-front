@@ -66,6 +66,10 @@ import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { Filters, VuetifyOrder } from "@/types/list";
 import type { Vehicle } from "@/types/vehicle";
+import * as enumHelper from "@/utils/enumHelper";
+import { VehicleType } from "@/types/vehicletype";
+import { VehicleCapacityType } from "@/types/vehiclecapacitytype";
+import { VehicleStatus } from "@/types/vehiclestatus";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -82,13 +86,37 @@ const page = ref(1);
 const filters: Ref<Filters> = ref({});
 const order = ref({});
 
+const vehicleTypes = enumHelper.getMap(VehicleType);
+vehicleTypes.unshift({ key: "", value: "" });
+
+const vehicleCapacityTypes = enumHelper.getMap(VehicleCapacityType);
+vehicleCapacityTypes.unshift({ key: "", value: "" });
+
+const vehicleStatusTypes = enumHelper.getMap(VehicleStatus);
+vehicleStatusTypes.unshift({ key: "", value: "" });
 async function sendRequest() {
-  await vehicleListStore.getItems({
-    page: page.value,
-    order: order.value,
-    page_size: itemsPerPage.value,
-    ...filters.value,
-  });
+  await vehicleListStore
+    .getItems({
+      page: page.value,
+      order: order.value,
+      page_size: itemsPerPage.value,
+      ...filters.value,
+    })
+    .then(() => {
+      items.value?.forEach((vehicle) => {
+        vehicle.shipper =
+          vehicle.shipper.firstName + " " + vehicle.shipper.lastName;
+        vehicle.vehicleType = vehicleTypes.find(
+          (type) => type.value === vehicle.vehicleType,
+        )?.key;
+        vehicle.vehicleCapacity = vehicleCapacityTypes.find(
+          (type) => type.value === vehicle.vehicleCapacity,
+        )?.key;
+        vehicle.status = vehicleStatusTypes.find(
+          (type) => type.value === vehicle.status,
+        )?.key;
+      });
+    });
 }
 
 useMercureList({ store: vehicleListStore, deleteStore: vehicleDeleteStore });

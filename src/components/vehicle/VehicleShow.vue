@@ -52,7 +52,7 @@
           </td>
 
           <td>
-            {{ item.vehicleType }}
+            {{ vehicletype }}
           </td>
         </tr>
         <tr>
@@ -61,7 +61,16 @@
           </td>
 
           <td>
-            {{ item.vehicleCapacity }}
+            {{ capacity }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {{ $t("vehicle.status") }}
+          </td>
+
+          <td>
+            {{ status }}
           </td>
         </tr>
       </tbody>
@@ -86,7 +95,10 @@ import SimpleVehicleImageList from "@/components/vehicleimage/SimpleVehicleImage
 import { useVehicleImageListStore } from "@/store/vehicleimage/list";
 import { Vehicle } from "@/types/vehicle";
 import ActionCell from "../common/ActionCell.vue";
-import { UserType } from "@/types/usertype";
+import * as enumHelper from "@/utils/enumHelper";
+import { VehicleType } from "@/types/vehicletype";
+import { VehicleCapacityType } from "@/types/vehiclecapacitytype";
+import { VehicleStatus } from "@/types/vehiclestatus";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -109,6 +121,24 @@ useMercureItem({
 });
 
 await vehicleShowStore.retrieve(decodeURIComponent(route.params.id as string));
+
+
+const vehicleTypes = enumHelper.getMap(VehicleType);
+vehicleTypes.unshift({ key: "", value: "" });
+const vehicletype = vehicleTypes.find(
+  (type) => type.value === item?.value?.vehicleType
+)?.key;
+const vehicleCapacityTypes = enumHelper.getMap(VehicleCapacityType);
+vehicleCapacityTypes.unshift({ key: "", value: "" });
+const capacity = vehicleCapacityTypes.find(
+  (type) => type.value === item?.value?.vehicleCapacity
+)?.key;
+
+const vehicleStatusTypes = enumHelper.getMap(VehicleStatus);
+vehicleStatusTypes.unshift({ key: "", value: "" });
+const status = vehicleStatusTypes.find(
+  (type) => type.value === item?.value?.status
+)?.key;
 
 await vehicleImagesStore.getItems({
   page: 1,
