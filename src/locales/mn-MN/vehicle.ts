@@ -4,4 +4,5 @@ export default {
   vehicleType: "Төрөл",
   vehicleCapacity: "Даац",
   status: "Төлөв",
+  vinNumber: "Арлын дугаар",
 };

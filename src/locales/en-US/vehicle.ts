@@ -4,4 +4,5 @@ export default {
   vehicleType: "VehicleType",
   vehicleCapacity: "VehicleCapacity",
   status: "Status",
+  vinNumber: "VinNumber",
 };

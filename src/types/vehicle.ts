@@ -5,6 +5,7 @@ export interface Vehicle extends Item {
   shipper?: any;
   vehicleType?: string;
   vehicleCapacity?: string;
+  vinNumber?: string;
   status?: string;
   adminEditable?: boolean;
 }

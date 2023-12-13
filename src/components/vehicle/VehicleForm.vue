@@ -7,6 +7,7 @@
           :error="Boolean(violations?.plateNumber)"
           :error-messages="violations?.plateNumber"
           :label="$t('vehicle.plateNumber')"
+          :rules="plateNumberRules"
         >
           <template #append-inner>
             <v-icon
@@ -19,6 +20,24 @@
         </v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="6">
+        <v-text-field
+          v-model="item.vinNumber"
+          :error="Boolean(violations?.vinNumber)"
+          :error-messages="violations?.vinNumber"
+          :label="$t('vehicle.vinNumber')"
+          :rules="vinNumberRules"
+        >
+          <template #append-inner>
+            <v-icon
+              style="cursor: pointer"
+              @click.prevent.stop="item.vinNumber = undefined"
+            >
+              mdi-close
+            </v-icon>
+          </template>
+        </v-text-field>
+      </v-col>
+      <v-col v-if="!createOwnVehicle" cols="12" sm="6" md="6">
         <v-card
           class="mx-auto"
           :title="shipperName"
@@ -32,6 +51,7 @@
           v-model="item.vehicleType"
           :label="$t('vehicle.vehicleType')"
           :items="vehicleTypes"
+          :rules="required"
           item-title="key"
           item-value="value"
         />
@@ -41,15 +61,16 @@
           v-model="item.vehicleCapacity"
           :label="$t('vehicle.vehicleCapacity')"
           :items="vehicleCapacityTypes"
+          :rules="required"
           item-title="key"
           item-value="value"
         />
       </v-col>
 
-      <v-col cols="12" sm="6" md="6">
+      <v-col v-if="!createOwnVehicle"  cols="12" sm="6" md="6">
         <v-select
-          v-if="item.adminEditable"
           v-model="item.status"
+          :disabled="!item.adminEditable"
           :error="Boolean(violations?.status)"
           :error-messages="violations?.status"
           :items="vehicleStatusTypes"
@@ -84,9 +105,12 @@ import { VehicleCapacityType } from "@/types/vehiclecapacitytype";
 import { VehicleStatus } from "@/types/vehiclestatus";
 import { AdminUser } from "@/types/adminuser";
 import { useRouter } from "vue-router";
+import * as apiToken from "@/utils/apiToken";
+import { assertMaxLength, assertRequired } from "@/validations";
 const props = defineProps<{
   values?: Vehicle;
   errors?: SubmissionErrors;
+  createOwnVehicle?: boolean
 }>();
 
 const violations = toRef(props, "errors");
@@ -99,7 +123,13 @@ if (props.values) {
   };
   shipperName.value =
     item.value.shipper.firstName + " " + item.value.shipper.lastName;
+ 
 }
+if(props.createOwnVehicle){
+    item.value.shipper = {
+      "@id": apiToken.getDecodedToken().iri
+    }
+  }
 const vehicleTypes = enumHelper.getMap(VehicleType);
 vehicleTypes.unshift({ key: "", value: "" });
 
@@ -108,17 +138,22 @@ vehicleCapacityTypes.unshift({ key: "", value: "" });
 
 const vehicleStatusTypes = enumHelper.getMap(VehicleStatus);
 vehicleStatusTypes.unshift({ key: "", value: "" });
+const plateNumberRules = [assertRequired(), assertMaxLength(8)];
+const vinNumberRules = [assertRequired(), assertMaxLength(17)];
+const required = [assertRequired()];
 
 const emit = defineEmits<{
   (e: "submit", item: Vehicle): void;
 }>();
 
-function emitSubmit() {
-  item.value.shipper = item.value.shipper["@id"];
-  emit("submit", item.value);
-}
-
 const form: Ref<VForm | null> = ref(null);
+async function emitSubmit() {
+  item.value.shipper = item.value.shipper["@id"];
+  const v = await form.value.validate();
+  if (v.valid) {
+    emit("submit", item.value);
+  }
+}
 
 function resetForm() {
   if (!form.value) return;
