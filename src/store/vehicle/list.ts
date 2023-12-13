@@ -56,20 +56,8 @@ export const useVehicleListStore = defineStore("vehicleList", {
     },
 
     setItems(items: Vehicle[]) {
-      items.map((item) => {
-        item.shipper = item.shipper
-          ? item.shipper.firstName + " " + item.shipper.lastName
-          : {};
-        item.vehicleType = item.vehicleType
-          ? VehicleType[item.vehicleType]
-          : {};
-        item.vehicleCapacity = item.vehicleCapacity
-          ? VehicleCapacityType[item.vehicleCapacity]
-          : {};
-      });
       this.items = items;
     },
-
     setTotalItems(totalItems: number) {
       this.totalItems = totalItems;
     },
