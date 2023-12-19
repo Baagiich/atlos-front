@@ -11,6 +11,9 @@ import validation from "./validation";
 import vehicle from "./vehicle";
 import vehicleimage from "./vehicleimage";
 import consignor from "./consignor";
+import wallet from "./wallet";
+import currency from "./currency";
+import bank from "./bank";
 
 export default {
   home: "Нүүр",
@@ -53,7 +56,11 @@ export default {
   successfull: "Амжилттай",
   enterNewPassword: "Шинэ нууц үгээ оруулна уу",
   submitAgain: "Дахин илгээх",
+  back: "Буцах",
   vehicle,
   vehicleimage,
   consignor,
+  wallet,
+  currency,
+  bank,
 };

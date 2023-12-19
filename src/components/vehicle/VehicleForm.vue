@@ -67,7 +67,7 @@
         />
       </v-col>
 
-      <v-col v-if="!createOwnVehicle"  cols="12" sm="6" md="6">
+      <v-col v-if="!createOwnVehicle" cols="12" sm="6" md="6">
         <v-select
           v-model="item.status"
           :disabled="!item.adminEditable"
@@ -110,7 +110,7 @@ import { assertMaxLength, assertRequired } from "@/validations";
 const props = defineProps<{
   values?: Vehicle;
   errors?: SubmissionErrors;
-  createOwnVehicle?: boolean
+  createOwnVehicle?: boolean;
 }>();
 
 const violations = toRef(props, "errors");
@@ -123,13 +123,12 @@ if (props.values) {
   };
   shipperName.value =
     item.value.shipper.firstName + " " + item.value.shipper.lastName;
- 
 }
-if(props.createOwnVehicle){
-    item.value.shipper = {
-      "@id": apiToken.getDecodedToken().iri
-    }
-  }
+if (props.createOwnVehicle) {
+  item.value.shipper = {
+    "@id": apiToken.getDecodedToken().iri,
+  };
+}
 const vehicleTypes = enumHelper.getMap(VehicleType);
 vehicleTypes.unshift({ key: "", value: "" });
 

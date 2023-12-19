@@ -1,4 +1,3 @@
-
 import type { Item } from "./item";
 
 export interface Consignor extends Item {
@@ -9,6 +8,6 @@ export interface Consignor extends Item {
   phoneNumber?: string;
   register?: string;
   certificate?: any;
-  status?:string
-  adminUser?: string
+  status?: string;
+  adminUser?: string;
 }
