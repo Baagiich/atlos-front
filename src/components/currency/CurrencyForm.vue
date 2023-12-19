@@ -40,7 +40,12 @@
     <v-row>
       <v-col cols="12" sm="6" md="6">
         <v-btn color="primary" type="submit">{{ $t("submit") }}</v-btn>
-        <v-btn color="primary" variant="text" class="ml-2" @click="goToBackPage">
+        <v-btn
+          color="primary"
+          variant="text"
+          class="ml-2"
+          @click="goToBackPage"
+        >
           {{ $t("back") }}
         </v-btn>
       </v-col>
