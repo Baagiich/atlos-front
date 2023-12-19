@@ -19,6 +19,9 @@ import shipmentLoadCreate from "./shipmentLoadCreate";
 import passwordresetRoutes from "./passwordreset";
 import vehicleimagesRoutes from "./vehicleimage";
 import consignorRoutes from "./consignor";
+import walletRoutes from "./wallet";
+import currencyRoutes from "./currency";
+import bankRoutes from "./bank";
 
 const routes = [
   {
@@ -55,6 +58,9 @@ const routes = [
   ...passwordresetRoutes,
   ...vehicleimagesRoutes,
   ...consignorRoutes,
+  ...walletRoutes,
+  ...currencyRoutes,
+  ...bankRoutes,
 ];
 
 const router = createRouter({

@@ -10,6 +10,9 @@ import vehicle from "./vehicle";
 import vehicleimage from "./vehicleimage";
 
 import validation from "./validation";
+import wallet from "./wallet";
+import currency from "./currency";
+import bank from "./bank";
 export default {
   home: "Home",
   submit: "Submit",
@@ -52,6 +55,10 @@ export default {
   successfull: "Successfull",
   enterNewPassword: "Please enter new password",
   submitAgain: "Submit again",
+  back: "Back",
   vehicleimage,
   vehicle,
+  wallet,
+  currency,
+  bank,
 };
