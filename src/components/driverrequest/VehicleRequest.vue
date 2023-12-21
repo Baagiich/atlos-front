@@ -238,11 +238,12 @@ function sendRequestToVehicle(item: Vehicle) {
 function createVehicleRequest(item: Vehicle): Requests {
   const req: Requests = {
     fromUser: apiToken.getDecodedToken().iri,
-    toUser: item.shipper,
+    toUser: item.shipper["@id"],
     code: RequestsCodeType.SHIPPER_TO_VEHICLE,
     type: RequestsType.PENDING,
     targetEntityId: targetEntityId.value,
     params: {
+      iri: item["@id"],
       plateNumber: item.plateNumber,
     },
   };

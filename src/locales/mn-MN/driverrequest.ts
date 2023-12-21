@@ -9,4 +9,8 @@ export default {
   plateNumber: "Улсын дугаар",
   vehicleType: "Төрөл",
   vehicleCapacity: "Даац",
+  sendBid: "Тээврийн үнийн санал өгөх",
+  sent: "Илгээгдсэн",
+  accept: "Зөвшөөрөх",
+  cancel: "Цуцлах",
 };

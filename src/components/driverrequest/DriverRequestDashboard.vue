@@ -27,6 +27,9 @@
       <v-col md="6">
         <VehicleRequest :target-entity-id="getTargetEntityId()" />
       </v-col>
+      <v-col md="4">
+        <BidRequest :currency="item.currency" :shipmentid="item['@id']" />
+      </v-col>
     </v-row>
   </v-container>
 
@@ -48,7 +51,7 @@ import ShipmentInfo from "@/components/driverrequest/ShipmentInfo.vue";
 import ShipmentLoadInfos from "@/components/driverrequest/ShipmentLoadInfos.vue";
 import DriverRequest from "./DriverRequest.vue";
 import VehicleRequest from "./VehicleRequest.vue";
-
+import BidRequest from "./BidRequest.vue";
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
