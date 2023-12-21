@@ -1,5 +1,5 @@
 const names = {
-  dahsboard: "DriverRequestDashboard",
+  dahsboard: "ShipmentLoadDashboard",
 };
 export default [
   {
