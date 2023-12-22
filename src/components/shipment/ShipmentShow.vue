@@ -11,7 +11,7 @@
       v-if="error || deleteError"
       type="error"
       class="mb-4"
-      closable="true"
+      closable
     >
       {{ error || deleteError }}
     </v-alert>

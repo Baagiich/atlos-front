@@ -63,6 +63,11 @@
         >
           {{ t("shipment.sendBid") }}
         </v-btn>
+      
+        <ActionCell
+          :actions="['show']"
+          @show="goToShowPage(item)"
+        />
       </template>
     </v-data-table-server>
   </v-container>
@@ -78,6 +83,7 @@ import { useShipmentDeleteStore } from "@/store/shipment/delete";
 import Toolbar from "@/components/common/Toolbar.vue";
 import DataFilter from "@/components/common/DataFilter.vue";
 import Filter from "@/components/shipment/ShipmentFilter.vue";
+import ActionCell from "@/components/common/ActionCell.vue";
 import { formatDateTime } from "@/utils/date";
 import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
@@ -99,7 +105,8 @@ const { items, totalItems, error, isLoading } = storeToRefs(shipmentListStore);
 const page = ref("1");
 const filters: Ref<Filters> = ref({});
 if (apiToken.getDecodedToken().user_type != UserType.ADMIN) {
-  filters.value.state = "created";
+  breadcrumb[0].title !== 'ShipmentOwnList' ? filters.value.state = "created" : null;
+  
 }
 const order = ref({});
 const itemsPerPage = ref("10");
@@ -174,7 +181,12 @@ function goToCreatePage() {
     name: "ShipmentCreate",
   });
 }
-
+function goToShowPage(item: Shipment) {
+  router.push({
+    name: "ShipmentDetail",
+    params: { id: item["@id"] },
+  });
+}
 onBeforeUnmount(() => {
   shipmentDeleteStore.$reset();
 });

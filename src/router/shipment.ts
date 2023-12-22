@@ -3,6 +3,8 @@ const names = {
   create: "ShipmentCreate",
   update: "ShipmentUpdate",
   show: "ShipmentShow",
+  detail: "ShipmentDetail",
+  ownList: "ShipmentOwnList",
 };
 
 const breadcrumbs = {
@@ -10,6 +12,8 @@ const breadcrumbs = {
   create: { title: names.create, to: { name: names.create } },
   update: { title: names.update, to: { name: names.update } },
   show: { title: names.show, to: { name: names.show } },
+  detail: { title: names.detail, to: { name: names.detail } },
+  ownList: { title: names.ownList, to: { name: names.ownList } },
 };
 
 export default [
@@ -19,6 +23,14 @@ export default [
     component: () => import("@/views/shipment/ViewList.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list],
+    },
+  },
+  {
+    name: names.ownList,
+    path: "/shipments/list",
+    component: () => import("@/views/shipment/ViewList.vue"),
+    meta: {
+      breadcrumb: [breadcrumbs.ownList],
     },
   },
   {
@@ -45,4 +57,12 @@ export default [
       breadcrumb: [breadcrumbs.list, breadcrumbs.show],
     },
   },
+  {
+    name: names.detail,
+    path: "/shipments/detail/:id",
+    component: () => import("@/views/shipment/ViewDetail.vue"),
+    meta: {
+      breadcrumb: [breadcrumbs.list, breadcrumbs.detail],
+    },
+  }
 ];
