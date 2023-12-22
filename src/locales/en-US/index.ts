@@ -13,6 +13,7 @@ import validation from "./validation";
 import wallet from "./wallet";
 import currency from "./currency";
 import bank from "./bank";
+import order from "./order";
 export default {
   home: "Home",
   submit: "Submit",
@@ -56,9 +57,11 @@ export default {
   enterNewPassword: "Please enter new password",
   submitAgain: "Submit again",
   back: "Back",
+  amount: "Amount",
   vehicleimage,
   vehicle,
   wallet,
   currency,
   bank,
+  order,
 };

@@ -14,6 +14,7 @@ import consignor from "./consignor";
 import wallet from "./wallet";
 import currency from "./currency";
 import bank from "./bank";
+import order from "./order";
 
 export default {
   home: "Нүүр",
@@ -57,10 +58,12 @@ export default {
   enterNewPassword: "Шинэ нууц үгээ оруулна уу",
   submitAgain: "Дахин илгээх",
   back: "Буцах",
+  amount: "Дүн",
   vehicle,
   vehicleimage,
   consignor,
   wallet,
   currency,
   bank,
+  order,
 };
