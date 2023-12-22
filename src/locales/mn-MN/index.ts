@@ -15,6 +15,7 @@ import wallet from "./wallet";
 import currency from "./currency";
 import bank from "./bank";
 import order from "./order";
+import fileuploader from "./fileuploader";
 
 export default {
   home: "Нүүр",
@@ -66,4 +67,8 @@ export default {
   currency,
   bank,
   order,
+  informationNotCompleted: "Мэдээлэл дутуу байна. Та мэдээллээ бүрэн оруулж байж баталгаажихийг анхаарна уу.",
+  notAvailable: "Хоосон байна",
+  fileUpload: "Файл хуулах",
+  fileuploader
 };

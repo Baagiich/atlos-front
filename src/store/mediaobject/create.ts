@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
-import type { MediaObject } from "@/types/mediaobject";
+import type { MediaObject, MediaObjectInput } from "@/types/mediaobject";
 import type { SubmissionErrors } from "@/types/error";
 
 interface State {
@@ -20,7 +20,7 @@ export const useMediaObjectCreateStore = defineStore("mediaobjectCreate", {
   }),
 
   actions: {
-    async create(payload: MediaObject) {
+    async create(payload: FormData) {
       this.setError(undefined);
       this.setViolations(undefined);
       this.toggleLoading();
@@ -28,7 +28,7 @@ export const useMediaObjectCreateStore = defineStore("mediaobjectCreate", {
       try {
         const response = await api("media_objects", {
           method: "POST",
-          body: JSON.stringify(payload),
+          body: payload,
         });
         const data: MediaObject = await response.json();
 

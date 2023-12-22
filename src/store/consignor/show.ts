@@ -2,6 +2,8 @@ import { defineStore } from "pinia";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
 import type { Consignor } from "@/types/consignor";
+import * as apiToken from "@/utils/apiToken";
+import { UserType } from "@/types/usertype";
 
 interface State {
   retrieved?: Consignor;
@@ -47,6 +49,10 @@ export const useConsignorShowStore = defineStore("consignorShow", {
     },
 
     setRetrieved(retrieved: Consignor) {
+      retrieved.adminEditable = true;
+      if (apiToken.getDecodedToken().user_type !== UserType.ADMIN) {
+        retrieved.adminEditable = false;
+      }
       this.retrieved = retrieved;
     },
 
