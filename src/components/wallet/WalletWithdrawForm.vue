@@ -98,7 +98,6 @@ import { storeToRefs } from "pinia";
 import { computed, Ref, ref, toRef } from "vue";
 import { WalletWithdraw } from "@/types/wallet/wallet-withdraw";
 import { SubmissionErrors } from "@/types/error";
-import { useRouter } from "vue-router";
 import { useWalletWithdrawStore } from "@/store/wallet/withdraw";
 import { VForm } from "vuetify/lib/components/index.mjs";
 import { useWalletListStore } from "@/store/wallet/list";
@@ -111,7 +110,6 @@ const props = defineProps<{
 }>();
 
 const violations = toRef(props, "errors");
-const router = useRouter();
 const walletWithdrawStore = useWalletWithdrawStore();
 const walletListStore = useWalletListStore();
 
@@ -143,9 +141,5 @@ const form: Ref<VForm | null> = ref(null);
 
 function setIsShowDialog(value: boolean) {
   walletWithdrawStore.setIsShowDialog(value);
-}
-function setIsSuccess(value: boolean) {
-  setIsShowDialog(false);
-  walletWithdrawStore.setIsSuccess(value);
 }
 </script>

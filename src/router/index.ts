@@ -22,6 +22,7 @@ import consignorRoutes from "./consignor";
 import walletRoutes from "./wallet";
 import currencyRoutes from "./currency";
 import bankRoutes from "./bank";
+import order from "./order";
 
 const routes = [
   {
@@ -61,6 +62,7 @@ const routes = [
   ...walletRoutes,
   ...currencyRoutes,
   ...bankRoutes,
+  ...order,
 ];
 
 const router = createRouter({

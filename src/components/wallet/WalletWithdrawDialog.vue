@@ -14,18 +14,12 @@ import { useCurrencyListStore } from "@/store/currency/list";
 import { useBankListStore } from "@/store/bank/list";
 import { useWalletWithdrawStore } from "@/store/wallet/withdraw";
 import { storeToRefs } from "pinia";
-import { computed, Ref, ref } from "vue";
 import { WalletWithdraw } from "@/types/wallet/wallet-withdraw";
-import { SubmissionErrors } from "@/types/error";
 import Form from "@/components/wallet/WalletWithdrawForm.vue";
-import { useRouter } from "vue-router";
-import { useWalletListStore } from "@/store/wallet/list";
 
-const router = useRouter();
 const currencyListStore = useCurrencyListStore();
 const bankListStore = useBankListStore();
 const walletWithdrawStore = useWalletWithdrawStore();
-const walletListStore = useWalletListStore();
 
 const { items: currencies } = storeToRefs(currencyListStore);
 const { items: banks } = storeToRefs(bankListStore);
