@@ -10,9 +10,19 @@
     <v-alert v-if="error || deleteError" type="error" class="mb-4" closable>
       {{ error || deleteError }}
     </v-alert>
-
-    <router-link
+    <v-alert
+    v-if="item && !item.certificate"
+      density="compact"
+      type="warning"
+      :text="$t('informationNotCompleted')"
+    ></v-alert>
+    <ActionCell
       v-if="item"
+      :actions="['update']"
+      @update="goToUpdatePage(item)"
+    />
+    <router-link
+      v-if="item.adminEditable"
       id="adminuser-edit-link"
       :to="{ name: 'AdminUserUpdate', params: { id: item.adminUser } }"
       ><v-btn>{{ $t("adminuser.edit") }}</v-btn></router-link
@@ -85,7 +95,8 @@
             {{ $t("consignor.certificate") }}
           </td>
 
-          <td><MediaObjectThumb :id="item.certificate"></MediaObjectThumb></td>
+          <td v-if="item.certificate"><MediaObjectThumb :id="item.certificate"></MediaObjectThumb></td>
+          <td v-else class="text-orange-lighten-2">{{ $t("notAvailable") }}</td>
         </tr>
       </tbody>
     </v-table>
@@ -106,6 +117,8 @@ import { useConsignorDeleteStore } from "@/store/consignor/delete";
 import { useConsignorShowStore } from "@/store/consignor/show";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import MediaObjectThumb from "@/components/mediaobject/MediaObjectThumb.vue";
+import ActionCell from "../common/ActionCell.vue";
+import { Consignor } from "@/types/consignor";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -142,7 +155,12 @@ async function deleteItem() {
 
   router.push({ name: "ConsignorList" });
 }
-
+function goToUpdatePage(item: Consignor) {
+  router.push({
+    name: "ConsignorUpdate",
+    params: { id: item["@id"] },
+  });
+}
 onBeforeUnmount(() => {
   consignorShowStore.$reset();
 });

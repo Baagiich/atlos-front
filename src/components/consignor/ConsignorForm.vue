@@ -110,6 +110,19 @@
             </template>
           </v-text-field>
         </v-col>
+        <v-col v-if="updateForm" cols="12">
+          <v-text-field
+            v-model="item.certificate"
+            :error="Boolean(violations?.certificate)"
+            :error-messages="violations?.certificate"
+            :label="$t('consignor.certificate')"
+            variant="plain"
+            disabled
+          >
+          </v-text-field>
+          <FileUploader></FileUploader>
+         
+        </v-col>
       </v-row>
       <v-row v-if="props.contractTemplate">
         <v-checkbox
@@ -198,10 +211,14 @@ import {
   assertEmail,
   assertChecked,
 } from "@/validations";
+import FileUploader from "../common/FileUploader.vue";
+import { useMediaObjectCreateStore } from "@/store/mediaobject/create";
+import { storeToRefs } from "pinia";
 const props = defineProps<{
   values?: Consignor;
   errors?: SubmissionErrors;
   contractTemplate?: ContractTemplate;
+  updateForm?: boolean;
 }>();
 
 const violations = toRef(props, "errors");
@@ -221,6 +238,9 @@ const phoneNumberRules = [assertRequired(), assertMaxLength(20)];
 const registerNumberRules = [assertRequired(), assertMaxLength(12)];
 const contractSignedRules = [assertChecked()];
 const dialog = ref(false);
+
+const mediaObjectCreateStore = useMediaObjectCreateStore();
+const { created, isLoading,error, violations:mediaObj } = storeToRefs(mediaObjectCreateStore);
 const emit = defineEmits<{
   (e: "submit", item: Consignor): void;
 }>();
@@ -228,6 +248,7 @@ const form: Ref<VForm | null> = ref(null);
 async function emitSubmit() {
   const v = await form.value.validate();
   if (v.valid) {
+    item.value.certificate = created?.value?.["@id"];
     emit("submit", item.value);
   }
 }

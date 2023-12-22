@@ -14,6 +14,7 @@ import wallet from "./wallet";
 import currency from "./currency";
 import bank from "./bank";
 import order from "./order";
+import fileuploader from "./fileuploader";
 export default {
   home: "Home",
   submit: "Submit",
@@ -64,4 +65,8 @@ export default {
   currency,
   bank,
   order,
+  informationNotCompleted: "Information not completed. To activate your account you need to complete your profile",
+  notAvailable: "Not available",
+  fileUpload: "File upload",
+  fileuploader
 };
