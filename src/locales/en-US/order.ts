@@ -1,12 +1,17 @@
 export default {
-  title: "Order checkout",
+  title: "Payments",
+  checkoutTitle: "Payment checkout",
   totalAmount: "Total amount",
-  id: "Order ID",
+  number: "Invoice ID",
   description: "Description",
   product: {
     name: "Product name",
   },
   methodChoice: "Payment method",
   pay: "Pay now",
-  influenceBalance: "Дансны үлдэгдэл хүрэлцэхгүй байна!",
+  influenceBalance: "Influence balance!",
+  paid: "Paid",
+  unpaid: "Not paid",
+  paidAt: "Paid date",
+  shipmentName: "Shipment name",
 };

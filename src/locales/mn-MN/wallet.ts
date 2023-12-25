@@ -8,7 +8,7 @@ export default {
   account: {
     availableBalance: "Боломжит үлдэгдэл",
     create: "Данс үүсгэх",
-    empty: "Hоосон байна. Шинээр данс үүсгэнэ үү",
+    empty: "Данс олдсонгүй. Шинээр үүсгэнэ үү",
     message: {
       success: "Хэтэвч амжилттай үүслээ",
     },

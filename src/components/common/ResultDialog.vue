@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isSuccess" width="500">
+  <v-dialog v-model="show" width="500">
     <v-sheet class="position-relative">
       <v-fade-transition hide-on-leave>
         <v-card
@@ -8,29 +8,28 @@
           elevation="16"
           max-width="500"
         >
-          <template v-slot:title>
-            {{ $t("wallet.account.withdraw.title") }}
+          <template #append>
+            <v-btn icon="$close" variant="text" @click="emitClose"></v-btn>
           </template>
-          <template v-slot:append>
-            <v-btn
-              icon="$close"
-              variant="text"
-              @click="setIsSuccess(false)"
-            ></v-btn>
-          </template>
-
           <v-divider></v-divider>
-
           <div class="py-12 text-center">
             <v-icon
+              v-if="type == 'success'"
               class="mb-6"
               color="success"
               icon="mdi-check-circle-outline"
-              size="128"
+              size="80"
+            ></v-icon>
+            <v-icon
+              v-else
+              class="mb-6"
+              color="red"
+              icon="mdi-check-circle-outline"
+              size="80"
             ></v-icon>
 
-            <div class="text-h4 font-weight-bold">
-              {{ $t("wallet.account.withdraw.successfullyMessage") }}
+            <div class="text-h5 font-weight-bold">
+              {{ message }}
             </div>
           </div>
 
@@ -43,7 +42,7 @@
               min-width="92"
               rounded
               variant="outlined"
-              @click="setIsSuccess(false)"
+              @click="emitClose"
             >
               Close
             </v-btn>
@@ -54,12 +53,21 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-import { useWalletWithdrawStore } from "@/store/wallet/withdraw";
-import { storeToRefs } from "pinia";
-const walletWithdrawStore = useWalletWithdrawStore();
-const { isSuccess } = storeToRefs(walletWithdrawStore);
+import { toRef } from "vue";
 
-function setIsSuccess(value: boolean) {
-  walletWithdrawStore.setIsSuccess(value);
+const props = defineProps<{
+  show: boolean;
+  type?: "success" | "fail";
+  message: String;
+}>();
+
+let show = toRef(props, "show");
+
+const emit = defineEmits<{
+  (e: "close"): void;
+}>();
+
+function emitClose() {
+  emit("close");
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
-    <v-alert v-if="error" type="error" class="mb-4" :closable="true">
-      {{ error }}
+    <v-alert v-if="errorCreate" type="error" class="mb-4" :closable="true">
+      {{ errorCreate }}
     </v-alert>
     <v-alert
       v-if="validationError"
@@ -12,41 +12,56 @@
     >
       {{ validationError }}
     </v-alert>
-    <h2>{{ $t("order.title") }}</h2>
+    <h2>{{ $t("order.checkoutTitle") }}</h2>
     <v-form ref="form" @submit.prevent="submit">
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="8">
           <v-table>
             <tbody>
               <tr>
-                <td>{{ $t("order.id") }}</td>
-                <td>{{ orderData.number }}</td>
+                <td>{{ $t("order.number") }}</td>
+                <td>{{ retrieved?.number }}</td>
+              </tr>
+              <tr>
+                <td>{{ $t("order.shipmentName") }}</td>
+                <td>{{ retrieved?.item.shipment.name }}</td>
               </tr>
               <tr>
                 <td>{{ $t("order.product.name") }}</td>
-                <td>{{ orderData.product }}</td>
+                <td>{{ retrieved?.item.product.name }}</td>
+              </tr>
+              <tr>
+                <td>{{ $t("status") }}</td>
+                <td>
+                  <v-chip v-if="retrieved?.paidAt" color="green">{{
+                    $t("order.paid")
+                  }}</v-chip>
+                  <v-chip v-else>{{ $t("order.unpaid") }}</v-chip>
+                </td>
               </tr>
               <tr>
                 <td>{{ $t("currency.title") }}</td>
-                <td>{{ orderData.currency }}</td>
+                <td>{{ retrieved?.totalAmount.currency }}</td>
               </tr>
               <tr>
                 <td>{{ $t("amount") }}</td>
-                <td>{{ orderData.amount }}</td>
+                <td>{{ retrieved?.totalAmount.amount }}</td>
               </tr>
-            </tbody>
-            <tfoot>
+              <tr>
+                <td>{{ $t("quantity") }}</td>
+                <td>{{ retrieved?.item.quantity }}</td>
+              </tr>
               <tr>
                 <td>
                   <strong>{{ $t("order.totalAmount") }}</strong>
                 </td>
                 <td>
-                  <strong>{{ orderData.amountTotal }}</strong>
+                  <strong>{{ retrieved?.totalAmount.amount }}</strong>
                 </td>
               </tr>
-            </tfoot>
+            </tbody>
           </v-table>
-          <v-row class="mt-6">
+          <v-row v-if="retrieved && !retrieved?.paidAt" class="mt-6">
             <v-col cols="6">
               <v-select
                 v-model="orderPaymentData.method"
@@ -59,14 +74,14 @@
               >
               </v-select>
               <v-btn
-                :disabled="!orderPaymentData.method || isLoading"
-                :loading="isLoading"
+                :disabled="!orderPaymentData.method || isLoadingRetrieve"
+                :loading="isLoadingRetrieve"
                 block
                 class="text-none px-6"
                 color="blue"
                 variant="flat"
                 size="large"
-                type="submit"
+                @click="toggleConfirmDelete"
               >
                 {{ $t("order.pay") }}
               </v-btn>
@@ -74,15 +89,27 @@
             <v-col v-if="orderPaymentData.method == 'wallet'" cols="6">
               <span>{{ $t("wallet.account.availableBalance") }}</span>
               <br />
-              <v-chip icon="mdi-blinds"
-                >{{ currencyAccount ? currencyAccount.balance : "" }}
-                {{ orderData.currency }}</v-chip
+              <v-chip v-if="currencyAccount" icon="mdi-blinds"
+                >{{ currencyAccount.balance }}
+                {{ currencyAccount?.currency }}</v-chip
               >
+              <v-btn
+                v-else
+                color="orange"
+                @click="router.push({ name: 'WalletList' })"
+              >
+                {{ $t("wallet.account.empty") }}
+              </v-btn>
             </v-col>
           </v-row>
         </v-col>
       </v-row>
     </v-form>
+    <ConfirmDialog
+      :show="confirmDelete"
+      @cancel="toggleConfirmDelete"
+      @confirm="submit"
+    ></ConfirmDialog>
   </v-container>
 </template>
 
@@ -92,18 +119,17 @@ import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useWalletListStore } from "@/store/wallet/list";
 import { useOrderPaymentStore } from "@/store/order/createpayment";
+import { useOrderShowStore } from "@/store/order/show";
 import { OrderPayment } from "@/types/orderpayment";
+import ConfirmDialog from "@/components/common/ConfirmDialog.vue";
+import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
-
 const validationError = ref("");
-const orderData = ref({
-  currency: "CNY",
-  number: "k2h38123j348s",
-  product: "30% урьдчилгаа",
-  amount: "150000",
-  amountTotal: "150000",
-});
+const confirmDelete = ref(false);
+const route = useRoute();
+const router = useRouter();
+
 const orderPaymentData: Ref<OrderPayment> = ref({});
 orderPaymentData.value.orderIri = "iri";
 
@@ -118,28 +144,53 @@ const walletListStore = useWalletListStore();
 const { accounts } = storeToRefs(walletListStore);
 
 const orderPaymentStore = useOrderPaymentStore();
+const orderShowStore = useOrderShowStore();
 const {
   created: paymentCreated,
-  isLoading,
-  error,
+  isLoadingCreate,
+  errorCreate,
 } = storeToRefs(orderPaymentStore);
 
+await walletListStore.getAccounts();
+await orderShowStore.retrieve({
+  page: 1,
+  groups: [
+    "order_item:list",
+    "product:read",
+    "shipment:list",
+    "money:read",
+    "order:read",
+  ],
+  ...{ number: route.params.orderNumber as string },
+});
+
+const { retrieved, isLoadingRetrieve, errorRetrieve } =
+  storeToRefs(orderShowStore);
+
 const currencyAccount = computed(() => {
-  return accounts
+  return accounts && retrieved
     ? accounts.value.find((obj) =>
-        obj.currency === orderData.value.currency ? obj.balance : null,
+        obj.currency === retrieved.value?.totalAmount.currency
+          ? obj.balance
+          : null,
       )
     : null;
 });
 
-await walletListStore.getAccounts();
-
 async function submit() {
+  if (!currencyAccount.value) {
+    validationError.value = t("wallet.account.empty");
+    return;
+  }
   if (!currencyAccount.value?.balance) {
     return;
   }
 
-  if (currencyAccount.value?.balance < orderData.value.amountTotal) {
+  if (!retrieved || !retrieved.value?.totalAmount) {
+    return;
+  }
+
+  if (+currencyAccount.value?.balance < retrieved?.value?.totalAmount.amount) {
     validationError.value = t("order.influenceBalance");
     return;
   }
@@ -148,5 +199,9 @@ async function submit() {
   if (!paymentCreated?.value) {
     return;
   }
+}
+
+function toggleConfirmDelete() {
+  confirmDelete.value = !confirmDelete.value;
 }
 </script>

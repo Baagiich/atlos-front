@@ -17,7 +17,6 @@ const items = [{ title: t("home"), to: "/" }, ...props.breadcrumb];
 
 <style>
 .v-breadcrumbs-item--active {
-  font-size: 20px;
   font-weight: bold;
   opacity: 1 !important;
 }

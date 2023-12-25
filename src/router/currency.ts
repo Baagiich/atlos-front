@@ -5,7 +5,7 @@ const names = {
 };
 
 const breadcrumbs = {
-  list: { title: "List", to: { name: names.list } },
+  list: { title: "Currencies", to: { name: names.list } },
   create: { title: "Create", to: { name: names.create } },
   update: { title: "Update", to: { name: names.update } },
 };
