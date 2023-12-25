@@ -1,24 +1,5 @@
 <template>
-  <v-stepper alt-labels>
-    <v-stepper-header>
-      <template
-        v-for="(stateValue, stateIndex) in shipmentState"
-        :key="'stepper-header-' + stateIndex"
-      >
-        <v-divider v-if="stateIndex >= 2"></v-divider>
-        <v-stepper-item
-          v-if="stateIndex >= 1"
-          :complete="stateValue.value <= currentShipmentStateIndex"
-          :value="stateValue.value"
-        >
-          <template v-slot:title>
-            {{ $t(`shipment.${stateValue.key}`) }}
-          </template></v-stepper-item
-        >
-      </template>
-    </v-stepper-header>
-  </v-stepper>
-
+  <ShipmentDetailState></ShipmentDetailState>
   <v-card>
     <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
       <v-tab :value="1">{{ $t("shipment.seeShipmentList") }}</v-tab>
@@ -31,6 +12,9 @@
             <shipment-location-list
               @selected="emitSelected"
             ></shipment-location-list>
+            <v-btn @click="goToFilesPage">
+              {{ $t("shipment.seeShipmentImages") }}
+            </v-btn>
           </v-col>
           <v-col cols="6">
             <GoogleMap
@@ -209,23 +193,19 @@ import {
 } from "vue3-google-map";
 import { useShipmentDetailStore } from "@/store/shipment/detail";
 import { storeToRefs } from "pinia";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { ShipmentState } from "@/types/shipment_state";
+import ShipmentDetailState from "./ShipmentState.vue";
 import * as enumHelper from "@/utils/enumHelper";
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const tab = ref(null);
 const selectedLocation = ref(null);
+const router = useRouter();
 const shipmentDetailStore = useShipmentDetailStore();
 const { retrieved, isLoading, error, totalItems } =
   storeToRefs(shipmentDetailStore);
 const route = useRoute();
 
-async function locationList() {
-  await shipmentDetailStore.retrieve(
-    decodeURIComponent(route.params.id as string),
-  );
-}
-locationList();
 const locations = computed(() => {
   return retrieved && retrieved.value?.deviceLocation
     ? retrieved.value.deviceLocation.map((obj) => ({
@@ -234,17 +214,13 @@ const locations = computed(() => {
       }))
     : [];
 });
-const shipmentState = enumHelper.getMap(ShipmentState);
-shipmentState.unshift({ key: "", value: "" });
-
-const currentShipmentStateIndex = computed(() => {
-  return retrieved && retrieved.value?.state
-    ? ShipmentState[retrieved.value.state as keyof typeof ShipmentState]
-      ? ShipmentState[retrieved.value.state as keyof typeof ShipmentState]
-      : 0
-    : 0;
-});
 async function emitSelected(value: any) {
   selectedLocation.value = value;
+}
+
+function goToFilesPage(){
+  router.push({
+    name: "ShipmentDetailFiles",
+  });
 }
 </script>

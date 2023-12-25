@@ -30,4 +30,5 @@ export default {
   timeFrom: 'Time from',
   timeTo: 'Time to',
   location: "Location",
+  seeShipmentImages: "See shipment images"
 };

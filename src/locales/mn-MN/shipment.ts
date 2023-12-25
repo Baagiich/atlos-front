@@ -50,4 +50,5 @@ export default {
   timeTo: 'Дуусах хугацаа',
   location: "Тээврийн байршил",
   showBid: "Үнийн санал харах",
+  seeShipmentImages: "Тээврийн зургууд харах",
 };

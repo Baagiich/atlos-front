@@ -16,6 +16,7 @@ import currency from "./currency";
 import bank from "./bank";
 import order from "./order";
 import fileuploader from "./fileuploader";
+import shipmentimage from "./shipmentimage";
 
 export default {
   home: "Нүүр",
@@ -75,6 +76,7 @@ export default {
   informationNotCompleted: "Мэдээлэл дутуу байна. Та мэдээллээ бүрэн оруулж байж баталгаажихийг анхаарна уу.",
   notAvailable: "Хоосон байна",
   fileUpload: "Файл хуулах",
+  fileuploader,
+  shipmentimage,
   save: "Хадгалах",
-  fileuploader
 };
