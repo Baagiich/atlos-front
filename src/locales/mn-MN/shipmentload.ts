@@ -31,4 +31,6 @@ export default {
   shipmentPrice: "Тээврийн үнэ оруулах *",
   prePayment: "Урьдчилгаа хувь",
   postPayment: "Адаг хувь",
+  mainSize: "Овор хэмжээ *",
+  mainWeight: "Жин *"
 };

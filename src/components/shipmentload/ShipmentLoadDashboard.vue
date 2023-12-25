@@ -50,6 +50,7 @@
           v-if="secondStepShow"
           :disabled="secondStepDisabled"
           @second-step="emitSecondStep"
+          @finish="emitFinish"
         />
         <div v-if="totalCreatedLoads > 0">
           <div v-for="item in createdLoads" :key="item['@id']">
@@ -62,7 +63,7 @@
         </div>
         <ShipmentLoadCreate
           :createdShipmentId="createdShipmentId"
-          v-if="thirdStepShow"
+          v-if="thirdStepShow && item.loadType === 1"
           @updatelist="getCreatedLoads"
         />
       </v-col>
@@ -91,6 +92,7 @@ import { useShipmentCreateStore } from "@/store/shipment/create";
 import ShipmentLoadUpdate from "@/components/shipmentload/ShipmentLoadUpdate.vue";
 import { useShipmentLoadListStore } from "@/store/shipmentload/list";
 import { Filters } from "@/types/list";
+import router from "@/router";
 
 const { t } = useI18n();
 const breadcrumb = useBreadcrumb();
@@ -117,6 +119,18 @@ async function emitSecondStep() {
   await saveFromAddress();
   await saveToAddress();
   await createNewShipment();
+  await getCreatedLoads();
+}
+async function emitFinish() {
+  await saveFromAddress();
+  await saveToAddress();
+  await createNewShipment();
+  await gotoList();
+}
+async function gotoList() {
+  router.push({
+    name: "ShipmentList",
+  });
 }
 async function saveFromAddress() {
   if (fromAddress.value) {
@@ -140,7 +154,6 @@ async function createNewShipment() {
     createdShipmentId.value = createdShipment?.value["@id"];
     secondStepDisabled.value = true;
     thirdStepShow.value = true;
-    await getCreatedLoads();
   }
 }
 const shipmentloadListStore = useShipmentLoadListStore();

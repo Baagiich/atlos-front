@@ -28,7 +28,7 @@ async function login(item: Auth) {
 
   if (typeof error.value === "undefined") {
     router.push({
-      name: "CountryList",
+      name: "ShipmentList",
     });
   }
 }

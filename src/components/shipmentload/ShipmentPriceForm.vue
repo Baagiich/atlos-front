@@ -92,11 +92,56 @@
           </template>
         </v-text-field>
       </v-col>
+      <v-col cols="12" sm="6" md="1" v-if="item.loadType === 2">
+        <v-text-field
+          v-model="item.mainWeight"
+          :error="Boolean(violations?.name)"
+          :error-messages="violations?.name"
+          :label="$t('shipmentload.mainWeight')"
+          :rules="priceRules"
+          type="number"
+          variant="outlined"
+          clearable
+          @update:model-value="onPriceWrited"
+        >
+          <template #append-inner>
+            <v-icon
+              style="cursor: pointer"
+              @click.prevent.stop="item.mainWeight = undefined"
+            >
+              mdi-close
+            </v-icon>
+          </template>
+        </v-text-field>
+      </v-col>
+      <v-col cols="12" sm="6" md="1" v-if="item.loadType === 2">
+        <v-text-field
+          v-model.number="item.mainSize"
+          :error="Boolean(violations?.packageType)"
+          :error-messages="violations?.packageType"
+          :label="$t('shipmentload.mainSize')"
+          :rules="priceRules"
+          type="number"
+          variant="outlined"
+          clearable
+        >
+          <template #append-inner>
+            <v-icon
+              style="cursor: pointer"
+              @click.prevent.stop="item.mainSize = undefined"
+            >
+              mdi-close
+            </v-icon>
+          </template>
+        </v-text-field>
+      </v-col>
+
     </v-row>
 
     <v-row>
       <v-col cols="12" sm="6" md="6">
-        <v-btn color="primary" @click="emitNextStep">{{ $t("add") }}</v-btn>
+        <v-btn  v-if="item.loadType === 1" color="primary" @click="emitNextStep">{{ $t("add") }}</v-btn>
+        <v-btn  v-if="item.loadType === 2" color="primary" @click="emitFinish">{{ $t("save") }}</v-btn>
         <v-btn color="primary" variant="text" class="ml-2" @click="resetForm">
           {{ $t("reset") }}
         </v-btn>
@@ -140,12 +185,19 @@ const onPriceWrited = () => {
 };
 const emit = defineEmits<{
   (e: "second-step"): void;
+  (e: "finish"): void;
 }>();
 
 async function emitNextStep() {
   const v = await form.value.validate();
   if (v.valid) {
     emit("second-step");
+  }
+}
+async function emitFinish() {
+  const v = await form.value.validate();
+  if (v.valid) {
+    emit("finish");
   }
 }
 const form: Ref<VForm | null> = ref(null);

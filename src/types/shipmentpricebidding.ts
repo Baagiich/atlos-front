@@ -7,4 +7,5 @@ export interface ShipmentPriceBidding extends Item {
     amount?: number;
     currency?: string;
   };
+  type?: string;
 }

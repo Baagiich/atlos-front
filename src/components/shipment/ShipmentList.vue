@@ -54,14 +54,27 @@
       <template #item.unloadAt="{ item }">
         {{ formatDateTime(item.unloadAt) }}
       </template>
+      <template #item.state="{ item }">
+        {{ item.state }}
+      </template>
       <template #item.actions="{ item }">
         <v-btn
+        v-if="userType === UserType.DRIVER || userType === UserType.SHIPPER"
           color="secondary"
           size="small"
           class="ma-2"
           @click="createPriceBidding(item)"
         >
           {{ t("shipment.sendBid") }}
+        </v-btn>
+        <v-btn
+        v-if="userType === UserType.CONSIGNOR"
+          color="secondary"
+          size="small"
+          class="ma-2"
+          @click="editPriceBidding(item)"
+        >
+          {{ t("shipment.showBid") }}
         </v-btn>
       
         <ActionCell
@@ -101,10 +114,14 @@ const { deleted, mercureDeleted } = storeToRefs(shipmentDeleteStore);
 
 const shipmentListStore = useShipmentListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(shipmentListStore);
+const userType = apiToken.getDecodedToken().user_type;
 
 const page = ref("1");
 const filters: Ref<Filters> = ref({});
-if (apiToken.getDecodedToken().user_type != UserType.ADMIN) {
+// if (userType.value != UserType.ADMIN) {
+//   filters.value.state = "created";
+// }
+if (userType != UserType.ADMIN) {
   breadcrumb[0].title !== 'ShipmentOwnList' ? filters.value.state = "created" : null;
   
 }
@@ -119,7 +136,6 @@ async function sendRequest() {
     ...filters.value,
   });
 }
-
 useMercureList({ store: shipmentListStore, deleteStore: shipmentDeleteStore });
 
 sendRequest();
@@ -144,6 +160,11 @@ const headers = [
   {
     title: t("shipment.unloadAt"),
     key: "unloadAt",
+    sortable: false,
+  },
+  {
+    title: t("shipment.state"),
+    key: "state",
     sortable: false,
   },
   {
@@ -178,7 +199,7 @@ function resetFilter() {
 
 function goToCreatePage() {
   router.push({
-    name: "ShipmentCreate",
+    name: "ShipmentLoadDashboard",
   });
 }
 function goToShowPage(item: Shipment) {
@@ -193,6 +214,12 @@ onBeforeUnmount(() => {
 function createPriceBidding(item: Shipment) {
   router.push({
     name: "DriverRequestDashboard",
+    params: { id: item["@id"] },
+  });
+}
+function editPriceBidding(item: Shipment) {
+  router.push({
+    name: "EditPriceDashboard",
     params: { id: item["@id"] },
   });
 }
