@@ -1,12 +1,17 @@
 export default {
-  title: "Төлбөр төлөлт",
+  title: "Төлбөр",
+  checkoutTitle: "Төлбөр төлөлт",
   totalAmount: "Нийт",
-  id: "Нэхэмжлэхийн дугаар",
+  number: "Нэхэмжлэхийн дугаар",
   description: "Тайлбар",
   product: {
     name: "Бүтээгдэхүүний нэр",
   },
   methodChoice: "Төлбөрийн хэрэгсэл",
   pay: "Төлөх",
-  influenceBalance: "Influence balance!",
+  influenceBalance: "Дансны үлдэгдэл хүрэлцэхгүй байна!",
+  paid: "Төлбөр төлөгдсөн",
+  unpaid: "Төлбөр төлөгдөөгүй",
+  paidAt: "Төлөгдсөн огноо",
+  shipmentName: "Тээврийн нэр",
 };

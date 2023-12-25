@@ -5,7 +5,7 @@
       v-if="created || updated"
       type="success"
       class="mb-4"
-      closable="true"
+      :closable="true"
     >
       <template v-if="updated">
         {{ $t("itemUpdated", [updated["@id"]]) }}
@@ -21,8 +21,7 @@
 
 <script lang="ts" setup>
 import { onBeforeUnmount } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import Toolbar from "@/components/common/Toolbar.vue";
 import Form from "@/components/bank/BankForm.vue";
@@ -32,9 +31,7 @@ import { useBankCreateStore } from "@/store/bank/create";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { Bank } from "@/types/bank";
 
-const { t } = useI18n();
 const route = useRoute();
-const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
 const bankCreateStore = useBankCreateStore();
@@ -45,7 +42,6 @@ const {
   retrieved: item,
   updated,
   isLoading,
-  error,
   violations,
 } = storeToRefs(bankUpdateStore);
 

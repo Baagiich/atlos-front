@@ -10,30 +10,22 @@
 </template>
 
 <script setup lang="ts">
-import { useCurrencyListStore } from "@/store/currency/list";
-import { useBankListStore } from "@/store/bank/list";
 import { useWalletWithdrawStore } from "@/store/wallet/withdraw";
 import { storeToRefs } from "pinia";
 import { WalletWithdraw } from "@/types/wallet/wallet-withdraw";
 import Form from "@/components/wallet/WalletWithdrawForm.vue";
 
-const currencyListStore = useCurrencyListStore();
-const bankListStore = useBankListStore();
+defineProps({
+  banks: {
+    type: Array,
+    default: undefined,
+  },
+  currencies: { type: Array, default: undefined },
+});
+
 const walletWithdrawStore = useWalletWithdrawStore();
 
-const { items: currencies } = storeToRefs(currencyListStore);
-const { items: banks } = storeToRefs(bankListStore);
-const { created, isShowDialog, violations, isLoading } =
-  storeToRefs(walletWithdrawStore);
-
-async function sendRequestBanks() {
-  await bankListStore.getItems({
-    page: 1,
-    page_size: 50,
-  });
-}
-
-sendRequestBanks();
+const { created, isShowDialog, violations } = storeToRefs(walletWithdrawStore);
 
 async function submitWithdraw(item: WalletWithdraw) {
   await walletWithdrawStore.withdraw(item);

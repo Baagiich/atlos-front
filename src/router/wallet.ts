@@ -1,5 +1,5 @@
 const names = {
-  list: "Wallet",
+  list: "WalletList",
 };
 
 const breadcrumbs = {

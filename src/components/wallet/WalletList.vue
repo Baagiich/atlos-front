@@ -1,7 +1,16 @@
 <template>
   <WalletDepositDialog></WalletDepositDialog>
-  <WalletWithdrawDialog></WalletWithdrawDialog>
-  <WithdrawSuccessDialog></WithdrawSuccessDialog>
+  <WalletWithdrawDialog
+    :currencies="linkedCurrencies"
+    :banks="banks"
+  ></WalletWithdrawDialog>
+  <ResultDialog
+    :show="isSuccessWithdraw"
+    :type="'success'"
+    :message="$t('wallet.account.withdraw.successfullyMessage')"
+    @close="setWithdrawSuccess(false)"
+  ></ResultDialog>
+
   <v-container fluid>
     <v-alert v-if="error" type="error" class="mb-4" :closable="true">
       {{ error }}
@@ -33,7 +42,7 @@
         </v-col>
         <v-col cols="12" md="5">
           <WalletCreate
-            :items="nonExistCurrencies"
+            :items="nonLinkedCurrencies"
             :is-loading="isLoadingCurrency"
           ></WalletCreate>
         </v-col>
@@ -89,12 +98,14 @@ import { useCurrencyListStore } from "@/store/currency/list";
 import { useWalletTransactionsStore } from "@/store/wallet/transactions";
 import { useWalletDepositStore } from "@/store/wallet/deposit";
 import { useWalletWithdrawStore } from "@/store/wallet/withdraw";
+import { useBankListStore } from "@/store/bank/list";
 import BalanceCard from "@/components/common/BalanceCard.vue";
 import TransactionList from "@/components/wallet/TransactionList.vue";
 import WalletCreate from "@/components/wallet/WalletCreate.vue";
 import WalletDepositDialog from "@/components/wallet/WalletDepositDialog.vue";
 import WalletWithdrawDialog from "@/components/wallet/WalletWithdrawDialog.vue";
 import WithdrawSuccessDialog from "@/components/wallet/WithdrawSuccessDialog.vue";
+import ResultDialog from "@/components/common/ResultDialog.vue";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -105,6 +116,7 @@ const currencyListStore = useCurrencyListStore();
 const transactionListStore = useWalletTransactionsStore();
 const walletDepositStore = useWalletDepositStore();
 const walletWithdrawStore = useWalletWithdrawStore();
+const bankListStore = useBankListStore();
 
 const { accounts, error } = storeToRefs(walletListStore);
 const { items: currencies, isLoading: isLoadingCurrency } =
@@ -114,10 +126,22 @@ const {
   isLoading: isLoadingTransaction,
   totalItems: transactionTotal,
 } = storeToRefs(transactionListStore);
+const { items: banks } = storeToRefs(bankListStore);
+
+const { isSuccess: isSuccessWithdraw } = storeToRefs(walletWithdrawStore);
 
 const transactionPage = ref("1");
+const showResultDialog = ref(false);
 
-const nonExistCurrencies = computed(() => {
+const linkedCurrencies = computed(() => {
+  return currencies
+    ? currencies.value.filter((obj) =>
+        accounts.value.some(({ currency }) => obj.code === currency),
+      )
+    : [];
+});
+
+const nonLinkedCurrencies = computed(() => {
   return currencies
     ? currencies.value.filter(
         (obj) => !accounts.value.some(({ currency }) => obj.code === currency),
@@ -143,6 +167,13 @@ async function sendRequestTransactions() {
   });
 }
 
+async function sendRequestBanks() {
+  await bankListStore.getItems({
+    page: 1,
+    page_size: 50,
+  });
+}
+
 function setIsShowDepositDialog(value: boolean) {
   walletDepositStore.setIsShowDialog(value);
 }
@@ -151,9 +182,14 @@ function setIsShowWithdrawDialog(value: boolean) {
   walletWithdrawStore.setIsShowDialog(value);
 }
 
+function setWithdrawSuccess(value: boolean) {
+  walletWithdrawStore.setIsSuccess(value);
+}
+
 sendRequestAccounts();
 sendRequestCurrencies();
 sendRequestTransactions();
+sendRequestBanks();
 
 const headers = [
   { title: "№", key: "id" },

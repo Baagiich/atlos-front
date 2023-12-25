@@ -8,7 +8,7 @@ export default {
   account: {
     availableBalance: "Available balance",
     create: "Create a account",
-    empty: "Empty account. Please create a wallet account",
+    empty: "Empty registered any account. Please create a wallet account",
     message: {
       success: "Your wallet has been created successfully",
     },

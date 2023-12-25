@@ -1,8 +1,9 @@
 export default {
-  title: "Country",
-  isoCode3: "IsoCode3",
+  title: "Хот",
   name: "Name",
-  states: "States",
+  state: "State",
+  capital: "Capital",
+  addresses: "Addresses",
   updatedAt: "UpdatedAt",
   createdAt: "CreatedAt",
 };

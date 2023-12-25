@@ -21,8 +21,7 @@
 
 <script lang="ts" setup>
 import { onBeforeUnmount } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import Toolbar from "@/components/common/Toolbar.vue";
 import Form from "@/components/currency/CurrencyForm.vue";
@@ -32,9 +31,7 @@ import { useCurrencyCreateStore } from "@/store/currency/create";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { Currency } from "@/types/currency";
 
-const { t } = useI18n();
 const route = useRoute();
-const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
 const currencyCreateStore = useCurrencyCreateStore();
@@ -45,7 +42,6 @@ const {
   retrieved: item,
   updated,
   isLoading,
-  error,
   violations,
 } = storeToRefs(currencyUpdateStore);
 
