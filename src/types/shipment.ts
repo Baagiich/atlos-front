@@ -27,4 +27,6 @@ export interface Shipment extends Item {
   name?: string;
   loadType?: any;
   currency?: string;
+  mainWeight?: number;
+  mainSize?: number;
 }

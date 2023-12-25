@@ -70,5 +70,6 @@ export default {
   informationNotCompleted: "Мэдээлэл дутуу байна. Та мэдээллээ бүрэн оруулж байж баталгаажихийг анхаарна уу.",
   notAvailable: "Хоосон байна",
   fileUpload: "Файл хуулах",
+  save: "Хадгалах",
   fileuploader
 };

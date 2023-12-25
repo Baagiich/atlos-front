@@ -3,6 +3,7 @@ const names = {
   create: "ShipmentCreate",
   update: "ShipmentUpdate",
   show: "ShipmentShow",
+  editPrice: "EditPriceDashboard",
   detail: "ShipmentDetail",
   ownList: "ShipmentOwnList",
 };
@@ -12,6 +13,7 @@ const breadcrumbs = {
   create: { title: names.create, to: { name: names.create } },
   update: { title: names.update, to: { name: names.update } },
   show: { title: names.show, to: { name: names.show } },
+  editPrice: { title: names.editPrice, to: { name: names.editPrice } },
   detail: { title: names.detail, to: { name: names.detail } },
   ownList: { title: names.ownList, to: { name: names.ownList } },
 };
@@ -55,6 +57,14 @@ export default [
     component: () => import("@/views/shipment/ViewShow.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list, breadcrumbs.show],
+    },
+  },
+  {
+    name: names.editPrice,
+    path: "/shipments/price/edit/:id",
+    component: () => import("@/views/shipment/EditPriceDashboard.vue"),
+    meta: {
+      breadcrumb: [breadcrumbs.list, breadcrumbs.editPrice],
     },
   },
   {
