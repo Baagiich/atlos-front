@@ -68,11 +68,11 @@
           {{ t("shipment.sendBid") }}
         </v-btn>
         <v-btn
-        v-if="userType === UserType.CONSIGNOR"
+        v-else-if="userType === UserType.CONSIGNOR"
           color="secondary"
           size="small"
           class="ma-2"
-          @click="editPriceBidding(item)"
+          @click="gotoEditPriceDashboard(item)"
         >
           {{ t("shipment.showBid") }}
         </v-btn>
@@ -118,9 +118,7 @@ const userType = apiToken.getDecodedToken().user_type;
 
 const page = ref("1");
 const filters: Ref<Filters> = ref({});
-// if (userType.value != UserType.ADMIN) {
-//   filters.value.state = "created";
-// }
+
 if (userType != UserType.ADMIN) {
   breadcrumb[0].title !== 'ShipmentOwnList' ? filters.value.state = "created" : null;
   
@@ -217,7 +215,7 @@ function createPriceBidding(item: Shipment) {
     params: { id: item["@id"] },
   });
 }
-function editPriceBidding(item: Shipment) {
+function gotoEditPriceDashboard(item: Shipment) {
   router.push({
     name: "EditPriceDashboard",
     params: { id: item["@id"] },
