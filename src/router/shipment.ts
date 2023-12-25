@@ -6,6 +6,7 @@ const names = {
   editPrice: "EditPriceDashboard",
   detail: "ShipmentDetail",
   ownList: "ShipmentOwnList",
+  detailFiles: "ShipmentDetailFiles",
 };
 
 const breadcrumbs = {
@@ -16,6 +17,7 @@ const breadcrumbs = {
   editPrice: { title: names.editPrice, to: { name: names.editPrice } },
   detail: { title: names.detail, to: { name: names.detail } },
   ownList: { title: names.ownList, to: { name: names.ownList } },
+  detailFiles: { title: names.detailFiles, to: { name: names.detailFiles } },
 };
 
 export default [
@@ -73,6 +75,14 @@ export default [
     component: () => import("@/views/shipment/ViewDetail.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list, breadcrumbs.detail],
+    },
+  },
+  {
+    name: names.detailFiles,
+    path: "/shipments/detail/files/:id",
+    component: () => import("@/views/shipment/ViewDetailFiles.vue"),
+    meta: {
+      breadcrumb: [breadcrumbs.list, breadcrumbs.detailFiles],
     },
   }
 ];
