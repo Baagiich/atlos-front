@@ -7,14 +7,14 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="deleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="deleted" type="success" class="mb-4" closable>
       {{ $t("itemDeleted", [deleted["@id"]]) }}
     </v-alert>
-    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable>
       {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
     </v-alert>
 
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">
+    <v-alert v-if="error" type="error" class="mb-4" closable>
       {{ error }}
     </v-alert>
 

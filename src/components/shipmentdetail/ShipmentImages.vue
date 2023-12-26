@@ -9,6 +9,7 @@
     <v-window v-model="tab">
       <v-window-item :key="1" :value="1">
         <ShipmentImageSlide :items="loadPictures"></ShipmentImageSlide>
+        
       </v-window-item>
       <v-window-item :key="2" :value="2">
         <ShipmentImageSlide :items="unloadPictures"></ShipmentImageSlide>

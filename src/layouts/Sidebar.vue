@@ -102,7 +102,13 @@ const menuItems = [
     title: t("shipment.title"),
     routeName: "ShipmentList",
     icon: "mdi-truck-delivery",
-    roles: ["ROLE_ADMIN"],
+    roles: ["ROLE_ADMIN", "ROLE_CONSIGNOR"],
+  },
+  {
+    title: t("shipment.activeShipment"),
+    routeName: "ShipmentOwnList",
+    icon: "mdi-truck-delivery",
+    roles: ["ROLE_ADMIN", "ROLE_CONSIGNOR"],
   },
   {
     title: t("shppercompany.title"),
