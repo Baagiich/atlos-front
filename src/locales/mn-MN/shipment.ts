@@ -51,4 +51,6 @@ export default {
   location: "Тээврийн байршил",
   showBid: "Үнийн санал харах",
   seeShipmentImages: "Тээврийн зургууд харах",
+  title: 'Тээвэр',
+  activeShipment: 'Идэвхтэй тээвэр',
 };

@@ -32,7 +32,7 @@ export default [
   {
     name: names.ownList,
     path: "/shipments/list",
-    component: () => import("@/views/shipment/ViewList.vue"),
+    component: () => import("@/views/shipment/ViewOwnList.vue"),
     meta: {
       breadcrumb: [breadcrumbs.ownList],
     },
