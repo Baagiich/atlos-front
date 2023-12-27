@@ -6,7 +6,21 @@
     permanent
     @click="rail = false"
   >
-    <v-list-item class="text-center" nav>
+    <v-list-item class="pa-3">
+      <div class="locale-changer">
+        <v-icon color="red">mdi-web</v-icon>
+        <select v-model="$i18n.locale" style="cursor: pointer">
+          <option
+            v-for="locale in $i18n.availableLocales"
+            :key="`locale-${locale}`"
+            :value="locale"
+          >
+            {{ $t(locale) }}
+          </option>
+        </select>
+      </div>
+    </v-list-item>
+    <v-list-item class="text-center mb-2" nav>
       <v-img style="max-height: 30px" :src="logoAtlos" />
     </v-list-item>
     <v-list-item

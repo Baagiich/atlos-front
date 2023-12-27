@@ -10,7 +10,6 @@
     :message="$t('wallet.account.withdraw.successfullyMessage')"
     @close="setWithdrawSuccess(false)"
   ></ResultDialog>
-
   <v-container fluid>
     <v-alert v-if="error" type="error" class="mb-4" :closable="true">
       {{ error }}
@@ -25,6 +24,7 @@
                 <BalanceCard
                   :balance="account.balance"
                   :currency="account.currency"
+                  :credit="account.credit"
                 />
               </v-col>
             </v-row>
@@ -104,7 +104,6 @@ import TransactionList from "@/components/wallet/TransactionList.vue";
 import WalletCreate from "@/components/wallet/WalletCreate.vue";
 import WalletDepositDialog from "@/components/wallet/WalletDepositDialog.vue";
 import WalletWithdrawDialog from "@/components/wallet/WalletWithdrawDialog.vue";
-import WithdrawSuccessDialog from "@/components/wallet/WithdrawSuccessDialog.vue";
 import ResultDialog from "@/components/common/ResultDialog.vue";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -131,7 +130,6 @@ const { items: banks } = storeToRefs(bankListStore);
 const { isSuccess: isSuccessWithdraw } = storeToRefs(walletWithdrawStore);
 
 const transactionPage = ref("1");
-const showResultDialog = ref(false);
 
 const linkedCurrencies = computed(() => {
   return currencies

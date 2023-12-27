@@ -99,7 +99,7 @@ import { computed, Ref, ref, toRef } from "vue";
 import { WalletWithdraw } from "@/types/wallet/wallet-withdraw";
 import { SubmissionErrors } from "@/types/error";
 import { useWalletWithdrawStore } from "@/store/wallet/withdraw";
-import { VForm } from "vuetify/lib/components/index.mjs";
+import { VForm } from "vuetify/components";
 import { useWalletListStore } from "@/store/wallet/list";
 
 const props = defineProps<{
