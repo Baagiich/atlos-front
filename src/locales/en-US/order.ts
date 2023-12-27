@@ -14,4 +14,5 @@ export default {
   unpaid: "Not paid",
   paidAt: "Paid date",
   shipmentName: "Shipment name",
+  paymentSuccessMessage: "Successfully!",
 };

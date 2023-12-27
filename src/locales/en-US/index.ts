@@ -69,6 +69,8 @@ export default {
   status: "Status",
   description: "Description",
   logout: "Logout",
+  "en-US": "US",
+  "mn-MN": "MN",
   vehicleimage,
   vehicle,
   wallet,

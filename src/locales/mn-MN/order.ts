@@ -14,4 +14,5 @@ export default {
   unpaid: "Төлбөр төлөгдөөгүй",
   paidAt: "Төлөгдсөн огноо",
   shipmentName: "Тээврийн нэр",
+  paymentSuccessMessage: "Төлбөр төлөлт амжилттай!",
 };

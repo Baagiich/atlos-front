@@ -1,7 +1,14 @@
 <template>
+  <Toolbar :breadcrumb="breadcrumb" />
+  <ResultDialog
+    :show="paymentCreated?.status == 4"
+    :type="'success'"
+    :message="$t('order.paymentSuccessMessage')"
+    @close="closeDialog"
+  ></ResultDialog>
   <v-container fluid>
-    <v-alert v-if="errorCreate" type="error" class="mb-4" :closable="true">
-      {{ errorCreate }}
+    <v-alert v-if="errorPay" type="error" class="mb-4" :closable="true">
+      {{ errorPay }}
     </v-alert>
     <v-alert
       v-if="validationError"
@@ -64,7 +71,7 @@
           <v-row v-if="retrieved && !retrieved?.paidAt" class="mt-6">
             <v-col cols="6">
               <v-select
-                v-model="orderPaymentData.method"
+                v-model="orderPaymentData.gatewayName"
                 :label="$t('order.methodChoice')"
                 :items="paymentMethods"
                 item-title="name"
@@ -74,32 +81,47 @@
               >
               </v-select>
               <v-btn
-                :disabled="!orderPaymentData.method || isLoadingRetrieve"
+                :disabled="!orderPaymentData.gatewayName || isLoadingRetrieve"
                 :loading="isLoadingRetrieve"
                 block
                 class="text-none px-6"
                 color="blue"
                 variant="flat"
                 size="large"
-                @click="toggleConfirmDelete"
+                @click="toggleConfirmDialog"
               >
                 {{ $t("order.pay") }}
               </v-btn>
             </v-col>
-            <v-col v-if="orderPaymentData.method == 'wallet'" cols="6">
-              <span>{{ $t("wallet.account.availableBalance") }}</span>
-              <br />
-              <v-chip v-if="currencyAccount" icon="mdi-blinds"
-                >{{ currencyAccount.balance }}
-                {{ currencyAccount?.currency }}</v-chip
-              >
-              <v-btn
-                v-else
-                color="orange"
-                @click="router.push({ name: 'WalletList' })"
-              >
-                {{ $t("wallet.account.empty") }}
-              </v-btn>
+            <v-col
+              v-if="orderPaymentData.gatewayName == PaymentType.ATLOS_WALLET"
+              cols="6"
+            >
+              <v-row>
+                <v-col cols="4">
+                  <span>{{ $t("wallet.account.availableBalance") }}</span>
+                  <br />
+                  <v-chip v-if="currencyAccount" icon="mdi-blinds"
+                    >{{ currencyAccount.balance }}
+                    {{ currencyAccount?.currency }}</v-chip
+                  >
+                  <v-btn
+                    v-else
+                    color="orange"
+                    @click="router.push({ name: 'WalletList' })"
+                  >
+                    {{ $t("wallet.account.empty") }}
+                  </v-btn>
+                </v-col>
+                <v-col cols="4">
+                  <span>{{ $t("wallet.account.credit") }}</span>
+                  <br />
+                  <v-chip v-if="currencyAccount" icon="mdi-blinds"
+                    >{{ currencyAccount.credit }}
+                    {{ currencyAccount?.currency }}</v-chip
+                  >
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
         </v-col>
@@ -107,7 +129,7 @@
     </v-form>
     <ConfirmDialog
       :show="confirmDelete"
-      @cancel="toggleConfirmDelete"
+      @cancel="toggleConfirmDialog"
       @confirm="submit"
     ></ConfirmDialog>
   </v-container>
@@ -122,21 +144,23 @@ import { useOrderPaymentStore } from "@/store/order/createpayment";
 import { useOrderShowStore } from "@/store/order/show";
 import { OrderPayment } from "@/types/orderpayment";
 import ConfirmDialog from "@/components/common/ConfirmDialog.vue";
+import ResultDialog from "@/components/common/ResultDialog.vue";
 import { useRoute, useRouter } from "vue-router";
+import Toolbar from "@/components/common/Toolbar.vue";
+import { useBreadcrumb } from "@/composables/breadcrumb";
+import { PaymentType } from "@/types/paymenttype";
 
 const { t } = useI18n();
 const validationError = ref("");
 const confirmDelete = ref(false);
 const route = useRoute();
 const router = useRouter();
-
-const orderPaymentData: Ref<OrderPayment> = ref({});
-orderPaymentData.value.orderIri = "iri";
+const breadcrumb = useBreadcrumb();
 
 const paymentMethods = [
   {
     name: t("wallet.title"),
-    value: "wallet",
+    value: PaymentType.ATLOS_WALLET,
   },
 ];
 
@@ -147,25 +171,36 @@ const orderPaymentStore = useOrderPaymentStore();
 const orderShowStore = useOrderShowStore();
 const {
   created: paymentCreated,
-  isLoadingCreate,
-  errorCreate,
+  isLoading: isLoadingPay,
+  error: errorPay,
 } = storeToRefs(orderPaymentStore);
 
 await walletListStore.getAccounts();
-await orderShowStore.retrieve({
-  page: 1,
-  groups: [
-    "order_item:list",
-    "product:read",
-    "shipment:list",
-    "money:read",
-    "order:read",
-  ],
-  ...{ number: route.params.orderNumber as string },
-});
 
-const { retrieved, isLoadingRetrieve, errorRetrieve } =
-  storeToRefs(orderShowStore);
+async function retrieveOrder() {
+  await orderShowStore.retrieve({
+    page: 1,
+    groups: [
+      "order_item:list",
+      "product:read",
+      "shipment:list",
+      "money:read",
+      "order:read",
+    ],
+    ...{ number: route.params.orderNumber as string },
+  });
+}
+
+await retrieveOrder();
+
+const {
+  retrieved,
+  isLoading: isLoadingRetrieve,
+  error: errorRetrieve,
+} = storeToRefs(orderShowStore);
+
+const orderPaymentData: Ref<OrderPayment> = ref({});
+orderPaymentData.value.order = retrieved?.value?.["@id"];
 
 const currencyAccount = computed(() => {
   return accounts && retrieved
@@ -178,6 +213,7 @@ const currencyAccount = computed(() => {
 });
 
 async function submit() {
+  toggleConfirmDialog();
   if (!currencyAccount.value) {
     validationError.value = t("wallet.account.empty");
     return;
@@ -190,10 +226,14 @@ async function submit() {
     return;
   }
 
-  if (+currencyAccount.value?.balance < retrieved?.value?.totalAmount.amount) {
+  if (
+    +currencyAccount.value?.balance + +currencyAccount.value?.credit <
+    retrieved?.value?.totalAmount.amount
+  ) {
     validationError.value = t("order.influenceBalance");
     return;
   }
+
   await orderPaymentStore.payOrder(orderPaymentData.value);
 
   if (!paymentCreated?.value) {
@@ -201,7 +241,12 @@ async function submit() {
   }
 }
 
-function toggleConfirmDelete() {
+function toggleConfirmDialog() {
   confirmDelete.value = !confirmDelete.value;
+}
+
+function closeDialog() {
+  retrieveOrder();
+  orderPaymentStore.$reset();
 }
 </script>

@@ -6,7 +6,8 @@ export default {
     choice: "Choice currency",
   },
   account: {
-    availableBalance: "Available balance",
+    availableBalance: "Balance",
+    credit: "Credit",
     create: "Create a account",
     empty: "Empty registered any account. Please create a wallet account",
     message: {

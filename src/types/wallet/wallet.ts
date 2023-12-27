@@ -6,4 +6,5 @@ export interface WalletAccount {
   currency: string;
   created_at: Date;
   updated_at: Date;
+  credit: string;
 }

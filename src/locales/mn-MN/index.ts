@@ -70,6 +70,8 @@ export default {
   status: "Төлөв",
   description: "Тайлбар",
   logout: "Гарах",
+  "en-US": "EN",
+  "mn-MN": "MN",
   vehicle,
   vehicleimage,
   consignor,

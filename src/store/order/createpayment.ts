@@ -3,9 +3,10 @@ import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
 import type { OrderPayment } from "@/types/orderpayment";
 import type { SubmissionErrors } from "@/types/error";
+import { OrderPaymentRes } from "@/types/orderpaymentres";
 
 interface State {
-  created?: OrderPayment;
+  created?: OrderPaymentRes;
   isLoading: boolean;
   error?: string;
   violations?: SubmissionErrors;
@@ -30,7 +31,11 @@ export const useOrderPaymentStore = defineStore("orderPayment", {
           method: "POST",
           body: JSON.stringify(payload),
         });
-        const data: OrderPayment = await response.json();
+        const data: OrderPaymentRes = await response.json();
+
+        if (data.status == 3) {
+          this.setError(data.details.error);
+        }
 
         this.toggleLoading();
         this.setCreated(data);
@@ -49,7 +54,7 @@ export const useOrderPaymentStore = defineStore("orderPayment", {
       }
     },
 
-    setCreated(created: OrderPayment) {
+    setCreated(created: OrderPaymentRes) {
       this.created = created;
     },
 

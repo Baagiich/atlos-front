@@ -6,7 +6,8 @@ export default {
     choice: "Валют сонгох",
   },
   account: {
-    availableBalance: "Боломжит үлдэгдэл",
+    availableBalance: "Үлдэгдэл",
+    credit: "Зээл",
     create: "Данс үүсгэх",
     empty: "Данс олдсонгүй. Шинээр үүсгэнэ үү",
     message: {

@@ -8,6 +8,12 @@
       <div class="text-h6 font-weight-bold mb-1">
         {{ balance }}
       </div>
+      <div class="mb-1">
+        <span class="text-medium-emphasis"
+          >{{ $t("wallet.account.credit") }}:</span
+        >
+        {{ credit }}
+      </div>
     </v-card-item>
   </v-card>
 </template>
@@ -17,6 +23,7 @@ const props = defineProps({
   currency: String,
   balance: String,
   color: String,
+  credit: String,
 });
 </script>
 

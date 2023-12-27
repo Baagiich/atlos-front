@@ -5,7 +5,7 @@ const names = {
 
 const breadcrumbs = {
   list: { title: "Payment", to: { name: names.list } },
-  checkout: { title: "Payment checkout", to: { name: names.checkout } },
+  checkout: { title: "Checkout", to: { name: names.checkout } },
 };
 
 export default [
@@ -22,7 +22,7 @@ export default [
     path: "/orders/checkout/:orderNumber",
     component: () => import("@/views/order/ViewCheckout.vue"),
     meta: {
-      breadcrumb: [breadcrumbs.checkout],
+      breadcrumb: [breadcrumbs.list, breadcrumbs.checkout],
     },
   },
 ];

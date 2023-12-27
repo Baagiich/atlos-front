@@ -53,7 +53,6 @@ import { useOrderListStore } from "@/store/order/list";
 import Toolbar from "@/components/common/Toolbar.vue";
 import DataFilter from "@/components/common/DataFilter.vue";
 import Filter from "@/components/order/OrderFilter.vue";
-import ActionCell from "@/components/common/ActionCell.vue";
 import { formatDateTime } from "@/utils/date";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { Filters, VuetifyOrder } from "@/types/list";
