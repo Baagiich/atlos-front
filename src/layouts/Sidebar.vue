@@ -1,13 +1,19 @@
 <template>
   <v-navigation-drawer
+    v-if="userTokenData"
     v-model="drawer"
     :rail="rail"
     permanent
     @click="rail = false"
   >
+    <v-list-item class="text-center" nav>
+      <v-img style="max-height: 30px" :src="logoAtlos" />
+    </v-list-item>
     <v-list-item
-      prepend-avatar="https://mgl.gogo.mn/newsn/thumbnail/1000/images/c/2023/10/311617-10102023-1696900623-2008281341-Fuso_1.jpg"
-      title="ATLOS DASHBOARD"
+      prepend-icon="mdi-account-circle"
+      :class="bgClass"
+      :subtitle="userTokenData?.username"
+      title="DASHBOARD"
       nav
     >
       <template #append>
@@ -30,16 +36,30 @@
         @click="router.push({ name: menuItem.routeName })"
       ></v-list-item>
     </v-list>
+    <template #append>
+      <v-list-item class="text-center" prepend-icon="mdi-power" nav>
+        <div class="pa-2">
+          <v-btn block @click="logout"> {{ t("logout") }} </v-btn>
+        </div>
+      </v-list-item>
+    </template>
   </v-navigation-drawer>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import * as apiToken from "@/utils/apiToken";
 import { useI18n } from "vue-i18n";
+import { useSecurityLoginStore } from "@/store/security/login";
+import { storeToRefs } from "pinia";
+import logoAtlos from "@/assets/logo-atlos.png";
+
 const router = useRouter();
 const { t } = useI18n();
+
+const securityLoginStore = useSecurityLoginStore();
+const { userTokenData } = storeToRefs(securityLoginStore);
 
 const drawer = ref(true);
 const rail = ref(true);
@@ -124,8 +144,14 @@ const menuItems = [
   },
 ];
 
-const userRoles = apiToken.getDecodedToken().roles;
+const bgClass = computed(() => {
+  return userTokenData?.value?.user_type == 3
+    ? "bg-red"
+    : "bg-blue-grey-darken-1";
+});
+
 function isGrantedRole(roles: string[] | undefined): boolean {
+  const userRoles = userTokenData?.value ? userTokenData?.value?.roles : [];
   if (!roles) {
     return true;
   }
@@ -137,5 +163,11 @@ function isGrantedRole(roles: string[] | undefined): boolean {
   }
 
   return false;
+}
+
+function logout() {
+  apiToken.remove();
+  securityLoginStore.setUserTokenData(undefined);
+  router.push({ name: "Login" });
 }
 </script>
