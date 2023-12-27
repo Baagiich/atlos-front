@@ -114,7 +114,7 @@ export async function callRefreshToken(
 export function getDecodedToken() {
   const tokenData = get();
   if (!tokenData || !isRefreshTokenAlive(tokenData)) {
-    throw new Error("no token data");
+    return undefined;
   }
   return jwtDecode(tokenData.token);
 }

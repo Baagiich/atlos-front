@@ -7,8 +7,10 @@ import { useDeviceShowStore } from "@/store/device/show";
 import { useDeviceCreateStore } from "@/store/device/create";
 import UAParser from "ua-parser-js";
 import { v4 as uuidv4 } from "uuid";
+import { JwtPayload } from "jwt-decode";
 
 interface State {
+  userTokenData?: JwtPayload;
   isLoading: boolean;
   error?: string;
   violations?: SubmissionErrors;
@@ -16,6 +18,7 @@ interface State {
 
 export const useSecurityLoginStore = defineStore("securityLogin", {
   state: (): State => ({
+    userTokenData: apiToken.getDecodedToken(),
     isLoading: false,
     error: undefined,
     violations: undefined,
@@ -49,7 +52,7 @@ export const useSecurityLoginStore = defineStore("securityLogin", {
 
           deviceShow.retrieveFromLocal();
         }
-        payload.deviceId = deviceShow.retrieved.deviceId;
+        payload.deviceId = deviceShow.retrieved?.deviceId;
         await apiToken.setToken(payload);
 
         this.toggleLoading();
@@ -72,6 +75,10 @@ export const useSecurityLoginStore = defineStore("securityLogin", {
     },
     toggleLoading() {
       this.isLoading = !this.isLoading;
+    },
+
+    setUserTokenData(data?: JwtPayload) {
+      this.userTokenData = data;
     },
 
     setError(error: string | undefined) {

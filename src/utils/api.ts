@@ -6,6 +6,7 @@ import { useRouter } from "vue-router";
 import * as apiToken from "@/utils/apiToken";
 import { useDeviceShowStore } from "@/store/device/show";
 import { useDeviceCreateStore } from "@/store/device/create";
+import { useSecurityLoginStore } from "@/store/security/login";
 import { storeToRefs } from "pinia";
 
 const MIME_TYPE = "application/ld+json";
@@ -64,6 +65,9 @@ export default async function api(
           }
 
           if (router.currentRoute.value.name !== "Login") {
+            apiToken.remove();
+            const securityLoginStore = useSecurityLoginStore();
+            securityLoginStore.setUserTokenData(undefined);
             router.push({ name: "Login" });
           }
         }
