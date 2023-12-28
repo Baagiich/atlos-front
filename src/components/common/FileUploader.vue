@@ -243,6 +243,7 @@ defineProps({
 const files = ref([]);
 const upload = ref();
 const uploadAuto = ref(false);
+const name = ref()
 
 function inputFilter(newFile, oldFile, prevent) {
   if (newFile && !oldFile) {

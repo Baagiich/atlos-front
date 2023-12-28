@@ -128,7 +128,7 @@ const menuItems = [
     title: "shipment.activeShipment",
     routeName: "ShipmentOwnList",
     icon: "mdi-truck-delivery",
-    roles: ["ROLE_ADMIN", "ROLE_CONSIGNOR"],
+    roles: ["ROLE_ADMIN", "ROLE_CONSIGNOR", "ROLE_SHIPPER"],
   },
   {
     title: "shppercompany.title",

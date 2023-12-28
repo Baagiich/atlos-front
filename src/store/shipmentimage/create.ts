@@ -25,7 +25,6 @@ export const useShipmentImageCreateStore = defineStore("shipmentImageCreate", {
       this.setError(undefined);
       this.setViolations(undefined);
       this.toggleLoading();
-
       try {
         const response = await api("shipment_images", {
           method: "POST",

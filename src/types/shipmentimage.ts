@@ -4,7 +4,7 @@ import { ListParams } from "./list";
 export interface ShipmentImage extends Item {
   image?: any;
   shipment?: any;
-  tags?: string;
+  tags?: string[];
   status?: string;
   rejectedCauses?: string;
   approvedAt?: string;
