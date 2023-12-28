@@ -6,20 +6,6 @@
     permanent
     @click="rail = false"
   >
-    <v-list-item class="pa-3">
-      <div class="locale-changer">
-        <v-icon color="red">mdi-web</v-icon>
-        <select v-model="$i18n.locale" style="cursor: pointer">
-          <option
-            v-for="locale in $i18n.availableLocales"
-            :key="`locale-${locale}`"
-            :value="locale"
-          >
-            {{ $t(locale) }}
-          </option>
-        </select>
-      </div>
-    </v-list-item>
     <v-list-item class="text-center mb-2" nav>
       <v-img style="max-height: 30px" :src="logoAtlos" />
     </v-list-item>
@@ -45,7 +31,7 @@
         v-show="isGrantedRole(menuItem.roles)"
         :key="index"
         :prepend-icon="menuItem.icon"
-        :title="menuItem.title"
+        :title="$t(menuItem.title)"
         :value="menuItem.routeName"
         @click="router.push({ name: menuItem.routeName })"
       ></v-list-item>
@@ -79,79 +65,79 @@ const drawer = ref(true);
 const rail = ref(true);
 const menuItems = [
   {
-    title: t("order.title"),
+    title: "order.title",
     routeName: "OrderList",
     icon: "mdi-account-credit-card",
     roles: ["ROLE_CONSIGNOR", "ROLE_SHIPPER"],
   },
   {
-    title: t("wallet.title"),
+    title: "wallet.title",
     routeName: "WalletList",
     icon: "mdi-wallet",
     roles: ["ROLE_CONSIGNOR", "ROLE_SHIPPER"],
   },
   {
-    title: t("bank.title"),
+    title: "bank.title",
     routeName: "BankList",
     icon: "mdi-bank",
     roles: ["ROLE_ADMIN"],
   },
   {
-    title: t("currency.title"),
+    title: "currency.title",
     routeName: "CurrencyList",
     icon: "mdi-currency-usd",
     roles: ["ROLE_ADMIN"],
   },
   {
-    title: t("city.title"),
+    title: "city.title",
     routeName: "CityList",
     icon: "mdi-home-city",
     roles: ["ROLE_ADMIN"],
   },
   {
-    title: t("contract.title"),
+    title: "contract.title",
     routeName: "ContractList",
     icon: "mdi-note-text",
     roles: ["ROLE_ADMIN"],
   },
   {
-    title: t("contracttemplate.title"),
+    title: "contracttemplate.title",
     routeName: "ContractTemplateList",
     icon: "mdi-note-search",
     roles: ["ROLE_ADMIN"],
   },
   {
-    title: t("country.title"),
+    title: "country.title",
     routeName: "CountryList",
     icon: "mdi-earth",
     roles: ["ROLE_ADMIN"],
   },
   {
-    title: t("driver.title"),
+    title: "driver.title",
     routeName: "DriverList",
     icon: "mdi-card-account-details",
     roles: ["ROLE_ADMIN"],
   },
   {
-    title: t("shipment.title"),
+    title: "shipment.title",
     routeName: "ShipmentList",
     icon: "mdi-truck-delivery",
     roles: ["ROLE_ADMIN", "ROLE_CONSIGNOR"],
   },
   {
-    title: t("shipment.activeShipment"),
+    title: "shipment.activeShipment",
     routeName: "ShipmentOwnList",
     icon: "mdi-truck-delivery",
     roles: ["ROLE_ADMIN", "ROLE_CONSIGNOR"],
   },
   {
-    title: t("shppercompany.title"),
+    title: "shppercompany.title",
     routeName: "ShipperCompanyList",
     icon: "mdi-handshake",
     roles: ["ROLE_ADMIN"],
   },
   {
-    title: t("vehicle.title"),
+    title: "vehicle.title",
     routeName: "VehicleList",
     icon: "mdi-car-estate",
     roles: ["ROLE_ADMIN"],
