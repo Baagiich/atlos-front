@@ -1,8 +1,7 @@
 import { createI18n } from "vue-i18n";
 import messages from "@/locales";
 
-const locale = "mn-MN";
-const currentLocale = localStorage.getItem("locale") ?? locale;
+const currentLocale = localStorage.getItem("locale") ?? "mn-MN";
 
 export default createI18n({
   locale: currentLocale,

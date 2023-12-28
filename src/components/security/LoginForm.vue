@@ -69,16 +69,6 @@
       >
         {{ $t("signin") }}
       </v-btn>
-
-      <!-- <v-card-text class="text-center">
-        <a
-          class="text-black text-decoration-none"
-          href="#"
-          rel="noopener noreferrer"
-        >
-          Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
-        </a>
-      </v-card-text> -->
     </v-card>
   </v-form>
 </template>
