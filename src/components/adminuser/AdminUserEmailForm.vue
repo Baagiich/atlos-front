@@ -1,7 +1,7 @@
 <template>
   <v-form ref="form" @submit.prevent="emitSubmit">
     <v-row>
-      <v-col cols="12" sm="6" md="6">
+      <v-col class="mx-auto" cols="12" sm="6" md="4">
         <v-text-field
           v-model="item.email"
           :label="$t('adminuser.email')"
@@ -18,19 +18,12 @@
             </v-icon>
           </template>
         </v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" sm="6" md="6">
         <v-card-item v-if="canResend">
           {{ countdownTimerFormatted }}</v-card-item
         >
         <v-btn :disabled="canResend" color="primary" type="submit">{{
           $t(sendRequest)
         }}</v-btn>
-        <v-btn color="primary" variant="text" class="ml-2" @click="resetForm">
-          {{ $t("reset") }}
-        </v-btn>
       </v-col>
     </v-row>
   </v-form>

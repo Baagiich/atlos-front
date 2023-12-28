@@ -6,6 +6,19 @@
       max-width="448"
       rounded="lg"
     >
+      <div class="text-right">
+        <v-icon color="red">mdi-web</v-icon>
+        <select v-model="$i18n.locale" style="cursor: pointer">
+          <option
+            v-for="(availableLocale, index) in $i18n.availableLocales"
+            :key="`locale-${availableLocale}`"
+            :value="availableLocale"
+            :selected="index == 0"
+          >
+            {{ $t(availableLocale) }}
+          </option>
+        </select>
+      </div>
       <div class="text-subtitle-1 text-medium-emphasis">{{ $t("email") }}</div>
       <v-text-field
         v-model="item.email"
@@ -56,26 +69,17 @@
       >
         {{ $t("signin") }}
       </v-btn>
-
-      <v-card-text class="text-center">
-        <a
-          class="text-black text-decoration-none"
-          href="#"
-          rel="noopener noreferrer"
-        >
-          Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
-        </a>
-      </v-card-text>
     </v-card>
   </v-form>
 </template>
 
 <script setup lang="ts">
-import { ref, toRef, Ref } from "vue";
+import { ref, toRef, Ref, onBeforeUnmount } from "vue";
 import type { Auth } from "@/types/auth";
 import type { SubmissionErrors } from "@/types/error";
 import { VForm } from "vuetify/components";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 const router = useRouter();
 const props = defineProps<{
   values?: Auth;
@@ -87,6 +91,7 @@ const violations = toRef(props, "errors");
 const item: Ref<Auth> = ref({});
 const visible = ref(false);
 const form: Ref<VForm | null> = ref(null);
+const { locale } = useI18n();
 
 if (props.values) {
   item.value = {
@@ -112,4 +117,8 @@ function handlePasswordReset() {
     name: "AdminUserPasswordReset",
   });
 }
+
+onBeforeUnmount(() => {
+  localStorage.setItem("locale", locale.value);
+});
 </script>
