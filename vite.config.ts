@@ -1,4 +1,4 @@
-// Plugins
+/// <reference types="vitest" />
 import vue from "@vitejs/plugin-vue";
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import ViteFonts from "unplugin-fonts/vite";

@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from "vue";
+import { onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import Loading from "@/components/common/Loading.vue";
@@ -22,8 +22,7 @@ import type { AdminUserVerify } from "@/types/adminuserverify";
 const router = useRouter();
 
 const adminUserCreate = useAdminUserCreateStore();
-const { created, isLoading, violations, error, verified } =
-  storeToRefs(adminUserCreate);
+const { isLoading, violations, error, verified } = storeToRefs(adminUserCreate);
 async function verify(item: AdminUserVerify) {
   await adminUserCreate.verify(item);
 

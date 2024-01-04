@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="form" @submit.prevent="emitSubmit">
+  <v-form ref="form" @submit.prevent="emitSubmit">
     <v-card
       class="mx-auto pa-12 pb-8"
       elevation="8"
@@ -26,7 +26,7 @@
         :placeholder="$t('email')"
         :error="Boolean(violations?.email)"
         :error-messages="violations?.email"
-        :rules="[required]"
+        :rules="[assertRequired()]"
         prepend-inner-icon="mdi-email-outline"
         variant="outlined"
       ></v-text-field>
@@ -51,7 +51,7 @@
         :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
         :type="visible ? 'text' : 'password'"
         :placeholder="$t('password')"
-        :rules="[required]"
+        :rules="[assertRequired()]"
         density="compact"
         prepend-inner-icon="mdi-lock-outline"
         variant="outlined"
@@ -80,6 +80,7 @@ import type { SubmissionErrors } from "@/types/error";
 import { VForm } from "vuetify/components";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { assertRequired } from "@/validations";
 const router = useRouter();
 const props = defineProps<{
   values?: Auth;
@@ -90,7 +91,7 @@ const violations = toRef(props, "errors");
 
 const item: Ref<Auth> = ref({});
 const visible = ref(false);
-const form: Ref<VForm | null> = ref(null);
+const form: Ref<VForm | undefined> = ref(undefined);
 const { locale } = useI18n();
 
 if (props.values) {
@@ -106,10 +107,6 @@ const emit = defineEmits<{
 function emitSubmit() {
   if (!form.value) return;
   emit("submit", item.value);
-}
-
-function required(v) {
-  return !!v || "Field is required";
 }
 
 function handlePasswordReset() {

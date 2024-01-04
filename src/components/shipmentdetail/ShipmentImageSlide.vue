@@ -87,9 +87,7 @@ const uploadOverlay = ref(false);
 const images: Ref<{ data: ShipmentImage; tag: string }[]> = ref([]);
 const selectedTag: Ref<string[]> = ref([]);
 const mediaObjectCreateStore = useMediaObjectCreateStore();
-const { created, isLoading, error, violations } = storeToRefs(
-  mediaObjectCreateStore,
-);
+const { created } = storeToRefs(mediaObjectCreateStore);
 
 async function formatItems() {
   props.files ? await processData(fileTags) : await processData(imageTags);

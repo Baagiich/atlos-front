@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
 import type { Country } from "@/types/country";
+import type { State as StateModel } from "@/types/state";
 import type { PagedCollection } from "@/types/collection";
 import type { ListParams } from "@/types/list";
 
@@ -83,7 +84,8 @@ export const useCountryListStore = defineStore("loadCountryList", {
         return item["@id"] !== deletedItem["@id"];
       });
     },
-    getCityNames(selectedCountry: string) {
+
+    getCityNames(selectedCountry: string | undefined = undefined) {
       if (!selectedCountry) {
         return [];
       }
@@ -96,7 +98,7 @@ export const useCountryListStore = defineStore("loadCountryList", {
         return [];
       }
 
-      const cities = selectedCountryItem.states.flatMap((state) =>
+      const cities = selectedCountryItem.states.flatMap((state: StateModel) =>
         state.cities.map((city) => city.name),
       );
 

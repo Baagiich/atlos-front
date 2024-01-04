@@ -1,7 +1,6 @@
 <template>
   <v-container fluid>
     <v-row>
-     
       <v-col cols="12" sm="6" md="6">
         <v-text-field
           v-model="item.startAt"
@@ -22,7 +21,6 @@
 
 <script lang="ts" setup>
 import { toRef } from "vue";
-import type { Shipment } from "@/types/shipment";
 import { DeviceLocation } from "@/types/devicelocation";
 
 const props = defineProps<{

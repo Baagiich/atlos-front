@@ -59,7 +59,7 @@
       </template>
       <template #item.actions="{ item }">
         <v-btn
-        v-if="userType === UserType.DRIVER || userType === UserType.SHIPPER"
+          v-if="userType === UserType.DRIVER || userType === UserType.SHIPPER"
           color="secondary"
           size="small"
           class="ma-2"
@@ -68,7 +68,7 @@
           {{ t("shipment.sendBid") }}
         </v-btn>
         <v-btn
-        v-else-if="userType === UserType.CONSIGNOR"
+          v-else-if="userType === UserType.CONSIGNOR"
           color="secondary"
           size="small"
           class="ma-2"
@@ -76,11 +76,8 @@
         >
           {{ t("shipment.showBid") }}
         </v-btn>
-      
-        <ActionCell
-          :actions="['show']"
-          @show="goToShowPage(item)"
-        />
+
+        <ActionCell :actions="['show']" @show="goToShowPage(item)" />
       </template>
     </v-data-table-server>
   </v-container>
@@ -114,22 +111,23 @@ const { deleted, mercureDeleted } = storeToRefs(shipmentDeleteStore);
 
 const shipmentListStore = useShipmentListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(shipmentListStore);
-const userType = apiToken.getDecodedToken().user_type;
+const userType = apiToken.getDecodedToken()?.user_type;
 
-const page = ref("1");
+const page = ref(1);
 const filters: Ref<Filters> = ref({});
 
 if (userType != UserType.ADMIN) {
-  breadcrumb[0].title !== 'ShipmentOwnList' ? filters.value.state = "created" : null;
-  
+  breadcrumb[0].title !== "ShipmentOwnList"
+    ? (filters.value.state = "created")
+    : null;
 }
 const order = ref({});
 const itemsPerPage = ref("10");
 async function sendRequest() {
   await shipmentListStore.getItems({
-    page: page.value,
+    page: +page.value,
     order: order.value,
-    page_size: itemsPerPage.value,
+    page_size: +itemsPerPage.value,
     groups: ["shipment:list"],
     ...filters.value,
   });
@@ -172,7 +170,7 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
 
   sendRequest();

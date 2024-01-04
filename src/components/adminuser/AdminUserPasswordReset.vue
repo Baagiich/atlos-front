@@ -26,14 +26,12 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount, ref } from "vue";
-import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import Loading from "@/components/common/Loading.vue";
 import Form from "@/components/adminuser/AdminUserEmailForm.vue";
 import { useSecurityPasswordResetStore } from "@/store/security/passwordReset";
 import { PasswordReset } from "@/types/passwordReset";
 
-const router = useRouter();
 const securityPasswordResetStore = useSecurityPasswordResetStore();
 const { isLoading, violations, error, data } = storeToRefs(
   securityPasswordResetStore,
@@ -42,7 +40,7 @@ const dialog = ref(false);
 async function handleReset(item: PasswordReset) {
   await securityPasswordResetStore.passwordReset(item);
 
-  if (!data.value) {
+  if (!data || !data.value) {
     return;
   }
   if (data.value?.message === "Successful") {

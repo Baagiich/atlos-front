@@ -1,6 +1,6 @@
 <template>
   <Suspense>
-    <List :own="true"/>
+    <List :own="true" />
 
     <template #fallback>{{ $t("loading") }}</template>
   </Suspense>

@@ -4,6 +4,7 @@ export interface Shipment extends Item {
   shipmentImages?: any;
   state?: string;
   driver?: any;
+  adminuser?: any;
   action?: string;
   consignor?: string;
   shipmentCode?: string;
@@ -17,7 +18,7 @@ export interface Shipment extends Item {
   unloadAt?: string;
   prePayment?: number;
   postPayment?: number;
-  price: {
+  price?: {
     amount?: number;
     currency?: string;
   };

@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: front_dev
     ports:
       - "3000:3000"
     volumes:

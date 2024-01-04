@@ -4,8 +4,6 @@ import { extractHubURL } from "@/utils/mercure";
 import type { Vehicle } from "@/types/vehicle";
 import type { PagedCollection } from "@/types/collection";
 import type { ListParams } from "@/types/list";
-import { VehicleType } from "@/types/vehicletype";
-import { VehicleCapacityType } from "@/types/vehiclecapacitytype";
 
 interface State {
   items: Vehicle[];

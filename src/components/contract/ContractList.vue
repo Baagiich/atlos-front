@@ -7,14 +7,14 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="deleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="deleted" type="success" class="mb-4" :closable="true">
       {{ $t("itemDeleted", [deleted["@id"]]) }}
     </v-alert>
-    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="mercureDeleted" type="success" class="mb-4" :closable="true">
       {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
     </v-alert>
 
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">
+    <v-alert v-if="error" type="error" class="mb-4" :closable="true">
       {{ error }}
     </v-alert>
 
@@ -36,52 +36,52 @@
       <template #item.actions="{ item }">
         <ActionCell
           :actions="['show', 'update', 'delete']"
-          @show="goToShowPage(item.raw)"
-          @update="goToUpdatePage(item.raw)"
-          @delete="deleteItem(item.raw)"
+          @show="goToShowPage(item)"
+          @update="goToUpdatePage(item)"
+          @delete="deleteItem(item)"
         />
       </template>
 
       <template #item.@id="{ item }">
         <router-link
-          :to="{ name: 'ContractShow', params: { id: item.raw['@id'] } }"
+          :to="{ name: 'ContractShow', params: { id: item['@id'] } }"
         >
-          {{ item.raw["@id"] }}
+          {{ item["@id"] }}
         </router-link>
       </template>
 
-      <template #item.adminuser="{ item }">
+      <template #item.adminUser="{ item }">
         <router-link
           v-if="router.hasRoute('AdminUserShow')"
-          :to="{ name: 'AdminUserShow', params: { id: item.raw.adminuser } }"
+          :to="{ name: 'AdminUserShow', params: { id: item.adminUser } }"
         >
-          {{ item.raw.adminuser }}
+          {{ item.adminUser }}
         </router-link>
 
         <p v-else>
-          {{ item.raw.adminuser }}
+          {{ item.adminUser }}
         </p>
       </template>
-      <template #item.contracttemplate="{ item }">
+      <template #item.contractTemplate="{ item }">
         <router-link
           v-if="router.hasRoute('ContractTemplateShow')"
           :to="{
             name: 'ContractTemplateShow',
-            params: { id: item.raw.contracttemplate },
+            params: { id: item.contractTemplate },
           }"
         >
-          {{ item.raw.contracttemplate }}
+          {{ item.contractTemplate }}
         </router-link>
 
         <p v-else>
-          {{ item.raw.contracttemplate }}
+          {{ item.contractTemplate }}
         </p>
       </template>
       <template #item.updatedAt="{ item }">
-        {{ formatDateTime(item.raw.updatedAt) }}
+        {{ formatDateTime(item.updatedAt) }}
       </template>
       <template #item.createdAt="{ item }">
-        {{ formatDateTime(item.raw.createdAt) }}
+        {{ formatDateTime(item.createdAt) }}
       </template>
     </v-data-table-server>
   </v-container>
@@ -114,13 +114,13 @@ const { deleted, mercureDeleted } = storeToRefs(contractDeleteStore);
 const contractListStore = useContractListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(contractListStore);
 
-const page = ref("1");
+const page = ref(1);
 const filters: Ref<Filters> = ref({});
 const order = ref({});
 
 async function sendRequest() {
   await contractListStore.getItems({
-    page: page.value,
+    page: +page.value,
     order: order.value,
     ...filters.value,
   });
@@ -164,7 +164,7 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
 
   sendRequest();

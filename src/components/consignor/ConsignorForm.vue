@@ -121,7 +121,6 @@
           >
           </v-text-field>
           <FileUploader></FileUploader>
-         
         </v-col>
       </v-row>
       <v-row v-if="props.contractTemplate">
@@ -240,12 +239,15 @@ const contractSignedRules = [assertChecked()];
 const dialog = ref(false);
 
 const mediaObjectCreateStore = useMediaObjectCreateStore();
-const { created, isLoading,error, violations:mediaObj } = storeToRefs(mediaObjectCreateStore);
+const { created } = storeToRefs(mediaObjectCreateStore);
 const emit = defineEmits<{
   (e: "submit", item: Consignor): void;
 }>();
 const form: Ref<VForm | null> = ref(null);
 async function emitSubmit() {
+  if (!form.value) {
+    return;
+  }
   const v = await form.value.validate();
   if (v.valid) {
     item.value.certificate = created?.value?.["@id"];

@@ -23,7 +23,7 @@
         variant="outlined"
         clearable
       >
-        <template v-slot:label>
+        <template #label>
           {{ $t("wallet.currency.choice") }}
         </template>
       </v-select>

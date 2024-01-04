@@ -23,9 +23,11 @@ import { onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import LoginForm from "@/components/security/LoginForm.vue";
 import { useSecurityLoginStore } from "@/store/security/login";
+import Loading from "@/components/common/Loading.vue";
 import { Auth } from "@/types/auth";
 import { storeToRefs } from "pinia";
 import logoAtlos from "@/assets/logo-atlos.png";
+import isUndefined from "lodash/isUndefined";
 
 const router = useRouter();
 
@@ -36,7 +38,7 @@ const { isLoading, violations, error } = storeToRefs(securityLoginStore);
 async function login(item: Auth) {
   await securityLoginStore.login(item);
 
-  if (typeof error.value === "undefined") {
+  if (isUndefined(error?.value)) {
     router.push({
       name: "ShipmentList",
     });

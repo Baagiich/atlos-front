@@ -5,7 +5,7 @@
       v-if="created || updated"
       type="success"
       class="mb-4"
-      closable="true"
+      :closable="true"
     >
       <template v-if="updated">
         {{ $t("itemUpdated", [updated["@id"]]) }}

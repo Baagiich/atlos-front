@@ -101,7 +101,7 @@ const order = ref({});
 
 async function sendRequest() {
   await countryListStore.getItems({
-    page: page.value,
+    page: +page.value,
     order: order.value,
   });
 }

@@ -1,36 +1,22 @@
 <template>
   <v-container fluid>
-    <v-alert
-      v-if="error || deleteError"
-      type="error"
-      class="mb-4"
-      closable="true"
-    >
-      {{ error || deleteError }}
+    <v-alert v-if="deleteError" type="error" class="mb-4" :closable="true">
+      {{ deleteError }}
     </v-alert>
 
-    <v-alert
-      v-if="created || updated"
-      type="success"
-      class="mb-4"
-      closable="true"
-    >
-      <template v-if="updated">
-        {{ $t("itemUpdated", [updated["@id"]]) }}
-      </template>
-      <template v-else-if="created">
-        {{ $t("itemCreated", [created["@id"]]) }}
-      </template>
+    <v-alert v-if="created" type="success" class="mb-4" :closable="true">
+      {{ $t("itemCreated", [created["@id"]]) }}
     </v-alert>
 
     <Form
       v-if="item"
       :values="item"
-      :isUpdate="true"
+      :is-update="true"
       @delete="deleteItem"
       @submit="update"
     />
   </v-container>
+  <Loading :visible="deleteLoading" />
 </template>
 
 <script lang="ts" setup>
@@ -52,9 +38,9 @@ const { isLoading: deleteLoading, error: deleteError } = storeToRefs(
   shipmentloadDeleteStore,
 );
 const props = defineProps<{
-  item: ShipmentLoad;
+  item?: ShipmentLoad;
 }>();
-const item: Ref<ShipmentLoad> = ref(props.item);
+const item: Ref<ShipmentLoad | undefined> = ref(props.item);
 const shipmentloadUpdateStore = useShipmentLoadUpdateStore();
 
 await shipmentloadUpdateStore.retrieve(getId());
@@ -75,6 +61,9 @@ const emit = defineEmits<{
   (e: "updatelist"): void;
 }>();
 function getId(): string {
+  if (!item.value) {
+    return "";
+  }
   const iri = item.value["@id"];
   if (iri) {
     iri.replace("/api/shipment_loads/", "");

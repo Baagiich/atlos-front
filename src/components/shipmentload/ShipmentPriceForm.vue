@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form">
+  <v-form v-if="item" ref="form">
     <v-row>
       <v-col cols="12" sm="6" md="2">
         <v-text-field
@@ -92,7 +92,7 @@
           </template>
         </v-text-field>
       </v-col>
-      <v-col cols="12" sm="6" md="1" v-if="item.loadType === 2">
+      <v-col v-if="item.loadType === 2" cols="12" sm="6" md="1">
         <v-text-field
           v-model="item.mainWeight"
           :error="Boolean(violations?.name)"
@@ -114,7 +114,7 @@
           </template>
         </v-text-field>
       </v-col>
-      <v-col cols="12" sm="6" md="1" v-if="item.loadType === 2">
+      <v-col v-if="item.loadType === 2" cols="12" sm="6" md="1">
         <v-text-field
           v-model.number="item.mainSize"
           :error="Boolean(violations?.packageType)"
@@ -135,13 +135,19 @@
           </template>
         </v-text-field>
       </v-col>
-
     </v-row>
 
     <v-row>
       <v-col cols="12" sm="6" md="6">
-        <v-btn  v-if="item.loadType === 1" color="primary" @click="emitNextStep">{{ $t("add") }}</v-btn>
-        <v-btn  v-if="item.loadType === 2" color="primary" @click="emitFinish">{{ $t("save") }}</v-btn>
+        <v-btn
+          v-if="item.loadType === 1"
+          color="primary"
+          @click="emitNextStep"
+          >{{ $t("add") }}</v-btn
+        >
+        <v-btn v-if="item.loadType === 2" color="primary" @click="emitFinish">{{
+          $t("save")
+        }}</v-btn>
         <v-btn color="primary" variant="text" class="ml-2" @click="resetForm">
           {{ $t("reset") }}
         </v-btn>
@@ -167,7 +173,7 @@ const { item } = storeToRefs(newShipmentStore);
 const props = defineProps<{
   errors?: SubmissionErrors;
 }>();
-const price: Ref<number> = ref();
+const price: Ref<number | undefined> = ref();
 const { t } = useI18n();
 
 const violations = toRef(props, "errors");
@@ -176,8 +182,13 @@ const priceRules = [
   assertRequired(),
   assertNumber(t("shipmentload.shipmentPrice")),
 ];
-var pileUpType = ref(false);
 const onPriceWrited = () => {
+  if (!item || !item.value) {
+    return;
+  }
+  if (typeof price.value === "undefined") {
+    return;
+  }
   item.value.price = {
     amount: +price.value,
     currency: item.value.currency,
@@ -189,12 +200,18 @@ const emit = defineEmits<{
 }>();
 
 async function emitNextStep() {
+  if (!form.value) {
+    return;
+  }
   const v = await form.value.validate();
   if (v.valid) {
     emit("second-step");
   }
 }
 async function emitFinish() {
+  if (!form.value) {
+    return;
+  }
   const v = await form.value.validate();
   if (v.valid) {
     emit("finish");
@@ -206,8 +223,5 @@ function resetForm() {
   if (!form.value) return;
 
   form.value.reset();
-}
-function toggleIsPileUp() {
-  pileUpType.value = !pileUpType.value;
 }
 </script>

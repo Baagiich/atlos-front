@@ -97,7 +97,7 @@ vehicleStatusTypes.unshift({ key: "", value: "" });
 async function sendRequest() {
   await vehicleListStore
     .getItems({
-      page: page.value,
+      page: +page.value,
       order: order.value,
       page_size: itemsPerPage.value,
       ...filters.value,

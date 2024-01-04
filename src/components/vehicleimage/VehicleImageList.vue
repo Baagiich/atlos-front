@@ -7,14 +7,14 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="deleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="deleted" type="success" class="mb-4" :closable="true">
       {{ $t("itemDeleted", [deleted["@id"]]) }}
     </v-alert>
-    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="mercureDeleted" type="success" class="mb-4" :closable="true">
       {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
     </v-alert>
 
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">
+    <v-alert v-if="error" type="error" class="mb-4" :closable="true">
       {{ error }}
     </v-alert>
 
@@ -53,13 +53,13 @@
       <template #item.mediaobject="{ item }">
         <router-link
           v-if="router.hasRoute('MediaObjectShow')"
-          :to="{ name: 'MediaObjectShow', params: { id: item.mediaobject } }"
+          :to="{ name: 'MediaObjectShow', params: { id: item.image } }"
         >
-          {{ item.mediaobject }}
+          {{ item.image }}
         </router-link>
 
         <p v-else>
-          {{ item.mediaobject }}
+          {{ item.image }}
         </p>
       </template>
       <template #item.vehicle="{ item }">
@@ -113,13 +113,13 @@ const { items, totalItems, error, isLoading } = storeToRefs(
   vehicleimageListStore,
 );
 
-const page = ref("1");
+const page = ref(1);
 const filters: Ref<Filters> = ref({});
 const order = ref({});
 
 async function sendRequest() {
   await vehicleimageListStore.getItems({
-    page: page.value,
+    page: +page.value,
     order: order.value,
     ...filters.value,
   });
@@ -166,7 +166,7 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
 
   sendRequest();

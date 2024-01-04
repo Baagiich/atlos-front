@@ -1,6 +1,6 @@
 <template>
   <v-form ref="form" @submit.prevent="emitSubmit">
-    <v-row>
+    <v-row v-if="item">
       <v-col cols="12" sm="6" md="6">
         <v-text-field
           v-model="item.name"
@@ -67,7 +67,7 @@ const props = defineProps<{
 const violations = toRef(props, "errors");
 const router = useRouter();
 
-const item: Ref<Currency> = ref({});
+const item: Ref<Currency | undefined> = ref(undefined);
 
 if (props.values) {
   item.value = {
@@ -80,6 +80,9 @@ const emit = defineEmits<{
 }>();
 
 function emitSubmit() {
+  if (!item.value) {
+    return;
+  }
   emit("submit", item.value);
 }
 

@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
-import type { ShipmentLoadInfos } from "@/types/shipmentloadinfos";
+import type { ShipmentLoad } from "@/types/shipmentload";
 
 interface State {
-  retrieved?: ShipmentLoadInfos;
+  retrieved?: ShipmentLoad;
   hubUrl?: URL;
   isLoading: boolean;
   error?: string;
@@ -26,7 +26,7 @@ export const useShipmentLoadInfosShowStore = defineStore(
 
         try {
           const response = await api(id);
-          const data: ShipmentLoadInfos = await response.json();
+          const data: ShipmentLoad = await response.json();
           const hubUrl = extractHubURL(response);
 
           this.toggleLoading();
@@ -48,7 +48,7 @@ export const useShipmentLoadInfosShowStore = defineStore(
         this.isLoading = !this.isLoading;
       },
 
-      setRetrieved(retrieved: ShipmentLoadInfos) {
+      setRetrieved(retrieved: ShipmentLoad) {
         this.retrieved = retrieved;
       },
 

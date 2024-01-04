@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
-import type { MediaObject, MediaObjectInput } from "@/types/mediaobject";
+import type { MediaObject } from "@/types/mediaobject";
 import type { SubmissionErrors } from "@/types/error";
 
 interface State {

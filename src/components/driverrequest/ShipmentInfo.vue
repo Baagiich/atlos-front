@@ -4,7 +4,7 @@
       v-if="error || deleteError"
       type="error"
       class="mb-4"
-      closable="true"
+      :closable="true"
     >
       {{ error || deleteError }}
     </v-alert>
@@ -70,7 +70,6 @@
 import { onBeforeUnmount } from "vue";
 import { storeToRefs } from "pinia";
 import Loading from "@/components/common/Loading.vue";
-import { useMercureItem } from "@/composables/mercureItem";
 import { useShipmentDeleteStore } from "@/store/shipment/delete";
 import { useShipmentShowStore } from "@/store/shipment/show";
 import { formatDateInput } from "@/utils/date";
@@ -80,11 +79,6 @@ const { retrieved: item, isLoading, error } = storeToRefs(shipmentShowStore);
 
 const shipmentDeleteStore = useShipmentDeleteStore();
 const { error: deleteError } = storeToRefs(shipmentDeleteStore);
-
-useMercureItem({
-  store: shipmentShowStore,
-  deleteStore: shipmentDeleteStore,
-});
 
 onBeforeUnmount(() => {
   shipmentShowStore.$reset();

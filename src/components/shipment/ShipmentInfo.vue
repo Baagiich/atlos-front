@@ -4,7 +4,7 @@
       v-if="error || deleteError"
       type="error"
       class="mb-4"
-      closable="true"
+      :closable="true"
     >
       {{ error || deleteError }}
     </v-alert>
@@ -60,12 +60,13 @@
           </td>
         </tr>
         <tr>
-              <v-btn color="red">{{ $t("shipment.cancelShipment") }}</v-btn>
-    <v-btn float:right variant="outlined" color="blue">{{ $t("shipment.editShipment") }}</v-btn>
+          <v-btn color="red">{{ $t("shipment.cancelShipment") }}</v-btn>
+          <v-btn float:right variant="outlined" color="blue">{{
+            $t("shipment.editShipment")
+          }}</v-btn>
         </tr>
       </tbody>
     </v-table>
-
   </v-container>
 
   <Loading :visible="isLoading" />
@@ -75,7 +76,6 @@
 import { onBeforeUnmount } from "vue";
 import { storeToRefs } from "pinia";
 import Loading from "@/components/common/Loading.vue";
-import { useMercureItem } from "@/composables/mercureItem";
 import { useShipmentDeleteStore } from "@/store/shipment/delete";
 import { useShipmentShowStore } from "@/store/shipment/show";
 import { formatDateInput } from "@/utils/date";
@@ -85,11 +85,6 @@ const { retrieved: item, isLoading, error } = storeToRefs(shipmentShowStore);
 
 const shipmentDeleteStore = useShipmentDeleteStore();
 const { error: deleteError } = storeToRefs(shipmentDeleteStore);
-
-useMercureItem({
-  store: shipmentShowStore,
-  deleteStore: shipmentDeleteStore,
-});
 
 onBeforeUnmount(() => {
   shipmentShowStore.$reset();

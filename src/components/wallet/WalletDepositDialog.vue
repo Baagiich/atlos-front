@@ -17,7 +17,7 @@
                   item-value="code"
                   variant="outlined"
                 >
-                  <template v-slot:label>
+                  <template #label>
                     {{ $t("wallet.currency.choice") }}
                   </template>
                 </v-select>
@@ -26,16 +26,14 @@
             <tr>
               <td>{{ $t("wallet.account.deposit.bankAccNo") }} |</td>
               <td>
-                <strong>{{
-                  selectedAccountInfo ? selectedAccountInfo.bankAccountNo : ""
-                }}</strong>
+                <strong>{{ selectedAccountInfo?.bankAccountNo }}</strong>
               </td>
             </tr>
             <tr>
               <td>{{ $t("wallet.account.deposit.bankAccName") }} |</td>
               <td>
                 <strong class="text-uppercase">{{
-                  selectedAccountInfo ? selectedAccountInfo.bankAccountName : ""
+                  selectedAccountInfo?.bankAccountName
                 }}</strong>
               </td>
             </tr>
@@ -65,7 +63,9 @@
 <script setup lang="ts">
 import { useCurrencyListStore } from "@/store/currency/list";
 import { useWalletDepositStore } from "@/store/wallet/deposit";
+import { WalletDepositAccountInfo } from "@/types/wallet/wallet-deposit-account-info";
 import { storeToRefs } from "pinia";
+import { Ref } from "vue";
 import { computed, ref } from "vue";
 const currencyListStore = useCurrencyListStore();
 const walletDepositStore = useWalletDepositStore();
@@ -73,7 +73,7 @@ const walletDepositStore = useWalletDepositStore();
 const { items: currencies } = storeToRefs(currencyListStore);
 const { isShowDialog, depositAccountInfos } = storeToRefs(walletDepositStore);
 
-const selectedCurrencyCode = ref();
+const selectedCurrencyCode: Ref<string> = ref("MNT");
 
 function setIsShowDialog(value: boolean) {
   walletDepositStore.setIsShowDialog(value);
@@ -82,8 +82,9 @@ function setIsShowDialog(value: boolean) {
 const selectedAccountInfo = computed(() => {
   return selectedCurrencyCode.value
     ? depositAccountInfos.value.find(
-        (obj) => obj.currency === selectedCurrencyCode.value,
+        (obj: WalletDepositAccountInfo) =>
+          obj.currency === selectedCurrencyCode.value,
       )
-    : [];
+    : undefined;
 });
 </script>

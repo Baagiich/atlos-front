@@ -126,7 +126,7 @@ if (props.values) {
 }
 if (props.createOwnVehicle) {
   item.value.shipper = {
-    "@id": apiToken.getDecodedToken().iri,
+    "@id": apiToken.getDecodedToken()?.iri,
   };
 }
 const vehicleTypes = enumHelper.getMap(VehicleType);
@@ -147,6 +147,10 @@ const emit = defineEmits<{
 
 const form: Ref<VForm | null> = ref(null);
 async function emitSubmit() {
+  if (!form.value) {
+    return;
+  }
+
   item.value.shipper = item.value.shipper["@id"];
   const v = await form.value.validate();
   if (v.valid) {

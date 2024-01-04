@@ -20,7 +20,13 @@
       </template>
     </v-alert>
 
-    <Form v-if="item" :values="item" :errors="violations" :updateForm="true" @submit="update" />
+    <Form
+      v-if="item"
+      :values="item"
+      :errors="violations"
+      :update-form="true"
+      @submit="update"
+    />
   </v-container>
 
   <Loading :visible="isLoading || deleteLoading" />

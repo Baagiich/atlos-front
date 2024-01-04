@@ -1,5 +1,5 @@
 <template>
-    <v-stepper alt-labels>
+  <v-stepper alt-labels>
     <v-stepper-header>
       <template
         v-for="(stateValue, stateIndex) in shipmentState"
@@ -11,7 +11,7 @@
           :complete="stateValue.value <= currentShipmentStateIndex"
           :value="stateValue.value"
         >
-          <template v-slot:title>
+          <template #title>
             {{ $t(`shipment.${stateValue.key}`) }}
           </template></v-stepper-item
         >
@@ -28,10 +28,9 @@ import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 const shipmentDetailStore = useShipmentDetailStore();
-const { retrieved, isLoading, error, totalItems } =
-  storeToRefs(shipmentDetailStore);
-  const route = useRoute();
-  async function locationList() {
+const { retrieved } = storeToRefs(shipmentDetailStore);
+const route = useRoute();
+async function locationList() {
   await shipmentDetailStore.retrieve(
     decodeURIComponent(route.params.id as string),
   );
@@ -47,5 +46,4 @@ const currentShipmentStateIndex = computed(() => {
       : 0
     : 0;
 });
-
 </script>

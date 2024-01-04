@@ -7,14 +7,14 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="deleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="deleted" type="success" class="mb-4" :closable="true">
       {{ $t("itemDeleted", [deleted["@id"]]) }}
     </v-alert>
-    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="mercureDeleted" type="success" class="mb-4" :closable="true">
       {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
     </v-alert>
 
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">
+    <v-alert v-if="error" type="error" class="mb-4" :closable="true">
       {{ error }}
     </v-alert>
 
@@ -36,17 +36,17 @@
       <template #item.actions="{ item }">
         <ActionCell
           :actions="['show', 'update', 'delete']"
-          @show="goToShowPage(item.raw)"
-          @update="goToUpdatePage(item.raw)"
-          @delete="deleteItem(item.raw)"
+          @show="goToShowPage(item)"
+          @update="goToUpdatePage(item)"
+          @delete="deleteItem(item)"
         />
       </template>
 
       <template #item.@id="{ item }">
         <router-link
-          :to="{ name: 'DriverImageShow', params: { id: item.raw['@id'] } }"
+          :to="{ name: 'DriverImageShow', params: { id: item['@id'] } }"
         >
-          {{ item.raw["@id"] }}
+          {{ item["@id"] }}
         </router-link>
       </template>
 
@@ -55,33 +55,33 @@
           v-if="router.hasRoute('MediaObjectShow')"
           :to="{
             name: 'MediaObjectShow',
-            params: { id: item.raw.mediaobject },
+            params: { id: item.image },
           }"
         >
-          {{ item.raw.mediaobject }}
+          {{ item.image }}
         </router-link>
 
         <p v-else>
-          {{ item.raw.mediaobject }}
+          {{ item.image }}
         </p>
       </template>
       <template #item.driver="{ item }">
         <router-link
           v-if="router.hasRoute('DriverShow')"
-          :to="{ name: 'DriverShow', params: { id: item.raw.driver } }"
+          :to="{ name: 'DriverShow', params: { id: item.driver } }"
         >
-          {{ item.raw.driver }}
+          {{ item.driver }}
         </router-link>
 
         <p v-else>
-          {{ item.raw.driver }}
+          {{ item.driver }}
         </p>
       </template>
       <template #item.updatedAt="{ item }">
-        {{ formatDateTime(item.raw.updatedAt) }}
+        {{ formatDateTime(item.updatedAt) }}
       </template>
       <template #item.createdAt="{ item }">
-        {{ formatDateTime(item.raw.createdAt) }}
+        {{ formatDateTime(item.createdAt) }}
       </template>
     </v-data-table-server>
   </v-container>
@@ -115,13 +115,13 @@ const driverimageListStore = useDriverImageListStore();
 const { items, totalItems, error, isLoading } =
   storeToRefs(driverimageListStore);
 
-const page = ref("1");
+const page = ref(1);
 const filters: Ref<Filters> = ref({});
 const order = ref({});
 
 async function sendRequest() {
   await driverimageListStore.getItems({
-    page: page.value,
+    page: +page.value,
     order: order.value,
     ...filters.value,
   });
@@ -168,7 +168,7 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
 
   sendRequest();

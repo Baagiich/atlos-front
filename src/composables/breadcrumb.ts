@@ -1,9 +1,7 @@
 import { useRoute } from "vue-router";
-import type { BreadcrumbValue } from "@/types/breadcrumb";
+import { VBreadcrumbsItem } from "vuetify/lib/components/index.mjs";
 
 export function useBreadcrumb() {
   const route = useRoute();
-  const breadcrumb = route.meta.breadcrumb as BreadcrumbValue[];
-
-  return breadcrumb;
+  return route.meta.breadcrumb as VBreadcrumbsItem[];
 }

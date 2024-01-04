@@ -2,9 +2,7 @@ import { defineStore } from "pinia";
 import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
 import type { ShipperCompany } from "@/types/shippercompany";
-import type { AdminUserVerify } from "@/types/adminuserverify";
 import type { SubmissionErrors } from "@/types/error";
-import { AdminUser } from "@/types/adminuser";
 
 interface State {
   created?: ShipperCompany;

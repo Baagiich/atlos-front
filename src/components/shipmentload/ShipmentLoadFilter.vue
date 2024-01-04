@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="12" sm="6" md="6">
         <v-text-field
-          v-model="item.shipment"
+          v-model="filters.shipment"
           :label="$t('shipmentload.shipment')"
           type="string"
         />
@@ -13,12 +13,12 @@
 </template>
 
 <script lang="ts" setup>
+import { Filters } from "@/types/list";
 import { toRef } from "vue";
-import type { ShipmentLoad } from "@/types/shipmentload";
 
 const props = defineProps<{
-  values: ShipmentLoad;
+  values: Filters;
 }>();
 
-const item = toRef(props, "values");
+const filters = toRef(props, "values");
 </script>

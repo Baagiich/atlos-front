@@ -95,7 +95,6 @@
 <script setup lang="ts">
 import { ref, Ref, toRef } from "vue";
 import { VForm } from "vuetify/components";
-import { formatDateInput } from "@/utils/date";
 import FormRepeater from "@/components/common/FormRepeater.vue";
 import type { Country } from "@/types/country";
 import type { SubmissionErrors } from "@/types/error";
@@ -111,7 +110,6 @@ const item: Ref<Country> = ref({});
 if (props.values) {
   item.value = {
     ...props.values,
-    publicationDate: formatDateInput(props.values.publicationDate),
   };
 }
 

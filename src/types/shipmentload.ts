@@ -1,13 +1,14 @@
 import type { Item } from "./item";
+import { ShipmentLoadPackageType } from "./shipmentloadpackagetype";
 
 export interface ShipmentLoad extends Item {
   name?: string;
   quantity?: number;
-  length?: decimal;
-  width?: decimal;
-  height?: decimal;
-  weight?: decimal;
-  shipment?: any;
-  packageType?: any;
-  isPileUp: false;
+  length?: number;
+  width?: number;
+  height?: number;
+  weight?: number;
+  shipment?: string;
+  packageType?: string | ShipmentLoadPackageType;
+  isPileUp: boolean;
 }

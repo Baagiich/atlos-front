@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
-import type { Shipment } from "@/types/shipment";
 import { ShipmentImage } from "@/types/shipmentimage";
 
 interface State {

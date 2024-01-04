@@ -7,12 +7,7 @@
   />
 
   <v-container fluid>
-    <v-alert
-      v-if="error || deleteError"
-      type="error"
-      class="mb-4"
-      closable
-    >
+    <v-alert v-if="error || deleteError" type="error" class="mb-4" closable>
       {{ error || deleteError }}
     </v-alert>
 

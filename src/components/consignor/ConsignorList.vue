@@ -84,7 +84,7 @@ const order = ref({});
 
 async function sendRequest() {
   await consignorListStore.getItems({
-    page: page.value,
+    page: +page.value,
     order: order.value,
     page_size: itemsPerPage.value,
     ...filters.value,

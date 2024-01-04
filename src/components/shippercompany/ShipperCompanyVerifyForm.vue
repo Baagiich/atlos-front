@@ -74,24 +74,21 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref, Ref, toRaw, toRef } from "vue";
+import { ref, Ref, toRef } from "vue";
 import { VForm } from "vuetify/components";
 import type { SubmissionErrors } from "@/types/error";
-import { useI18n } from "vue-i18n";
 import { AdminUserVerify } from "@/types/adminuserverify";
 import {
   assertRequired,
   assertNumber,
   assertPasswordConfirm,
 } from "@/validations";
-const { t } = useI18n();
 const props = defineProps<{
   values?: AdminUserVerify;
   errors?: SubmissionErrors;
 }>();
 
 const violations = toRef(props, "errors");
-const showPlainPassword = ref(false);
 const item: Ref<AdminUserVerify> = ref({});
 if (props.values) {
   item.value = {
@@ -111,6 +108,10 @@ const emit = defineEmits<{
 }>();
 const form: Ref<VForm | null> = ref(null);
 async function emitSubmit() {
+  if (!form.value) {
+    return;
+  }
+
   const v = await form.value.validate();
   if (v.valid) {
     item.value.recievedCode = Number(item.value.recievedCode);

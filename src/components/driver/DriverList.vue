@@ -7,14 +7,14 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="deleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="deleted" type="success" class="mb-4" :closable="true">
       {{ $t("itemDeleted", [deleted["@id"]]) }}
     </v-alert>
-    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="mercureDeleted" type="success" class="mb-4" :closable="true">
       {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
     </v-alert>
 
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">
+    <v-alert v-if="error" type="error" class="mb-4" :closable="true">
       {{ error }}
     </v-alert>
 
@@ -69,12 +69,12 @@ const { deleted, mercureDeleted } = storeToRefs(driverDeleteStore);
 const driverListStore = useDriverListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(driverListStore);
 
-const page = ref("1");
+const page = ref(1);
 const order = ref({});
 
 async function sendRequest() {
   await driverListStore.getItems({
-    page: page.value,
+    page: +page.value,
     order: order.value,
   });
 }
@@ -117,7 +117,7 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
 
   sendRequest();

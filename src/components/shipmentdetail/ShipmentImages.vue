@@ -8,20 +8,30 @@
     </v-tabs>
     <v-window v-model="tab">
       <v-window-item :key="1" :value="1">
-        <ShipmentImageSlide :items="loadPictures"  @submitImg="emitUpload"></ShipmentImageSlide>
+        <ShipmentImageSlide
+          :items="loadPictures"
+          @submitImg="emitUpload"
+        ></ShipmentImageSlide>
       </v-window-item>
       <v-window-item :key="2" :value="2">
-        <ShipmentImageSlide :items="unloadPictures"  @submitImg="emitUpload"></ShipmentImageSlide>
+        <ShipmentImageSlide
+          :items="unloadPictures"
+          @submitImg="emitUpload"
+        ></ShipmentImageSlide>
       </v-window-item>
       <v-window-item :key="3" :value="3">
-        <ShipmentImageSlide :items="filePictures" :files="true" @submitImg="emitUpload"></ShipmentImageSlide>
+        <ShipmentImageSlide
+          :items="filePictures"
+          :files="true"
+          @submitImg="emitUpload"
+        ></ShipmentImageSlide>
       </v-window-item>
     </v-window>
   </v-card>
 </template>
 
 <script setup lang="ts">
-import { watch, onBeforeUnmount, Ref, ref } from "vue";
+import { onBeforeUnmount, Ref, ref } from "vue";
 import { useShipmentImageListStore } from "@/store/shipmentimage/list";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
@@ -42,7 +52,7 @@ const unloadPictures: Ref<ShipmentImage[]> = ref([]);
 const filePictures: Ref<ShipmentImage[]> = ref([]);
 filters.value.shipment = decodeURIComponent(route.params.id as string);
 const shipmentImageCreateStore = useShipmentImageCreateStore();
-const { created, error, violations, isLoading } = storeToRefs(shipmentImageCreateStore);
+const { created } = storeToRefs(shipmentImageCreateStore);
 await shipmentImageListStore.getItems({
   page: page.value,
   groups: ["shipment:detail:images"],
@@ -74,12 +84,12 @@ async function emitUpload(shipmentImage: any) {
     return;
   }
   await shipmentImageListStore.getItems({
-  page: page.value,
-  groups: ["shipment:detail:images"],
-  ...filters.value,
+    page: page.value,
+    groups: ["shipment:detail:images"],
+    ...filters.value,
   });
 
- classifyItem();
+  classifyItem();
 }
 
 onBeforeUnmount(() => {

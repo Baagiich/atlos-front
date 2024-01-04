@@ -11,7 +11,7 @@
       v-if="error || deleteError"
       type="error"
       class="mb-4"
-      closable="true"
+      :closable="true"
     >
       {{ error || deleteError }}
     </v-alert>
@@ -35,14 +35,14 @@
               v-if="router.hasRoute('MediaObjectShow')"
               :to="{
                 name: 'MediaObjectShow',
-                params: { id: item.mediaobject },
+                params: { id: item.image },
               }"
             >
-              {{ item.mediaobject }}
+              {{ item.image }}
             </router-link>
 
             <p v-else>
-              {{ item.mediaobject }}
+              {{ item.image }}
             </p>
           </td>
         </tr>

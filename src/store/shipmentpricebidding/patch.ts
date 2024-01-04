@@ -3,8 +3,6 @@ import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
 import type { ShipmentPriceBiddingPatch } from "@/types/shipmentpricebiddingpatch";
 import type { SubmissionErrors } from "@/types/error";
-import { log } from "node:console";
-import { getegid } from "node:process";
 
 interface State {
   created?: ShipmentPriceBiddingPatch;
@@ -53,8 +51,6 @@ export const useShipmentPriceBiddingPathcStore = defineStore(
             this.setError(error.message);
           }
         }
-
-       
       },
 
       setCreated(created: ShipmentPriceBiddingPatch) {
@@ -73,5 +69,5 @@ export const useShipmentPriceBiddingPathcStore = defineStore(
         this.violations = violations;
       },
     },
-  }
+  },
 );

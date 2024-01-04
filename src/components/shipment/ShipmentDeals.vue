@@ -1,12 +1,12 @@
 <template>
   <v-container fluid>
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">
+    <v-alert v-if="error" type="error" class="mb-4" :closable="true">
       {{ error }}
     </v-alert>
-    <v-alert v-if="patchError" type="error" class="mb-4" closable="true">
+    <v-alert v-if="patchError" type="error" class="mb-4" :closable="true">
       {{ patchError }}
     </v-alert>
-    <v-alert v-if="createError" type="error" class="mb-4" closable="true">
+    <v-alert v-if="createError" type="error" class="mb-4" :closable="true">
       {{ createError }}
     </v-alert>
     <v-data-table-server
@@ -32,7 +32,9 @@
       <template #item.bidPrice="{ item }">
         <p>
           {{
-            item.shipmentPriceBiddings.length
+            Array.isArray(item.shipmentPriceBiddings) &&
+            item.shipmentPriceBiddings.length > 0 &&
+            item.shipmentPriceBiddings[0].price
               ? item.shipmentPriceBiddings[0].price.amount
               : "-"
           }}
@@ -41,7 +43,9 @@
       <template #item.replyBidPrice="{ item }">
         <p>
           {{
-            item.shipmentPriceBiddings.length == 2
+            Array.isArray(item.shipmentPriceBiddings) &&
+            item.shipmentPriceBiddings.length === 2 &&
+            item.shipmentPriceBiddings[1].price
               ? item.shipmentPriceBiddings[1].price.amount
               : "-"
           }}
@@ -56,9 +60,12 @@
         <p>
           <v-dialog v-model="dialogApprove" width="auto">
             <template #activator="{ props }">
-              <v-btn color="green" 
-              :disabled="item.status !== DealType.PENDING"
-               v-bind="props" @click="approveItem = item">
+              <v-btn
+                color="green"
+                :disabled="item.status !== DealType.PENDING"
+                v-bind="props"
+                @click="approveItem = item"
+              >
                 {{ t("shipment.accept") }}
               </v-btn>
             </template>
@@ -82,11 +89,11 @@
           <v-dialog v-model="dialog" width="auto">
             <template #activator="{ props }">
               <v-btn
-              :disabled="item.status !== DealType.PENDING"
+                :disabled="item.status !== DealType.PENDING"
                 color="primary"
                 v-bind="props"
-                @click="(dialogItem = item), (bidPrice = undefined)"
                 class="send-bid-btn"
+                @click="(dialogItem = item), (bidPrice = undefined)"
               >
                 {{ t("shipment.sendBid") }}
               </v-btn>
@@ -96,7 +103,12 @@
                 {{ t("shipment.sendBidTitle") }}
               </h1>
               <v-spacer></v-spacer>
-              <div>
+              <div
+                v-if="
+                  Array.isArray(dialogItem.shipmentPriceBiddings) &&
+                  dialogItem.shipmentPriceBiddings[0].price
+                "
+              >
                 {{ dialogItem.shipmentPriceBiddings[0].price.amount }}
               </div>
               <v-text-field
@@ -119,9 +131,15 @@
           </v-dialog>
           <v-dialog v-model="dialogCancel" width="auto">
             <template #activator="{ props }">
-              <v-btn color="red" 
-              :disabled="item.status !== DealType.PENDING && item.status !== DealType.REPLIED"
-              v-bind="props" @click="cancelItem = item">
+              <v-btn
+                color="red"
+                :disabled="
+                  item.status !== DealType.PENDING &&
+                  item.status !== DealType.REPLIED
+                "
+                v-bind="props"
+                @click="cancelItem = item"
+              >
                 {{ t("shipment.cancel") }}
               </v-btn>
             </template>
@@ -164,17 +182,21 @@ import { ShipmentShipperDeal } from "@/types/shipmentshipperdeal";
 import { BiddingType } from "@/types/bidding_type";
 import { ShipmentPriceBidding } from "@/types/shipmentpricebidding";
 import { useShipmentPriceBiddingCreateStore } from "@/store/shipmentpricebidding/create";
+import isString from "lodash/isString";
+import { Review } from "@/types/review";
 
 const { t } = useI18n();
 const route = useRoute();
-const props2 = defineProps(["currency"]);
+const props2 = defineProps<{
+  currency: string;
+}>();
 const currency = ref(props2.currency);
 const useDealListStore = useShipmentShipperDealListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(useDealListStore);
 const dialog = ref(false);
 const dialogApprove = ref(false);
 const dialogCancel = ref(false);
-const page = ref("1");
+const page = ref(1);
 const order = ref({});
 const itemsPerPage = ref("10");
 const filters: Ref<Filters> = ref({});
@@ -188,47 +210,58 @@ const biddingPatchStore = useShipmentPriceBiddingPathcStore();
 const { created: patch, error: patchError } = storeToRefs(biddingPatchStore);
 const biddingCreateStore = useShipmentPriceBiddingCreateStore();
 const { created, error: createError } = storeToRefs(biddingCreateStore);
-const bidPrice: Ref<number> = ref();
+const bidPrice: Ref<number | undefined> = ref(undefined);
 
-filters.value.shipment = route.params.id;
+filters.value.shipment = isString(route.params.id) ? route.params.id : "";
 
 async function sendRequest() {
   await useDealListStore.getItems({
-    page: page.value,
+    page: +page.value,
     order: order.value,
-    shipment: route.params.id,
-    page_size: itemsPerPage.value,
+    page_size: +itemsPerPage.value,
     groups: ["adminUser:list", "shipment:deal", "shipmentShipperDeal:list"],
     ...filters.value,
   });
 }
 
 sendRequest();
-function getStatus(code: number) {
-  if(code == DealType.PENDING) {
+function getStatus(code?: number) {
+  if (code == DealType.PENDING) {
     return t("shipment.pending");
-  } else if(code == DealType.COMPLETED) {
+  } else if (code == DealType.COMPLETED) {
     return t("shipment.completed");
-  } else if(code == DealType.CANCELLED) {
+  } else if (code == DealType.CANCELLED) {
     return t("shipment.cancelled");
-  } else if(code == DealType.REPLIED) {
+  } else if (code == DealType.REPLIED) {
     return t("shipment.replied");
   }
+
+  return t("shipment.unknown");
 }
 function getAverageReview(shipper: Shipment) {
   if (shipper.reviews.length === 0) {
     return 0;
   }
   return (
-    shipper.reviews.reduce((a, b) => a + b.rating, 0) / shipper.reviews.length
+    shipper.reviews.reduce(
+      (sum: number, current: Review) => sum + (current.rating || 0),
+      0,
+    ) / shipper.reviews.length
   );
+}
+function getShipmentPriceBiddingId(item: ShipmentPriceBidding) {
+  const iri = item["@id"];
+  return iri ? iri.replace("/api/shipment_price_biddings/", "") : "";
 }
 async function approveBid() {
   const item = approveItem.value;
-  const id = item.shipmentPriceBiddings[0]["@id"].replace(
-    "/api/shipment_price_biddings/",
-    "",
-  );
+  if (
+    !item.shipmentPriceBiddings ||
+    !Array.isArray(item.shipmentPriceBiddings)
+  ) {
+    return;
+  }
+  const id = getShipmentPriceBiddingId(item.shipmentPriceBiddings[0]);
   shipmentpricebiddingpatch.value.id = id;
   shipmentpricebiddingpatch.value.state = BiddingType.APPROVED;
   await biddingPatchStore.create(shipmentpricebiddingpatch.value);
@@ -239,10 +272,13 @@ async function approveBid() {
 }
 async function cancelBid() {
   const item = cancelItem.value;
-  const id = item.shipmentPriceBiddings[0]["@id"].replace(
-    "/api/shipment_price_biddings/",
-    "",
-  );
+  if (
+    !item.shipmentPriceBiddings ||
+    !Array.isArray(item.shipmentPriceBiddings)
+  ) {
+    return;
+  }
+  const id = getShipmentPriceBiddingId(item.shipmentPriceBiddings[0]);
   shipmentpricebiddingpatch.value.id = id;
   shipmentpricebiddingpatch.value.state = BiddingType.CANCELLED;
   await biddingPatchStore.create(shipmentpricebiddingpatch.value);
@@ -254,8 +290,8 @@ async function cancelBid() {
 async function createShipmentPriceBidding() {
   shipmentpricebidding.value.shipment = dialogItem.value.shipment["@id"];
   shipmentpricebidding.value.price = {
-    amount: +bidPrice.value,
-    currency: currency,
+    amount: bidPrice?.value === undefined ? undefined : +bidPrice?.value,
+    currency: currency.value,
   };
   shipmentpricebidding.value.shipmentDeal = dialogItem.value["@id"];
   shipmentpricebidding.value.type = "reply";
@@ -299,7 +335,7 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
 
   sendRequest();
@@ -313,7 +349,7 @@ function updateOrder(newOrders: VuetifyOrder[]) {
 }
 </script>
 <style lang="scss">
-.send-bid-btn{
+.send-bid-btn {
   margin: 0 10px;
 }
 .shipment-load-infos-table {
@@ -331,4 +367,3 @@ function updateOrder(newOrders: VuetifyOrder[]) {
   }
 }
 </style>
-patch

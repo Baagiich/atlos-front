@@ -53,9 +53,9 @@ const breadcrumb = useBreadcrumb();
 const bankListStore = useBankListStore();
 const bankDeleteStore = useBankDeleteStore();
 const { items, totalItems, error, isLoading } = storeToRefs(bankListStore);
-const { deleted } = storeToRefs(bankListStore);
+const { deleted } = storeToRefs(bankDeleteStore);
 
-const page = ref("1");
+const page = ref(1);
 const order = ref({});
 
 async function sendRequest() {
@@ -91,7 +91,7 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
   sendRequest();
 }

@@ -156,7 +156,6 @@
 <script setup lang="ts">
 import { ref, Ref, toRef } from "vue";
 import { VForm } from "vuetify/components";
-import { formatDateInput } from "@/utils/date";
 import type { Requests } from "@/types/requests";
 import type { SubmissionErrors } from "@/types/error";
 const props = defineProps<{
@@ -171,7 +170,6 @@ const item: Ref<Requests> = ref({});
 if (props.values) {
   item.value = {
     ...props.values,
-    publicationDate: formatDateInput(props.values.publicationDate),
   };
 }
 

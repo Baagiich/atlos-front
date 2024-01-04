@@ -130,9 +130,9 @@
           <v-radio
             :label="$t('shipmentload.isPileUp')"
             color="indigo"
-            @click="toggleIsPileUp"
             variant="outlined"
             clearable
+            @click="toggleIsPileUp"
           ></v-radio>
         </v-radio-group>
       </v-col>
@@ -176,7 +176,7 @@ const isUpdate = toRef(props, "isUpdate");
 const packageTypeName: Ref<string> = ref("");
 const shipmentloadTypeStore = useShipmentLoadPackageTypeStore();
 const { items } = storeToRefs(shipmentloadTypeStore);
-const page = ref("1");
+const page = ref(1);
 const filters: Ref<Filters> = ref({});
 const order = ref({});
 
@@ -186,7 +186,7 @@ function getTypeNames() {
 
 async function sendRequest() {
   await shipmentloadTypeStore.getItems({
-    page: page.value,
+    page: +page.value,
     order: order.value,
     ...filters.value,
   });
@@ -194,7 +194,9 @@ async function sendRequest() {
 
 const violations = toRef(props, "errors");
 
-const item: Ref<ShipmentLoad> = ref({});
+const item: Ref<ShipmentLoad> = ref({
+  isPileUp: false,
+});
 item.value.shipment = props.createdShipmentId;
 
 function onTypeSelected(value: string | null) {
@@ -251,6 +253,6 @@ function resetForm() {
   form.value.reset();
 }
 function toggleIsPileUp(value: boolean) {
-  value = !value;
+  item.value.isPileUp = !value;
 }
 </script>
