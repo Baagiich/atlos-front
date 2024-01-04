@@ -1,6 +1,6 @@
 <template>
   <v-toolbar class="px-4 d-flex justify-space-around" elevation="0">
-    <Breadcrumb :breadcrumb="breadcrumb" />
+    <v-breadcrumbs :breadcrumb="breadcrumb" />
 
     <v-spacer />
 
@@ -33,14 +33,13 @@
 
 <script lang="ts" setup>
 import { ref, toRefs } from "vue";
-import Breadcrumb from "@/components/common/Breadcrumb.vue";
 import ConfirmDelete from "@/components/common/ConfirmDelete.vue";
-import type { BreadcrumbValue } from "@/types/breadcrumb";
+import { VBreadcrumbsItem } from "vuetify/lib/components/index.mjs";
 
 const props = defineProps<{
   actions?: ("submit" | "reset" | "delete" | "add")[];
   isLoading: boolean;
-  breadcrumb: BreadcrumbValue[];
+  breadcrumb: VBreadcrumbsItem[];
 }>();
 
 const { actions } = toRefs(props);

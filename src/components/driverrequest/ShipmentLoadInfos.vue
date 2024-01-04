@@ -1,13 +1,13 @@
 <template>
   <v-container fluid>
-    <v-alert v-if="deleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="deleted" type="success" class="mb-4" :closable="true">
       {{ $t("itemDeleted", [deleted["@id"]]) }}
     </v-alert>
-    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="mercureDeleted" type="success" class="mb-4" :closable="true">
       {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
     </v-alert>
 
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">
+    <v-alert v-if="error" type="error" class="mb-4" :closable="true">
       {{ error }}
     </v-alert>
 
@@ -35,8 +35,12 @@
         </p>
       </template>
       <template #item.shipmentpackagetype="{ item }">
-        <p>
-          {{ item.packageType.name }}
+        <p v-if="item?.packageType">
+          {{
+            isString(item.packageType)
+              ? item.packageType
+              : item.packageType?.name
+          }}
         </p>
       </template>
       <template #item.count="{ item }">
@@ -66,7 +70,9 @@ import { storeToRefs } from "pinia";
 import { useShipmentLoadListStore } from "@/store/shipmentload/list";
 import { useShipmentLoadDeleteStore } from "@/store/shipmentload/delete";
 import { useMercureList } from "@/composables/mercureList";
-import type { VuetifyOrder } from "@/types/list";
+import type { Filters, VuetifyOrder } from "@/types/list";
+import isString from "lodash/isString";
+import { Ref } from "vue";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -79,15 +85,22 @@ const { items, totalItems, error, isLoading } = storeToRefs(
   shipmentLoadListStore,
 );
 
-const page = ref("1");
+const page = ref(1);
 const order = ref({});
 const itemsPerPage = ref("10");
+
+const filters: Ref<Filters> = ref({});
+
+if (isString(route.params.shipmentId)) {
+  filters.value.shipment = route.params.shipmentId;
+}
+
 async function sendRequest() {
   await shipmentLoadListStore.getItems({
-    page: page.value,
+    page: +page.value,
     order: order.value,
-    shipment: route.params.id,
-    page_size: itemsPerPage.value,
+    page_size: +itemsPerPage.value,
+    ...filters.value,
   });
 }
 
@@ -128,7 +141,7 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
 
   sendRequest();

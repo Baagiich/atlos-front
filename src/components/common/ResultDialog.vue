@@ -58,7 +58,7 @@ import { toRef } from "vue";
 const props = defineProps<{
   show: boolean;
   type?: "success" | "fail";
-  message: String;
+  message: string;
 }>();
 
 let show = toRef(props, "show");

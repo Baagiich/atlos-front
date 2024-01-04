@@ -65,7 +65,7 @@ const breadcrumb = useBreadcrumb();
 const orderListStore = useOrderListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(orderListStore);
 
-const page = ref("1");
+const page = ref(1);
 const filters: Ref<Filters> = ref({});
 const ordering = ref({});
 
@@ -124,7 +124,7 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
 
   sendRequest();

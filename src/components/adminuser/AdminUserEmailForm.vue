@@ -35,7 +35,6 @@ import type { SubmissionErrors } from "@/types/error";
 import { VForm } from "vuetify/components";
 import { PasswordReset } from "@/types/passwordReset";
 import { assertEmail, assertRequired } from "@/validations";
-import { useI18n } from "vue-i18n";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 
@@ -46,7 +45,6 @@ const props = defineProps<{
   errors?: SubmissionErrors;
 }>();
 const violations = toRef(props, "errors");
-const { t } = useI18n();
 const item: Ref<PasswordReset> = ref({});
 const emailRules = [assertRequired(), assertEmail()];
 if (props.values) {
@@ -62,6 +60,9 @@ const emit = defineEmits<{
 const countdownTimer = ref(120);
 const countdownTimerFormatted = ref();
 async function emitSubmit() {
+  if (!form.value) {
+    return;
+  }
   const v = await form.value.validate();
   if (v.valid) {
     sendRequest.value = "submitAgain";
@@ -73,11 +74,6 @@ async function emitSubmit() {
 
 const form: Ref<VForm | null> = ref(null);
 
-function resetForm() {
-  if (!form.value) return;
-
-  form.value.reset();
-}
 function startTimer() {
   if (countdownTimer.value > 0) {
     countdownTimer.value -= 1;

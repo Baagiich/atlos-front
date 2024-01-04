@@ -1,11 +1,11 @@
 <template>
-  <v-form ref="form" @submit.prevent="emitSubmit">
+  <v-form v-if="item" ref="form" @submit.prevent="emitSubmit">
     <v-row>
       <v-col cols="12">
         <FormRepeater
           :values="item.shipmentImages"
           :label="$t('shipment.shipmentImages')"
-          @update="(values: any) => (item.shipmentImages = values)"
+          @update="(values: any) => item && (item.shipmentImages = values)"
         />
       </v-col>
       <v-col cols="12" sm="6" md="6">
@@ -114,14 +114,16 @@
         <FormRepeater
           :values="item.shipmentShipperDeals"
           :label="$t('shipment.shipmentShipperDeals')"
-          @update="(values: any) => (item.shipmentShipperDeals = values)"
+          @update="
+            (values: any) => item && (item.shipmentShipperDeals = values)
+          "
         />
       </v-col>
       <v-col cols="12">
         <FormRepeater
           :values="item.reviews"
           :label="$t('shipment.reviews')"
-          @update="(values: any) => (item.reviews = values)"
+          @update="(values: any) => item && (item.reviews = values)"
         />
       </v-col>
       <v-col cols="12" sm="6" md="6">
@@ -332,7 +334,6 @@
 <script setup lang="ts">
 import { ref, Ref, toRef } from "vue";
 import { VForm } from "vuetify/components";
-import { formatDateInput } from "@/utils/date";
 import FormRepeater from "@/components/common/FormRepeater.vue";
 import type { Shipment } from "@/types/shipment";
 import type { SubmissionErrors } from "@/types/error";
@@ -343,17 +344,16 @@ const props = defineProps<{
 
 const violations = toRef(props, "errors");
 
-const item: Ref<Shipment> = ref({});
+const item: Ref<Shipment | undefined> = ref(undefined);
 
 if (props.values) {
   item.value = {
     ...props.values,
-    publicationDate: formatDateInput(props.values.publicationDate),
   };
 }
 
 const emit = defineEmits<{
-  (e: "submit", item: Shipment): void;
+  (e: "submit", item?: Shipment): void;
 }>();
 
 function emitSubmit() {

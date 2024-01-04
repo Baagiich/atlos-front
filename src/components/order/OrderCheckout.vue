@@ -1,5 +1,8 @@
 <template>
-  <Toolbar :breadcrumb="breadcrumb" />
+  <Toolbar
+    :breadcrumb="breadcrumb"
+    :is-loading="isLoadingPay || isLoadingRetrieve"
+  />
   <ResultDialog
     :show="paymentCreated?.status == 4"
     :type="'success'"
@@ -110,8 +113,8 @@
                     color="orange"
                     @click="router.push({ name: 'WalletList' })"
                   >
-                    {{ $t("wallet.account.empty") }}
-                  </v-btn>
+                    {{ $t("wallet.account.empty") }} </v-btn
+                  >string
                 </v-col>
                 <v-col cols="4">
                   <span>{{ $t("wallet.account.credit") }}</span>
@@ -193,11 +196,7 @@ async function retrieveOrder() {
 
 await retrieveOrder();
 
-const {
-  retrieved,
-  isLoading: isLoadingRetrieve,
-  error: errorRetrieve,
-} = storeToRefs(orderShowStore);
+const { retrieved, isLoading: isLoadingRetrieve } = storeToRefs(orderShowStore);
 
 const orderPaymentData: Ref<OrderPayment> = ref({});
 orderPaymentData.value.order = retrieved?.value?.["@id"];

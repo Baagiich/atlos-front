@@ -8,7 +8,7 @@ export interface Consignor extends Item {
   phoneNumber?: string;
   register?: string;
   certificate?: any;
-  status?:string
-  adminUser?: string
-  adminEditable?: boolean
+  status?: string;
+  adminUser?: string;
+  adminEditable?: boolean;
 }

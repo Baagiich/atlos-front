@@ -4,8 +4,10 @@ stages:
   - lint:commit
   - lint:code
   - test
+  - build
   - approve
   - release
+  - deploy
 
 before_script:
   - npm ci --cache .npm --prefer-offline
@@ -14,6 +16,7 @@ cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - .npm/
+    - dist/
 
 lint:commit:
   stage: lint:commit
@@ -22,6 +25,8 @@ lint:commit:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: on_success
+    - if: $CI_COMMIT_BRANCH == "dev"
+      when: never
     - when: manual
       allow_failure: false
 
@@ -30,7 +35,9 @@ lint:code:
   script:
     - ./node_modules/eslint/bin/eslint.js $(git diff --name-only HEAD | grep -E 'src/.*\.ts|test/.*\.ts$' | xargs)
   rules:
-    - when: always
+    - if: $CI_COMMIT_BRANCH == "dev"
+      when: never
+    - when: on_success
 
 test:
   stage: test
@@ -38,7 +45,20 @@ test:
   script:
     - npm run test-ci
   rules:
-    - when: always
+    - when: on_success
+
+build:
+  stage: build
+  script:
+    - npm run build
+    - cp -a dist/. public/
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
+      when: on_success
 
 approve:
   stage: approve
@@ -46,6 +66,8 @@ approve:
     - echo ok
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
+    - if: $CI_COMMIT_BRANCH == "dev"
       when: never
     - when: manual
       allow_failure: false
@@ -58,3 +80,15 @@ release:
     - npx semantic-release
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+deploy_to_test:
+  stage: deploy
+  before_script:
+    - apk add --no-cache openssh
+  script:
+    - chmod 600 $TEST_SERVER_PRIVATE_KEY
+    - >
+      ssh -oStrictHostKeyChecking=no -T -i $TEST_SERVER_PRIVATE_KEY $TEST_SERVER_HOST "cd /home/ubuntu/atlos-backend; rm -rf artifacts.zip; curl --location --output artifacts.zip --header \"PRIVATE-TOKEN: $GITLAB_TOKEN\" \"https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/dev/download?job=build\"; sh /home/ubuntu/atlos-backend/deploy-front.sh"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
+      when: on_success

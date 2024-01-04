@@ -3,7 +3,7 @@ import type { Item } from "./item";
 export interface ShipmentPriceBidding extends Item {
   shipment?: any;
   shipmentDeal?: any;
-  price: {
+  price?: {
     amount?: number;
     currency?: string;
   };

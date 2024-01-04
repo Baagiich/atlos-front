@@ -11,7 +11,7 @@
       v-if="error || deleteError"
       type="error"
       class="mb-4"
-      closable="true"
+      :closable="true"
     >
       {{ error || deleteError }}
     </v-alert>
@@ -32,14 +32,14 @@
 
           <td>
             <router-link
-              v-if="router.hasRoute('AdminUserShow')"
-              :to="{ name: 'AdminUserShow', params: { id: item.adminuser } }"
+              v-if="router.hasRoute('adminUserShow')"
+              :to="{ name: 'adminUserShow', params: { id: item.adminUser } }"
             >
-              {{ item.adminuser }}
+              {{ item.adminUser }}
             </router-link>
 
             <p v-else>
-              {{ item.adminuser }}
+              {{ item.adminUser }}
             </p>
           </td>
         </tr>
@@ -50,17 +50,17 @@
 
           <td>
             <router-link
-              v-if="router.hasRoute('ContractTemplateShow')"
+              v-if="router.hasRoute('contractTemplateShow')"
               :to="{
-                name: 'ContractTemplateShow',
-                params: { id: item.contracttemplate },
+                name: 'contractTemplateShow',
+                params: { id: item.contractTemplate },
               }"
             >
-              {{ item.contracttemplate }}
+              {{ item.contractTemplate }}
             </router-link>
 
             <p v-else>
-              {{ item.contracttemplate }}
+              {{ item.contractTemplate }}
             </p>
           </td>
         </tr>

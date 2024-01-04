@@ -1,9 +1,7 @@
 import { defineStore } from "pinia";
 import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
-
 import type { SubmissionErrors } from "@/types/error";
-import { AdminUser } from "@/types/adminuser";
 import { Consignor } from "@/types/consignor";
 
 interface State {

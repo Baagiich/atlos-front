@@ -51,7 +51,7 @@
           :readonly="true"
           :disabled="true"
         >
-          <template v-slot:label>
+          <template #label>
             {{ $t("wallet.account.availableBalance") }}
           </template>
         </v-text-field>
@@ -101,12 +101,14 @@ import { SubmissionErrors } from "@/types/error";
 import { useWalletWithdrawStore } from "@/store/wallet/withdraw";
 import { VForm } from "vuetify/components";
 import { useWalletListStore } from "@/store/wallet/list";
+import { Currency } from "@/types/currency";
+import { Bank } from "@/types/bank";
 
 const props = defineProps<{
   values?: WalletWithdraw;
   errors?: SubmissionErrors;
-  currencies: [];
-  banks: [];
+  currencies: Currency[];
+  banks: Bank[];
 }>();
 
 const violations = toRef(props, "errors");

@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form">
+  <v-form v-if="item" ref="form">
     <v-row>
       <v-col cols="12">
         <v-radio-group v-model="item.loadType" :rules="requireRules">
@@ -46,10 +46,10 @@
           variant="outlined"
           clearable
           :items="currencyTypes"
-          @update:modelValue="onCurrencySelect"
           :rules="requireRules"
           item-title="key"
           item-value="value"
+          @update:modelValue="onCurrencySelect"
         ></v-select>
       </v-col>
     </v-row>
@@ -67,11 +67,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, toRef } from "vue";
+import { ref, Ref } from "vue";
 import { VForm } from "vuetify/components";
-import type { Shipment } from "@/types/shipment";
 import type { SubmissionErrors } from "@/types/error";
-import { useI18n } from "vue-i18n";
 import { useCreateNewShipmentStore } from "@/store/shipmentload/newshipment";
 import { ShipmentLoadType } from "@/types/shipment_load_type";
 import { ShipmentType } from "@/types/shipment_type";
@@ -80,11 +78,10 @@ import { storeToRefs } from "pinia";
 import { assertRequired } from "@/validations";
 import * as enumHelper from "@/utils/enumHelper";
 
-const props = defineProps<{
+defineProps<{
   errors?: SubmissionErrors;
 }>();
 
-const { t } = useI18n();
 const requireRules = [assertRequired()];
 const selectedCurrency = ref("");
 const newShipmentStore = useCreateNewShipmentStore();
@@ -92,6 +89,9 @@ const { item } = storeToRefs(newShipmentStore);
 const currencyTypes = enumHelper.getMap(CurrencyType);
 currencyTypes.unshift({ key: "", value: "" });
 const onCurrencySelect = () => {
+  if (!item || !item.value) {
+    return;
+  }
   item.value.currency = selectedCurrency.value;
 };
 
@@ -99,6 +99,9 @@ const emit = defineEmits<{
   (e: "next-step"): void;
 }>();
 async function emitNextStep() {
+  if (!form.value) {
+    return;
+  }
   const v = await form.value.validate();
   if (v.valid) {
     emit("next-step");

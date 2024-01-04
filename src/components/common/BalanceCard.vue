@@ -19,12 +19,12 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  currency: String,
-  balance: String,
-  color: String,
-  credit: String,
-});
+defineProps<{
+  currency?: string;
+  balance?: string;
+  color?: string;
+  credit?: string;
+}>();
 </script>
 
 <style>

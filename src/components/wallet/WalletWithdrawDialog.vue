@@ -14,14 +14,14 @@ import { useWalletWithdrawStore } from "@/store/wallet/withdraw";
 import { storeToRefs } from "pinia";
 import { WalletWithdraw } from "@/types/wallet/wallet-withdraw";
 import Form from "@/components/wallet/WalletWithdrawForm.vue";
+import { Currency } from "@/types/currency";
+import { Bank } from "@/types/bank";
 
-defineProps({
-  banks: {
-    type: Array,
-    default: undefined,
-  },
-  currencies: { type: Array, default: undefined },
-});
+interface Props {
+  banks: Bank[];
+  currencies: Currency[];
+}
+defineProps<Props>();
 
 const walletWithdrawStore = useWalletWithdrawStore();
 

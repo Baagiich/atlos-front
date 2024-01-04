@@ -2,7 +2,7 @@
   <Toolbar :breadcrumb="breadcrumb" :is-loading="isLoading" />
 
   <v-container fluid>
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">{{
+    <v-alert v-if="error" type="error" class="mb-4" :closable="true">{{
       error
     }}</v-alert>
 
@@ -30,7 +30,10 @@ const shipmentCreateStore = useShipmentCreateStore();
 const { created, isLoading, violations, error } =
   storeToRefs(shipmentCreateStore);
 
-async function create(item: Shipment) {
+async function create(item?: Shipment) {
+  if (!item) {
+    return;
+  }
   await shipmentCreateStore.create(item);
 
   if (!created?.value) {

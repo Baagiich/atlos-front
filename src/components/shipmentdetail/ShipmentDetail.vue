@@ -19,7 +19,7 @@
           <v-col cols="6">
             <GoogleMap
               class="rounded-xl overflow-hidden"
-              :api-key="googleMapsApiKey"
+              :api-key="GOOGLE_MAPS_API_KEY"
               style="width: 100%; height: 500px; margin: 10px"
               :zoom="5"
               :center="{
@@ -101,7 +101,7 @@
       <v-window-item :key="2" :value="2">
         <GoogleMap
           class="rounded-xl overflow-hidden"
-          :api-key="googleMapsApiKey"
+          :api-key="GOOGLE_MAPS_API_KEY"
           style="width: 100%; height: 400px; margin: 10px"
           :zoom="4.5"
           :center="{
@@ -142,8 +142,8 @@
           <MarkerCluster>
             <Marker
               v-for="(location, i) in locations"
-              :options="{ position: location }"
               :key="i"
+              :options="{ position: location }"
             />
           </MarkerCluster>
           <CustomMarker
@@ -183,7 +183,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from "vue";
+import { computed, ref } from "vue";
 import ShipmentLocationList from "./ShipmentLocationList.vue";
 import {
   GoogleMap,
@@ -193,18 +193,15 @@ import {
 } from "vue3-google-map";
 import { useShipmentDetailStore } from "@/store/shipment/detail";
 import { storeToRefs } from "pinia";
-import { useRoute, useRouter } from "vue-router";
-import { ShipmentState } from "@/types/shipment_state";
+import { useRouter } from "vue-router";
 import ShipmentDetailState from "./ShipmentState.vue";
-import * as enumHelper from "@/utils/enumHelper";
-const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+import { GOOGLE_MAPS_API_KEY } from "@/utils/config";
+
 const tab = ref(null);
 const selectedLocation = ref(null);
 const router = useRouter();
 const shipmentDetailStore = useShipmentDetailStore();
-const { retrieved, isLoading, error, totalItems } =
-  storeToRefs(shipmentDetailStore);
-const route = useRoute();
+const { retrieved } = storeToRefs(shipmentDetailStore);
 
 const locations = computed(() => {
   return retrieved && retrieved.value?.deviceLocation
@@ -218,7 +215,7 @@ async function emitSelected(value: any) {
   selectedLocation.value = value;
 }
 
-function goToFilesPage(){
+function goToFilesPage() {
   router.push({
     name: "ShipmentDetailFiles",
   });

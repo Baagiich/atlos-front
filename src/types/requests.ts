@@ -6,7 +6,7 @@ export interface Requests extends Item {
   code?: string;
   type?: string;
   targetEntityId?: number;
-  params?: string;
+  params?: any;
   updatedAt?: string;
   createdAt?: string;
 }

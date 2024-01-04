@@ -7,14 +7,14 @@
   />
 
   <v-container fluid>
-    <v-alert v-if="deleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="deleted" type="success" class="mb-4" :closable="true">
       {{ $t("itemDeleted", [deleted["@id"]]) }}
     </v-alert>
-    <v-alert v-if="mercureDeleted" type="success" class="mb-4" closable="true">
+    <v-alert v-if="mercureDeleted" type="success" class="mb-4" :closable="true">
       {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
     </v-alert>
 
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">
+    <v-alert v-if="error" type="error" class="mb-4" :closable="true">
       {{ error }}
     </v-alert>
 
@@ -65,13 +65,16 @@
       <template #item.packagetype="{ item }">
         <router-link
           v-if="router.hasRoute('PackageTypeShow')"
-          :to="{ name: 'PackageTypeShow', params: { id: item.packagetype } }"
+          :to="{
+            name: 'PackageTypeShow',
+            params: { id: isString(item.packageType) ? item.packageType : '' },
+          }"
         >
-          {{ item.packagetype }}
+          {{ item.packageType }}
         </router-link>
 
         <p v-else>
-          {{ item.packagetype }}
+          {{ item.packageType }}
         </p>
       </template>
     </v-data-table-server>
@@ -93,6 +96,7 @@ import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { Filters, VuetifyOrder } from "@/types/list";
 import type { ShipmentLoad } from "@/types/shipmentload";
+import isString from "lodash/isString";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -105,16 +109,19 @@ const shipmentloadListStore = useShipmentLoadListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(
   shipmentloadListStore,
 );
-const props = defineProps(["shipmentId"]);
+const props = defineProps<{ shipmentId?: string }>();
 const shipmentId = ref(props.shipmentId);
-const page = ref("1");
+const page = ref(1);
 const filters: Ref<Filters> = ref({});
-filters.value.shipment = shipmentId;
+
+if (shipmentId.value) {
+  filters.value.shipment = shipmentId.value;
+}
 const order = ref({});
 
 async function sendRequest() {
   await shipmentloadListStore.getItems({
-    page: page.value,
+    page: +page.value,
     order: order.value,
     ...filters.value,
   });
@@ -176,7 +183,7 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
 
   sendRequest();

@@ -21,10 +21,10 @@
 
 <script lang="ts" setup>
 import { toRef } from "vue";
-import { Order } from "@/types/list";
+import { Filters } from "@/types/list";
 
 const props = defineProps<{
-  values: Order;
+  values: Filters;
 }>();
 
 const item = toRef(props, "values");

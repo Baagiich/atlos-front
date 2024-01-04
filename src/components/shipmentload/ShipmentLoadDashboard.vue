@@ -2,13 +2,8 @@
   <Toolbar :breadcrumb="breadcrumb" :is-loading="isLoading" />
 
   <v-container fluid>
-    <v-alert
-      v-if="error || deleteError"
-      type="error"
-      class="mb-4"
-      closable="true"
-    >
-      {{ error || deleteError }}
+    <v-alert v-if="error" type="error" class="mb-4" :closable="true">
+      {{ error }}
     </v-alert>
     <v-row>
       <v-col cols="12" sm="6" md="12">
@@ -53,17 +48,17 @@
           @finish="emitFinish"
         />
         <div v-if="totalCreatedLoads > 0">
-          <div v-for="item in createdLoads" :key="item['@id']">
+          <div v-for="createdLoad in createdLoads" :key="createdLoad['@id']">
             <ShipmentLoadUpdate
               v-if="thirdStepShow"
-              :item="item"
+              :item="createdLoad"
               @updatelist="getCreatedLoads"
             />
           </div>
         </div>
         <ShipmentLoadCreate
-          :createdShipmentId="createdShipmentId"
-          v-if="thirdStepShow && item.loadType === 1"
+          v-if="thirdStepShow && item && item.loadType === 1"
+          :created-shipment-id="createdShipmentId"
           @updatelist="getCreatedLoads"
         />
       </v-col>
@@ -133,6 +128,9 @@ async function gotoList() {
   });
 }
 async function saveFromAddress() {
+  if (!item || !item.value) {
+    return;
+  }
   if (fromAddress.value) {
     await addressCreateStore.create(fromAddress.value);
     if (created?.value) {
@@ -141,6 +139,9 @@ async function saveFromAddress() {
   }
 }
 async function saveToAddress() {
+  if (!item || !item.value) {
+    return;
+  }
   if (toAddress.value) {
     await addressCreateStore.create(toAddress.value);
     if (created?.value) {
@@ -149,6 +150,9 @@ async function saveToAddress() {
   }
 }
 async function createNewShipment() {
+  if (!item || !item.value) {
+    return;
+  }
   await shipmentCreateStore.create(item.value);
   if (createdShipment?.value && createdShipment?.value["@id"]) {
     createdShipmentId.value = createdShipment?.value["@id"];
@@ -160,13 +164,13 @@ const shipmentloadListStore = useShipmentLoadListStore();
 const { items: createdLoads, totalItems: totalCreatedLoads } = storeToRefs(
   shipmentloadListStore,
 );
-const page = ref("1");
+const page = ref(1);
 const filters: Ref<Filters> = ref({});
 const order = ref({});
 async function getCreatedLoads() {
   filters.value.shipment = createdShipmentId.value;
   await shipmentloadListStore.getItems({
-    page: page.value,
+    page: +page.value,
     order: order.value,
     ...filters.value,
   });

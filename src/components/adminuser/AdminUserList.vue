@@ -63,10 +63,10 @@
         </p>
       </template>
       <template #item.userType="{ item }">
-        {{ UserType[item.userType] }}
+        {{ isNumber(item.userType) ? UserType[item.userType] : "" }}
       </template>
       <template #item.status="{ item }">
-        {{ UserStatusType[item.status] }}
+        {{ isNumber(item.status) ? UserStatusType[item.status] : "" }}
       </template>
       <template #item.verified="{ item }">
         <v-chip>{{ item.verified ? "verified" : "pending" }}</v-chip>
@@ -92,6 +92,7 @@ import DataFilter from "@/components/common/DataFilter.vue";
 import Filter from "@/components/adminuser/AdminUserFilter.vue";
 import { UserType } from "@/types/usertype";
 import { UserStatusType } from "@/types/user_status_type";
+import isNumber from "lodash/isNumber";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -181,7 +182,7 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
 
   sendRequest();

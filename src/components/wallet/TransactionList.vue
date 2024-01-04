@@ -6,7 +6,7 @@
     :loading="isLoading"
     :items-per-page="items.length"
   >
-    <template v-slot:item="{ item }">
+    <template #item="{ item }">
       <tr>
         <td>{{ item.id }}</td>
         <td>
@@ -24,15 +24,13 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  headers: {
-    type: Array,
-  },
-  items: { type: Array },
-  totalItems: {
-    type: Number,
-    default: 0,
-  },
-  isLoading: Boolean,
+interface Props {
+  headers: any[];
+  items: any[];
+  totalItems: number;
+  isLoading: boolean;
+}
+withDefaults(defineProps<Props>(), {
+  totalItems: 0,
 });
 </script>

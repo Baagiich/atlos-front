@@ -5,7 +5,6 @@ import { extractHubURL } from "@/utils/mercure";
 import type { Vehicle } from "@/types/vehicle";
 import type { SubmissionErrors } from "@/types/error";
 import * as apiToken from "@/utils/apiToken";
-import { UserType } from "@/types/usertype";
 
 interface State {
   retrieved?: Vehicle;
@@ -88,11 +87,7 @@ export const useVehicleUpdateStore = defineStore("vehicleUpdate", {
     },
 
     setRetrieved(retrieved: Vehicle) {
-      retrieved.adminEditable = true;
-      if (apiToken.getDecodedToken().user_type !== UserType.ADMIN) {
-        retrieved.adminEditable = false;
-      }
-
+      retrieved.adminEditable = apiToken.isAdmin();
       this.retrieved = retrieved;
     },
 

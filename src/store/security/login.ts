@@ -7,10 +7,10 @@ import { useDeviceShowStore } from "@/store/device/show";
 import { useDeviceCreateStore } from "@/store/device/create";
 import UAParser from "ua-parser-js";
 import { v4 as uuidv4 } from "uuid";
-import { JwtPayload } from "jwt-decode";
+import { AppJwtPayload } from "@/types/appjwtpayload";
 
 interface State {
-  userTokenData?: JwtPayload;
+  userTokenData?: AppJwtPayload;
   isLoading: boolean;
   error?: string;
   violations?: SubmissionErrors;
@@ -37,11 +37,11 @@ export const useSecurityLoginStore = defineStore("securityLogin", {
         if (!deviceShow.retrieved) {
           const parser = new UAParser();
           await deviceCreate.create({
-            name: parser.getBrowser().name,
+            name: parser.getBrowser().name || "noname",
             deviceId: uuidv4(),
-            model: parser.getBrowser().name,
-            version: parser.getBrowser().version,
-            os: parser.getOS().name,
+            model: parser.getBrowser().name || "nomodel",
+            version: parser.getBrowser().version || "noversion",
+            os: parser.getOS().name || "noos",
           });
 
           if (deviceCreate.error) {
@@ -77,7 +77,7 @@ export const useSecurityLoginStore = defineStore("securityLogin", {
       this.isLoading = !this.isLoading;
     },
 
-    setUserTokenData(data?: JwtPayload) {
+    setUserTokenData(data?: AppJwtPayload) {
       this.userTokenData = data;
     },
 

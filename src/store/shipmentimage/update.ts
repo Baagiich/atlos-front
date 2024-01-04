@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
-import type { Shipment } from "@/types/shipment";
 import type { SubmissionErrors } from "@/types/error";
 import { ShipmentImage } from "@/types/shipmentimage";
 

@@ -18,7 +18,7 @@
       v-if="showCreateVehicleAlert"
       type="error"
       class="mb-4"
-      closable="true"
+      :closable="true"
     >
       {{ $t("driverrequest.totalItemError") }}
     </v-alert>
@@ -60,47 +60,40 @@ import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { useVehicleDeleteStore } from "@/store/vehicle/delete";
 import { useMercureList } from "@/composables/mercureList";
-import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { VuetifyOrder, Filters } from "@/types/list";
 import { useRequestsCreateStore } from "@/store/requests/create";
 import * as apiToken from "@/utils/apiToken";
 import type { Requests } from "@/types/requests";
-import { useRoute } from "vue-router";
 import { useVehicleRequestsListStore } from "@/store/driverrequests/vehiclelist";
 import { RequestsCodeType } from "@/types/requests_code_type";
 import { RequestsType } from "@/types/requests_type";
 import { useVehicleListStore } from "@/store/vehicle/list";
 import { Vehicle } from "@/types/vehicle";
 
-const props = defineProps(["targetEntityId"]);
+const props = defineProps<{
+  targetEntityId?: number;
+}>();
 const targetEntityId = ref(props.targetEntityId);
 const { t } = useI18n();
-const breadcrumb = useBreadcrumb();
-const route = useRoute();
 
 const vehicleDeleteStore = useVehicleDeleteStore();
-const { deleted, mercureDeleted } = storeToRefs(vehicleDeleteStore);
 
 const vehicleListStore = useVehicleListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(vehicleListStore);
 
 const requestsVehicleListStore = useVehicleRequestsListStore();
-const {
-  items: requestVehicleItems,
-  totalItems: requestVehicleTotalItems,
-  error: requestError,
-  isLoading: requsetisLoading,
-} = storeToRefs(requestsVehicleListStore);
+const { items: requestVehicleItems, totalItems: requestVehicleTotalItems } =
+  storeToRefs(requestsVehicleListStore);
 
 const requestsCreateStore = useRequestsCreateStore();
 const { created } = storeToRefs(requestsCreateStore);
-const page = ref("1");
+const page = ref(1);
 const filters: Ref<Filters> = ref({});
 filters.value.plateNumber = "";
 const order = ref({});
 const filtersVehicleRequest: Ref<Filters> = ref({
-  fromUser: apiToken.getDecodedToken().iri,
-  targetEntityId: targetEntityId.value,
+  fromUser: apiToken.getDecodedToken()?.iri || "",
+  targetEntityId: targetEntityId.value?.toString() || "",
   code: RequestsCodeType.SHIPPER_TO_VEHICLE,
 });
 const BUTTON_STATES = {
@@ -124,14 +117,14 @@ async function handleButtonClick(item: Vehicle) {
 }
 async function sendRequest() {
   await vehicleListStore.getItems({
-    page: page.value,
+    page: +page.value,
     order: order.value,
     ...(filters.value || {}),
   });
 }
 async function checkRequest() {
   await requestsVehicleListStore.getVehicleRequests({
-    page: page.value,
+    page: +page.value,
     order: order.value,
     ...filtersVehicleRequest.value,
     groups: ["requests:detail"],
@@ -165,9 +158,13 @@ async function toggleBtns() {
 async function setup() {
   await checkRequest();
 
-  if (requestVehicleTotalItems.value >= 1) {
+  if (
+    Array.isArray(requestVehicleTotalItems.value) &&
+    requestVehicleTotalItems.value.length > 0
+  ) {
     filters.value = {};
-    filters.value.plateNumber = requestVehicleItems.value[0].params.plateNumber;
+    filters.value.plateNumber =
+      requestVehicleItems.value[0].params?.plateNumber;
     await sendRequest();
   }
   await toggleBtns();
@@ -197,7 +194,7 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: string) {
+function updatePage(newPage: number) {
   page.value = newPage;
 
   sendRequest();
@@ -237,7 +234,7 @@ function sendRequestToVehicle(item: Vehicle) {
 }
 function createVehicleRequest(item: Vehicle): Requests {
   const req: Requests = {
-    fromUser: apiToken.getDecodedToken().iri,
+    fromUser: apiToken.getDecodedToken()?.iri,
     toUser: item.shipper["@id"],
     code: RequestsCodeType.SHIPPER_TO_VEHICLE,
     type: RequestsType.PENDING,

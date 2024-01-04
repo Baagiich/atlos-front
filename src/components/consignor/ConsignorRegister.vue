@@ -2,7 +2,7 @@
   <Toolbar :breadcrumb="breadcrumb" :is-loading="isLoading" />
 
   <v-container fluid>
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">{{
+    <v-alert v-if="error" type="error" class="mb-4" :closable="true">{{
       error
     }}</v-alert>
 
@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from "vue";
+import { onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import Toolbar from "@/components/common/Toolbar.vue";
@@ -37,12 +37,7 @@ const { created, isLoading, violations, error } = storeToRefs(
   consignorRegisterStore,
 );
 const contracttemplateListStore = useContractTemplateListStore();
-const {
-  isLoading: contractTemplateIsLoading,
-  registrationTemplate,
-  hubUrl,
-  error: contractTemplateError,
-} = storeToRefs(contracttemplateListStore);
+const { registrationTemplate } = storeToRefs(contracttemplateListStore);
 async function create(item: Consignor) {
   await consignorRegisterStore.create(item);
 

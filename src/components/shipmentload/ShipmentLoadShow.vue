@@ -11,7 +11,7 @@
       v-if="error || deleteError"
       type="error"
       class="mb-4"
-      closable="true"
+      :closable="true"
     >
       {{ error || deleteError }}
     </v-alert>
@@ -107,14 +107,16 @@
               v-if="router.hasRoute('PackageTypeShow')"
               :to="{
                 name: 'PackageTypeShow',
-                params: { id: item.packagetype },
+                params: {
+                  id: isString(item.packageType) ? item.packageType : '',
+                },
               }"
             >
-              {{ item.packagetype }}
+              {{ item.packageType }}
             </router-link>
 
             <p v-else>
-              {{ item.packagetype }}
+              {{ item.packageType }}
             </p>
           </td>
         </tr>
@@ -136,6 +138,7 @@ import { useMercureItem } from "@/composables/mercureItem";
 import { useShipmentLoadDeleteStore } from "@/store/shipmentload/delete";
 import { useShipmentLoadShowStore } from "@/store/shipmentload/show";
 import { useBreadcrumb } from "@/composables/breadcrumb";
+import isString from "lodash/isString";
 
 const { t } = useI18n();
 const route = useRoute();

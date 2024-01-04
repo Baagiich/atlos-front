@@ -2,12 +2,12 @@ import { defineStore } from "pinia";
 import type { Shipment } from "@/types/shipment";
 
 interface State {
-  item: Shipment;
+  item?: Shipment;
 }
 
 export const useCreateNewShipmentStore = defineStore("newShipmentItem", {
   state: (): State => ({
-    item: {},
+    item: undefined,
   }),
 
   actions: {

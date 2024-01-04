@@ -21,7 +21,6 @@ import Loading from "@/components/common/Loading.vue";
 import Form from "@/components/mediaobject/MediaObjectForm.vue";
 import { useMediaObjectCreateStore } from "@/store/mediaobject/create";
 import { useBreadcrumb } from "@/composables/breadcrumb";
-import type { MediaObject } from "@/types/mediaobject";
 
 const router = useRouter();
 const breadcrumb = useBreadcrumb();
@@ -31,8 +30,9 @@ const { created, isLoading, violations, error } = storeToRefs(
   mediaobjectCreateStore,
 );
 
-async function create(item: MediaObject) {
-  await mediaobjectCreateStore.create(item);
+// async function create(item: MediaObject) {
+async function create() {
+  await mediaobjectCreateStore.create(new FormData());
 
   if (!created?.value) {
     return;

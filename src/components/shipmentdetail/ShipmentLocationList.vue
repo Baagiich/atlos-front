@@ -32,12 +32,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount, Ref } from "vue";
+import { ref, onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { formatDateTimeFull } from "@/utils/date";
-import type { Filters } from "@/types/list";
 import { useShipmentDetailStore } from "@/store/shipment/detail";
 
 const { t } = useI18n();
@@ -46,7 +45,6 @@ const shipmentDetailStore = useShipmentDetailStore();
 const { retrieved, isLoading, error, totalItems } =
   storeToRefs(shipmentDetailStore);
 
-const filters: Ref<Filters> = ref({});
 const selectedLocation = ref({});
 const itemsPerPage = ref("10");
 const emit = defineEmits<{
@@ -55,7 +53,9 @@ const emit = defineEmits<{
 
 let headers = ref([
   {
-    title: t("shipment.shipmentCode", { number: retrieved?.value?.shipmentCode}),
+    title: t("shipment.shipmentCode", {
+      number: retrieved?.value?.shipmentCode,
+    }),
     key: "createdAt",
     sortable: false,
   },
@@ -89,15 +89,6 @@ async function sendRequest() {
 
 sendRequest();
 
-function onSendFilter() {
-  sendRequest();
-}
-
-function resetFilter() {
-  filters.value = {};
-
-  sendRequest();
-}
 function showOnMap(row: any) {
   retrieved && retrieved.value?.deviceLocation
     ? retrieved.value.deviceLocation.map((item: any) => {

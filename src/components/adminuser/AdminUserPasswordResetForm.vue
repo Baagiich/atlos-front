@@ -55,11 +55,9 @@
 import { ref, Ref, toRef } from "vue";
 import { VForm } from "vuetify/components";
 import type { SubmissionErrors } from "@/types/error";
-import { useI18n } from "vue-i18n";
 import { assertRequired, assertPasswordConfirm } from "@/validations";
 import { PasswordResetVerify } from "@/types/passwordReset";
 import { useRoute } from "vue-router";
-const { t } = useI18n();
 const route = useRoute();
 const props = defineProps<{
   values?: PasswordResetVerify;
@@ -85,6 +83,9 @@ const emit = defineEmits<{
 }>();
 const form: Ref<VForm | null> = ref(null);
 async function emitSubmit() {
+  if (!form.value) {
+    return;
+  }
   const v = await form.value.validate();
   if (v.valid) {
     item.value.passwordChangeToken = route.params.token as string;

@@ -188,7 +188,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref, Ref, toRaw, toRef } from "vue";
+import { ref, Ref, toRef } from "vue";
 import { VForm } from "vuetify/components";
 import type { ShipperCompany } from "@/types/shippercompany";
 import type { SubmissionErrors } from "@/types/error";
@@ -228,6 +228,9 @@ const emit = defineEmits<{
 }>();
 const form: Ref<VForm | null> = ref(null);
 async function emitSubmit() {
+  if (!form.value) {
+    return;
+  }
   const v = await form.value.validate();
   if (v.valid) {
     emit("submit", item.value);

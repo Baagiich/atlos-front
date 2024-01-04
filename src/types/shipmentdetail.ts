@@ -2,7 +2,7 @@ import { DeviceLocation } from "./devicelocation";
 import type { Item } from "./item";
 
 export interface ShipmentDetail extends Item {
-  deviceLocation?: [ DeviceLocation];
+  deviceLocation?: [DeviceLocation];
   state?: string;
   driver?: any;
   action?: string;

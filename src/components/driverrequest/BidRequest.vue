@@ -44,10 +44,7 @@
 
 <script setup lang="ts">
 import { ref, Ref } from "vue";
-import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
-import { useBreadcrumb } from "@/composables/breadcrumb";
-import { useRoute } from "vue-router";
 import { useDriverRequestsListStore } from "@/store/driverrequests/driverlist";
 import { useVehicleRequestsListStore } from "@/store/driverrequests/vehiclelist";
 import { RequestsType } from "@/types/requests_type";
@@ -60,20 +57,18 @@ import { ShipmentPriceBiddingPatch } from "@/types/shipmentpricebiddingpatch";
 import { ShipmentShipperDeal } from "@/types/shipmentshipperdeal";
 import { BiddingType } from "@/types/bidding_type";
 import { DealType } from "@/types/deal_type";
-
 import * as apiToken from "@/utils/apiToken";
 import { Filters } from "@/types/list";
+import isNumber from "lodash/isNumber";
 
-const props = defineProps(["currency", "shipmentid"]);
+const props = defineProps<{
+  currency?: string;
+  shipmentid?: string;
+}>();
 const currency = ref(props.currency);
 const shipmentId = ref(props.shipmentid);
-const { t } = useI18n();
-const breadcrumb = useBreadcrumb();
-const route = useRoute();
 const biddingCreateStore = useShipmentPriceBiddingCreateStore();
-const { created } = storeToRefs(biddingCreateStore);
 const biddingPatchStore = useShipmentPriceBiddingPathcStore();
-const { created: patch } = storeToRefs(biddingPatchStore);
 const dealCreateStore = useShipmentShipperDealCreateStore();
 const { created: dealCreate } = storeToRefs(dealCreateStore);
 const shipmentpricebidding: Ref<ShipmentPriceBidding> = ref({});
@@ -94,40 +89,58 @@ const requestsVehicleListStore = useVehicleRequestsListStore();
 const { items: requestVehicleItems, totalItems: requestVehicleTotalItems } =
   storeToRefs(requestsVehicleListStore);
 const shipmentDealListStore = useShipmentShipperDealListStore();
-const {
-  items: dealItems,
-  totalItems: dealtotalItems,
-  error,
-  isLoading,
-} = storeToRefs(shipmentDealListStore);
-const page = ref("1");
+const { items: dealItems, totalItems: dealtotalItems } = storeToRefs(
+  shipmentDealListStore,
+);
+const page = ref(1);
 const filters: Ref<Filters> = ref({});
-filters.value.shipment = shipmentId.value;
-filters.value.shipper = apiToken.getDecodedToken().iri;
+if (shipmentId.value) {
+  filters.value.shipment = shipmentId.value.toString();
+}
+
+const tokenPayload = apiToken.getDecodedToken();
+if (tokenPayload) {
+  filters.value.shipper = tokenPayload.iri;
+}
 const order = ref({});
 const itemsPerPage = ref("10");
 async function getDeals() {
   await shipmentDealListStore.getItems({
-    page: page.value,
+    page: +page.value,
     order: order.value,
-    page_size: itemsPerPage.value,
+    page_size: +itemsPerPage.value,
     ...filters.value,
   });
 }
 await getDeals();
 async function setBidPrice() {
-  if (dealtotalItems.value > 0) {
+  if (
+    dealtotalItems.value > 0 &&
+    dealItems.value[0] &&
+    dealItems.value[0].price &&
+    isNumber(dealItems.value[0].price?.amount)
+  ) {
     bidPrice.value = dealItems.value[0].price.amount;
   }
 }
 await setBidPrice();
 async function buttonToggle() {
+  if (!dealItems.value[0] || !dealItems.value[0].shipmentPriceBiddings) {
+    return;
+  }
   btn1.value = dealtotalItems.value == 0;
   btn2.value =
     dealtotalItems.value > 0 &&
     dealItems.value[0].shipmentPriceBiddings.length !== 2;
-  if (checkReply()) {
-    btn3.value = checkReply();
+
+  const replied = checkReply();
+  if (
+    replied &&
+    Array.isArray(dealItems.value[0].shipmentPriceBiddings) &&
+    dealItems.value[0].shipmentPriceBiddings[1].price &&
+    isNumber(dealItems.value[0].shipmentPriceBiddings[1].price.amount)
+  ) {
+    btn3.value = replied;
     bidPrice.value = dealItems.value[0].shipmentPriceBiddings[1].price.amount;
   }
   if (dealtotalItems.value > 0) {
@@ -139,12 +152,17 @@ await buttonToggle();
 function checkReply() {
   if (
     dealtotalItems.value > 0 &&
+    dealItems.value[0] &&
+    Array.isArray(dealItems.value[0].shipmentPriceBiddings) &&
     dealItems.value[0].shipmentPriceBiddings.length === 2 &&
     dealItems.value[0].status === DealType.PENDING
   ) {
-    pendingBiddingId.value = dealItems.value[0].shipmentPriceBiddings[1][
-      "@id"
-    ].replace("/api/shipment_price_biddings/", "");
+    const iri = dealItems.value[0].shipmentPriceBiddings[1]["@id"];
+    if (!iri) {
+      return false;
+    }
+
+    pendingBiddingId.value = iri.replace("/api/shipment_price_biddings/", "");
     return true;
   }
   return false;
@@ -165,10 +183,10 @@ function checkRequests() {
 async function createShipmentShipperDeal() {
   if (checkRequests()) {
     shipmentShipperDeal.value.shipment = shipmentId.value;
-    (shipmentShipperDeal.value.shipper = apiToken.getDecodedToken().iri),
+    (shipmentShipperDeal.value.shipper = apiToken.getDecodedToken()?.iri),
       (shipmentShipperDeal.value.price = {
         amount: +bidPrice.value,
-        currency: currency,
+        currency: currency.value,
       });
     shipmentShipperDeal.value.driver = requestItems.value[0].toUser["@id"];
     shipmentShipperDeal.value.vehicle =
@@ -180,9 +198,9 @@ async function createShipmentPriceBidding() {
   shipmentpricebidding.value.shipment = shipmentId.value;
   shipmentpricebidding.value.price = {
     amount: +bidPrice.value,
-    currency: currency,
+    currency: currency.value,
   };
-  shipmentpricebidding.value.shipmentDeal = dealCreate?.value["@id"];
+  shipmentpricebidding.value.shipmentDeal = dealCreate?.value?.["@id"];
 
   biddingCreateStore.create(shipmentpricebidding.value);
 }

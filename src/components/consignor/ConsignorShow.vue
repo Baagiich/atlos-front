@@ -11,7 +11,7 @@
       {{ error || deleteError }}
     </v-alert>
     <v-alert
-    v-if="item && !item.certificate"
+      v-if="item && !item.certificate"
       density="compact"
       type="warning"
       :text="$t('informationNotCompleted')"
@@ -22,7 +22,7 @@
       @update="goToUpdatePage(item)"
     />
     <router-link
-      v-if="item.adminEditable"
+      v-if="item && item.adminEditable"
       id="adminuser-edit-link"
       :to="{ name: 'AdminUserUpdate', params: { id: item.adminUser } }"
       ><v-btn>{{ $t("adminuser.edit") }}</v-btn></router-link
@@ -95,7 +95,9 @@
             {{ $t("consignor.certificate") }}
           </td>
 
-          <td v-if="item.certificate"><MediaObjectThumb :id="item.certificate"></MediaObjectThumb></td>
+          <td v-if="item.certificate">
+            <MediaObjectThumb :id="item.certificate"></MediaObjectThumb>
+          </td>
           <td v-else class="text-orange-lighten-2">{{ $t("notAvailable") }}</td>
         </tr>
       </tbody>

@@ -6,11 +6,11 @@
       v-if="error || deleteError"
       type="error"
       class="mb-4"
-      closable="true"
+      :closable="true"
     >
       {{ error || deleteError }}
     </v-alert>
-    <v-row>
+    <v-row v-if="item">
       <v-col class="driver-request-shipment-code" md="12">
         {{ t("driverrequest.shipmentCode") }}{{ item.shipmentCode }}
       </v-col>
@@ -37,9 +37,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount, Ref } from "vue";
+import { onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import Toolbar from "@/components/common/Toolbar.vue";
 import Loading from "@/components/common/Loading.vue";
@@ -54,15 +54,13 @@ import VehicleRequest from "./VehicleRequest.vue";
 import BidRequest from "./BidRequest.vue";
 const { t } = useI18n();
 const route = useRoute();
-const router = useRouter();
 const breadcrumb = useBreadcrumb();
 
 const shipmentShowStore = useShipmentShowStore();
 const { retrieved: item, isLoading, error } = storeToRefs(shipmentShowStore);
 
 const shipmentDeleteStore = useShipmentDeleteStore();
-const { deleted, error: deleteError } = storeToRefs(shipmentDeleteStore);
-const targetEntityId = ref(getTargetEntityId());
+const { error: deleteError } = storeToRefs(shipmentDeleteStore);
 useMercureItem({
   store: shipmentShowStore,
   deleteStore: shipmentDeleteStore,
@@ -72,6 +70,9 @@ useMercureItem({
 await shipmentShowStore.retrieve(decodeURIComponent(route.params.id as string));
 function getTargetEntityId(): number {
   const routeParam = route.params.id;
+  if (Array.isArray(routeParam)) {
+    return 0;
+  }
   const targetEntityId = routeParam.replace("/api/shipments/", "");
   return +targetEntityId;
 }

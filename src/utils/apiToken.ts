@@ -1,7 +1,9 @@
 import { Auth, TokenResponse } from "@/types/auth";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import { ENTRYPOINT } from "./config";
 import { jwtDecode } from "jwt-decode";
+import { AppJwtPayload } from "@/types/appjwtpayload";
+import { UserType } from "@/types/usertype";
 
 const TOKEN_KEY = "API_TOKEN";
 
@@ -66,8 +68,8 @@ export async function callAuth(payload: Auth) {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/ld+json",
-      deviceId,
-    },
+      deviceId: deviceId,
+    } as HeadersInit,
   });
 
   if (!response.ok) {
@@ -116,5 +118,13 @@ export function getDecodedToken() {
   if (!tokenData || !isRefreshTokenAlive(tokenData)) {
     return undefined;
   }
-  return jwtDecode(tokenData.token);
+  return jwtDecode<AppJwtPayload>(tokenData.token);
+}
+
+export function isAdmin(): boolean {
+  const payload = getDecodedToken();
+  if (!payload) {
+    return false;
+  }
+  return payload.user_type === UserType.ADMIN;
 }

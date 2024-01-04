@@ -32,5 +32,5 @@ export default {
   prePayment: "Урьдчилгаа хувь",
   postPayment: "Адаг хувь",
   mainSize: "Овор хэмжээ *",
-  mainWeight: "Жин *"
+  mainWeight: "Жин *",
 };

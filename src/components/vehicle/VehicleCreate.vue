@@ -6,7 +6,7 @@
       error
     }}</v-alert>
 
-    <Form :errors="violations" @submit="create" :createOwnVehicle="true" />
+    <Form :errors="violations" :create-own-vehicle="true" @submit="create" />
   </v-container>
 
   <Loading :visible="isLoading" />

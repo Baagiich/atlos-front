@@ -11,7 +11,7 @@
       v-if="error || deleteError"
       type="error"
       class="mb-4"
-      closable="true"
+      :closable="true"
     >
       {{ error || deleteError }}
     </v-alert>
@@ -20,7 +20,7 @@
       v-if="created || updated"
       type="success"
       class="mb-4"
-      closable="true"
+      :closable="true"
     >
       <template v-if="updated">
         {{ $t("itemUpdated", [updated["@id"]]) }}

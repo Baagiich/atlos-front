@@ -10,24 +10,24 @@
         <v-row>
           <v-col cols="4">
             <v-select
-              :label="$t('shipmentload.country')"
               v-model="selectedCountry"
+              :label="$t('shipmentload.country')"
               :items="getCountryNames()"
               :rules="requireRules"
-              @update:modelValue="onCountrySelect"
               variant="outlined"
               clearable
+              @update:modelValue="onCountrySelect"
             ></v-select>
           </v-col>
           <v-col cols="4">
             <v-select
-              :label="$t('shipmentload.city')"
               v-model="selectedCity"
+              :label="$t('shipmentload.city')"
               :items="cityNames"
               :rules="requireRules"
-              @update:model-value="setCityLocations"
               variant="outlined"
               clearable
+              @update:model-value="setCityLocations"
             ></v-select>
           </v-col>
           <v-col cols="4">
@@ -127,14 +127,17 @@
 
 <script setup lang="ts">
 import { ref, Ref, toRef } from "vue";
-import { useI18n } from "vue-i18n";
 import { useCountryListStore } from "@/store/shipmentload/countrylist";
 import { storeToRefs } from "pinia";
 import { GoogleMap, CustomMarker } from "vue3-google-map";
 import { Filters } from "@/types/list";
 import { assertRequired } from "@/validations";
+import { Address } from "@/types/address";
+import { SubmissionErrors } from "@/types/error";
+import { State } from "@/types/state";
+import { City } from "@/types/city";
+import { VForm } from "vuetify/lib/components/index.mjs";
 
-const { t } = useI18n();
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const lat = ref(47.923293);
 const lng = ref(106.928076);
@@ -146,19 +149,18 @@ const page = ref(1);
 const order = ref({});
 const countryFilters: Ref<Filters> = ref({});
 const countryListStore = useCountryListStore();
-const {
-  items: countryItems,
-  totalItems: countryTotalItems,
-  error: countryError,
-  isLoading: countryIsLoading,
-} = storeToRefs(countryListStore);
-const props = defineProps(["address", "title"]);
+const { items: countryItems } = storeToRefs(countryListStore);
+const props = defineProps<{
+  address: Address;
+  title: string;
+  errors?: SubmissionErrors;
+}>();
 const violations = toRef(props, "errors");
 const address = ref(props.address);
 const title = ref(props.title);
 const onCountrySelect = () => {
   selectedCity.value = null;
-  cityNames.value = countryListStore.getCityNames(selectedCountry.value);
+  cityNames.value = countryListStore.getCityNames();
 };
 const requireRules = [assertRequired()];
 const getCountryNames = () => {
@@ -173,9 +175,14 @@ const setCityLocations = () => {
   const selectedCountryItem = countryItems.value.find(
     (country) => country.name === selectedCountry.value,
   );
+
+  if (!selectedCountryItem) {
+    return;
+  }
+
   const selectedCityItem = selectedCountryItem.states
-    .flatMap((state) => state.cities)
-    .find((city) => city.name === selectedCity.value);
+    .flatMap((state: State) => state.cities)
+    .find((city: City) => city.name === selectedCity.value);
 
   if (selectedCityItem && selectedCityItem.location) {
     lat.value = selectedCityItem.location.latitude;
@@ -199,7 +206,8 @@ async function getCountry() {
   });
 }
 getCountry();
-const onMapClick = (event: google.maps.MouseEvent) => {
+const onMapClick = (event: google.maps.MapMouseEvent) => {
+  if (event.latLng === null) return;
   lat.value = event.latLng.lat();
   lng.value = event.latLng.lng();
   address.value = address.value || {};
@@ -218,11 +226,4 @@ const emitSubmit = () => {
   emit("submit", address.value);
 };
 const form: Ref<VForm | null> = ref(null);
-
-const resetForm = () => {
-  if (!form.value) return;
-
-  form.value.reset();
-  showMarker.value = false;
-};
 </script>
