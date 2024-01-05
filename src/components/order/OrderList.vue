@@ -37,6 +37,14 @@
         }}</v-chip>
         <v-chip v-else>{{ $t("order.unpaid") }}</v-chip>
       </template>
+      <template #item.description="{ item }">
+        <span v-if="item.item?.details.paymentType">
+          {{ $t(item.item?.details.paymentType) }}
+        </span>
+        <span v-else>
+          {{ item?.item?.product.name }}
+        </span>
+      </template>
       <template #item.paidAt="{ item }">
         {{ formatDateTime(item.paidAt) }}
       </template>
@@ -94,6 +102,11 @@ const headers = [
     sortable: true,
   },
   {
+    title: t("shipment.shipmentCode"),
+    key: "item.shipment.shipmentCode",
+    sortable: false,
+  },
+  {
     title: t("order.totalAmount"),
     key: "totalAmount.amount",
     sortable: false,
@@ -110,7 +123,7 @@ const headers = [
   },
   {
     title: t("description"),
-    key: "item.product.name",
+    key: "description",
     sortable: false,
   },
   {

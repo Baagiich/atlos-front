@@ -71,6 +71,8 @@ export default {
   logout: "Logout",
   "en-US": "US",
   "mn-MN": "MN",
+  advance: "Advance",
+  remaining: "Remaining payment",
   vehicleimage,
   vehicle,
   wallet,
