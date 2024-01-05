@@ -1,29 +1,66 @@
 <template>
   <ShipmentDetailState></ShipmentDetailState>
+  <v-card-title>{{ $t("consignor.title") }}</v-card-title>
   <v-card>
-    <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
-      <v-tab :value="1">{{ $t("shipmentimage.load") }}</v-tab>
-      <v-tab :value="2">{{ $t("shipmentimage.unload") }}</v-tab>
-      <v-tab :value="3">{{ $t("shipmentimage.files") }}</v-tab>
+    <v-tabs
+      v-model="consignortab"
+      color="deep-purple-accent-4"
+      align-tabs="center"
+    >
+      <v-tab :value="`consignor` + 1">{{ $t("shipmentimage.load") }}</v-tab>
+      <v-tab :value="`consignor` + 2">{{ $t("shipmentimage.unload") }}</v-tab>
     </v-tabs>
-    <v-window v-model="tab">
-      <v-window-item :key="1" :value="1">
+    <v-window v-model="consignortab">
+      <v-window-item :key="`consignor` + 1" :value="`consignor` + 1">
         <ShipmentImageSlide
-          :items="loadPictures"
+          :items="consignorLoadPictures"
+          :consignor="isConsignor"
           @submitImg="emitUpload"
         ></ShipmentImageSlide>
       </v-window-item>
-      <v-window-item :key="2" :value="2">
+      <v-window-item :key="`consignor` + 2" :value="`consignor` + 2">
         <ShipmentImageSlide
-          :items="unloadPictures"
+          :items="consignorUnloadPictures"
+          :consignor="isConsignor"
           @submitImg="emitUpload"
         ></ShipmentImageSlide>
       </v-window-item>
-      <v-window-item :key="3" :value="3">
+    </v-window>
+  </v-card>
+  <v-card-title>{{ $t("shippercompany.title") }}</v-card-title>
+  <v-card>
+    <v-tabs
+      v-model="shippertab"
+      color="deep-purple-accent-4"
+      align-tabs="center"
+    >
+      <v-tab :value="`shipper` + 1">{{ $t("shipmentimage.load") }}</v-tab>
+      <v-tab :value="`shipper` + 2">{{ $t("shipmentimage.unload") }}</v-tab>
+      <v-tab :value="`shipper` + 3">{{ $t("shipmentimage.files") }}</v-tab>
+    </v-tabs>
+    <v-window v-model="shippertab">
+      <v-window-item :key="`shipper` + 1" :value="`shipper` + 1">
         <ShipmentImageSlide
-          :items="filePictures"
+          :items="shipperLoadPictures"
+          :consignor="!isConsignor"
+          @submitImg="emitUpload"
+        ></ShipmentImageSlide>
+      </v-window-item>
+      <v-window-item :key="`shipper` + 2" :value="`shipper` + 2">
+        <ShipmentImageSlide
+          :items="shipperUnloadPictures"
+          :consignor="!isConsignor"
+          @submitImg="emitUpload"
+        ></ShipmentImageSlide>
+      </v-window-item>
+      <v-window-item :key="`shipper` + 3" :value="`shipper` + 3">
+        <ShipmentImageSlide
+          :items="shipperFilePictures"
+          :consignor="!isConsignor"
           :files="true"
           @submitImg="emitUpload"
+          @accept-file="emitAcceptFile"
+          @reject-file="emitRejectFile"
         ></ShipmentImageSlide>
       </v-window-item>
     </v-window>
@@ -31,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, Ref, ref } from "vue";
+import { onBeforeUnmount, Ref, ref, computed } from "vue";
 import { useShipmentImageListStore } from "@/store/shipmentimage/list";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
@@ -40,38 +77,79 @@ import { ShipmentImage } from "@/types/shipmentimage";
 import ShipmentDetailState from "./ShipmentState.vue";
 import ShipmentImageSlide from "./ShipmentImageSlide.vue";
 import { useShipmentImageCreateStore } from "@/store/shipmentimage/create";
-
-const tab = ref(null);
+import * as apiToken from "@/utils/apiToken";
+import { UserType } from "@/types/usertype";
+import { useShipmentImageUpdateStore } from "@/store/shipmentimage/update";
+import * as enumHelper from "@/utils/enumHelper";
+import { ShipmentImageRejectType } from "@/types/shipmentimage_reject_type";
+const consignortab = ref(null);
+const shippertab = ref(null);
 const page = ref(1);
 const shipmentImageListStore = useShipmentImageListStore();
 const { items } = storeToRefs(shipmentImageListStore);
 const route = useRoute();
 const filters: Ref<Filters> = ref({});
-const loadPictures: Ref<ShipmentImage[]> = ref([]);
-const unloadPictures: Ref<ShipmentImage[]> = ref([]);
-const filePictures: Ref<ShipmentImage[]> = ref([]);
+const consignorLoadPictures: Ref<ShipmentImage[]> = ref([]);
+const consignorUnloadPictures: Ref<ShipmentImage[]> = ref([]);
+const consignorFilePictures: Ref<ShipmentImage[]> = ref([]);
+const shipperLoadPictures: Ref<ShipmentImage[]> = ref([]);
+const shipperUnloadPictures: Ref<ShipmentImage[]> = ref([]);
+const shipperFilePictures: Ref<ShipmentImage[]> = ref([]);
 filters.value.shipment = decodeURIComponent(route.params.id as string);
 const shipmentImageCreateStore = useShipmentImageCreateStore();
-const { created } = storeToRefs(shipmentImageCreateStore);
+const { created } = storeToRefs(
+  shipmentImageCreateStore,
+);
+const shipmentImageUpdateStore = useShipmentImageUpdateStore();
+
+const payload = apiToken.getDecodedToken();
+if(!payload) {
+  throw new Error("Token payload invalid");
+}
+
+const userType = payload.user_type;
+
+const rejectType = enumHelper.getMap(ShipmentImageRejectType);
+rejectType.unshift({ key: "", value: "" });
+
+const isConsignor = computed(() => {
+  if (userType === UserType.CONSIGNOR) {
+    return true;
+  }
+  return false;
+});
 await shipmentImageListStore.getItems({
   page: page.value,
   groups: ["shipment:detail:images"],
   ...filters.value,
 });
 function classifyItem() {
-  unloadPictures.value = [];
-  loadPictures.value = [];
-  filePictures.value = [];
+  consignorUnloadPictures.value = [];
+  consignorLoadPictures.value = [];
+  consignorFilePictures.value = [];
+
+  shipperUnloadPictures.value = [];
+  shipperLoadPictures.value = [];
+  shipperFilePictures.value = [];
 
   items.value.forEach((item) => {
-    if (item.tags?.includes("unload_images")) {
-      unloadPictures.value.push(item);
-    } else if (item.tags?.includes("load_images")) {
-      loadPictures.value.push(item);
-    } else if (item.tags?.includes("files")) {
-      filePictures.value.push(item);
-    } else {
-      filePictures.value.push(item);
+    if (item.tags?.includes("consignor")) {
+      if (item.tags.includes("unload_images")) {
+        consignorUnloadPictures.value.push(item);
+      } else if (item.tags.includes("load_images")) {
+        consignorLoadPictures.value.push(item);
+      } else {
+        consignorFilePictures.value.push(item);
+      }
+    }
+    if (item.tags?.includes("shipper")) {
+      if (item.tags?.includes("unload_images")) {
+        shipperUnloadPictures.value.push(item);
+      } else if (item.tags?.includes("load_images")) {
+        shipperLoadPictures.value.push(item);
+      } else {
+        shipperFilePictures.value.push(item);
+      }
     }
   });
 }
@@ -92,6 +170,34 @@ async function emitUpload(shipmentImage: any) {
   classifyItem();
 }
 
+async function emitAcceptFile(data: any) {
+  await shipmentImageUpdateStore.approve(data.id as string);
+  await shipmentImageListStore.getItems({
+    page: page.value,
+    groups: ["shipment:detail:images"],
+    ...filters.value,
+  });
+
+  classifyItem();
+}
+
+async function emitRejectFile(data: any) {
+  let causes: string[] = [];
+  data.rejectedCauses.value.forEach((item: number) => {
+    causes.push(rejectType[item].key);
+  });
+
+  await shipmentImageUpdateStore.reject(data.image.id as string, {
+    rejectedCauses: causes,
+  });
+  await shipmentImageListStore.getItems({
+    page: page.value,
+    groups: ["shipment:detail:images"],
+    ...filters.value,
+  });
+
+  classifyItem();
+}
 onBeforeUnmount(() => {
   shipmentImageCreateStore.$reset();
 });

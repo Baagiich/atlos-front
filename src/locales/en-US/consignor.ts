@@ -7,4 +7,5 @@ export default {
   register: "Register",
   certificate: "Certificate",
   status: "Status",
+  title: "Consignor",
 };

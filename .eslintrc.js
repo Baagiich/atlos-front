@@ -22,6 +22,7 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": "error",
     "lodash/prefer-lodash-method": "off",
     "lodash/prefer-lodash-typecheck": "off",
+    "lodash/prefer-includes": "off",
     "@typescript-eslint/ban-types": [
       "error",
       {
@@ -40,5 +41,5 @@ module.exports = {
       interpolationAsNonHTML: false,
     },
   },
-  ignorePatterns: ["!.*", "dist", "node_modules"],
+  ignorePatterns: ["!.*", "dist", "node_modules", ".history", "build/"],
 };
