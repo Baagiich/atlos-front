@@ -184,6 +184,8 @@ import { ShipmentPriceBidding } from "@/types/shipmentpricebidding";
 import { useShipmentPriceBiddingCreateStore } from "@/store/shipmentpricebidding/create";
 import isString from "lodash/isString";
 import { Review } from "@/types/review";
+import { useShipmentShowStore } from "@/store/shipment/show";
+import router from "@/router";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -210,6 +212,10 @@ const biddingPatchStore = useShipmentPriceBiddingPathcStore();
 const { created: patch, error: patchError } = storeToRefs(biddingPatchStore);
 const biddingCreateStore = useShipmentPriceBiddingCreateStore();
 const { created, error: createError } = storeToRefs(biddingCreateStore);
+
+const shipmentShowStore = useShipmentShowStore();
+const { retrieved: shipmentItem } = storeToRefs(shipmentShowStore);
+
 const bidPrice: Ref<number | undefined> = ref(undefined);
 
 filters.value.shipment = isString(route.params.id) ? route.params.id : "";
@@ -266,8 +272,20 @@ async function approveBid() {
   shipmentpricebiddingpatch.value.state = BiddingType.APPROVED;
   await biddingPatchStore.create(shipmentpricebiddingpatch.value);
   dialogApprove.value = false;
-  if (patch) {
-    sendRequest();
+
+  if (patch && patch.value?.state === "approved") {
+    await shipmentShowStore.retrieve(
+      decodeURIComponent(route.params.id as string),
+    );
+
+    if (!shipmentItem || !shipmentItem.value) {
+      return;
+    }
+
+    router.push({
+      name: "OrderCheckout",
+      params: { orderNumber: shipmentItem.value.advanceOrderNumber },
+    });
   }
 }
 async function cancelBid() {

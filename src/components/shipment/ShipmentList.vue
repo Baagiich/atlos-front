@@ -57,9 +57,47 @@
       <template #item.state="{ item }">
         {{ item.state }}
       </template>
+      <template #item.advancePaid="{ item }">
+        <v-chip v-if="item.advancePaid" color="green">{{
+          $t("order.paid")
+        }}</v-chip>
+        <v-chip v-else-if="item.advanceOrderNumber">
+          <v-btn
+            color="success"
+            size="small"
+            class="ma-2"
+            @click="goToCheckoutPage(item.advanceOrderNumber)"
+          >
+            {{ t("order.pay") }}
+          </v-btn>
+        </v-chip>
+        <v-chip v-else>
+          {{ t("order.unpaid") }}
+        </v-chip>
+      </template>
+      <template #item.remainingPaid="{ item }">
+        <v-chip v-if="item.remainingPaid" color="green">{{
+          $t("order.paid")
+        }}</v-chip>
+        <v-chip v-else-if="item.remainingOrderNumber">
+          <v-btn
+            color="success"
+            size="small"
+            class="ma-2"
+            @click="goToCheckoutPage(item.remainingOrderNumber)"
+          >
+            {{ t("order.pay") }}
+          </v-btn>
+        </v-chip>
+        <v-chip v-else>
+          {{ t("order.unpaid") }}
+        </v-chip>
+      </template>
       <template #item.actions="{ item }">
         <v-btn
-          v-if="userType === UserType.DRIVER || userType === UserType.SHIPPER"
+          v-if="
+            userType && [UserType.DRIVER, UserType.SHIPPER].includes(userType)
+          "
           color="secondary"
           size="small"
           class="ma-2"
@@ -77,6 +115,16 @@
           {{ t("shipment.showBid") }}
         </v-btn>
 
+        <v-btn
+          v-if="item.state === ShipmentStateString.DELIVERED"
+          color="warning"
+          size="small"
+          class="ma-2"
+          @click="approveShipmentDelivery(item.id)"
+        >
+          {{ t("shipment.approveDelivery") }}
+        </v-btn>
+
         <ActionCell :actions="['show']" @show="goToShowPage(item)" />
       </template>
     </v-data-table-server>
@@ -90,6 +138,7 @@ import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useShipmentListStore } from "@/store/shipment/list";
 import { useShipmentDeleteStore } from "@/store/shipment/delete";
+import { useShipmentPatchStore } from "@/store/shipment/patch";
 import Toolbar from "@/components/common/Toolbar.vue";
 import DataFilter from "@/components/common/DataFilter.vue";
 import Filter from "@/components/shipment/ShipmentFilter.vue";
@@ -101,6 +150,8 @@ import type { Filters, VuetifyOrder } from "@/types/list";
 import type { Shipment } from "@/types/shipment";
 import { UserType } from "@/types/usertype";
 import * as apiToken from "@/utils/apiToken";
+import { ShipmentAction } from "@/types/shipmentaction";
+import { ShipmentStateString } from "@/types/shipment_state";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -112,6 +163,8 @@ const { deleted, mercureDeleted } = storeToRefs(shipmentDeleteStore);
 const shipmentListStore = useShipmentListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(shipmentListStore);
 const userType = apiToken.getDecodedToken()?.user_type;
+
+const shipmentPatchStore = useShipmentPatchStore();
 
 const page = ref(1);
 const filters: Ref<Filters> = ref({});
@@ -161,6 +214,16 @@ const headers = [
   {
     title: t("shipment.state"),
     key: "state",
+    sortable: false,
+  },
+  {
+    title: t("advance"),
+    key: "advancePaid",
+    sortable: false,
+  },
+  {
+    title: t("remaining"),
+    key: "remainingPaid",
     sortable: false,
   },
   {
@@ -218,5 +281,21 @@ function gotoEditPriceDashboard(item: Shipment) {
     name: "EditPriceDashboard",
     params: { id: item["@id"] },
   });
+}
+
+async function goToCheckoutPage(orderNumber: string) {
+  router.push({
+    name: "OrderCheckout",
+    params: { orderNumber: orderNumber },
+  });
+}
+
+async function approveShipmentDelivery(id?: number) {
+  if (!id) {
+    return;
+  }
+
+  await shipmentPatchStore.doAction(id, ShipmentAction.DELIVERY_TO_APPROVE);
+  await sendRequest();
 }
 </script>

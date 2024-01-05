@@ -1,6 +1,7 @@
 import type { Item } from "./item";
 
 export interface Shipment extends Item {
+  id?: number;
   shipmentImages?: any;
   state?: string;
   driver?: any;
@@ -30,4 +31,8 @@ export interface Shipment extends Item {
   currency?: string;
   mainWeight?: number;
   mainSize?: number;
+  advancePaid?: boolean;
+  remainingPaid?: boolean;
+  advanceOrderNumber?: string;
+  remainingOrderNumber?: string;
 }

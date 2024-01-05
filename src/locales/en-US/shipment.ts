@@ -33,4 +33,5 @@ export default {
   seeShipmentImages: "See shipment images",
   title: "Shipment",
   activeShipment: "Active shipment",
+  approveDelivery: "Approve delivery",
 };

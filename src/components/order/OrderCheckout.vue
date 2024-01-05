@@ -101,7 +101,7 @@
               cols="6"
             >
               <v-row>
-                <v-col cols="4">
+                <v-col cols="auto">
                   <span>{{ $t("wallet.account.availableBalance") }}</span>
                   <br />
                   <v-chip v-if="currencyAccount" icon="mdi-blinds"
@@ -113,10 +113,10 @@
                     color="orange"
                     @click="router.push({ name: 'WalletList' })"
                   >
-                    {{ $t("wallet.account.empty") }} </v-btn
-                  >string
+                    {{ $t("wallet.account.empty") }}
+                  </v-btn>
                 </v-col>
-                <v-col cols="4">
+                <v-col v-if="currencyAccount" cols="4">
                   <span>{{ $t("wallet.account.credit") }}</span>
                   <br />
                   <v-chip v-if="currencyAccount" icon="mdi-blinds"

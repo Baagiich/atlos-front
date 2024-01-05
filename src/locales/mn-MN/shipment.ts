@@ -32,6 +32,7 @@ export default {
   sendBidTitle: "Тээврийн үнэ илгээх",
   wantApprove: "Үнийн санал Баталгаажуулах уу?",
   approve: "Баталгаажуулах",
+  approveDelivery: "Хүргэлт батлах",
   back: "Буцах",
   wantCancel: "Тээврийн үнэ цуцлах уу?",
   pending: "Хүлээгдэж байна",

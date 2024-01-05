@@ -72,6 +72,8 @@ export default {
   logout: "Гарах",
   "en-US": "EN",
   "mn-MN": "MN",
+  advance: "Урьдчилгаа",
+  remaining: "Үлдэгдэл",
   vehicle,
   vehicleimage,
   consignor,
