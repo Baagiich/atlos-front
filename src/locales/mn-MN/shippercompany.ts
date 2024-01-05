@@ -5,4 +5,5 @@ export default {
   email: "Имэйл",
   register: "Компанийн регистр",
   phoneNumber: "Утас",
+  title: "Тээвэрлэгч",
 };

@@ -3,7 +3,7 @@ import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
 import { extractHubURL } from "@/utils/mercure";
 import type { SubmissionErrors } from "@/types/error";
-import { ShipmentImage } from "@/types/shipmentimage";
+import { ShipmentImage, ShipmentImageReject } from "@/types/shipmentimage";
 
 interface State {
   retrieved?: ShipmentImage;
@@ -85,6 +85,58 @@ export const useShipmentImageUpdateStore = defineStore("shipmentImageUpdate", {
       }
     },
 
+    async approve(id: string) {
+      this.toggleLoading();
+      console.log("id", id);
+      try {
+        const response = await api("shipment_images/" + id + "/approve", {
+          method: "POST",
+          body: JSON.stringify({}),
+          
+        });
+        const data: ShipmentImage = await response.json();
+        const hubUrl = extractHubURL(response);
+
+        this.toggleLoading();
+        this.setRetrieved(data);
+
+        if (hubUrl) {
+          this.setHubUrl(hubUrl);
+        }
+      } catch (error) {
+        this.toggleLoading();
+
+        if (error instanceof Error) {
+          this.setError(error.message);
+        }
+      }
+    },
+
+    async reject(id: string, payload: ShipmentImageReject) {
+      this.toggleLoading();
+
+      try {
+        const response = await api("shipment_images/" + id + "/reject", {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+        const data: ShipmentImage = await response.json();
+        const hubUrl = extractHubURL(response);
+
+        this.toggleLoading();
+        this.setRetrieved(data);
+
+        if (hubUrl) {
+          this.setHubUrl(hubUrl);
+        }
+      } catch (error) {
+        this.toggleLoading();
+
+        if (error instanceof Error) {
+          this.setError(error.message);
+        }
+      }
+    },
     setRetrieved(retrieved: ShipmentImage) {
       this.retrieved = retrieved;
     },

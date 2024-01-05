@@ -5,4 +5,5 @@ export default {
   email: "Email",
   register: "Register",
   phoneNumber: "PhoneNumber",
+  title: "Shipper",
 };

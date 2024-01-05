@@ -7,4 +7,5 @@ export default {
   register: "Компанийн регистр",
   phoneNumber: "Утас",
   status: "Төлөв",
+  title: "Ачаа илгээгч",
 };

@@ -16,3 +16,7 @@ export interface ShipmentImage extends Item {
 export interface ShipmentImageListParams extends ListParams {
   shipment?: string;
 }
+
+export interface ShipmentImageReject extends Item {
+  rejectedCauses?: string[];
+}
