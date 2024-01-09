@@ -172,7 +172,7 @@ const filters: Ref<Filters> = ref({});
 if (userType != UserType.ADMIN) {
   breadcrumb[0].title !== "ShipmentOwnList"
     ? (filters.value.state = "created")
-    : null;
+    : filters.value.owner = "true";
 }
 const order = ref({});
 const itemsPerPage = ref("10");
