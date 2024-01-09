@@ -25,7 +25,7 @@ lint:commit:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: on_success
-    - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "test"
       when: never
     - when: manual
       allow_failure: false
@@ -35,7 +35,7 @@ lint:code:
   script:
     - ./node_modules/eslint/bin/eslint.js $(git diff --name-only HEAD | grep -E 'src/.*\.ts|test/.*\.ts$' | xargs)
   rules:
-    - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "test"
       when: never
     - when: on_success
 
@@ -57,7 +57,7 @@ build:
     paths:
       - public
   rules:
-    - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "test"
       when: on_success
 
 approve:
@@ -67,7 +67,7 @@ approve:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: never
-    - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "test"
       when: never
     - when: manual
       allow_failure: false
@@ -88,7 +88,7 @@ deploy_to_test:
   script:
     - chmod 600 $TEST_SERVER_PRIVATE_KEY
     - >
-      ssh -oStrictHostKeyChecking=no -T -i $TEST_SERVER_PRIVATE_KEY $TEST_SERVER_HOST "cd /home/ubuntu/atlos-backend; rm -rf artifacts.zip; curl --location --output artifacts.zip --header \"PRIVATE-TOKEN: $GITLAB_TOKEN\" \"https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/dev/download?job=build\"; sh /home/ubuntu/atlos-backend/deploy-front.sh"
+      ssh -oStrictHostKeyChecking=no -T -i $TEST_SERVER_PRIVATE_KEY $TEST_SERVER_HOST "cd /home/ubuntu/atlos-backend; rm -rf artifacts.zip; curl --location --output artifacts.zip --header \"PRIVATE-TOKEN: $GITLAB_TOKEN\" \"https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/test/download?job=build\"; sh /home/ubuntu/atlos-backend/deploy-front.sh"
   rules:
-    - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "test"
       when: on_success
