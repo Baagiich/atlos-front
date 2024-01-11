@@ -143,7 +143,7 @@
                 {{ t("shipment.cancel") }}
               </v-btn>
             </template>
-            <v-card  class="shipment-deal-card">
+            <v-card class="shipment-deal-card">
               <h4>
                 {{ t("shipment.wantCancel") }}
               </h4>
@@ -386,10 +386,10 @@ function updateOrder(newOrders: VuetifyOrder[]) {
 }
 .shipment-deal-card {
   width: 377.561px;
-height: 160px;
-flex-shrink: 0;
-border-radius: 25px !important;
-border: 1px solid rgba(0, 0, 0, 0.10);
-background: #FFF;
+  height: 160px;
+  flex-shrink: 0;
+  border-radius: 25px !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
 }
 </style>

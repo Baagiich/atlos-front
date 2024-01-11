@@ -1,15 +1,21 @@
 <template>
-  <VueDatePicker v-model="date" range :format="formatRange" :format-locale="mn" @update:model-value="selectDate">
+  <VueDatePicker
+    v-model="date"
+    range
+    :format="formatRange"
+    :format-locale="mn"
+    @update:model-value="selectDate"
+  >
   </VueDatePicker>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useCreateNewShipmentStore } from "@/store/shipmentload/newshipment";
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 import { storeToRefs } from "pinia";
-import { mn } from 'date-fns/locale';
+import { mn } from "date-fns/locale";
 import dayjs from "dayjs";
 
 const date = ref();
@@ -18,17 +24,20 @@ onMounted(() => {
   const startDate = new Date();
   const endDate = new Date(new Date().setDate(startDate.getDate() + 7));
   date.value = [startDate, endDate];
-})
+});
 const newShipmentStore = useCreateNewShipmentStore();
 const { item } = storeToRefs(newShipmentStore);
 
-
 function selectDate() {
+  if (!item || !item.value) {
+    return;
+  }
+
   item.value.loadAt = dayjs(date.value[0]).toISOString();
   item.value.unloadAt = dayjs(date.value[0]).toISOString();
 }
 
-const formatRange = (range) => {
+const formatRange = (range: any[]) => {
   const startDate = range[0];
   const endDate = range[1];
 

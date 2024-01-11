@@ -160,7 +160,7 @@ const address = ref(props.address);
 const title = ref(props.title);
 const onCountrySelect = () => {
   selectedCity.value = null;
-  if(selectedCountry.value){
+  if (selectedCountry.value) {
     cityNames.value = countryListStore.getCityNames(selectedCountry.value);
   }
 };

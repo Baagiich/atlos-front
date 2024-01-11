@@ -136,10 +136,7 @@ import { VForm } from "vuetify/components";
 import type { SubmissionErrors } from "@/types/error";
 import { useCreateNewShipmentStore } from "@/store/shipmentload/newshipment";
 import { storeToRefs } from "pinia";
-import {
-  assertNumber,
-  assertRequired,
-} from "@/validations";
+import { assertNumber, assertRequired } from "@/validations";
 import { useI18n } from "vue-i18n";
 const selectedPercent: Ref<string> = ref<string>("");
 const newShipmentStore = useCreateNewShipmentStore();

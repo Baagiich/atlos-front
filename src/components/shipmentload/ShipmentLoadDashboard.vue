@@ -8,89 +8,90 @@
     <v-row>
       <v-col cols="12" sm="6" md="12">
         <v-stepper v-model="currentStep">
-          <template v-slot:default="{ prev, next }">
+          <template #default="">
             <v-stepper-header>
-          <template v-for="n in steps" :key="`${n}-step`">
-            <v-stepper-item
-              :complete="e1 > n"
-              :step="`Step {{ n }}`"
-              :value="n"
-            ></v-stepper-item>
+              <template v-for="n in steps" :key="`${n}-step`">
+                <v-stepper-item
+                  :complete="currentStep > n"
+                  :step="`Step {{ n }}`"
+                  :value="n"
+                ></v-stepper-item>
 
-            <v-divider
-              v-if="n !== steps"
-              :key="n"
-            ></v-divider>
-          </template>
-        </v-stepper-header>
+                <!-- <v-divider v-if="n !== steps" :key="n"></v-divider> -->
+              </template>
+            </v-stepper-header>
 
-          <v-stepper-window>
-            <v-stepper-window-item :value="steps[0]"  :key="step">
-              <ShipmentForm />
-            </v-stepper-window-item>
-    
-            <v-stepper-window-item :value="steps[1]" :key="step">
-              <ShipmentLocationCreateForm
-                :address="fromAddress"
-                :title="t('shipmentload.loadLocation')"
-              />
-              <ShipmentLocationCreateForm
-                :address="toAddress"
-                :title="t('shipmentload.unloadLocation')"
-              />
-              <v-row>
-                <v-col cols="3">
-                  <ShipmentCreateDatePicker
-                    :title="t('shipmentload.loadDate')"
-                  />
-                </v-col>
-              </v-row>
-              <ShipmentPriceForm
-                @finish="emitFinish"
-              />
-            </v-stepper-window-item>
+            <v-stepper-window>
+              <v-stepper-window-item :key="step" :value="steps[0]">
+                <ShipmentForm />
+              </v-stepper-window-item>
 
-            <v-stepper-window-item :value="steps[2]" :key="step">
-              <h3 class="load-title">
-                {{ $t("shipmentload.loadTitle") }}
-              </h3>
+              <v-stepper-window-item :key="step" :value="steps[1]">
+                <ShipmentLocationCreateForm
+                  :address="fromAddress"
+                  :title="t('shipmentload.loadLocation')"
+                />
+                <ShipmentLocationCreateForm
+                  :address="toAddress"
+                  :title="t('shipmentload.unloadLocation')"
+                />
+                <v-row>
+                  <v-col cols="3">
+                    <ShipmentCreateDatePicker
+                      :title="t('shipmentload.loadDate')"
+                    />
+                  </v-col>
+                </v-row>
+                <ShipmentPriceForm @finish="emitFinish" />
+              </v-stepper-window-item>
 
-              <div v-if="totalCreatedLoads > 0">
-                <div
-                  v-for="createdLoad in createdLoads"
-                  :key="createdLoad['@id']"
-                >
-                  <ShipmentLoadUpdate
+              <v-stepper-window-item :key="step" :value="steps[2]">
+                <h3 class="load-title">
+                  {{ $t("shipmentload.loadTitle") }}
+                </h3>
+
+                <div v-if="totalCreatedLoads > 0">
+                  <div
+                    v-for="createdLoad in createdLoads"
                     :key="createdLoad['@id']"
-                    :item="createdLoad"
-                    @updatelist="getCreatedLoads"
-                  />
+                  >
+                    <ShipmentLoadUpdate
+                      :key="createdLoad['@id']"
+                      :item="createdLoad"
+                      @updatelist="getCreatedLoads"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <ShipmentLoadCreate
-                v-if="item.loadType === 1"
-                :created-shipment-id="createdShipmentId"
-                @updatelist="getCreatedLoads"
-              />
-              <br />
-              <ShipmentLoadSum
-                v-if="item.loadType === 1 && totalCreatedLoads > 0"
-                :created-loads="createdLoads"
-                :patch-shipment-item="patchShipmentItem"
-                :currency="item.currency"
-              />
-            </v-stepper-window-item>
-            <v-stepper-window-item :value="steps[3]" :key="step">
-              <ShipmentDocumentType
-                :item-documents="itemDocuments"
-                :save-store="saveStore"
-              />
-            </v-stepper-window-item>
-          </v-stepper-window>
-          <v-stepper-actions :next-text="t('shipmentload.continue')" :prev-text="t('back')" :disabled="false" @click:prev="prev(); handleBackStepChange()" @click:next="next(); handleNextStepChange()">
+                <ShipmentLoadCreate
+                  v-if="item && item.loadType === 1"
+                  :created-shipment-id="createdShipmentId"
+                  @updatelist="getCreatedLoads"
+                />
+                <br />
+                <ShipmentLoadSum
+                  v-if="item && item.loadType === 1 && totalCreatedLoads > 0"
+                  :created-loads="createdLoads"
+                  :patch-shipment-item="patchShipmentItem"
+                  :currency="item.currency"
+                />
+              </v-stepper-window-item>
+              <v-stepper-window-item :key="step" :value="steps[3]">
+                <ShipmentDocumentType
+                  :item-documents="itemDocuments"
+                  :save-store="saveStore"
+                />
+              </v-stepper-window-item>
+            </v-stepper-window>
+            <v-stepper-actions
+              :next-text="t('shipmentload.continue')"
+              :prev-text="t('back')"
+              :disabled="false"
+              @click:prev="prev"
+              @click:next="next"
+            >
             </v-stepper-actions>
-        </template>
+          </template>
         </v-stepper>
       </v-col>
     </v-row>
@@ -272,48 +273,57 @@ async function getCreatedLoads() {
   });
 }
 async function saveSumOnShipment() {
-  await shipmentPatchStore.create(patchShipmentItem.value);
+  await shipmentUpdateStore.update(patchShipmentItem.value);
   if (patchShipment?.value) {
     console.log("shipment patched");
   }
 }
-async function handleNextStepChange (){
+
+watch(
+  () => item?.value?.loadType,
+  () => {
+    if (item?.value?.loadType === 2) {
+      steps.value = [1, 2];
+    } else {
+      steps.value = [1, 2, 3, 4];
+    }
+  },
+);
+
+function prev() {
+  if (currentStep.value > 1) {
+    currentStep.value--;
+  }
+  if (currentStep.value === 4) {
+    gotoList();
+  }
+}
+
+async function next() {
+  if (currentStep.value < steps.value.length) {
+    currentStep.value++;
+  }
   console.log("nextstep:", currentStep.value);
   if (currentStep.value === 3) {
-      if (isUpdateShipment.value === false) {
-       await saveShipment();
-      }
-      if (isUpdateShipment.value === true) {
-        await updateShipment();
-      }
+    if (isUpdateShipment.value === false) {
+      await saveShipment();
     }
-    if (currentStep.value === 4) {
-      await  saveSumOnShipment();
+    if (isUpdateShipment.value === true) {
+      await updateShipment();
     }
-    if(currentStep.value === 1){
-      // 2 alhamtai bolson uchir butsaad 1 ruu usrehed shiopmentiig shalgav
-      if(item?.value?.loadType === 2){
-       await emitFinish();
-       }
-      saveStore.value = true;
-      await emitFinishDocument();
-    }
-}
-function handleBackStepChange(){
-  if(currentStep.value === 4){
-    gotoList();
-    }
-}
-watch(
-  () => item?.value?.loadType,()=>{
-    if(item?.value?.loadType === 2){
-   steps.value = [1, 2];
-}else{
-steps.value = [1, 2, 3, 4];
-
-}
   }
-)
+  if (currentStep.value === 4) {
+    await saveSumOnShipment();
+  }
+  if (currentStep.value === 1) {
+    // 2 alhamtai bolson uchir butsaad 1 ruu usrehed shiopmentiig shalgav
+    if (item?.value?.loadType === 2) {
+      await emitFinish();
+    }
+    saveStore.value = true;
+    await emitFinishDocument();
+  }
+}
 </script>
 <style lang="scss">
 .driver-request-shipment-code {

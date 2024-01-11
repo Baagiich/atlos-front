@@ -97,13 +97,11 @@ const shipperUnloadPictures: Ref<ShipmentImage[]> = ref([]);
 const shipperFilePictures: Ref<ShipmentImage[]> = ref([]);
 filters.value.shipment = decodeURIComponent(route.params.id as string);
 const shipmentImageCreateStore = useShipmentImageCreateStore();
-const { created } = storeToRefs(
-  shipmentImageCreateStore,
-);
+const { created } = storeToRefs(shipmentImageCreateStore);
 const shipmentImageUpdateStore = useShipmentImageUpdateStore();
 
 const payload = apiToken.getDecodedToken();
-if(!payload) {
+if (!payload) {
   throw new Error("Token payload invalid");
 }
 

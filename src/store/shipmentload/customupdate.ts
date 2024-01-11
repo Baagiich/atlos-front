@@ -26,14 +26,11 @@ export const useShipmentLoadUpdateStore = defineStore("shipmentloadUpdate", {
       this.setError(undefined);
       this.toggleLoading();
       try {
-        const response = await api(
-           payload["@id"],
-          {
-            method: "PUT",
-            headers: new Headers({ "Content-Type": "application/ld+json" }),
-            body: JSON.stringify(payload),
-          },
-        );
+        const response = await api(payload["@id"] ?? "", {
+          method: "PUT",
+          headers: new Headers({ "Content-Type": "application/ld+json" }),
+          body: JSON.stringify(payload),
+        });
         const data: ShipmentLoad = await response.json();
 
         this.toggleLoading();
@@ -52,7 +49,6 @@ export const useShipmentLoadUpdateStore = defineStore("shipmentloadUpdate", {
         }
       }
     },
-
 
     setUpdated(updated: ShipmentLoad) {
       this.updated = updated;

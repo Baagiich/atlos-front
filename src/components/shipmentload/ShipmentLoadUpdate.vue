@@ -11,7 +11,7 @@
     <Form
       v-if="props.item"
       :values="props.item"
-      :isUpdate=true
+      :is-update="true"
       @delete="deleteItem"
       @submit="update"
     />
@@ -44,7 +44,7 @@ const shipmentloadUpdateStore = useShipmentLoadUpdateStore();
 
 async function update(item: ShipmentLoad) {
   await shipmentloadUpdateStore.update(item);
-  await updateLoadList()
+  await updateLoadList();
 }
 
 async function deleteItem() {
@@ -53,7 +53,7 @@ async function deleteItem() {
     return;
   }
   await shipmentloadDeleteStore.deleteItem(props.item);
-  updateLoadList()
+  updateLoadList();
 }
 function updateLoadList() {
   emit("updatelist");

@@ -11,63 +11,60 @@ interface State {
   violations?: SubmissionErrors;
 }
 
-export const useDocumentTypePatchStore = defineStore(
-  "DocumentTypePatchStore",
-  {
-    state: (): State => ({
-      created: undefined,
-      isLoading: false,
-      error: undefined,
-      violations: undefined,
-    }),
+export const useDocumentTypePatchStore = defineStore("DocumentTypePatchStore", {
+  state: (): State => ({
+    created: undefined,
+    isLoading: false,
+    error: undefined,
+    violations: undefined,
+  }),
 
-    actions: {
-      async create(payload: DocumentType) {
-        this.setError(undefined);
-        this.setViolations(undefined);
+  actions: {
+    async create(payload: DocumentType) {
+      this.setError(undefined);
+      this.setViolations(undefined);
+      this.toggleLoading();
+      try {
+        const response = await api(`document_types/${payload.id}`, {
+          method: "PATCH",
+          body: JSON.stringify(payload),
+          headers: new Headers({
+            "Content-Type": "application/merge-patch+json",
+          }),
+        });
+        const data: DocumentType = await response.json();
+
         this.toggleLoading();
-        try {
-          const response = await api(`document_types/${payload.id}`, {
-            method: "PATCH",
-            body: JSON.stringify(payload),
-            headers: new Headers({
-              "Content-Type": "application/merge-patch+json",
-            }),
-          });
-          const data: DocumentType = await response.json();
+        this.setCreated(data);
+      } catch (error) {
+        this.toggleLoading();
 
-          this.toggleLoading();
-          this.setCreated(data);
-        } catch (error) {
-          this.toggleLoading();
-
-          if (error instanceof SubmissionError) {
-            this.setViolations(error.errors);
-            this.setError(error.errors._error);
-            return;
-          }
-
-          if (error instanceof Error) {
-            this.setError(error.message);
-          }
+        if (error instanceof SubmissionError) {
+          this.setViolations(error.errors);
+          this.setError(error.errors._error);
+          return;
         }
-      },
 
-      setCreated(created: DocumentType) {
-        this.created = created;
-      },
+        if (error instanceof Error) {
+          this.setError(error.message);
+        }
+      }
+    },
 
-      toggleLoading() {
-        this.isLoading = !this.isLoading;
-      },
+    setCreated(created: DocumentType) {
+      this.created = created;
+    },
 
-      setError(error: string | undefined) {
-        this.error = error;
-      },
+    toggleLoading() {
+      this.isLoading = !this.isLoading;
+    },
 
-      setViolations(violations: SubmissionErrors | undefined) {
-        this.violations = violations;
-      },
+    setError(error: string | undefined) {
+      this.error = error;
+    },
+
+    setViolations(violations: SubmissionErrors | undefined) {
+      this.violations = violations;
     },
   },
-);
+});

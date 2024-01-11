@@ -137,16 +137,33 @@
         </v-radio-group>
       </v-col>
       <v-col cols="12" sm="6" md="1">
-        <v-btn v-if="isUpdate" :key="item['@id']" icon="mdi-pencil-circle" color="green" @click="addPerLoad"></v-btn>
-        <v-btn v-if="isUpdate" :key="item['@id']" icon="mdi-delete-circle" class="ml-2" color="red" @click="deleteItem"></v-btn>
+        <v-btn
+          v-if="isUpdate"
+          :key="item['@id']"
+          icon="mdi-pencil-circle"
+          color="green"
+          @click="addPerLoad"
+        ></v-btn>
+        <v-btn
+          v-if="isUpdate"
+          :key="item['@id']"
+          icon="mdi-delete-circle"
+          class="ml-2"
+          color="red"
+          @click="deleteItem"
+        ></v-btn>
       </v-col>
     </v-row>
 
     <v-row>
       <v-col cols="12" sm="6" md="6">
-        <v-btn v-if="!isUpdate" color="primary" class="load-add-btn" @click="addPerLoad">{{
-          $t("shipmentload.addLoad")
-        }}</v-btn>
+        <v-btn
+          v-if="!isUpdate"
+          color="primary"
+          class="load-add-btn"
+          @click="addPerLoad"
+          >{{ $t("shipmentload.addLoad") }}</v-btn
+        >
       </v-col>
     </v-row>
   </v-form>
@@ -226,9 +243,9 @@ const emit = defineEmits<{
 }>();
 
 function addPerLoad() {
-item.value.shipment = props.createdShipmentId;
+  item.value.shipment = props.createdShipmentId;
   emit("submit", item.value);
-  if(!isUpdate.value) {
+  if (!isUpdate.value) {
     resetForm();
   }
 }
@@ -248,10 +265,10 @@ function toggleIsPileUp(value: boolean) {
 }
 </script>
 <style lang="scss">
-.load-form{
+.load-form {
   height: 42px;
 }
-.load-add-btn{
+.load-add-btn {
   margin-top: 38px;
 }
 </style>

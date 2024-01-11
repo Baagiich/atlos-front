@@ -32,10 +32,10 @@ export interface Shipment extends Item {
   mainWeight?: number;
   mainSize?: number;
   mainQuantity?: number;
-  loadPrice: {
+  loadPrice?: {
     amount?: number;
     currency?: string;
-  }
+  };
   advancePaid?: boolean;
   remainingPaid?: boolean;
   advanceOrderNumber?: string;

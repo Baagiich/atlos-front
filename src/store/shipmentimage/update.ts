@@ -92,7 +92,6 @@ export const useShipmentImageUpdateStore = defineStore("shipmentImageUpdate", {
         const response = await api("shipment_images/" + id + "/approve", {
           method: "POST",
           body: JSON.stringify({}),
-          
         });
         const data: ShipmentImage = await response.json();
         const hubUrl = extractHubURL(response);

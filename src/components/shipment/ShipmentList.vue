@@ -1,10 +1,26 @@
 <template>
+  <v-alert
+    v-if="isExistNonReviewedShipment"
+    type="warning"
+    class="mb-4"
+    :closable="false"
+  >
+    {{ $t("shipment.nonReviewedAlertMsg") }}
+  </v-alert>
   <Toolbar
+    v-else
     :actions="['add']"
     :breadcrumb="breadcrumb"
     :is-loading="isLoading"
     @add="goToCreatePage"
   />
+
+  <ReviewRateDialog
+    :shipment="selectedShipment"
+    :show="isShowReviewDialog"
+    @cancel="hideReviewDialog"
+    @confirm="onConfirmReview"
+  ></ReviewRateDialog>
 
   <v-container fluid>
     <v-alert v-if="deleted" type="success" class="mb-4" closable>
@@ -18,7 +34,11 @@
       {{ error }}
     </v-alert>
 
-    <DataFilter @filter="onSendFilter" @reset="resetFilter">
+    <DataFilter
+      v-if="!isExistNonReviewedShipment"
+      @filter="onSendFilter"
+      @reset="resetFilter"
+    >
       <template #filter>
         <Filter :values="filters" />
       </template>
@@ -61,16 +81,15 @@
         <v-chip v-if="item.advancePaid" color="green">{{
           $t("order.paid")
         }}</v-chip>
-        <v-chip v-else-if="item.advanceOrderNumber">
-          <v-btn
-            color="success"
-            size="small"
-            class="ma-2"
-            @click="goToCheckoutPage(item.advanceOrderNumber)"
-          >
-            {{ t("order.pay") }}
-          </v-btn>
-        </v-chip>
+        <v-btn
+          v-else-if="item.advanceOrderNumber"
+          color="success"
+          size="small"
+          class="ma-2"
+          @click="goToCheckoutPage(item.advanceOrderNumber)"
+        >
+          {{ t("order.pay") }}
+        </v-btn>
         <v-chip v-else>
           {{ t("order.unpaid") }}
         </v-chip>
@@ -79,16 +98,15 @@
         <v-chip v-if="item.remainingPaid" color="green">{{
           $t("order.paid")
         }}</v-chip>
-        <v-chip v-else-if="item.remainingOrderNumber">
-          <v-btn
-            color="success"
-            size="small"
-            class="ma-2"
-            @click="goToCheckoutPage(item.remainingOrderNumber)"
-          >
-            {{ t("order.pay") }}
-          </v-btn>
-        </v-chip>
+        <v-btn
+          v-else-if="item.remainingOrderNumber"
+          color="success"
+          size="small"
+          class="ma-2"
+          @click="goToCheckoutPage(item.remainingOrderNumber)"
+        >
+          {{ t("order.pay") }}
+        </v-btn>
         <v-chip v-else>
           {{ t("order.unpaid") }}
         </v-chip>
@@ -129,7 +147,7 @@
           color="warning"
           size="small"
           class="ma-2"
-          @click="approveShipmentDelivery(item.id)"
+          @click="showReviewDialog(item)"
         >
           {{ t("shipment.approveDelivery") }}
         </v-btn>
@@ -153,7 +171,6 @@ import DataFilter from "@/components/common/DataFilter.vue";
 import Filter from "@/components/shipment/ShipmentFilter.vue";
 import ActionCell from "@/components/common/ActionCell.vue";
 import { formatDateTime } from "@/utils/date";
-import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
 import type { Filters, VuetifyOrder } from "@/types/list";
 import type { Shipment } from "@/types/shipment";
@@ -161,6 +178,7 @@ import { UserType } from "@/types/usertype";
 import * as apiToken from "@/utils/apiToken";
 import { ShipmentAction } from "@/types/shipmentaction";
 import { ShipmentStateString } from "@/types/shipment_state";
+import ReviewRateDialog from "@/components/review/ReviewRateDialog.vue";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -178,13 +196,13 @@ const shipmentPatchStore = useShipmentPatchStore();
 const page = ref(1);
 const filters: Ref<Filters> = ref({});
 
-if (userType != UserType.ADMIN) {
-  breadcrumb[0].title !== "ShipmentOwnList"
-    ? (filters.value.state = "created")
-    : filters.value.owner = "true";
-}
+const isShowReviewDialog = ref(false);
+const selectedShipment: Ref<Shipment> = ref({});
+
 const order = ref({});
 const itemsPerPage = ref("10");
+const isExistNonReviewedShipment = ref(true);
+
 async function sendRequest() {
   await shipmentListStore.getItems({
     page: +page.value,
@@ -194,9 +212,34 @@ async function sendRequest() {
     ...filters.value,
   });
 }
-useMercureList({ store: shipmentListStore, deleteStore: shipmentDeleteStore });
 
-sendRequest();
+async function getDeliveredShipments() {
+  const filterDelivered: Ref<Filters> = ref({});
+  filterDelivered.value.state = "delivered";
+  await shipmentListStore.getItems({
+    page: +page.value,
+    order: order.value,
+    page_size: +itemsPerPage.value,
+    groups: ["shipment:list"],
+    ...filterDelivered.value,
+  });
+}
+
+async function checkNonReviewedShipments() {
+  await getDeliveredShipments();
+  if (items.value.length < 1) {
+    isExistNonReviewedShipment.value = false;
+    await sendRequest();
+  }
+}
+
+await checkNonReviewedShipments();
+
+if (userType != UserType.ADMIN) {
+  breadcrumb[0].title !== "ShipmentOwnList"
+    ? (filters.value.state = "created")
+    : (filters.value.owner = "true");
+}
 
 const headers = [
   { title: t("id"), key: "@id" },
@@ -305,12 +348,32 @@ async function goToCheckoutPage(orderNumber: string) {
   });
 }
 
-async function approveShipmentDelivery(id?: number) {
-  if (!id) {
+async function showReviewDialog(shipment?: Shipment) {
+  if (!shipment) {
     return;
   }
+  selectedShipment.value = shipment;
+  isShowReviewDialog.value = !isShowReviewDialog.value;
+}
 
-  await shipmentPatchStore.doAction(id, ShipmentAction.DELIVERY_TO_APPROVE);
-  await sendRequest();
+function hideReviewDialog() {
+  isShowReviewDialog.value = !isShowReviewDialog.value;
+}
+
+async function onConfirmReview() {
+  hideReviewDialog();
+  await approveShipmentDelivery();
+  selectedShipment.value = {};
+}
+
+async function approveShipmentDelivery() {
+  if (!selectedShipment.value.id) {
+    return;
+  }
+  await shipmentPatchStore.doAction(
+    +selectedShipment.value.id,
+    ShipmentAction.DELIVERY_TO_APPROVE,
+  );
+  await checkNonReviewedShipments();
 }
 </script>

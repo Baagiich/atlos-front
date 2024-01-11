@@ -53,13 +53,11 @@ export const useShipmentUpdateStore = defineStore("shipmentUpdate", {
       this.toggleLoading();
 
       try {
-        const response = await api(`shipments/${payload.id}`,
-          {
-            method: "PUT",
-            headers: new Headers({ "Content-Type": "application/ld+json" }),
-            body: JSON.stringify(payload),
-          },
-        );
+        const response = await api(`shipments/${payload.id}`, {
+          method: "PUT",
+          headers: new Headers({ "Content-Type": "application/ld+json" }),
+          body: JSON.stringify(payload),
+        });
         const data: Shipment = await response.json();
 
         this.toggleLoading();
