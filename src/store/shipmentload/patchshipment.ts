@@ -2,10 +2,10 @@ import { defineStore } from "pinia";
 import type { Shipment } from "@/types/shipment";
 
 interface State {
-  item?: Shipment;
+  item: Shipment;
 }
 
-export const useCreateNewShipmentStore = defineStore("newShipmentItem", {
+export const usepatchShipmentStore = defineStore("patchShipmentItem", {
   state: (): State => ({
     item: {},
   }),

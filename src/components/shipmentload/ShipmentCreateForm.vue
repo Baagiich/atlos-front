@@ -53,21 +53,21 @@
         ></v-select>
       </v-col>
     </v-row>
-    <v-row>
+    <!-- <v-row>
       <v-col cols="12" sm="6" md="6">
-        <v-btn color="primary" variant="text" @click="emitNextStep">{{
-          $t("nextStep")
-        }}</v-btn>
-        <v-btn color="primary" variant="text" class="ml-2" @click="resetForm">
-          {{ $t("reset") }}
+        <v-btn color="primary" variant="outlined" @click="gotoList">
+          {{ $t("shipmentload.cancel") }}
         </v-btn>
+        <v-btn color="primary" class="ml-2" @click="emitNextStep">{{
+          $t("shipmentload.continue")
+        }}</v-btn>
       </v-col>
-    </v-row>
+    </v-row> -->
   </v-form>
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from "vue";
+import { onBeforeUnmount, ref, Ref } from "vue";
 import { VForm } from "vuetify/components";
 import type { SubmissionErrors } from "@/types/error";
 import { useCreateNewShipmentStore } from "@/store/shipmentload/newshipment";
@@ -80,6 +80,7 @@ import * as enumHelper from "@/utils/enumHelper";
 
 defineProps<{
   errors?: SubmissionErrors;
+  disabled?: boolean;
 }>();
 
 const requireRules = [assertRequired()];
@@ -95,25 +96,28 @@ const onCurrencySelect = () => {
   item.value.currency = selectedCurrency.value;
 };
 
-const emit = defineEmits<{
-  (e: "next-step"): void;
-}>();
-async function emitNextStep() {
-  if (!form.value) {
-    return;
-  }
-  const v = await form.value.validate();
-  if (v.valid) {
-    emit("next-step");
-  }
-}
+// const emit = defineEmits<{
+//   (e: "next-step"): void;
+// }>();
+// async function emitNextStep() {
+//   if (!form.value) {
+//     return;
+//   }
+//   const v = await form.value.validate();
+//   if (v.valid) {
+//     emit("next-step");
+//   }
+// }
 const form: Ref<VForm | null> = ref(null);
 
-function resetForm() {
-  if (!form.value) return;
+// function resetForm() {
+//   if (!form.value) return;
 
-  form.value.reset();
-}
+//   form.value.reset();
+// }
+onBeforeUnmount(() => {
+  newShipmentStore.$reset();
+});
 </script>
 <style lang="scss">
 .black-text label {

@@ -1,6 +1,6 @@
 <template>
   <v-form ref="form">
-    <v-row>
+    <v-row class="load-form">
       <v-col cols="12" sm="6" md="2">
         <v-text-field
           v-model="item.name"
@@ -125,7 +125,7 @@
           </template>
         </v-text-field>
       </v-col>
-      <v-col cols="12" sm="6" md="1">
+      <v-col cols="12" sm="6" md="2">
         <v-radio-group v-model="item.isPileUp">
           <v-radio
             :label="$t('shipmentload.isPileUp')"
@@ -137,21 +137,15 @@
         </v-radio-group>
       </v-col>
       <v-col cols="12" sm="6" md="1">
-        <v-btn v-if="isUpdate" color="primary" @click="addPerLoad">{{
-          $t("edit")
-        }}</v-btn>
-      </v-col>
-      <v-col cols="12" sm="6" md="1">
-        <v-btn v-if="isUpdate" color="primary" @click="deleteItem">{{
-          $t("delete")
-        }}</v-btn>
+        <v-btn v-if="isUpdate" :key="item['@id']" icon="mdi-pencil-circle" color="green" @click="addPerLoad"></v-btn>
+        <v-btn v-if="isUpdate" :key="item['@id']" icon="mdi-delete-circle" class="ml-2" color="red" @click="deleteItem"></v-btn>
       </v-col>
     </v-row>
 
     <v-row>
       <v-col cols="12" sm="6" md="6">
-        <v-btn v-if="!isUpdate" color="primary" @click="addPerLoad">{{
-          $t("add")
+        <v-btn v-if="!isUpdate" color="primary" class="load-add-btn" @click="addPerLoad">{{
+          $t("shipmentload.addLoad")
         }}</v-btn>
       </v-col>
     </v-row>
@@ -197,7 +191,6 @@ const violations = toRef(props, "errors");
 const item: Ref<ShipmentLoad> = ref({
   isPileUp: false,
 });
-item.value.shipment = props.createdShipmentId;
 
 function onTypeSelected(value: string | null) {
   const selectedType = shipmentloadTypeStore.items.find(
@@ -220,15 +213,11 @@ async function setShipmentTypeName() {
 
 async function setup() {
   await sendRequest();
-
   await setShipmentTypeName();
 }
-
 setup();
 if (props.values) {
-  item.value = {
-    ...props.values,
-  };
+  item.value = props.values;
 }
 
 const emit = defineEmits<{
@@ -237,12 +226,14 @@ const emit = defineEmits<{
 }>();
 
 function addPerLoad() {
+item.value.shipment = props.createdShipmentId;
   emit("submit", item.value);
-  resetForm();
+  if(!isUpdate.value) {
+    resetForm();
+  }
 }
 function deleteItem() {
   emit("delete", item.value);
-  resetForm();
 }
 
 const form: Ref<VForm | null> = ref(null);
@@ -256,3 +247,11 @@ function toggleIsPileUp(value: boolean) {
   item.value.isPileUp = !value;
 }
 </script>
+<style lang="scss">
+.load-form{
+  height: 42px;
+}
+.load-add-btn{
+  margin-top: 38px;
+}
+</style>

@@ -1,12 +1,10 @@
 import { defineStore } from "pinia";
 import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
-import { extractHubURL } from "@/utils/mercure";
 import type { ShipmentLoad } from "@/types/shipmentload";
 import type { SubmissionErrors } from "@/types/error";
 
 interface State {
-  retrieved?: ShipmentLoad;
   updated?: ShipmentLoad;
   hubUrl?: URL;
   isLoading: boolean;
@@ -16,7 +14,6 @@ interface State {
 
 export const useShipmentLoadUpdateStore = defineStore("shipmentloadUpdate", {
   state: (): State => ({
-    retrieved: undefined,
     updated: undefined,
     hubUrl: undefined,
     isLoading: false,
@@ -25,41 +22,12 @@ export const useShipmentLoadUpdateStore = defineStore("shipmentloadUpdate", {
   }),
 
   actions: {
-    async retrieve(id: string) {
-      this.toggleLoading();
-
-      try {
-        const response = await api(id);
-        const data: ShipmentLoad = await response.json();
-        const hubUrl = extractHubURL(response);
-
-        this.toggleLoading();
-        this.setRetrieved(data);
-
-        if (hubUrl) {
-          this.setHubUrl(hubUrl);
-        }
-      } catch (error) {
-        this.toggleLoading();
-
-        if (error instanceof Error) {
-          this.setError(error.message);
-        }
-      }
-    },
-
     async update(payload: ShipmentLoad) {
       this.setError(undefined);
       this.toggleLoading();
-
-      if (!this.retrieved) {
-        this.setError("No shipmentload found. Please reload");
-        return;
-      }
-z
       try {
         const response = await api(
-          this.retrieved["@id"] ?? payload["@id"] ?? "",
+           payload["@id"],
           {
             method: "PUT",
             headers: new Headers({ "Content-Type": "application/ld+json" }),
@@ -85,9 +53,6 @@ z
       }
     },
 
-    setRetrieved(retrieved: ShipmentLoad) {
-      this.retrieved = retrieved;
-    },
 
     setUpdated(updated: ShipmentLoad) {
       this.updated = updated;

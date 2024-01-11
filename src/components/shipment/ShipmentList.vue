@@ -106,7 +106,7 @@
           {{ t("shipment.sendBid") }}
         </v-btn>
         <v-btn
-          v-else-if="userType === UserType.CONSIGNOR"
+          v-if="userType === UserType.CONSIGNOR"
           color="secondary"
           size="small"
           class="ma-2"
@@ -114,6 +114,15 @@
         >
           {{ t("shipment.showBid") }}
         </v-btn>
+        <!-- <v-btn
+          v-if="userType === UserType.CONSIGNOR"
+          color="secondary"
+          size="small"
+          class="ma-2"
+          @click="gotoEditShipmentDashboard(item)"
+        >
+          {{ t("edit") }}
+        </v-btn> -->
 
         <v-btn
           v-if="item.state === ShipmentStateString.DELIVERED"
@@ -282,6 +291,12 @@ function gotoEditPriceDashboard(item: Shipment) {
     params: { id: item["@id"] },
   });
 }
+// function gotoEditShipmentDashboard(item: Shipment) {
+//   router.push({
+//     name: "ShipmentUpdate",
+//     params: { id: item["@id"] },
+//   })
+// }
 
 async function goToCheckoutPage(orderNumber: string) {
   router.push({
