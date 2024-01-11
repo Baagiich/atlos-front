@@ -24,6 +24,7 @@
     "@types/ua-parser-js": "^0.7.39",
     "@types/uuid": "^9.0.7",
     "@vue/eslint-config-prettier": "^8.0.0",
+    "@vuepic/vue-datepicker": "^7.4.0",
     "compressorjs": "^1.2.1",
     "core-js": "^3.29.0",
     "cropperjs": "^1.6.1",

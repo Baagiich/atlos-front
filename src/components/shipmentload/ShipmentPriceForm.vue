@@ -50,47 +50,16 @@
           {{ item.currency }}
         </v-sheet>
       </v-col>
-      <v-col cols="12" sm="6" md="1">
-        <v-text-field
-          v-model.number="item.prePayment"
-          :error="Boolean(violations?.packageType)"
-          :error-messages="violations?.packageType"
-          :label="$t('shipmentload.prePayment')"
-          :rules="percentNumberRules"
-          type="number"
-          variant="outlined"
-          clearable
-        >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.prePayment = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="1">
-        <v-text-field
-          v-model.number="item.postPayment"
-          :error="Boolean(violations?.quantity)"
-          :error-messages="violations?.quantity"
+      <v-col cols="4">
+        <v-select
+          v-model="selectedPercent"
           :label="$t('shipmentload.postPayment')"
+          :items="paymentPercentList.map((item) => item.percent)"
           :rules="percentNumberRules"
-          type="number"
           variant="outlined"
           clearable
-        >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.postPayment = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
-        </v-text-field>
+          @update:modelValue="onSelectChange()"
+        ></v-select>
       </v-col>
       <v-col v-if="item.loadType === 2" cols="12" sm="6" md="1">
         <v-text-field
@@ -137,22 +106,27 @@
       </v-col>
     </v-row>
 
-    <v-row>
+    <!-- <v-row v-if="!disabled">
       <v-col cols="12" sm="6" md="6">
+        <v-btn color="primary" variant="outlined" @click="emitBackStep">
+          {{ $t("shipmentload.return") }}
+        </v-btn>
         <v-btn
           v-if="item.loadType === 1"
           color="primary"
+          class="ml-2"
           @click="emitNextStep"
-          >{{ $t("add") }}</v-btn
+          >{{ $t("shipmentload.continue") }}</v-btn
         >
-        <v-btn v-if="item.loadType === 2" color="primary" @click="emitFinish">{{
-          $t("save")
-        }}</v-btn>
-        <v-btn color="primary" variant="text" class="ml-2" @click="resetForm">
-          {{ $t("reset") }}
-        </v-btn>
+        <v-btn
+          v-if="item.loadType === 2"
+          color="primary"
+          class="ml-2"
+          @click="emitFinish"
+          >{{ $t("shipmentload.continue") }}</v-btn
+        >
       </v-col>
-    </v-row>
+    </v-row> -->
   </v-form>
 </template>
 
@@ -163,11 +137,11 @@ import type { SubmissionErrors } from "@/types/error";
 import { useCreateNewShipmentStore } from "@/store/shipmentload/newshipment";
 import { storeToRefs } from "pinia";
 import {
-  assertMaxLengthNumber,
   assertNumber,
   assertRequired,
 } from "@/validations";
 import { useI18n } from "vue-i18n";
+const selectedPercent: Ref<string> = ref<string>("");
 const newShipmentStore = useCreateNewShipmentStore();
 const { item } = storeToRefs(newShipmentStore);
 const props = defineProps<{
@@ -177,7 +151,7 @@ const price: Ref<number | undefined> = ref();
 const { t } = useI18n();
 
 const violations = toRef(props, "errors");
-const percentNumberRules = [assertRequired(), assertMaxLengthNumber(2)];
+const percentNumberRules = [assertRequired()];
 const priceRules = [
   assertRequired(),
   assertNumber(t("shipmentload.shipmentPrice")),
@@ -194,34 +168,29 @@ const onPriceWrited = () => {
     currency: item.value.currency,
   };
 };
-const emit = defineEmits<{
-  (e: "second-step"): void;
-  (e: "finish"): void;
-}>();
+const paymentPercentList = [
+  { percent: "10-90", prePayValue: 10 },
+  { percent: "20-80", prePayValue: 20 },
+  { percent: "30-70", prePayValue: 30 },
+  { percent: "40-60", prePayValue: 40 },
+  { percent: "50-50", prePayValue: 50 },
+  { percent: "60-40", prePayValue: 60 },
+  { percent: "70-30", prePayValue: 70 },
+  { percent: "80-20", prePayValue: 80 },
+  { percent: "90-10", prePayValue: 90 },
+];
+function onSelectChange() {
+  const selectedPayment = paymentPercentList.find(
+    (item) => item.percent === selectedPercent.value,
+  );
 
-async function emitNextStep() {
-  if (!form.value) {
-    return;
-  }
-  const v = await form.value.validate();
-  if (v.valid) {
-    emit("second-step");
-  }
-}
-async function emitFinish() {
-  if (!form.value) {
-    return;
-  }
-  const v = await form.value.validate();
-  if (v.valid) {
-    emit("finish");
+  if (selectedPayment) {
+    if (!item || !item.value) {
+      return;
+    }
+    item.value.prePayment = selectedPayment.prePayValue;
+    item.value.postPayment = 100 - selectedPayment.prePayValue;
   }
 }
 const form: Ref<VForm | null> = ref(null);
-
-function resetForm() {
-  if (!form.value) return;
-
-  form.value.reset();
-}
 </script>

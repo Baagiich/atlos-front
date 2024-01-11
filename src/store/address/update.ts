@@ -52,14 +52,9 @@ export const useAddressUpdateStore = defineStore("addressUpdate", {
       this.setError(undefined);
       this.toggleLoading();
 
-      if (!this.retrieved) {
-        this.setError("No address found. Please reload");
-        return;
-      }
-
       try {
         const response = await api(
-          this.retrieved["@id"] ?? payload["@id"] ?? "",
+           payload.id ?? "",
           {
             method: "PUT",
             headers: new Headers({ "Content-Type": "application/ld+json" }),
