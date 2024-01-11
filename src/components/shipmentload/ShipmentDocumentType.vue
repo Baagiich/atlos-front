@@ -1,12 +1,5 @@
 <template>
   <v-container fluid class="load-sum-container">
-    <v-alert
-      v-if="error"
-      type="error"
-      class="mb-4"
-      closable="true"
-      >{{
-    }}</v-alert>
     <v-row class="row-sum">
       <v-col cols="12">
         <h4>
@@ -15,8 +8,12 @@
       </v-col>
       <v-col cols="2">
         <div v-for="(item, index) in docTypeRef" :key="index">
-          <div class="doc-names">{{ item.value }}</div>
-          <v-text-field v-model="item.data" variant="outlined" type="number"/>
+          <div class="doc-names">{{ item["value"] }}</div>
+          <v-text-field
+            v-model="item['data']"
+            variant="outlined"
+            type="number"
+          />
         </div>
       </v-col>
     </v-row>
@@ -31,13 +28,10 @@
       </v-col> -->
     </v-row>
   </v-container>
-
-  <Loading :visible="isLoading" />
 </template>
 
 <script setup lang="ts">
 import { onBeforeUnmount, ref, watch } from "vue";
-import Loading from "@/components/common/Loading.vue";
 import { DocumentTypeEnum } from "@/types/document_type";
 import { DocumentType } from "@/types/documenttype";
 import * as enumHelper from "@/utils/enumHelper";
@@ -45,11 +39,9 @@ import { Ref } from "vue";
 import { useCreateNewDocumentStore } from "@/store/shipmentload/newdocument";
 
 const docTypes = enumHelper.getMap(DocumentTypeEnum);
-const docTypeRef: Ref<{}> = ref(
-  docTypes.map((doc) => {
-    return { ...doc, data: 0 };
-  }),
-);
+const docTypeRef = docTypes.map((doc) => {
+  return { ...doc, data: 0 };
+});
 const props = defineProps(["itemDocuments", "saveStore"]);
 const itemDocuments: Ref<DocumentType[]> = ref(props.itemDocuments || []);
 const newDocumentStore = useCreateNewDocumentStore();
@@ -58,7 +50,7 @@ onBeforeUnmount(() => {
   newDocumentStore.$reset();
 });
 function savetoStore() {
-  docTypeRef.value.forEach((doc) => {
+  docTypeRef.forEach((doc) => {
     if (doc.data > 0) {
       const docType: Ref<DocumentType> = ref({});
       docType.value.name = doc.key;
@@ -68,13 +60,14 @@ function savetoStore() {
   });
 }
 watch(
-  () => props.saveStore,()=>{
-    if(props.saveStore){
-    console.log("saveStore");
-      savetoStore()
+  () => props.saveStore,
+  () => {
+    if (props.saveStore) {
+      console.log("saveStore");
+      savetoStore();
     }
-  }
-)
+  },
+);
 </script>
 <style lang="scss" scoped>
 .doc-names {

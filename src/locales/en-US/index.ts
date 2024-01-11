@@ -16,6 +16,7 @@ import bank from "./bank";
 import order from "./order";
 import fileuploader from "./fileuploader";
 import shipmentimage from "./shipmentimage";
+import review from "./review";
 export default {
   home: "Home",
   submit: "Submit",
@@ -73,12 +74,15 @@ export default {
   "mn-MN": "MN",
   advance: "Advance",
   remaining: "Remaining payment",
+  reasons: "Reasons",
+  select: "Select",
   vehicleimage,
   vehicle,
   wallet,
   currency,
   bank,
   order,
+  review,
   informationNotCompleted:
     "Information not completed. To activate your account you need to complete your profile",
   notAvailable: "Not available",

@@ -40,7 +40,7 @@
         />
         <div>
           <h3
-          v-if="thirdStepShow"
+            v-if="thirdStepShow"
             class="load-title"
             :disabled="thirdStepDisabled"
           >
@@ -50,7 +50,7 @@
           <div v-if="thirdStepShow && totalCreatedLoads > 0">
             <div v-for="createdLoad in createdLoads" :key="createdLoad['@id']">
               <ShipmentLoadUpdate
-              :key="createdLoad['@id']"
+                :key="createdLoad['@id']"
                 :disabled="thirdStepDisabled"
                 :item="createdLoad"
                 @updatelist="getCreatedLoads"
@@ -59,14 +59,19 @@
           </div>
 
           <ShipmentLoadCreate
-          v-if="thirdStepShow && item.loadType === 1"
+            v-if="thirdStepShow && item && item.loadType === 1"
             :created-shipment-id="createdShipmentId"
             :disabled="thirdStepDisabled"
             @updatelist="getCreatedLoads"
           />
           <br />
           <ShipmentLoadSum
-            v-if="thirdStepShow && item.loadType === 1 && totalCreatedLoads > 0"
+            v-if="
+              thirdStepShow &&
+              item &&
+              item.loadType === 1 &&
+              totalCreatedLoads > 0
+            "
             :disabled="thirdStepDisabled"
             :created-loads="createdLoads"
             :patch-shipment-item="patchShipmentItem"
@@ -106,7 +111,7 @@ import { usepatchShipmentStore } from "@/store/shipmentload/patchshipment";
 import ShipmentPriceForm from "./ShipmentPriceForm.vue";
 import { useAddressCreateStore } from "@/store/address/create";
 import { useShipmentCreateStore } from "@/store/shipment/create";
-import { useShipmentPathcStore } from "@/store/shipment/patch";
+import { useShipmentUpdateStore } from "@/store/shipment/update";
 import ShipmentLoadUpdate from "@/components/shipmentload/ShipmentLoadUpdate.vue";
 import { useShipmentLoadListStore } from "@/store/shipmentload/list";
 import { Filters } from "@/types/list";
@@ -135,8 +140,8 @@ const { created, isLoading, error } = storeToRefs(addressCreateStore);
 const createdShipmentId: Ref<string> = ref("");
 const shipmentCreateStore = useShipmentCreateStore();
 const { created: createdShipment } = storeToRefs(shipmentCreateStore);
-const shipmentPatchStore = useShipmentPathcStore();
-const { created: patchShipment } = storeToRefs(shipmentPatchStore);
+const shipmentUpdateStore = useShipmentUpdateStore();
+const { updated: patchShipment } = storeToRefs(shipmentUpdateStore);
 const documentTypeCreateStore = useDocumentTypeCreateStore();
 const { created: documentCreated } = storeToRefs(documentTypeCreateStore);
 function emitFirstStep() {
@@ -228,7 +233,7 @@ async function getCreatedLoads() {
   });
 }
 async function emitThirdStep() {
-  await shipmentPatchStore.create(patchShipmentItem.value);
+  await shipmentUpdateStore.update(patchShipmentItem.value);
   if (patchShipment?.value) {
     thirdStepDisabled.value = true;
     fourthStepShow.value = true;

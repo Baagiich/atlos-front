@@ -1,17 +1,17 @@
 import { defineStore } from "pinia";
 import { SubmissionError } from "@/utils/error";
 import api from "@/utils/api";
-import type { DocumentType } from "@/types/documenttype";
+import type { Review } from "@/types/review";
 import type { SubmissionErrors } from "@/types/error";
 
 interface State {
-  created?: DocumentType;
+  created?: Review;
   isLoading: boolean;
   error?: string;
   violations?: SubmissionErrors;
 }
 
-export const useDocumentTypeCreateStore = defineStore("DocumentTypeCreate", {
+export const useReviewCreateStore = defineStore("reviewCreate", {
   state: (): State => ({
     created: undefined,
     isLoading: false,
@@ -20,17 +20,17 @@ export const useDocumentTypeCreateStore = defineStore("DocumentTypeCreate", {
   }),
 
   actions: {
-    async create(payload: DocumentType) {
+    async create(payload: Review) {
       this.setError(undefined);
       this.setViolations(undefined);
       this.toggleLoading();
 
       try {
-        const response = await api("document_types", {
+        const response = await api("reviews", {
           method: "POST",
           body: JSON.stringify(payload),
         });
-        const data: DocumentType = await response.json();
+        const data: Review = await response.json();
 
         this.toggleLoading();
         this.setCreated(data);
@@ -49,7 +49,7 @@ export const useDocumentTypeCreateStore = defineStore("DocumentTypeCreate", {
       }
     },
 
-    setCreated(created: DocumentType) {
+    setCreated(created: Review) {
       this.created = created;
     },
 

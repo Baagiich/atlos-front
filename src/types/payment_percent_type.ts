@@ -1,6 +1,5 @@
 export enum DocumentTypeEnum {
-  TEN = {percent : "10-80",
-        prePayValue : 10},
+  TEN = "10-80",
   TWENTY = "20-80",
   THIRTY = "30-70",
   FORTY = "40-60",

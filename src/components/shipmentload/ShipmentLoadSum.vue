@@ -1,62 +1,57 @@
 <template>
   <v-container fluid class="load-sum-container">
-    <v-alert v-if="error" type="error" class="mb-4" closable="true">{{
-      error
-    }}</v-alert>
-  <v-form ref="form">
-    <v-row class="row-sum">
-      <v-col cols="3">
-      </v-col>
-      <v-col cols="1">
-       <h4>
-        {{ $t("shipmentload.sum") }}
-       </h4>
-      </v-col>
-      <v-col cols="1">
-        <v-text-field
-          variant="outlined"
-          :label="$t('shipmentload.sumQuantity')"
-          :model-value="totalQuantity"
-          suffix="ш"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="1">
-        <v-text-field
-          variant="outlined"
-          :label="$t('shipmentload.sumWeight')"
-          :model-value="totalWeight"
-          suffix="кг"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="2">
-        <v-text-field
-          variant="outlined"
-          :label="$t('shipmentload.cube')"
-          :model-value="totalCube"
-          suffix="Мкуб"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" sm="6" md="3">
-      </v-col>
-      <v-col cols="12" sm="6" md="1">
-        <v-text-field
-        v-model="loadPrice"
-        type="number"
-          variant="outlined"
-          :label="$t('shipmentload.loadPrice')"
-          :rules="priceRules"
-          @update:model-value="onPriceWrited"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="4">
-        <div color="red">
-          {{ $t("shipmentload.loadAttention") }}
-        </div>
-      </v-col>
-    </v-row>
-    <!-- <v-row>
+    <v-form ref="form">
+      <v-row class="row-sum">
+        <v-col cols="3"> </v-col>
+        <v-col cols="1">
+          <h4>
+            {{ $t("shipmentload.sum") }}
+          </h4>
+        </v-col>
+        <v-col cols="1">
+          <v-text-field
+            variant="outlined"
+            :label="$t('shipmentload.sumQuantity')"
+            :model-value="totalQuantity"
+            suffix="ш"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="1">
+          <v-text-field
+            variant="outlined"
+            :label="$t('shipmentload.sumWeight')"
+            :model-value="totalWeight"
+            suffix="кг"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="2">
+          <v-text-field
+            variant="outlined"
+            :label="$t('shipmentload.cube')"
+            :model-value="totalCube"
+            suffix="Мкуб"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" sm="6" md="3"> </v-col>
+        <v-col cols="12" sm="6" md="1">
+          <v-text-field
+            v-model="loadPrice"
+            type="number"
+            variant="outlined"
+            :label="$t('shipmentload.loadPrice')"
+            :rules="priceRules"
+            @update:model-value="onPriceWrited"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6" md="4">
+          <div color="red">
+            {{ $t("shipmentload.loadAttention") }}
+          </div>
+        </v-col>
+      </v-row>
+      <!-- <v-row>
       <v-col cols="12" sm="6" md="6">
         <v-btn color="primary" variant="outlined" @click="resetForm">
           {{ $t("shipmentload.return") }}
@@ -64,20 +59,17 @@
         <v-btn  color="primary" class="ml-2" @click="emitNextStep">{{ $t("shipmentload.continue") }}</v-btn>
       </v-col>
     </v-row> -->
-  </v-form>
-
+    </v-form>
   </v-container>
-
-  <Loading :visible="isLoading" />
 </template>
 
 <script setup lang="ts">
-import {ref, computed } from "vue";
-import Loading from "@/components/common/Loading.vue";
+import { ref, computed } from "vue";
 import { Ref } from "vue";
 import { assertNumber, assertRequired } from "@/validations";
 import { useI18n } from "vue-i18n";
 import { VForm } from "vuetify/components";
+import { ShipmentLoad } from "@/types/shipmentload";
 
 const props = defineProps(["createdLoads", "patchShipmentItem", "currency"]);
 const patchShipmentItem = ref(props.patchShipmentItem);
@@ -92,13 +84,20 @@ const totalWeight = computed(() => {
   if (!props.createdLoads) {
     return 0;
   }
-  return props.createdLoads.reduce((sum, load) => sum + load.weight, 0);
+  return props.createdLoads.reduce(
+    (sum: number, load: ShipmentLoad) => sum + (load.weight ?? 0),
+    0,
+  );
 });
 const totalCube = computed(() => {
   if (!props.createdLoads) {
     return 0;
   }
-  return props.createdLoads.reduce((sum, load) => sum + load.length * load.width * load.height, 0);
+  return props.createdLoads.reduce(
+    (sum: number, load: ShipmentLoad) =>
+      sum + (load.length ?? 1) * (load.width ?? 1) * (load.height ?? 1),
+    0,
+  );
 });
 const loadPrice = ref();
 const { t } = useI18n();
@@ -122,7 +121,7 @@ const form: Ref<VForm | null> = ref(null);
   margin-top: 85px;
   .row-sum {
     pointer-events: none;
-    h4{
+    h4 {
       text-align: right;
     }
   }

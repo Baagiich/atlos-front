@@ -17,6 +17,7 @@ import bank from "./bank";
 import order from "./order";
 import fileuploader from "./fileuploader";
 import shipmentimage from "./shipmentimage";
+import review from "./review";
 
 export default {
   home: "Нүүр",
@@ -74,6 +75,8 @@ export default {
   "mn-MN": "MN",
   advance: "Урьдчилгаа",
   remaining: "Үлдэгдэл",
+  reasons: "Шалтгаан",
+  select: "Сонгох",
   vehicle,
   vehicleimage,
   consignor,
@@ -81,6 +84,7 @@ export default {
   currency,
   bank,
   order,
+  review,
   informationNotCompleted:
     "Мэдээлэл дутуу байна. Та мэдээллээ бүрэн оруулж байж баталгаажихыг анхаарна уу.",
   notAvailable: "Хоосон байна",

@@ -56,7 +56,6 @@ export const useShipmentLoadUpdateStore = defineStore("shipmentloadUpdate", {
         this.setError("No shipmentload found. Please reload");
         return;
       }
-z
       try {
         const response = await api(
           this.retrieved["@id"] ?? payload["@id"] ?? "",
