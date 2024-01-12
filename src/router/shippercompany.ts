@@ -3,6 +3,7 @@ const names = {
   create: "ShipperCompanyCreate",
   update: "ShipperCompanyUpdate",
   show: "ShipperCompanyShow",
+  verify: "ShipperCompanyVerify",
 };
 
 const breadcrumbs = {
@@ -10,6 +11,7 @@ const breadcrumbs = {
   create: { title: names.create, to: { name: names.create } },
   update: { title: names.update, to: { name: names.update } },
   show: { title: names.show, to: { name: names.show } },
+  verify: { title: names.verify, to: { name: names.verify } },
 };
 
 export default [
@@ -45,4 +47,12 @@ export default [
       breadcrumb: [breadcrumbs.list, breadcrumbs.show],
     },
   },
+  {
+    name: names.verify,
+    path: "/shipper_companies/verify",
+    component: () => import("@/views/shippercompany/ViewVerify.vue"),
+    meta: {
+      breadcrumb: [breadcrumbs.list, breadcrumbs.verify],
+    },
+  }
 ];
