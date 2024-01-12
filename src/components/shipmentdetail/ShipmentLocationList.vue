@@ -4,12 +4,12 @@
       {{ error }}
     </v-alert>
 
-    <v-data-table-server
+    <v-data-table-virtual
+    v-if="retrieved?.deviceLocation"
       :headers="headers"
       :items="retrieved?.deviceLocation"
-      :items-length="totalItems"
       :loading="isLoading"
-      :items-per-page="itemsPerPage"
+      height="200"
     >
       <template #item.createdAt="{ item }">
         <p>
@@ -27,7 +27,7 @@
           mdi-dots-horizontal
         </v-icon>
       </template>
-    </v-data-table-server>
+    </v-data-table-virtual>
   </v-container>
 </template>
 
@@ -38,19 +38,20 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { formatDateTimeFull } from "@/utils/date";
 import { useShipmentDetailStore } from "@/store/shipment/detail";
+import { useShipmentShowStore } from "@/store/shipment/show";
 
 const { t } = useI18n();
 const route = useRoute();
 const shipmentDetailStore = useShipmentDetailStore();
-const { retrieved, isLoading, error, totalItems } =
+const { retrieved, isLoading, error } =
   storeToRefs(shipmentDetailStore);
 
 const selectedLocation = ref({});
-const itemsPerPage = ref("10");
 const emit = defineEmits<{
   (e: "selected", value: any): void;
 }>();
-
+const shipmentShowStore = useShipmentShowStore();
+await shipmentShowStore.retrieve(decodeURIComponent(route.params.id as string));
 let headers = ref([
   {
     title: t("shipment.shipmentCode", {

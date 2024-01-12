@@ -59,7 +59,7 @@
             {{ formatDateInput(item.unloadAt) }}
           </td>
         </tr>
-        <tr>
+        <tr v-if="!info">
           <v-btn color="red">{{ $t("shipment.cancelShipment") }}</v-btn>
           <v-btn float:right variant="outlined" color="blue">{{
             $t("shipment.editShipment")
@@ -79,7 +79,9 @@ import Loading from "@/components/common/Loading.vue";
 import { useShipmentDeleteStore } from "@/store/shipment/delete";
 import { useShipmentShowStore } from "@/store/shipment/show";
 import { formatDateInput } from "@/utils/date";
-
+defineProps<{
+  info?: boolean;
+}>();
 const shipmentShowStore = useShipmentShowStore();
 const { retrieved: item, isLoading, error } = storeToRefs(shipmentShowStore);
 
