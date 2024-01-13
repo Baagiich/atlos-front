@@ -101,5 +101,5 @@ export default {
   contract,
   contracttemplate,
   country,
-  requests,
+  requests
 };
