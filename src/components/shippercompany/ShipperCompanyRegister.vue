@@ -1,5 +1,5 @@
 <template>
-  <Toolbar :breadcrumb="breadcrumb" :is-loading="isLoading" />
+  <Toolbar :breadcrumb="breadcrumb" :is-loading="isLoading" :title="$t('shippercompany\.title')" />
 
   <v-container fluid>
     <v-alert v-if="error" type="error" class="mb-4" :closable="true">{{

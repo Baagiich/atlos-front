@@ -1,7 +1,8 @@
 export default {
-  firstName: "FirstName",
-  lastName: "LastName",
-  phoneNumber: "PhoneNumber",
-  email: "Email",
-  registerNumber: "RegisterNumber",
+  firstName: "Нэр",
+  lastName: "Овог",
+  phoneNumber: "Утасны дугаар",
+  email: "Имэйл",
+  registerNumber: "Регистр",
+  title: "Жолооч",
 };

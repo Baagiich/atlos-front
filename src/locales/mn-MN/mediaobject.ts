@@ -1,3 +1,3 @@
 export default {
-  contentUrl: "ContentUrl",
+  contentUrl: "Контент URL",
 };

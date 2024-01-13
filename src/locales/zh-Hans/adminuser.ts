@@ -1,0 +1,15 @@
+export default {
+  firstName: "名",
+  lastName: "性",
+  userType: "用户类型",
+  roles: "任务",
+  email: "电子邮件",
+  phoneNumber: "手机号码",
+  status: "身份",
+  verified: "已验证",
+  driver: "司机",
+  edit: "改变",
+  plainPassword: "清楚密码",
+  plainPasswordConfirm: "成功清楚密码",
+  recievedCode: "`已收代码",
+};

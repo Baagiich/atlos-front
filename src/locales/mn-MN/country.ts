@@ -1,9 +1,8 @@
 export default {
-  title: "Хот",
+  title: "Улс",
+  isoCode3: "Iso код3",
   name: "Нэр",
-  state: "Аймаг",
-  capital: "Нийслэл",
-  addresses: "Хаяг",
+  states: "Муж аймаг",
   updatedAt: "Зассан огноо",
   createdAt: "Үүсгэсэн огноо",
 };

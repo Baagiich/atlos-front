@@ -17,7 +17,7 @@ const breadcrumbs = {
 export default [
   {
     name: names.list,
-    path: "/shipper_companies",
+    path: "/shipper",
     component: () => import("@/views/shippercompany/ViewList.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list],
@@ -25,7 +25,7 @@ export default [
   },
   {
     name: names.create,
-    path: "/shipper_companies/create",
+    path: "/shipper/create",
     component: () => import("@/views/shippercompany/ViewCreate.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list, breadcrumbs.create],
@@ -33,7 +33,7 @@ export default [
   },
   {
     name: names.update,
-    path: "/shipper_companies/edit/:id",
+    path: "/shipper/edit/:id",
     component: () => import("@/views/shippercompany/ViewUpdate.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list, breadcrumbs.update],
@@ -41,7 +41,7 @@ export default [
   },
   {
     name: names.show,
-    path: "/shipper_companies/show/:id",
+    path: "/shipper/show/:id",
     component: () => import("@/views/shippercompany/ViewShow.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list, breadcrumbs.show],
@@ -49,7 +49,7 @@ export default [
   },
   {
     name: names.verify,
-    path: "/shipper_companies/verify",
+    path: "/shipper/verify",
     component: () => import("@/views/shippercompany/ViewVerify.vue"),
     meta: {
       breadcrumb: [breadcrumbs.list, breadcrumbs.verify],

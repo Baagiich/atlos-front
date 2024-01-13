@@ -78,7 +78,6 @@ export default {
   logout: "Гарах",
   "en-US": "EN",
   "mn-MN": "MN",
-  "zh-Hans": "CN",
   advance: "Урьдчилгаа",
   remaining: "Үлдэгдэл",
   reasons: "Шалтгаан",

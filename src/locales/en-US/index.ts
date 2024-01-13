@@ -17,6 +17,8 @@ import order from "./order";
 import fileuploader from "./fileuploader";
 import shipmentimage from "./shipmentimage";
 import review from "./review";
+import consignor from "./consignor";
+import shippercompany from "./shippercompany";
 export default {
   home: "Home",
   submit: "Submit",
@@ -72,6 +74,7 @@ export default {
   logout: "Logout",
   "en-US": "US",
   "mn-MN": "MN",
+  "zh-Hans": "CN",
   advance: "Advance",
   remaining: "Remaining payment",
   reasons: "Reasons",
@@ -89,4 +92,6 @@ export default {
   fileUpload: "File upload",
   fileuploader,
   shipmentimage,
+  consignor,
+  shippercompany,
 };
