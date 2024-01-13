@@ -33,7 +33,7 @@ export default [
   },
   {
     name: names.shipperCompanyRegister,
-    path: "/shipper_companies/registration",
+    path: "/shipper/registration",
     component: () => import("@/views/shippercompany/ViewRegister.vue"),
     meta: {
       breadcrumb: [],
