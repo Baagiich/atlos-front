@@ -89,6 +89,13 @@ async function internalApi(id: string, options: any = {}) {
     options.headers.set("deviceId", "uuid-uuid-uuid-0");
   }
 
+  if (options.headers.get("Accept-Language") === null) {
+    options.headers.set(
+      "Accept-Language",
+      localStorage.getItem("locale") ?? "mn-MN",
+    );
+  }
+
   if (
     options.body !== undefined &&
     !(options.body instanceof FormData) &&

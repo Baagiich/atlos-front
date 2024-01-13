@@ -7,7 +7,6 @@
         max-width="448"
         rounded="lg"
       >
-        
         <v-text-field
           v-model="item.recievedCode"
           :error="Boolean(violations?.recievedCode)"
@@ -25,7 +24,6 @@
             </v-icon>
           </template>
         </v-text-field>
-       
 
         <v-text-field
           v-model="item.plainPassword"
@@ -48,7 +46,6 @@
           </template>
         </v-text-field>
 
-        
         <v-text-field
           v-model="item.plainPasswordConfirm"
           :error="Boolean(violations?.plainPasswordConfirm)"

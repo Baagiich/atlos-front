@@ -1,12 +1,15 @@
 <template>
-  <Toolbar :breadcrumb="breadcrumb" :is-loading="isLoading" :title="$t('consignor\.title')" />
+  <Toolbar
+    :breadcrumb="breadcrumb"
+    :is-loading="isLoading"
+    :title="$t('consignor\.title')"
+  />
 
   <v-container fluid>
     <v-alert v-if="error" type="error" class="mb-4" :closable="true">{{
       error
     }}</v-alert>
 
-    
     <Form
       :errors="violations"
       :contract-template="registrationTemplate"

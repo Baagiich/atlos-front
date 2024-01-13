@@ -54,5 +54,5 @@ export default [
     meta: {
       breadcrumb: [breadcrumbs.list, breadcrumbs.verify],
     },
-  }
+  },
 ];

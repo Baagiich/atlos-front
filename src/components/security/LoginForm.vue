@@ -8,7 +8,7 @@
     >
       <div class="text-right">
         <v-icon color="red">mdi-web</v-icon>
-        <select v-model="$i18n.locale" style="cursor: pointer">
+        <select v-model="locale" style="cursor: pointer">
           <option
             v-for="(availableLocale, index) in $i18n.availableLocales"
             :key="`locale-${availableLocale}`"
@@ -21,12 +21,15 @@
       </div>
       <div class="text-subtitle-1 text-medium-emphasis">{{ $t("email") }}</div>
       <v-text-field
+        id="email-field"
         v-model="item.email"
+        tabindex="1"
+        type="email"
         density="compact"
         :placeholder="$t('email')"
         :error="Boolean(violations?.email)"
         :error-messages="violations?.email"
-        :rules="[assertRequired()]"
+        :rules="[assertRequired(), assertEmail()]"
         prepend-inner-icon="mdi-email-outline"
         variant="outlined"
       ></v-text-field>
@@ -35,17 +38,20 @@
       >
         {{ $t("password") }}
         <a
+          tabindex="3"
           class="text-caption text-decoration-none text-red"
           href="#"
           rel="noopener noreferrer"
           @click="handlePasswordReset"
         >
-          {{ $t("forgotPassword") }}</a
-        >
+          {{ $t("forgotPassword") }}
+        </a>
       </div>
 
       <v-text-field
+        id="password-field"
         v-model="item.password"
+        tabindex="2"
         :error="Boolean(violations?.password)"
         :error-messages="violations?.password"
         :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
@@ -61,6 +67,7 @@
       <v-btn
         :disabled="loading"
         :loading="loading"
+        tabindex="4"
         block
         class="mb-8"
         color="red"
@@ -80,7 +87,8 @@ import type { SubmissionErrors } from "@/types/error";
 import { VForm } from "vuetify/components";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { assertRequired } from "@/validations";
+import { watch } from "vue";
+import { assertRequired, assertEmail } from "@/validations";
 const router = useRouter();
 const props = defineProps<{
   values?: Auth;
@@ -114,6 +122,10 @@ function handlePasswordReset() {
     name: "AdminUserPasswordReset",
   });
 }
+
+watch(locale, (newLocale) => {
+  localStorage.setItem("locale", newLocale);
+});
 
 onBeforeUnmount(() => {
   localStorage.setItem("locale", locale.value);

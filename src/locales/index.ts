@@ -5,5 +5,5 @@ import zhHans from "./zh-Hans";
 export default {
   "en-US": enUS,
   "mn-MN": mnMN,
-  "zh-Hans": zhHans
+  "zh-Hans": zhHans,
 };
