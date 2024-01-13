@@ -5,7 +5,7 @@
     </v-alert>
 
     <v-data-table-virtual
-    v-if="retrieved?.deviceLocation"
+      v-if="retrieved?.deviceLocation"
       :headers="headers"
       :items="retrieved?.deviceLocation"
       :loading="isLoading"
@@ -43,8 +43,7 @@ import { useShipmentShowStore } from "@/store/shipment/show";
 const { t } = useI18n();
 const route = useRoute();
 const shipmentDetailStore = useShipmentDetailStore();
-const { retrieved, isLoading, error } =
-  storeToRefs(shipmentDetailStore);
+const { retrieved, isLoading, error } = storeToRefs(shipmentDetailStore);
 
 const selectedLocation = ref({});
 const emit = defineEmits<{
