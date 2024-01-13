@@ -68,6 +68,7 @@ export async function callAuth(payload: Auth) {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/ld+json",
+      "Accept-Language": getLocale(),
       deviceId: deviceId,
     } as HeadersInit,
   });
@@ -99,6 +100,7 @@ export async function callRefreshToken(
     headers: {
       "Content-Type": "application/json",
       Accept: "application/ld+json",
+      "Accept-Language": getLocale(),
       deviceId,
     },
   });
@@ -127,4 +129,8 @@ export function isAdmin(): boolean {
     return false;
   }
   return payload.user_type === UserType.ADMIN;
+}
+
+function getLocale(): string {
+  return localStorage.getItem("locale") || "en";
 }

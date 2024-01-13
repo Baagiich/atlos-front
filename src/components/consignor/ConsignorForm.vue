@@ -155,8 +155,9 @@
     <v-fade-transition hide-on-leave>
       <v-card
         v-if="dialog"
+        max-height="400"
         append-icon="$close"
-        class="mx-auto"
+        class="mx-auto overflow-y-auto"
         elevation="16"
         :title="$t('terms')"
       >
@@ -165,11 +166,9 @@
         </template>
 
         <v-divider></v-divider>
-
-        <div class="py-12 text-center">
+        <div class="mb-4 py-12 text-center">
           {{ contractTemplate?.template }}
         </div>
-
         <v-divider></v-divider>
         <div class="pa-4 text-end">
           <v-btn
@@ -209,6 +208,7 @@ import {
   assertMaxLength,
   assertEmail,
   assertChecked,
+  assertPhoneNumber,
 } from "@/validations";
 import FileUploader from "../common/FileUploader.vue";
 import { useMediaObjectCreateStore } from "@/store/mediaobject/create";
@@ -233,7 +233,11 @@ if (props.values) {
 const nameRules = [assertRequired(), assertMaxLength(50)];
 const emailRules = [assertRequired(), assertEmail()];
 
-const phoneNumberRules = [assertRequired(), assertMaxLength(20)];
+const phoneNumberRules = [
+  assertRequired(),
+  assertMaxLength(20),
+  assertPhoneNumber(),
+];
 const registerNumberRules = [assertRequired(), assertMaxLength(12)];
 const contractSignedRules = [assertChecked()];
 const dialog = ref(false);
@@ -259,7 +263,6 @@ function resetForm() {
 
   form.value.reset();
 }
-
 function handleAcceptContract() {
   dialog.value = false;
   contractSigned.value = true;

@@ -9,10 +9,11 @@
       <v-window-item :key="1" :value="1">
         <v-row>
           <v-col cols="6">
+            <ShipmentInfo :info="true"/>
             <shipment-location-list
               @selected="emitSelected"
             ></shipment-location-list>
-            <v-btn @click="goToFilesPage">
+            <v-btn class="ma-4" color="deep-purple-accent-4" @click="goToFilesPage">
               {{ $t("shipment.seeShipmentImages") }}
             </v-btn>
           </v-col>
@@ -39,12 +40,13 @@
                   <div
                     style="
                       font-size: 1rem;
-                      border: 1px solid black;
                       padding: 5px;
                       border-radius: 5px;
+                      background: rgba(233, 233, 240, 0.5);
                     "
                   >
                     <div style="font-weight: 700">
+                      <span class="mdi mdi-map-marker-multiple" style="color:green"></span>
                       {{ retrieved?.fromAddress.street }}
                     </div>
                     <div>
@@ -76,12 +78,14 @@
                   <div
                     style="
                       font-size: 1rem;
-                      border: 1px solid black;
                       padding: 5px;
                       border-radius: 5px;
+                      background: rgba(233, 233, 240, 0.5);
                     "
                   >
                     <div style="font-weight: 700">
+
+                  <span class="mdi mdi-map-marker-multiple" style="color:#5932EA"></span>
                       {{ retrieved?.toAddress.street }}
                     </div>
                     <div>
@@ -102,7 +106,7 @@
         <GoogleMap
           class="rounded-xl overflow-hidden"
           :api-key="GOOGLE_MAPS_API_KEY"
-          style="width: 100%; height: 400px; margin: 10px"
+          style="width: 100%; height: 500px; margin: 10px"
           :zoom="4.5"
           :center="{
             lat: retrieved?.fromAddress.location.latitude,
@@ -115,18 +119,20 @@
                 lat: retrieved?.fromAddress.location.latitude,
                 lng: retrieved?.fromAddress.location.longitude,
               },
+              anchorPoint: 'BOTTOM_CENTER',
             }"
           >
-            <div style="text-align: center">
+            <div style="text-align: center;  ">
               <div
                 style="
                   font-size: 1rem;
-                  border: 1px solid black;
+                  background: rgba(233, 233, 240, 0.5);
                   padding: 5px;
-                  border-radius: 5px;
-                "
+                  border-radius: 5px;"
               >
+                
                 <div style="font-weight: 700">
+                  <span class="mdi mdi-map-marker-multiple" style="color:green"></span>
                   {{ retrieved?.fromAddress.street }}
                 </div>
                 <div>
@@ -152,18 +158,20 @@
                 lat: retrieved?.toAddress.location.latitude,
                 lng: retrieved?.toAddress.location.longitude,
               },
+              anchorPoint: 'LEFT_CENTER',
             }"
           >
             <div style="text-align: center">
               <div
                 style="
                   font-size: 1rem;
-                  border: 1px solid black;
                   padding: 5px;
                   border-radius: 5px;
+                  background: rgba(233, 233, 240, 0.5)
                 "
               >
                 <div style="font-weight: 700">
+                  <span class="mdi mdi-map-marker-multiple" style="color:#5932EA"></span>
                   {{ retrieved?.toAddress.street }}
                 </div>
                 <div>
@@ -196,6 +204,7 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import ShipmentDetailState from "./ShipmentState.vue";
 import { GOOGLE_MAPS_API_KEY } from "@/utils/config";
+import ShipmentInfo from "@/components/shipment/ShipmentInfo.vue";
 
 const tab = ref(null);
 const selectedLocation = ref(null);

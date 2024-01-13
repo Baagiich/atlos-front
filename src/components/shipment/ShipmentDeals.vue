@@ -69,10 +69,10 @@
                 {{ t("shipment.accept") }}
               </v-btn>
             </template>
-            <v-card>
-              <h1>
+            <v-card class="shipment-deal-card">
+              <h4>
                 {{ t("shipment.wantApprove") }}
-              </h1>
+              </h4>
               <v-spacer></v-spacer>
               <v-btn
                 color="red"
@@ -99,9 +99,9 @@
               </v-btn>
             </template>
             <v-card>
-              <h1>
+              <h4>
                 {{ t("shipment.sendBidTitle") }}
-              </h1>
+              </h4>
               <v-spacer></v-spacer>
               <div
                 v-if="
@@ -143,10 +143,10 @@
                 {{ t("shipment.cancel") }}
               </v-btn>
             </template>
-            <v-card>
-              <h1>
+            <v-card class="shipment-deal-card">
+              <h4>
                 {{ t("shipment.wantCancel") }}
-              </h1>
+              </h4>
               <v-spacer></v-spacer>
               <v-btn
                 color="red"
@@ -383,5 +383,13 @@ function updateOrder(newOrders: VuetifyOrder[]) {
       }
     }
   }
+}
+.shipment-deal-card {
+  width: 377.561px;
+  height: 160px;
+  flex-shrink: 0;
+  border-radius: 25px !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
 }
 </style>

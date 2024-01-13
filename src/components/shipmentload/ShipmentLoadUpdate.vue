@@ -9,8 +9,8 @@
     </v-alert>
 
     <Form
-      v-if="item"
-      :values="item"
+      v-if="props.item"
+      :values="props.item"
       :is-update="true"
       @delete="deleteItem"
       @submit="update"
@@ -20,12 +20,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, Ref } from "vue";
+import { onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import Form from "@/components/shipmentload/ShipmentLoadForm.vue";
 import { useShipmentLoadDeleteStore } from "@/store/shipmentload/delete";
-import { useShipmentLoadUpdateStore } from "@/store/shipmentload/update";
+import { useShipmentLoadUpdateStore } from "@/store/shipmentload/customupdate";
 import { useShipmentLoadCreateStore } from "@/store/shipmentload/create";
 import type { ShipmentLoad } from "@/types/shipmentload";
 
@@ -40,35 +40,30 @@ const { isLoading: deleteLoading, error: deleteError } = storeToRefs(
 const props = defineProps<{
   item?: ShipmentLoad;
 }>();
-const item: Ref<ShipmentLoad | undefined> = ref(props.item);
 const shipmentloadUpdateStore = useShipmentLoadUpdateStore();
 
-await shipmentloadUpdateStore.retrieve(getId());
 async function update(item: ShipmentLoad) {
   await shipmentloadUpdateStore.update(item);
-  emit("updatelist");
+  await updateLoadList();
 }
 
 async function deleteItem() {
-  if (!item?.value) {
+  if (!props.item) {
     shipmentloadUpdateStore.setError(t("itemNotFound"));
     return;
   }
-  await shipmentloadDeleteStore.deleteItem(item?.value);
+  await shipmentloadDeleteStore.deleteItem(props.item);
+  updateLoadList();
+}
+function updateLoadList() {
   emit("updatelist");
+  shipmentloadCreateStore.$reset();
 }
 const emit = defineEmits<{
   (e: "updatelist"): void;
 }>();
-function getId(): string {
-  if (!item.value) {
-    return "";
-  }
-  const iri = item.value["@id"];
-  if (iri) {
-    iri.replace("/api/shipment_loads/", "");
-    return iri;
-  }
-  return "";
-}
+
+onBeforeUnmount(() => {
+  shipmentloadCreateStore.$reset();
+});
 </script>

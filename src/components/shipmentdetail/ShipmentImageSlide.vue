@@ -130,7 +130,7 @@
     <FileUploader></FileUploader>
     <div justify="center" align="center" class="ma-4 mt-8">
       <v-btn v-if="uploadedImg.image" color="green" @click="emitUpload">
-        {{$t("shipmentimage.upload")}}
+        {{ $t("shipmentimage.upload") }}
       </v-btn>
     </div>
   </v-overlay>
@@ -212,7 +212,6 @@ const uploadedImg = computed(() => {
 });
 
 function handleUpload(tag: string) {
-  
   uploadOverlay.value = true;
   props.items?.forEach((item) => {
     if (item.tags?.includes(tag)) {
@@ -234,7 +233,7 @@ watch(
   },
 );
 function formatRejectedCauses(data: any) {
-  const formattedData = data.map(( item: any) => {
+  const formattedData = data.map((item: any) => {
     return t("shipmentimage." + item);
   });
 

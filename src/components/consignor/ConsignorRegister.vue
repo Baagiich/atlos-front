@@ -1,5 +1,9 @@
 <template>
-  <Toolbar :breadcrumb="breadcrumb" :is-loading="isLoading" />
+  <Toolbar
+    :breadcrumb="breadcrumb"
+    :is-loading="isLoading"
+    :title="$t('consignor\.title')"
+  />
 
   <v-container fluid>
     <v-alert v-if="error" type="error" class="mb-4" :closable="true">{{
@@ -45,7 +49,7 @@ async function create(item: Consignor) {
     return;
   }
 
-  router.push({ name: "AdminUserVerify" });
+  router.push({ name: "ConsignorVerify" });
 }
 
 async function sendRequest() {

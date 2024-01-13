@@ -3,9 +3,8 @@
     <v-alert v-if="error" type="error" class="mb-4" :closable="true">{{
       error
     }}</v-alert>
-
     <Form
-      :created-shipment-id="createdShipmentId"
+      :created-shipment-id="props.createdShipmentId"
       :errors="violations"
       @submit="create"
     />
@@ -15,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from "vue";
+import { onBeforeUnmount } from "vue";
 import { storeToRefs } from "pinia";
 import Loading from "@/components/common/Loading.vue";
 import Form from "@/components/shipmentload/ShipmentLoadForm.vue";
@@ -27,7 +26,6 @@ const { created, isLoading, violations, error } = storeToRefs(
   shipmentloadCreateStore,
 );
 const props = defineProps(["createdShipmentId"]);
-const createdShipmentId = ref(props.createdShipmentId);
 async function create(item: ShipmentLoad) {
   await shipmentloadCreateStore.create(item);
 

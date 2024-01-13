@@ -16,7 +16,7 @@
               :rules="requireRules"
               variant="outlined"
               clearable
-              @update:modelValue="onCountrySelect"
+              @update:modelValue="onCountrySelect()"
             ></v-select>
           </v-col>
           <v-col cols="4">
@@ -160,7 +160,9 @@ const address = ref(props.address);
 const title = ref(props.title);
 const onCountrySelect = () => {
   selectedCity.value = null;
-  cityNames.value = countryListStore.getCityNames();
+  if (selectedCountry.value) {
+    cityNames.value = countryListStore.getCityNames(selectedCountry.value);
+  }
 };
 const requireRules = [assertRequired()];
 const getCountryNames = () => {

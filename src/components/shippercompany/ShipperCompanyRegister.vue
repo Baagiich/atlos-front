@@ -1,5 +1,5 @@
 <template>
-  <Toolbar :breadcrumb="breadcrumb" :is-loading="isLoading" />
+  <Toolbar :breadcrumb="breadcrumb" :is-loading="isLoading" :title="$t('shippercompany\.title')" />
 
   <v-container fluid>
     <v-alert v-if="error" type="error" class="mb-4" :closable="true">{{
@@ -45,7 +45,7 @@ async function create(item: ShipperCompany) {
     return;
   }
 
-  router.push({ name: "AdminUserVerify" });
+  router.push({ name: "ShipperCompanyVerify" });
 }
 
 async function sendRequest() {

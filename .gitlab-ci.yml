@@ -33,7 +33,7 @@ lint:commit:
 lint:code:
   stage: lint:code
   script:
-    - ./node_modules/eslint/bin/eslint.js $(git diff --name-only HEAD | grep -E 'src/.*\.ts|test/.*\.ts$' | xargs)
+    - npm run lint
   rules:
     - if: $CI_COMMIT_BRANCH == "test"
       when: never

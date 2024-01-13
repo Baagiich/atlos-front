@@ -52,20 +52,12 @@ export const useShipmentUpdateStore = defineStore("shipmentUpdate", {
       this.setError(undefined);
       this.toggleLoading();
 
-      if (!this.retrieved) {
-        this.setError("No shipment found. Please reload");
-        return;
-      }
-
       try {
-        const response = await api(
-          this.retrieved["@id"] ?? payload["@id"] ?? "",
-          {
-            method: "PUT",
-            headers: new Headers({ "Content-Type": "application/ld+json" }),
-            body: JSON.stringify(payload),
-          },
-        );
+        const response = await api(`shipments/${payload.id}`, {
+          method: "PUT",
+          headers: new Headers({ "Content-Type": "application/ld+json" }),
+          body: JSON.stringify(payload),
+        });
         const data: Shipment = await response.json();
 
         this.toggleLoading();

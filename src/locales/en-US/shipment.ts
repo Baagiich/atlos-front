@@ -34,4 +34,5 @@ export default {
   title: "Shipment",
   activeShipment: "Active shipment",
   approveDelivery: "Approve delivery",
+  nonReviewedAlertMsg: "Please approve and check unapproved shipments below",
 };

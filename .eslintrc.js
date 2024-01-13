@@ -5,7 +5,7 @@ module.exports = {
   env: {
     node: true,
   },
-  plugins: ["lodash"],
+  plugins: ["lodash", "vitest"],
   extends: [
     "eslint:recommended",
     "plugin:vue/vue3-recommended",
@@ -13,6 +13,8 @@ module.exports = {
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:lodash/recommended",
+    "plugin:vitest/recommended",
+    "plugin:prettier/recommended",
     "@vue/eslint-config-typescript",
     "prettier",
   ],
@@ -26,12 +28,12 @@ module.exports = {
     "@typescript-eslint/ban-types": [
       "error",
       {
-        "extendDefaults": true,
-        "types": {
-          "{}": false
-        }
-      }
-    ]
+        extendDefaults: true,
+        types: {
+          "{}": false,
+        },
+      },
+    ],
   },
   parser: "vue-eslint-parser",
   parserOptions: {

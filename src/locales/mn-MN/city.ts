@@ -1,9 +1,9 @@
 export default {
   title: "Хот",
-  name: "Name",
-  state: "State",
-  capital: "Capital",
-  addresses: "Addresses",
-  updatedAt: "UpdatedAt",
-  createdAt: "CreatedAt",
+  name: "Нэр",
+  state: "Аймаг",
+  capital: "Нийслэл",
+  addresses: "Хаяг",
+  updatedAt: "Зассан огноо",
+  createdAt: "Үүсгэсэн огноо",
 };

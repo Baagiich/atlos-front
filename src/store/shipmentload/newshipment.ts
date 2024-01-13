@@ -7,7 +7,7 @@ interface State {
 
 export const useCreateNewShipmentStore = defineStore("newShipmentItem", {
   state: (): State => ({
-    item: undefined,
+    item: {},
   }),
 
   actions: {

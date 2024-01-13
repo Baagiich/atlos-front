@@ -1,68 +1,54 @@
 <template>
-  <v-form ref="form" @submit.prevent="emitSubmit">
-    <v-text-field
-      v-model="date"
-      :label="title"
-      prepend-icon="event"
-      readonly
-      @click="showDatePicker"
-    ></v-text-field>
-
-    <v-date-picker
-      v-if="showDatePickerDialog"
-      v-model="datePickerModel"
-      @input="onDatePickerInput"
-      @click="saveDatePicker"
-    >
-    </v-date-picker>
-  </v-form>
+  <VueDatePicker
+    v-model="date"
+    range
+    :format="formatRange"
+    :format-locale="mn"
+    @update:model-value="selectDate"
+  >
+  </VueDatePicker>
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, Ref } from "vue";
-import { VForm } from "vuetify/components";
+import { ref, onMounted } from "vue";
 import { useCreateNewShipmentStore } from "@/store/shipmentload/newshipment";
-
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 import { storeToRefs } from "pinia";
+import { mn } from "date-fns/locale";
 import dayjs from "dayjs";
 
-const props = defineProps<{
-  isstartdate?: boolean;
-  title?: string;
-}>();
-const isStartDate = ref(props.isstartdate);
-const title = ref(props.title);
+const date = ref();
+
+onMounted(() => {
+  const startDate = new Date();
+  const endDate = new Date(new Date().setDate(startDate.getDate() + 7));
+  date.value = [startDate, endDate];
+});
 const newShipmentStore = useCreateNewShipmentStore();
 const { item } = storeToRefs(newShipmentStore);
-const date: Ref<Date> = ref(new Date());
 
-const showDatePickerDialog = ref(false);
-const datePickerModel = ref(new Date());
-
-function showDatePicker() {
-  showDatePickerDialog.value = true;
-}
-
-function saveDatePicker() {
+function selectDate() {
   if (!item || !item.value) {
     return;
   }
-  date.value = datePickerModel.value;
-  if (isStartDate.value) {
-    item.value.loadAt = dayjs(date.value).format("YYYY/MM/DD");
-  } else {
-    item.value.unloadAt = dayjs(date.value).format("YYYY/MM/DD");
-  }
-  showDatePickerDialog.value = false;
+
+  item.value.loadAt = dayjs(date.value[0]).toISOString();
+  item.value.unloadAt = dayjs(date.value[0]).toISOString();
 }
 
-function onDatePickerInput(value: any) {
-  datePickerModel.value = value;
-}
+const formatRange = (range: any[]) => {
+  const startDate = range[0];
+  const endDate = range[1];
 
-function emitSubmit() {
-  return true;
-}
+  const startDay = startDate.getDate();
+  const startMonth = startDate.getMonth() + 1;
+  const startYear = startDate.getFullYear();
 
-const form: Ref<VForm | null> = ref(null);
+  const endDay = endDate.getDate();
+  const endMonth = endDate.getMonth() + 1;
+  const endYear = endDate.getFullYear();
+
+  return `АЧИХ: ${startYear}/${startMonth}/${startDay} | БУУЛГАХ: ${endYear}/${endMonth}/${endDay}`;
+};
 </script>

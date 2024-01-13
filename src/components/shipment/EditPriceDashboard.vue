@@ -16,7 +16,7 @@
       </v-col>
 
       <v-col cols="12" sm="6" md="6">
-        <ShipmentInfo />
+        <ShipmentInfo :info="false"/>
       </v-col>
       <v-col cols="12" sm="6" md="6" class="container">
         <div class="bid-attention">

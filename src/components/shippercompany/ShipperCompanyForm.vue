@@ -144,8 +144,9 @@
     <v-fade-transition hide-on-leave>
       <v-card
         v-if="dialog"
+        max-height="400"
         append-icon="$close"
-        class="mx-auto"
+        class="mx-auto overflow-y-auto"
         elevation="16"
         :title="$t('terms')"
       >
@@ -198,6 +199,7 @@ import {
   assertMaxLength,
   assertEmail,
   assertChecked,
+  assertPhoneNumber,
 } from "@/validations";
 const props = defineProps<{
   values?: ShipperCompany;
@@ -220,7 +222,11 @@ const nameRules = [assertRequired(), assertMaxLength(50)];
 
 const emailRules = [assertRequired(), assertEmail()];
 
-const phoneNumberRules = [assertRequired(), assertMaxLength(20)];
+const phoneNumberRules = [
+  assertRequired(),
+  assertMaxLength(20),
+  assertPhoneNumber(),
+];
 const registerNumberRules = [assertRequired(), assertMaxLength(12)];
 const contractSignedRules = [assertChecked()];
 const emit = defineEmits<{
