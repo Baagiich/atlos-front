@@ -149,7 +149,6 @@
         class="mx-auto overflow-y-auto"
         elevation="16"
         :title="$t('terms')"
-        
       >
         <template #append>
           <v-btn icon="$close" variant="text" @click="dialog = false"></v-btn>
@@ -223,7 +222,11 @@ const nameRules = [assertRequired(), assertMaxLength(50)];
 
 const emailRules = [assertRequired(), assertEmail()];
 
-const phoneNumberRules = [assertRequired(), assertMaxLength(20), assertPhoneNumber()];
+const phoneNumberRules = [
+  assertRequired(),
+  assertMaxLength(20),
+  assertPhoneNumber(),
+];
 const registerNumberRules = [assertRequired(), assertMaxLength(12)];
 const contractSignedRules = [assertChecked()];
 const emit = defineEmits<{
