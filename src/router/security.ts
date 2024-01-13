@@ -8,17 +8,17 @@ const names = {
 
 export default [
   {
-    name: names.login,
-    path: "/login",
-    component: () => import("@/views/security/LoginShow.vue"),
+    name: names.shipperLogin,
+    path: "/shipper/login",
+    component: () => import("@/views/security/ShipperLoginShow.vue"),
     meta: {
       breadcrumb: [],
     },
   },
   {
-    name: names.shipperLogin,
-    path: "/shipper/login",
-    component: () => import("@/views/security/ShipperLoginShow.vue"),
+    name: names.login,
+    path: "/login",
+    component: () => import("@/views/security/LoginShow.vue"),
     meta: {
       breadcrumb: [],
     },
