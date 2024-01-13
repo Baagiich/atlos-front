@@ -45,7 +45,7 @@ async function create(item: ShipperCompany) {
     return;
   }
 
-  router.push({ name: "AdminUserVerify" });
+  router.push({ name: "ShipperCompanyVerify" });
 }
 
 async function sendRequest() {

@@ -17,4 +17,5 @@ export interface ListParams {
   order?: Order;
   page_size?: number;
   groups?: Array<string>;
+  atlosuserParam?: Array<string>;
 }

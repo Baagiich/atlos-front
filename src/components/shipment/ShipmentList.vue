@@ -202,7 +202,16 @@ const selectedShipment: Ref<Shipment> = ref({});
 const order = ref({});
 const itemsPerPage = ref("10");
 const isExistNonReviewedShipment = ref(true);
-
+const atlosuserParam  = ref({});
+if(userType == UserType.SHIPPER){
+  breadcrumb[0].title !== "ShipmentOwnList"
+    ? (filters.value.state = "created", atlosuserParam.value = {atlosuser: {shipper: 'off'}})
+    : null
+}else if(userType == UserType.CONSIGNOR){
+  breadcrumb[0].title !== "ShipmentOwnList"
+    ? (filters.value.state = "created", atlosuserParam.value = {atlosuser: {consignor: 'off'}})
+    : null
+}
 async function sendRequest() {
   await shipmentListStore.getItems({
     page: +page.value,
@@ -210,6 +219,7 @@ async function sendRequest() {
     page_size: +itemsPerPage.value,
     groups: ["shipment:list"],
     ...filters.value,
+    ...atlosuserParam.value
   });
 }
 
@@ -235,11 +245,7 @@ async function checkNonReviewedShipments() {
 
 await checkNonReviewedShipments();
 
-if (userType != UserType.ADMIN) {
-  breadcrumb[0].title !== "ShipmentOwnList"
-    ? (filters.value.state = "created")
-    : (filters.value.owner = "true");
-}
+
 
 const headers = [
   { title: t("id"), key: "@id" },
