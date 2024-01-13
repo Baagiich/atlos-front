@@ -11,7 +11,7 @@
     "lint": "npm run eslint && npm run vue-tsc",
     "format": "prettier --write .",
     "format-check": "prettier --check .",
-    "test": "vitest",
+    "test": "vitest --run",
     "coverage": "vitest run --coverage",
     "test-ci": "vitest run --coverage --no-color",
     "testui": "vitest --ui"

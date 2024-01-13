@@ -11,17 +11,11 @@
       {{ error || deleteError }}
     </v-alert>
     <v-row>
-      <v-col class="driver-request-shipment-code" md="12">
-        {{ t("driverrequest.shipmentCode") }}{{ item?.shipmentCode }}
-      </v-col>
-
       <v-col cols="12" sm="6" md="6">
-        <ShipmentInfo :info="false"/>
-      </v-col>
-      <v-col cols="12" sm="6" md="6" class="container">
-        <div class="bid-attention">
+        <ShipmentInfo :info="false" />
+        <p class="text-red">
           {{ t("shipment.bidAttention") }}
-        </div>
+        </p>
       </v-col>
       <v-col md="12">
         <ShipmentDeals
@@ -78,20 +72,4 @@ onBeforeUnmount(() => {
   shipmentShowStore.$reset();
 });
 </script>
-<style lang="scss">
-.driver-request-shipment-code {
-  text-align: right;
-  font-weight: bold;
-}
-.container {
-  position: relative;
-}
-
-.bid-attention {
-  position: absolute;
-  bottom: 35px;
-  left: 16px;
-  font-size: 18px;
-  width: 450px;
-}
-</style>
+<style lang="scss"></style>

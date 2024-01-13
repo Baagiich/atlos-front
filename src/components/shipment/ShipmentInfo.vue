@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <div>
     <v-alert
       v-if="error || deleteError"
       type="error"
@@ -19,9 +19,16 @@
       <tbody>
         <tr>
           <td>
+            {{ $t("driverrequest.shipmentCode") }}
+          </td>
+          <td>
+            <p>{{ item.shipmentCode }},</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
             {{ $t("shipment.fromAddress") }}
           </td>
-
           <td>
             <p>
               {{ item.fromAddress.city.name }},
@@ -59,15 +66,20 @@
             {{ formatDateInput(item.unloadAt) }}
           </td>
         </tr>
-        <tr v-if="!info">
-          <v-btn color="red">{{ $t("shipment.cancelShipment") }}</v-btn>
-          <v-btn float:right variant="outlined" color="blue">{{
-            $t("shipment.editShipment")
-          }}</v-btn>
-        </tr>
+        <tr></tr>
       </tbody>
     </v-table>
-  </v-container>
+    <v-rov>
+      <v-col>
+        <v-btn class="ma-2" color="red" size="small">{{
+          $t("shipment.cancelShipment")
+        }}</v-btn>
+        <v-btn class="ma-2" variant="outlined" color="blue" size="small">{{
+          $t("shipment.editShipment")
+        }}</v-btn>
+      </v-col>
+    </v-rov>
+  </div>
 
   <Loading :visible="isLoading" />
 </template>
