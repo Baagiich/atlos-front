@@ -64,11 +64,11 @@ export default async function api(
             }
           }
 
-          if (router.currentRoute.value.name !== "Login") {
+          if (router.currentRoute.value.name !== "Home") {
             apiToken.remove();
             const securityLoginStore = useSecurityLoginStore();
             securityLoginStore.setUserTokenData(undefined);
-            router.push({ name: "Login" });
+            router.push({ name: "Home" });
           }
         }
       }

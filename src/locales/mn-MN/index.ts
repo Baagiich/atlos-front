@@ -95,6 +95,8 @@ export default {
     "Мэдээлэл дутуу байна. Та мэдээллээ бүрэн оруулж байж баталгаажихыг анхаарна уу.",
   notAvailable: "Хоосон байна",
   fileUpload: "Файл хуулах",
+  Consignor: "Ачаа илгээгч",
+  Shipper: "Тээвэрлэгч",
   fileuploader,
   shipmentimage,
   save: "Хадгалах",
@@ -103,4 +105,6 @@ export default {
   contracttemplate,
   country,
   requests,
+  Help: "Тусламж",
+  DownloadDriverApp: "Жолоочийн аппликейшн татах",
 };

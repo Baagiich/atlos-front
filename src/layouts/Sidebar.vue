@@ -168,6 +168,6 @@ function isGrantedRole(roles: string[] | undefined): boolean {
 function logout() {
   apiToken.remove();
   securityLoginStore.setUserTokenData(undefined);
-  router.push({ name: "Login" });
+  router.push({ name: "Home" });
 }
 </script>
