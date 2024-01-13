@@ -9,11 +9,15 @@
       <v-window-item :key="1" :value="1">
         <v-row>
           <v-col cols="6">
-            <ShipmentInfo :info="true"/>
+            <ShipmentInfo :info="true" />
             <shipment-location-list
               @selected="emitSelected"
             ></shipment-location-list>
-            <v-btn class="ma-4" color="deep-purple-accent-4" @click="goToFilesPage">
+            <v-btn
+              class="ma-4"
+              color="deep-purple-accent-4"
+              @click="goToFilesPage"
+            >
               {{ $t("shipment.seeShipmentImages") }}
             </v-btn>
           </v-col>
@@ -46,7 +50,10 @@
                     "
                   >
                     <div style="font-weight: 700">
-                      <span class="mdi mdi-map-marker-multiple" style="color:green"></span>
+                      <span
+                        class="mdi mdi-map-marker-multiple"
+                        style="color: green"
+                      ></span>
                       {{ retrieved?.fromAddress.street }}
                     </div>
                     <div>
@@ -84,8 +91,10 @@
                     "
                   >
                     <div style="font-weight: 700">
-
-                  <span class="mdi mdi-map-marker-multiple" style="color:#5932EA"></span>
+                      <span
+                        class="mdi mdi-map-marker-multiple"
+                        style="color: #5932ea"
+                      ></span>
                       {{ retrieved?.toAddress.street }}
                     </div>
                     <div>
@@ -122,17 +131,20 @@
               anchorPoint: 'BOTTOM_CENTER',
             }"
           >
-            <div style="text-align: center;  ">
+            <div style="text-align: center">
               <div
                 style="
                   font-size: 1rem;
                   background: rgba(233, 233, 240, 0.5);
                   padding: 5px;
-                  border-radius: 5px;"
+                  border-radius: 5px;
+                "
               >
-                
                 <div style="font-weight: 700">
-                  <span class="mdi mdi-map-marker-multiple" style="color:green"></span>
+                  <span
+                    class="mdi mdi-map-marker-multiple"
+                    style="color: green"
+                  ></span>
                   {{ retrieved?.fromAddress.street }}
                 </div>
                 <div>
@@ -167,11 +179,14 @@
                   font-size: 1rem;
                   padding: 5px;
                   border-radius: 5px;
-                  background: rgba(233, 233, 240, 0.5)
+                  background: rgba(233, 233, 240, 0.5);
                 "
               >
                 <div style="font-weight: 700">
-                  <span class="mdi mdi-map-marker-multiple" style="color:#5932EA"></span>
+                  <span
+                    class="mdi mdi-map-marker-multiple"
+                    style="color: #5932ea"
+                  ></span>
                   {{ retrieved?.toAddress.street }}
                 </div>
                 <div>
