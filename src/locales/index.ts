@@ -1,9 +1,9 @@
 import enUS from "./en-US";
 import mnMN from "./mn-MN";
-import zhZH from "./zh-ZH";
+import zhHans from "./zh-Hans";
 
 export default {
   "en-US": enUS,
   "mn-MN": mnMN,
-  "zh-ZH": zhZH
+  "zh-Hans": zhHans
 };
