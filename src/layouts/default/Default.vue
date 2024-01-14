@@ -9,6 +9,7 @@
         <div class="d-inline-block text-black ml-16">
           <a
             href="#"
+            :class="{ 'text-red': locale === 'en-US' }"
             class="text-black text-decoration-none mx-1"
             @click.prevent="locale = 'en-US'"
             >EN</a
@@ -20,6 +21,7 @@
           <a
             href="#"
             class="text-black text-decoration-none mx-1"
+            :class="{ 'text-red': locale === 'zh-Hans' }"
             @click.prevent="locale = 'zh-Hans'"
             >中文</a
           >
@@ -30,6 +32,7 @@
           ></v-divider>
           <a
             href="#"
+            :class="{ 'text-red': locale === 'mn-MN' }"
             class="text-black text-decoration-none mx-1"
             @click.prevent="locale = 'mn-MN'"
             >MNG</a
