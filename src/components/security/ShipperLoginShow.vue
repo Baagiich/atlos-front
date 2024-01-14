@@ -54,7 +54,7 @@
           {{ error }}
         </v-alert>
         <LoginForm
-          class="mt-10"
+          class="mt-10 mr-15 ml-15"
           :errors="violations"
           :loading="isLoading"
           @submit="login"
