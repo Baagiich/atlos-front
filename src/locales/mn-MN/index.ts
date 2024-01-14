@@ -107,4 +107,11 @@ export default {
   requests,
   Help: "Тусламж",
   DownloadDriverApp: "Жолоочийн аппликейшн татах",
+  copyright: "Бүх эрх хуулиар хамгаалагдсан",
+  contactTermsTitle: "Үйлчилгээний нөхцөл",
+  contactAddressTitle: "Хаяг",
+  contactTitle: "Холбоо барих",
+  contactPhoneTitle: "Утасны дугаар",
+  contactAddressAtlos:
+    "7-р давхар, Minister Tower, Олимпийн гудамж, 1-р хороо, Сүхбаатар дүүрэг Улаанбаатар хот, Монгол улс",
 };
