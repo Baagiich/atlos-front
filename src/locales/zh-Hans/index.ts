@@ -91,8 +91,7 @@ export default {
   bank,
   order,
   review,
-  informationNotCompleted:
-    "文件不完整的。您注意一下把文件输入完整后才确认",
+  informationNotCompleted: "文件不完整的。您注意一下把文件输入完整后才确认",
   notAvailable: "空的",
   fileUpload: "上传文件",
   fileuploader,
