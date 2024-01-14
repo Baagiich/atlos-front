@@ -55,7 +55,7 @@
         }}</v-alert>
 
         <Form
-        class="mt-10 pa-10"
+          class="mt-10 pa-10"
           :errors="violations"
           :contract-template="registrationTemplate"
           @submit="create"

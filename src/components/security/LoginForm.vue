@@ -1,7 +1,6 @@
 <template>
   <v-form ref="form" @submit.prevent="emitSubmit">
-   
-      <!-- <div class="text-right">
+    <!-- <div class="text-right">
         <v-icon color="red">mdi-web</v-icon>
         <select v-model="locale" style="cursor: pointer">
           <option
@@ -15,64 +14,63 @@
         </select>
       </div>
     -->
-      <div class="text-subtitle-1 text-medium-emphasis">{{ $t("email") }}</div>
-      <v-text-field
-        id="email-field"
-        v-model="item.email"
-        tabindex="1"
-        type="email"
-        density="compact"
-        :placeholder="$t('email')"
-        :error="Boolean(violations?.email)"
-        :error-messages="violations?.email"
-        :rules="[assertRequired(), assertEmail()]"
-        prepend-inner-icon="mdi-email-outline"
-        variant="outlined"
-      ></v-text-field>
-      <div
-        class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
+    <div class="text-subtitle-1 text-medium-emphasis">{{ $t("email") }}</div>
+    <v-text-field
+      id="email-field"
+      v-model="item.email"
+      tabindex="1"
+      type="email"
+      density="compact"
+      :placeholder="$t('email')"
+      :error="Boolean(violations?.email)"
+      :error-messages="violations?.email"
+      :rules="[assertRequired(), assertEmail()]"
+      prepend-inner-icon="mdi-email-outline"
+      variant="outlined"
+    ></v-text-field>
+    <div
+      class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
+    >
+      {{ $t("password") }}
+      <a
+        tabindex="3"
+        class="text-caption text-decoration-none text-red"
+        href="#"
+        rel="noopener noreferrer"
+        @click="handlePasswordReset"
       >
-        {{ $t("password") }}
-        <a
-          tabindex="3"
-          class="text-caption text-decoration-none text-red"
-          href="#"
-          rel="noopener noreferrer"
-          @click="handlePasswordReset"
-        >
-          {{ $t("forgotPassword") }}
-        </a>
-      </div>
+        {{ $t("forgotPassword") }}
+      </a>
+    </div>
 
-      <v-text-field
-        id="password-field"
-        v-model="item.password"
-        tabindex="2"
-        :error="Boolean(violations?.password)"
-        :error-messages="violations?.password"
-        :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-        :type="visible ? 'text' : 'password'"
-        :placeholder="$t('password')"
-        :rules="[assertRequired()]"
-        density="compact"
-        prepend-inner-icon="mdi-lock-outline"
-        variant="outlined"
-        @click:append-inner="visible = !visible"
-      ></v-text-field>
+    <v-text-field
+      id="password-field"
+      v-model="item.password"
+      tabindex="2"
+      :error="Boolean(violations?.password)"
+      :error-messages="violations?.password"
+      :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+      :type="visible ? 'text' : 'password'"
+      :placeholder="$t('password')"
+      :rules="[assertRequired()]"
+      density="compact"
+      prepend-inner-icon="mdi-lock-outline"
+      variant="outlined"
+      @click:append-inner="visible = !visible"
+    ></v-text-field>
 
-      <v-btn
-        :disabled="loading"
-        :loading="loading"
-        tabindex="4"
-        block
-        class="mb-8"
-        color="red"
-        size="large"
-        type="submit"
-      >
-        {{ $t("signin") }}
-      </v-btn>
-  
+    <v-btn
+      :disabled="loading"
+      :loading="loading"
+      tabindex="4"
+      block
+      class="mb-8"
+      color="red"
+      size="large"
+      type="submit"
+    >
+      {{ $t("signin") }}
+    </v-btn>
   </v-form>
 </template>
 

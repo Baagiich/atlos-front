@@ -110,13 +110,13 @@
             }"
           >
             <div style="text-align: center">
-              <div style="font-size: 1.125rem">Vuejs Amsterdam</div>
-              <img
-                src="https://vuejs.org/images/logo.png"
-                width="50"
-                height="50"
-                style="margin-top: 8px"
-              />
+              <div class="text-red" style="font-size: 16px">
+                {{ title }}
+              </div>
+              <span
+                class="mdi mdi-map-marker"
+                style="color: red; font-size: 50px"
+              ></span>
             </div>
           </CustomMarker>
         </GoogleMap>

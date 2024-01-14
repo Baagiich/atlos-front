@@ -46,17 +46,16 @@
                       font-size: 1rem;
                       padding: 5px;
                       border-radius: 5px;
-                      background: rgba(233, 233, 240, 0.5);
+                      background: #00000080;
                     "
                   >
                     <div style="font-weight: 700">
                       <span
                         class="mdi mdi-map-marker-multiple"
-                        style="color: green"
+                        style="color: #34ff40; font-size: 24px"
                       ></span>
-                      {{ retrieved?.fromAddress.street }}
                     </div>
-                    <div>
+                    <div class="text-white">
                       {{
                         retrieved?.fromAddress.city.name +
                         ", " +
@@ -87,17 +86,16 @@
                       font-size: 1rem;
                       padding: 5px;
                       border-radius: 5px;
-                      background: rgba(233, 233, 240, 0.5);
+                      background: #00000080;
                     "
                   >
                     <div style="font-weight: 700">
                       <span
                         class="mdi mdi-map-marker-multiple"
-                        style="color: #5932ea"
+                        style="color: red; font-size: 24px"
                       ></span>
-                      {{ retrieved?.toAddress.street }}
                     </div>
-                    <div>
+                    <div class="text-white">
                       {{
                         retrieved?.toAddress.city.name +
                         ", " +
@@ -135,7 +133,7 @@
               <div
                 style="
                   font-size: 1rem;
-                  background: rgba(233, 233, 240, 0.5);
+                  background: #00000080;
                   padding: 5px;
                   border-radius: 5px;
                 "
@@ -143,11 +141,10 @@
                 <div style="font-weight: 700">
                   <span
                     class="mdi mdi-map-marker-multiple"
-                    style="color: green"
+                    style="color: #34ff40; font-size: 24px"
                   ></span>
-                  {{ retrieved?.fromAddress.street }}
                 </div>
-                <div>
+                <div class="text-white">
                   {{
                     retrieved?.fromAddress.city.name +
                     ", " +
@@ -179,17 +176,16 @@
                   font-size: 1rem;
                   padding: 5px;
                   border-radius: 5px;
-                  background: rgba(233, 233, 240, 0.5);
+                  background: #00000080;
                 "
               >
                 <div style="font-weight: 700">
                   <span
                     class="mdi mdi-map-marker-multiple"
-                    style="color: #5932ea"
+                    style="color: red; font-size: 24px"
                   ></span>
-                  {{ retrieved?.toAddress.street }}
                 </div>
-                <div>
+                <div class="text-white">
                   {{
                     retrieved?.toAddress.city.name +
                     ", " +
