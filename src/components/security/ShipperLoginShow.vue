@@ -60,23 +60,20 @@
           @submit="login"
         />
 
-        <v-card-subtitle  align="center"
-            justify="center">
+        <v-card-subtitle align="center" justify="center">
           <router-link
-              class="d-inline text-capitalize align-middle text-decoration-none"
-              style="font-weight: bold; color: red;"
-              :to="{ name: 'ShipperCompanyRegister' }"
-              >{{ $t("register") }}
-            </router-link>
+            class="d-inline text-capitalize align-middle text-decoration-none"
+            style="font-weight: bold; color: red"
+            :to="{ name: 'ShipperCompanyRegister' }"
+            >{{ $t("register") }}
+          </router-link>
         </v-card-subtitle>
 
-        <v-row style="position: absolute; bottom: 0; width: 50%" class="pa-15">
+        <v-row style="position: absolute; bottom: 0; width: 50%" class="pb-15">
           <v-col
             cols="12"
             sm="6"
             md="6"
-            align="center"
-            justify="center"
             class="mt-auto mb-auto"
           >
             <router-link

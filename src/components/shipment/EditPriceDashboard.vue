@@ -11,11 +11,16 @@
       {{ error || deleteError }}
     </v-alert>
     <v-row>
+      <v-col class="driver-request-shipment-code" md="12">
+        {{ t("driverrequest.shipmentCode") }}{{ item?.shipmentCode }}
+      </v-col>
       <v-col cols="12" sm="6" md="6">
         <ShipmentInfo :info="false" />
-        <p class="text-red">
+      </v-col>
+      <v-col cols="12" sm="6" md="6" class="container">
+        <div class="bid-attention">
           {{ t("shipment.bidAttention") }}
-        </p>
+        </div>
       </v-col>
       <v-col md="12">
         <ShipmentDeals

@@ -98,5 +98,12 @@ export default {
   shippercompany,
   Help: "Help",
   DownloadDriverApp: "Download the Driver App",
+  copyright: "All rights reserved",
+  contactTermsTitle: "Terms of service",
+  contactAddressTitle: "Address",
+  contactTitle: "Contact",
+  contactPhoneTitle: "Phone",
+  contactAddressAtlos:
+    "7th floor, Minister Tower, Olympic street, 1st khoroo, Sukhbaatar district, Ulaanbaatar, Mongolia",
   register: "Register",
 };
