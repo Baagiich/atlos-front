@@ -54,13 +54,13 @@
       ></v-divider>
 
       <router-link
-        class="d-inline text-capitalize align-middle mr-7 text-black text-decoration-none font-weight-medium"
+        class="d-inline align-middle mr-7 text-black text-decoration-none font-weight-medium"
         :to="{ name: 'ConsignorLogin' }"
         >{{ $t("Consignor") }}
       </router-link>
 
       <router-link
-        class="d-inline text-capitalize align-middle text-black text-decoration-none font-weight-medium"
+        class="d-inline align-middle text-black text-decoration-none font-weight-medium"
         :to="{ name: 'ShipperLogin' }"
         >{{ $t("Shipper") }}
       </router-link>
