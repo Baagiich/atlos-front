@@ -66,24 +66,25 @@
         </p>
       </template>
       <template #item.action="{ item }">
-        <p>
-          <v-dialog v-model="dialogApprove" width="auto">
-            <template #activator="{ props }">
-              <v-btn
-                color="green"
-                :disabled="item.status !== DealType.PENDING"
-                v-bind="props"
-                size="small"
-                @click="approveItem = item"
-              >
-                {{ t("shipment.accept") }}
-              </v-btn>
-            </template>
-            <v-card class="shipment-deal-card">
-              <h4>
-                {{ t("shipment.wantApprove") }}
-              </h4>
-              <v-spacer></v-spacer>
+        <v-dialog v-model="dialogApprove" width="300">
+          <template #activator="{ props }">
+            <v-btn
+              color="green"
+              :disabled="item.status !== DealType.PENDING"
+              v-bind="props"
+              size="small"
+              @click="approveItem = item"
+            >
+              {{ t("shipment.accept") }}
+            </v-btn>
+          </template>
+
+          <v-card>
+            <v-card-text>
+              {{ t("shipment.wantApprove") }}
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer />
               <v-btn
                 color="red"
                 variant="outlined"
@@ -100,72 +101,81 @@
               >
                 {{ t("shipment.approve") }}
               </v-btn>
-            </v-card>
-          </v-dialog>
-          <v-dialog v-model="dialog" width="auto">
-            <template #activator="{ props }">
-              <v-btn
-                :disabled="item.status !== DealType.PENDING"
-                color="primary"
-                v-bind="props"
-                class="send-bid-btn"
-                size="small"
-                @click="(dialogItem = item), (bidPrice = undefined)"
-              >
-                {{ t("shipment.sendBid") }}
-              </v-btn>
-            </template>
-            <v-card>
-              <h4>
-                {{ t("shipment.sendBidTitle") }}
-              </h4>
-              <v-spacer></v-spacer>
-              <div
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialog" width="300">
+          <template #activator="{ props }">
+            <v-btn
+              :disabled="item.status !== DealType.PENDING"
+              color="primary"
+              v-bind="props"
+              class="send-bid-btn"
+              size="small"
+              @click="(dialogItem = item), (bidPrice = undefined)"
+            >
+              {{ t("shipment.sendBid") }}
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-text>
+              {{ t("shipment.sendBidTitle") }}
+            </v-card-text>
+            <v-spacer></v-spacer>
+            <v-card-text>
+              <p
                 v-if="
                   Array.isArray(dialogItem.shipmentPriceBiddings) &&
                   dialogItem.shipmentPriceBiddings[0].price
                 "
               >
                 {{ dialogItem.shipmentPriceBiddings[0].price.amount }}
-              </div>
+              </p>
+              <v-spacer></v-spacer>
               <v-text-field
                 v-model="bidPrice"
+                class="mt-3"
                 type="number"
                 variant="outlined"
                 clearable
                 :placeholder="$t('shipment.sendNewPriceBid')"
               >
               </v-text-field>
-              <v-spacer></v-spacer>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer />
               <v-btn
-                color="green-darken-1"
-                variant="text"
+                color="green"
+                variant="flat"
                 size="small"
                 @click="createShipmentPriceBidding()"
               >
                 {{ t("shipment.send") }}
               </v-btn>
-            </v-card>
-          </v-dialog>
-          <v-dialog v-model="dialogCancel" width="auto">
-            <template #activator="{ props }">
-              <v-btn
-                color="red"
-                :disabled="
-                  item.status !== DealType.PENDING &&
-                  item.status !== DealType.REPLIED
-                "
-                v-bind="props"
-                size="small"
-                @click="cancelItem = item"
-              >
-                {{ t("shipment.cancel") }}
-              </v-btn>
-            </template>
-            <v-card class="shipment-deal-card">
-              <h4>
-                {{ t("shipment.wantCancel") }}
-              </h4>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialogCancel" width="auto">
+          <template #activator="{ props }">
+            <v-btn
+              color="red"
+              :disabled="
+                item.status !== DealType.PENDING &&
+                item.status !== DealType.REPLIED
+              "
+              v-bind="props"
+              size="small"
+              @click="cancelItem = item"
+            >
+              {{ t("shipment.cancel") }}
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-text>
+              {{ t("shipment.wantCancel") }}
+            </v-card-text>
+
+            <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
                 color="red"
@@ -183,9 +193,9 @@
               >
                 {{ t("shipment.cancel") }}
               </v-btn>
-            </v-card>
-          </v-dialog>
-        </p>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </template>
     </v-data-table-server>
   </div>
