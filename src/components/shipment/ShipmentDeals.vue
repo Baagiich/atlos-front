@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <div>
     <v-alert v-if="error" type="error" class="mb-4" :closable="true">
       {{ error }}
     </v-alert>
@@ -25,9 +25,18 @@
         </p>
       </template>
       <template #item.reviews="{ item }">
-        <p>
-          {{ getAverageReview(item.shipper) }}
-        </p>
+        <span class="text-grey-lighten text-caption me-2">
+          ({{ getAverageReview(item) }})
+        </span>
+
+        <v-rating
+          :model-value="getAverageReview(item)"
+          color="grey"
+          active-color="yellow-accent-4"
+          half-increments
+          readonly
+          size="18"
+        ></v-rating>
       </template>
       <template #item.bidPrice="{ item }">
         <p>
@@ -64,6 +73,7 @@
                 color="green"
                 :disabled="item.status !== DealType.PENDING"
                 v-bind="props"
+                size="small"
                 @click="approveItem = item"
               >
                 {{ t("shipment.accept") }}
@@ -77,11 +87,17 @@
               <v-btn
                 color="red"
                 variant="outlined"
+                size="small"
                 @click="dialogApprove = false"
               >
                 {{ t("shipment.back") }}
               </v-btn>
-              <v-btn color="green" variant="flat" @click="approveBid()">
+              <v-btn
+                color="green"
+                variant="flat"
+                size="small"
+                @click="approveBid()"
+              >
                 {{ t("shipment.approve") }}
               </v-btn>
             </v-card>
@@ -93,6 +109,7 @@
                 color="primary"
                 v-bind="props"
                 class="send-bid-btn"
+                size="small"
                 @click="(dialogItem = item), (bidPrice = undefined)"
               >
                 {{ t("shipment.sendBid") }}
@@ -123,6 +140,7 @@
               <v-btn
                 color="green-darken-1"
                 variant="text"
+                size="small"
                 @click="createShipmentPriceBidding()"
               >
                 {{ t("shipment.send") }}
@@ -138,6 +156,7 @@
                   item.status !== DealType.REPLIED
                 "
                 v-bind="props"
+                size="small"
                 @click="cancelItem = item"
               >
                 {{ t("shipment.cancel") }}
@@ -151,11 +170,17 @@
               <v-btn
                 color="red"
                 variant="outlined"
+                size="small"
                 @click="dialogCancel = false"
               >
                 {{ t("shipment.back") }}
               </v-btn>
-              <v-btn color="red" variant="flat" @click="cancelBid()">
+              <v-btn
+                color="red"
+                variant="flat"
+                size="small"
+                @click="cancelBid()"
+              >
                 {{ t("shipment.cancel") }}
               </v-btn>
             </v-card>
@@ -163,7 +188,7 @@
         </p>
       </template>
     </v-data-table-server>
-  </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -173,7 +198,6 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useShipmentShipperDealListStore } from "@/store/shipmentshipperdeal/list";
 import type { Filters, VuetifyOrder } from "@/types/list";
-import { Shipment } from "@/types/shipment";
 import { Ref } from "vue";
 import { DealType } from "@/types/deal_type";
 import { useShipmentPriceBiddingPathcStore } from "@/store/shipmentpricebidding/patch";
@@ -183,7 +207,6 @@ import { BiddingType } from "@/types/bidding_type";
 import { ShipmentPriceBidding } from "@/types/shipmentpricebidding";
 import { useShipmentPriceBiddingCreateStore } from "@/store/shipmentpricebidding/create";
 import isString from "lodash/isString";
-import { Review } from "@/types/review";
 import { useShipmentShowStore } from "@/store/shipment/show";
 import router from "@/router";
 
@@ -244,16 +267,12 @@ function getStatus(code?: number) {
 
   return t("shipment.unknown");
 }
-function getAverageReview(shipper: Shipment) {
-  if (shipper.reviews.length === 0) {
+function getAverageReview(shipmentDeal: ShipmentShipperDeal) {
+  if (!shipmentDeal.shipper || Array.isArray(shipmentDeal.shipper.review)) {
     return 0;
   }
-  return (
-    shipper.reviews.reduce(
-      (sum: number, current: Review) => sum + (current.rating || 0),
-      0,
-    ) / shipper.reviews.length
-  );
+
+  return shipmentDeal.shipper.review.average;
 }
 function getShipmentPriceBiddingId(item: ShipmentPriceBidding) {
   const iri = item["@id"];
