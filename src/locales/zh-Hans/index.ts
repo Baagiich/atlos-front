@@ -102,6 +102,7 @@ export default {
   contracttemplate,
   country,
   requests,
+  register: "Register",
   Consignor: "发货方",
   Shipper: "运输公司",
   Help: "帮助信息",
