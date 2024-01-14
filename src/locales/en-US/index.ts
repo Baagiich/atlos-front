@@ -90,8 +90,12 @@ export default {
     "Information not completed. To activate your account you need to complete your profile",
   notAvailable: "Not available",
   fileUpload: "File upload",
+  Consignor: "Consignor",
+  Shipper: "Shipper",
   fileuploader,
   shipmentimage,
   consignor,
   shippercompany,
+  Help: "Help",
+  DownloadDriverApp: "Download the Driver App",
 };

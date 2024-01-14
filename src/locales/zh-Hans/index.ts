@@ -78,6 +78,7 @@ export default {
   logout: "登出",
   "en-US": "EN",
   "mn-MN": "MN",
+  "zh-Hans": "CN",
   advance: "预付款",
   remaining: "剩余",
   reasons: "原因",
@@ -102,4 +103,8 @@ export default {
   contracttemplate,
   country,
   requests,
+  Consignor: "托运人",
+  Shipper: "Тээвэрлэгч",
+  Help: "Help",
+  DownloadDriverApp: "Driver App download",
 };
