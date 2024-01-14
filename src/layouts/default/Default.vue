@@ -9,6 +9,7 @@
         <div class="d-inline-block text-black ml-16">
           <a
             href="#"
+            :class="{ 'text-red': locale === 'en-US' }"
             class="text-black text-decoration-none mx-1"
             @click.prevent="locale = 'en-US'"
             >EN</a
@@ -20,6 +21,7 @@
           <a
             href="#"
             class="text-black text-decoration-none mx-1"
+            :class="{ 'text-red': locale === 'zh-Hans' }"
             @click.prevent="locale = 'zh-Hans'"
             >中文</a
           >
@@ -30,6 +32,7 @@
           ></v-divider>
           <a
             href="#"
+            :class="{ 'text-red': locale === 'mn-MN' }"
             class="text-black text-decoration-none mx-1"
             @click.prevent="locale = 'mn-MN'"
             >MNG</a
@@ -54,13 +57,13 @@
       ></v-divider>
 
       <router-link
-        class="d-inline text-capitalize align-middle mr-7 text-black text-decoration-none font-weight-medium"
+        class="d-inline align-middle mr-7 text-black text-decoration-none font-weight-medium"
         :to="{ name: 'ConsignorLogin' }"
         >{{ $t("Consignor") }}
       </router-link>
 
       <router-link
-        class="d-inline text-capitalize align-middle text-black text-decoration-none font-weight-medium"
+        class="d-inline align-middle text-black text-decoration-none font-weight-medium"
         :to="{ name: 'ShipperLogin' }"
         >{{ $t("Shipper") }}
       </router-link>

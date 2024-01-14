@@ -102,7 +102,7 @@ export default {
   contracttemplate,
   country,
   requests,
-  Consignor: "托运人",
+  Consignor: "发货方",
   Shipper: "运输公司",
   Help: "帮助信息",
   DownloadDriverApp: "下载驾驶员申请",
