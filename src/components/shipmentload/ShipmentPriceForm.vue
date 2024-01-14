@@ -53,7 +53,7 @@
       <v-col cols="4">
         <v-select
           v-model="selectedPercent"
-          :label="$t('shipmentload.postPayment')"
+          :label="$t('shipmentload.prePostPaymentRatio')"
           :items="paymentPercentList.map((item) => item.percent)"
           :rules="percentNumberRules"
           variant="outlined"

@@ -29,6 +29,7 @@ export default {
   shipmentPrice: "Shipment Price *",
   prePayment: "PrePayment",
   postPayment: "PostPayment",
+  prePostPaymentRatio: "Advance:Remaining",
   mainSize: "Main Size *",
   mainWeight: "Main Weight *",
   sumQuantity: "Total Quantity",

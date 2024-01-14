@@ -31,6 +31,7 @@ export default {
   shipmentPrice: "加运输价格",
   prePayment: "预付款",
   postPayment: "后付款",
+  prePostPaymentRatio: "预付款:后付款",
   mainSize: "总尺寸",
   mainWeight: "重量",
   sumQuantity: "总数量",

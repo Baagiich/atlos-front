@@ -6,14 +6,20 @@
           {{ $t("shipmentload.documentTitle") }}
         </h4>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="12">
         <div v-for="(item, index) in docTypeRef" :key="index">
-          <div class="doc-names">{{ item["value"] }}</div>
-          <v-text-field
-            v-model="item['data']"
-            variant="outlined"
-            type="number"
-          />
+          <v-row>
+            <v-col col="11">
+              <div class="doc-names">{{ item["value"] }}</div>
+            </v-col>
+            <v-col col="1">
+              <v-text-field
+                v-model="item['data']"
+                variant="outlined"
+                type="number"
+              />
+            </v-col>
+          </v-row>
         </div>
       </v-col>
     </v-row>
@@ -38,11 +44,22 @@ import * as enumHelper from "@/utils/enumHelper";
 import { Ref } from "vue";
 import { useCreateNewDocumentStore } from "@/store/shipmentload/newdocument";
 
+interface DocTypeRef {
+  key: string;
+  value: string;
+  data: number;
+}
 const docTypes = enumHelper.getMap(DocumentTypeEnum);
-const docTypeRef = docTypes.map((doc) => {
-  return { ...doc, data: 0 };
+const docTypeRef: Ref<DocTypeRef[]> = ref([]);
+
+docTypes.forEach((doc) => {
+  console.log(doc);
+  docTypeRef.value.push({ key: doc.key, value: doc.value, data: 0 });
 });
-const props = defineProps(["itemDocuments", "saveStore"]);
+const props = defineProps<{
+  itemDocuments?: DocumentType[];
+  saveStore: boolean;
+}>();
 const itemDocuments: Ref<DocumentType[]> = ref(props.itemDocuments || []);
 const newDocumentStore = useCreateNewDocumentStore();
 
@@ -50,7 +67,7 @@ onBeforeUnmount(() => {
   newDocumentStore.$reset();
 });
 function savetoStore() {
-  docTypeRef.forEach((doc) => {
+  docTypeRef.value.forEach((doc) => {
     if (doc.data > 0) {
       const docType: Ref<DocumentType> = ref({});
       docType.value.name = doc.key;

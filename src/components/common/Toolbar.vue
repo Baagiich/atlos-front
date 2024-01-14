@@ -16,10 +16,11 @@
 
       <v-btn
         v-if="actions?.includes('add')"
-        icon="mdi-plus-circle"
+        prepend-icon="mdi-plus-circle"
         color="primary"
         @click="emitAdd"
-      />
+        >{{ $t("shipment.add") }}</v-btn
+      >
     </div>
 
     <ConfirmDelete

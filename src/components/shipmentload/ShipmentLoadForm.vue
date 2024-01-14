@@ -1,14 +1,13 @@
 <template>
   <v-form ref="form">
     <v-row class="load-form">
-      <v-col cols="12" sm="6" md="2">
+      <v-col cols="12" sm="6" md="4">
         <v-text-field
           v-model="item.name"
           :error="Boolean(violations?.name)"
           :error-messages="violations?.name"
           :label="$t('shipmentload.loadName')"
           variant="outlined"
-          clearable
         >
           <template #append-inner>
             <v-icon
@@ -26,18 +25,16 @@
           :label="$t('shipmentload.packageType')"
           :items="getTypeNames()"
           variant="outlined"
-          clearable
           @update:modelValue="onTypeSelected"
         ></v-select>
       </v-col>
-      <v-col cols="12" sm="6" md="1">
+      <v-col cols="12" sm="6" md="2">
         <v-text-field
           v-model.number="item.quantity"
           :error="Boolean(violations?.quantity)"
           :error-messages="violations?.quantity"
           :label="$t('shipmentload.quantity')"
           variant="outlined"
-          clearable
         >
           <template #append-inner>
             <v-icon
@@ -49,14 +46,13 @@
           </template>
         </v-text-field>
       </v-col>
-      <v-col cols="12" sm="6" md="1">
+      <v-col cols="12" sm="6" md="2">
         <v-text-field
           v-model.number="item.length"
           :error="Boolean(violations?.length)"
           :error-messages="violations?.length"
           :label="$t('shipmentload.length')"
           variant="outlined"
-          clearable
         >
           <template #append-inner>
             <v-icon
@@ -68,14 +64,13 @@
           </template>
         </v-text-field>
       </v-col>
-      <v-col cols="12" sm="6" md="1">
+      <v-col cols="12" sm="6" md="2">
         <v-text-field
           v-model.number="item.width"
           :error="Boolean(violations?.width)"
           :error-messages="violations?.width"
           :label="$t('shipmentload.width')"
           variant="outlined"
-          clearable
         >
           <template #append-inner>
             <v-icon
@@ -87,14 +82,13 @@
           </template>
         </v-text-field>
       </v-col>
-      <v-col cols="12" sm="6" md="1">
+      <v-col cols="12" sm="6" md="2">
         <v-text-field
           v-model.number="item.height"
           :error="Boolean(violations?.height)"
           :error-messages="violations?.height"
           :label="$t('shipmentload.height')"
           variant="outlined"
-          clearable
         >
           <template #append-inner>
             <v-icon
@@ -106,14 +100,13 @@
           </template>
         </v-text-field>
       </v-col>
-      <v-col cols="12" sm="6" md="1">
+      <v-col cols="12" sm="6" md="2">
         <v-text-field
           v-model.number="item.weight"
           :error="Boolean(violations?.weight)"
           :error-messages="violations?.weight"
           :label="$t('shipmentload.weight')"
           variant="outlined"
-          clearable
         >
           <template #append-inner>
             <v-icon
@@ -131,12 +124,11 @@
             :label="$t('shipmentload.isPileUp')"
             color="indigo"
             variant="outlined"
-            clearable
             @click="toggleIsPileUp"
           ></v-radio>
         </v-radio-group>
       </v-col>
-      <v-col cols="12" sm="6" md="1">
+      <v-col cols="12" sm="6" md="2">
         <v-btn
           v-if="isUpdate"
           :key="item['@id']"
@@ -166,6 +158,7 @@
         >
       </v-col>
     </v-row>
+    <v-divider></v-divider>
   </v-form>
 </template>
 
@@ -265,9 +258,6 @@ function toggleIsPileUp(value: boolean) {
 }
 </script>
 <style lang="scss">
-.load-form {
-  height: 42px;
-}
 .load-add-btn {
   margin-top: 38px;
 }

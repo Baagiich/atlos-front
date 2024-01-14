@@ -35,7 +35,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="2">
+      <v-col cols="3">
         <v-sheet class="d-inline-flex" height="40">
           {{ $t("shipmentload.choiceCurrencyType") }}
         </v-sheet>

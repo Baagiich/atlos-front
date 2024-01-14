@@ -2,13 +2,12 @@
   <v-container fluid class="load-sum-container">
     <v-form ref="form">
       <v-row class="row-sum">
-        <v-col cols="3"> </v-col>
-        <v-col cols="1">
+        <v-col cols="2">
           <h4>
             {{ $t("shipmentload.sum") }}
           </h4>
         </v-col>
-        <v-col cols="1">
+        <v-col cols="2">
           <v-text-field
             variant="outlined"
             :label="$t('shipmentload.sumQuantity')"
@@ -16,7 +15,7 @@
             suffix="ш"
           ></v-text-field>
         </v-col>
-        <v-col cols="1">
+        <v-col cols="2">
           <v-text-field
             variant="outlined"
             :label="$t('shipmentload.sumWeight')"
@@ -34,8 +33,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" sm="6" md="3"> </v-col>
-        <v-col cols="12" sm="6" md="1">
+        <v-col cols="12" sm="6" md="4">
           <v-text-field
             v-model="loadPrice"
             type="number"
@@ -45,7 +43,7 @@
             @update:model-value="onPriceWrited"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" sm="6" md="4">
+        <v-col cols="12" sm="6" md="6">
           <div color="red">
             {{ $t("shipmentload.loadAttention") }}
           </div>
