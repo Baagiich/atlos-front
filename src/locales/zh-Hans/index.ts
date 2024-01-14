@@ -102,8 +102,8 @@ export default {
   contracttemplate,
   country,
   requests,
-  Consignor: "托运人",
-  Shipper: "Тээвэрлэгч",
+  Consignor: "发货方",
+  Shipper: "运输公司",
   Help: "Help",
   DownloadDriverApp: "Driver App download",
 };

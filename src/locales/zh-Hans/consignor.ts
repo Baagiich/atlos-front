@@ -7,5 +7,5 @@ export default {
   register: "登记",
   phoneNumber: "手机号码",
   status: "身份",
-  title: "托运人",
+  title: "发货方",
 };

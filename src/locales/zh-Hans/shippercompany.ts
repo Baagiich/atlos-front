@@ -5,5 +5,5 @@ export default {
   email: "电子邮件",
   register: "登记",
   phoneNumber: "电话号码",
-  title: "托运人",
+  title: "运输公司",
 };
