@@ -105,4 +105,5 @@ export default {
   contactPhoneTitle: "Phone",
   contactAddressAtlos:
     "7th floor, Minister Tower, Olympic street, 1st khoroo, Sukhbaatar district, Ulaanbaatar, Mongolia",
+  register: "Register",
 };
