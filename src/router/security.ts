@@ -16,6 +16,14 @@ export default [
     },
   },
   {
+    name: names.login,
+    path: "/login",
+    component: () => import("@/views/security/LoginShow.vue"),
+    meta: {
+      breadcrumb: [],
+    },
+  },
+  {
     name: names.consignorLogin,
     path: "/consignor/login",
     component: () => import("@/views/security/ConsignorLoginShow.vue"),
