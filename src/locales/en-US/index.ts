@@ -98,4 +98,5 @@ export default {
   shippercompany,
   Help: "Help",
   DownloadDriverApp: "Download the Driver App",
+  register: "Register",
 };

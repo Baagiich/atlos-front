@@ -106,4 +106,5 @@ export default {
   Shipper: "Тээвэрлэгч",
   Help: "Help",
   DownloadDriverApp: "Driver App download",
+  register: "Register",
 };

@@ -107,4 +107,6 @@ export default {
   requests,
   Help: "Тусламж",
   DownloadDriverApp: "Жолоочийн аппликейшн татах",
+
+  register: "Шинээр Бүртгүүлэх",
 };

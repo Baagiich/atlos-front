@@ -1,12 +1,7 @@
 <template>
   <v-form ref="form" @submit.prevent="emitSubmit">
-    <v-card
-      class="mx-auto pa-12 pb-8"
-      elevation="8"
-      max-width="448"
-      rounded="lg"
-    >
-      <div class="text-right">
+   
+      <!-- <div class="text-right">
         <v-icon color="red">mdi-web</v-icon>
         <select v-model="locale" style="cursor: pointer">
           <option
@@ -19,6 +14,7 @@
           </option>
         </select>
       </div>
+    -->
       <div class="text-subtitle-1 text-medium-emphasis">{{ $t("email") }}</div>
       <v-text-field
         id="email-field"
@@ -76,7 +72,7 @@
       >
         {{ $t("signin") }}
       </v-btn>
-    </v-card>
+  
   </v-form>
 </template>
 
