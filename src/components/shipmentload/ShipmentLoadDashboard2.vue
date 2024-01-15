@@ -82,6 +82,7 @@
         <ShipmentDocumentType
           v-if="fourthStepShow"
           :item-documents="itemDocuments"
+          :save-store="true"
           @finish="emitFinishDocument"
         />
       </v-col>
