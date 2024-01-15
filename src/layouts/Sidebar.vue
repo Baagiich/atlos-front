@@ -65,6 +65,12 @@ const drawer = ref(true);
 const rail = ref(true);
 const menuItems = [
   {
+    title: "shipment.addShipment",
+    routeName: "ShipmentLoadDashboard",
+    icon: "mdi mdi-plus-box",
+    roles: ["ROLE_CONSIGNOR", "ROLE_SHIPPER"],
+  },
+  {
     title: "order.title",
     routeName: "OrderList",
     icon: "mdi-account-credit-card",
@@ -76,6 +82,7 @@ const menuItems = [
     icon: "mdi-wallet",
     roles: ["ROLE_CONSIGNOR", "ROLE_SHIPPER"],
   },
+
   {
     title: "bank.title",
     routeName: "BankList",
