@@ -208,11 +208,6 @@ if (userType == UserType.SHIPPER) {
     ? ((filters.value.state = "created"),
       (atlosuserParam.value = { atlosuser: { shipper: "off" } }))
     : null;
-} else if (userType == UserType.CONSIGNOR) {
-  breadcrumb[0].title !== "ShipmentOwnList"
-    ? ((filters.value.state = "created"),
-      (atlosuserParam.value = { atlosuser: { consignor: "off" } }))
-    : null;
 }
 async function sendRequest() {
   await shipmentListStore.getItems({

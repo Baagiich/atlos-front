@@ -52,7 +52,9 @@ export const useShipmentListStore = defineStore("shipmentList", {
     },
 
     setItems(items: Shipment[]) {
-      this.items = items;
+      this.items = items.sort(function (a, b) {
+        return b.id! - a.id!;
+      });
     },
 
     setTotalItems(totalItems: number) {

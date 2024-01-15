@@ -124,12 +124,12 @@ const menuItems = [
     icon: "mdi-truck-delivery",
     roles: ["ROLE_ADMIN", "ROLE_CONSIGNOR"],
   },
-  {
-    title: "shipment.activeShipment",
-    routeName: "ShipmentOwnList",
-    icon: "mdi-truck-delivery",
-    roles: ["ROLE_ADMIN", "ROLE_CONSIGNOR", "ROLE_SHIPPER"],
-  },
+  // {
+  //   title: "shipment.activeShipment",
+  //   routeName: "ShipmentOwnList",
+  //   icon: "mdi-truck-delivery",
+  //   roles: ["ROLE_ADMIN", "ROLE_CONSIGNOR", "ROLE_SHIPPER"],
+  // },
   {
     title: "shppercompany.title",
     routeName: "ShipperCompanyList",
