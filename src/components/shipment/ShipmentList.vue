@@ -205,7 +205,7 @@ const isExistNonReviewedShipment = ref(true);
 const atlosuserParam = ref({});
 if (userType == UserType.SHIPPER) {
   breadcrumb[0].title !== "ShipmentOwnList"
-    ? ((filters.value.state = "created"),
+    ? (((filters.value.state = "created"), (filters.value.shipmentType = "2")),
       (atlosuserParam.value = { atlosuser: { shipper: "off" } }))
     : null;
 }
@@ -234,7 +234,7 @@ async function getDeliveredShipments() {
 
 async function checkNonReviewedShipments() {
   await getDeliveredShipments();
-  if (items.value.length < 1) {
+  if (userType == UserType.SHIPPER || items.value.length < 1) {
     isExistNonReviewedShipment.value = false;
     await sendRequest();
   }

@@ -4,14 +4,14 @@
     <v-text-field
       v-model="bidPrice"
       type="number"
-      :disabled="!checkRequests() || btn2 || btn3 || btn4 || btn5"
+      :disabled="!checkRequests || btn2 || btn3 || btn4 || btn5"
       variant="outlined"
       clearable
     >
     </v-text-field>
     <div>{{ currency }}</div>
     <div>
-      <v-btn v-if="btn1" :disabled="!checkRequests()" @click="createBid">{{
+      <v-btn v-if="btn1" :disabled="!checkRequests" @click="createBid">{{
         $t("driverrequest.sendRequest")
       }}</v-btn>
     </div>
@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from "vue";
+import { computed, ref, Ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useDriverRequestsListStore } from "@/store/driverrequests/driverlist";
 import { useVehicleRequestsListStore } from "@/store/driverrequests/vehiclelist";
@@ -125,13 +125,14 @@ async function setBidPrice() {
 }
 await setBidPrice();
 async function buttonToggle() {
-  if (!dealItems.value[0] || !dealItems.value[0].shipmentPriceBiddings) {
-    return;
-  }
+  // Tsaash urgeljlehgui bhar ni comment bolgov
+  // if (!dealItems.value[0] || !dealItems.value[0].shipmentPriceBiddings) {
+  //   return;
+  // }
   btn1.value = dealtotalItems.value == 0;
   btn2.value =
     dealtotalItems.value > 0 &&
-    dealItems.value[0].shipmentPriceBiddings.length !== 2;
+    dealItems.value[0].shipmentPriceBiddings?.length !== 2;
 
   const replied = checkReply();
   if (
@@ -168,7 +169,7 @@ function checkReply() {
   return false;
 }
 
-function checkRequests() {
+const checkRequests = computed(() => {
   if (requestTotalItems.value > 0 && requestVehicleTotalItems.value > 0) {
     if (
       requestItems.value[0].type == RequestsType.APPROVED &&
@@ -179,9 +180,9 @@ function checkRequests() {
     return false;
   }
   return false;
-}
+});
 async function createShipmentShipperDeal() {
-  if (checkRequests()) {
+  if (checkRequests.value) {
     shipmentShipperDeal.value.shipment = shipmentId.value;
     (shipmentShipperDeal.value.shipper = apiToken.getDecodedToken()?.iri),
       (shipmentShipperDeal.value.price = {
@@ -202,7 +203,7 @@ async function createShipmentPriceBidding() {
   };
   shipmentpricebidding.value.shipmentDeal = dealCreate?.value?.["@id"];
 
-  biddingCreateStore.create(shipmentpricebidding.value);
+  await biddingCreateStore.create(shipmentpricebidding.value);
 }
 async function createBid() {
   await createShipmentShipperDeal();
