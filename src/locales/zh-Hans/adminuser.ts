@@ -5,7 +5,7 @@ export default {
   roles: "任务",
   email: "电子邮件",
   phoneNumber: "手机号码",
-  status: "身份",
+  status: "状态",
   verified: "已验证",
   driver: "司机",
   edit: "改变",

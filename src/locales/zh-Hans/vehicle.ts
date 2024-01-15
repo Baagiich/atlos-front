@@ -3,6 +3,6 @@ export default {
   shipper: "所有者",
   vehicleType: "车辆类型",
   vehicleCapacity: "车辆容量",
-  status: "身份",
+  status: "状态",
   vinNumber: "車輛識別號碼",
 };

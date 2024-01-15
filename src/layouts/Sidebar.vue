@@ -68,7 +68,7 @@ const menuItems = [
     title: "shipment.addShipment",
     routeName: "ShipmentLoadDashboard",
     icon: "mdi mdi-plus-box",
-    roles: ["ROLE_CONSIGNOR", "ROLE_SHIPPER"],
+    roles: ["ROLE_CONSIGNOR"],
   },
   {
     title: "order.title",
