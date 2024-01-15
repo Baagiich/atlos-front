@@ -55,5 +55,5 @@ export default {
   title: "运输",
   activeShipment: "主动发货",
   nonReviewedAlertMsg: "吧下个没批准的运输一定要批准",
-  addShipment: "加运输",
+  add: "加运输",
 };

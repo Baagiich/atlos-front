@@ -56,5 +56,5 @@ export default {
   title: "Тээвэр",
   activeShipment: "Идэвхтэй тээвэр",
   nonReviewedAlertMsg: "Доорх баталгаажаагүй тээврүүдийг заавал баталгана уу!",
-  addShipment: "Тээвэр нэмэх",
+  add: "Тээвэр нэмэх",
 };
