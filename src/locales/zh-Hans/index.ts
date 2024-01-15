@@ -67,7 +67,7 @@ export default {
   email: "电子邮件",
   password: "密码",
   checkEmail: "查看密码",
-  successfull: "成功的",
+  successfull: "成功",
   enterNewPassword: "输入新密码",
   submitAgain: "重新发送",
   back: "后退",
