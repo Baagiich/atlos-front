@@ -113,4 +113,5 @@ export default {
   contactTitle: "联系信息",
   contactPhoneTitle: "联系电话",
   contactAddressAtlos: "蒙古国乌兰巴托市苏赫巴特区奥林匹克街部长大厦7楼",
+  registerVerification: "Бүртгэл баталгаажуулалт",
 };
