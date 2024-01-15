@@ -171,14 +171,16 @@ async function emitFinish() {
   await saveFromAddress();
   await saveToAddress();
   await createNewShipment();
-  await gotoList();
+  gotoList();
 }
 async function emitFinishDocument() {
+  console.log("GG");
+
   await saveDocuments();
-  await gotoList();
+  gotoList();
 }
 
-async function gotoList() {
+function gotoList() {
   router.push({
     name: "ShipmentList",
   });
@@ -300,7 +302,7 @@ function prev() {
 }
 
 async function next() {
-  if (currentStep.value < steps.value.length) {
+  if (currentStep.value <= steps.value.length) {
     currentStep.value++;
   }
   console.log("nextstep:", currentStep.value);
@@ -315,7 +317,7 @@ async function next() {
   if (currentStep.value === 4) {
     await saveSumOnShipment();
   }
-  if (currentStep.value === 1) {
+  if (currentStep.value === 5) {
     // 2 alhamtai bolson uchir butsaad 1 ruu usrehed shiopmentiig shalgav
     if (item?.value?.loadType === 2) {
       await emitFinish();

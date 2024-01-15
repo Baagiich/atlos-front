@@ -54,9 +54,11 @@ export const useShipmentUpdateStore = defineStore("shipmentUpdate", {
 
       try {
         const response = await api(`shipments/${payload.id}`, {
-          method: "PUT",
-          headers: new Headers({ "Content-Type": "application/ld+json" }),
+          method: "PATCH",
           body: JSON.stringify(payload),
+          headers: new Headers({
+            "Content-Type": "application/merge-patch+json",
+          }),
         });
         const data: Shipment = await response.json();
 
