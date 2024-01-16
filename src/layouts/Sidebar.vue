@@ -65,7 +65,7 @@ const drawer = ref(true);
 const rail = ref(true);
 const menuItems = [
   {
-    title: "shipment.addShipment",
+    title: "shipment.add",
     routeName: "ShipmentLoadDashboard",
     icon: "mdi mdi-plus-box",
     roles: ["ROLE_CONSIGNOR"],
