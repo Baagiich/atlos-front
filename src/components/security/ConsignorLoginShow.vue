@@ -11,18 +11,21 @@
             <a
               href="#"
               class="text-black text-decoration-none mx-1"
+              :class="{ 'text-red': locale === 'en-US' }"
               @click.prevent="locale = 'en-US'"
               >EN</a
             >
             <a
               href="#"
               class="text-black text-decoration-none mx-1"
+              :class="{ 'text-red': locale === 'zh-Hans' }"
               @click.prevent="locale = 'zh-Hans'"
               >中文</a
             >
             <a
               href="#"
               class="text-black text-decoration-none mx-1"
+              :class="{ 'text-red': locale === 'mn-MN' }"
               @click.prevent="locale = 'mn-MN'"
               >MNG</a
             >
@@ -53,21 +56,24 @@
         <v-alert v-if="error" type="error" class="mb-4" :closable="true">
           {{ error }}
         </v-alert>
-        <LoginForm
-          class="mt-10"
-          :errors="violations"
-          :loading="isLoading"
-          @submit="login"
-        />
-
-        <v-card-subtitle align="center" justify="center">
-          <router-link
-            class="d-inline text-capitalize align-middle text-decoration-none"
-            style="font-weight: bold; color: red"
-            :to="{ name: 'ConsignorRegister' }"
-            >{{ $t("register") }}
-          </router-link>
-        </v-card-subtitle>
+        <v-row>
+          <v-col offset="2" cols="8" align-self="center">
+            <LoginForm
+              class="mt-10"
+              :errors="violations"
+              :loading="isLoading"
+              @submit="login"
+            />
+            <v-card-subtitle align="center" justify="center">
+              <router-link
+                class="d-inline text-capitalize align-middle text-decoration-none"
+                style="font-weight: bold; color: red"
+                :to="{ name: 'ConsignorRegister' }"
+                >{{ $t("register") }}
+              </router-link>
+            </v-card-subtitle>
+          </v-col>
+        </v-row>
 
         <v-row style="position: absolute; bottom: 0; width: 50%" class="pb-15">
           <v-col cols="12" sm="6" md="6" class="mt-auto mb-auto">
