@@ -67,7 +67,7 @@ const props = defineProps<{
 const violations = toRef(props, "errors");
 const router = useRouter();
 
-const item: Ref<Currency | undefined> = ref(undefined);
+const item: Ref<Currency> = ref({});
 
 if (props.values) {
   item.value = {

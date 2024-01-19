@@ -23,6 +23,7 @@ import walletRoutes from "./wallet";
 import currencyRoutes from "./currency";
 import bankRoutes from "./bank";
 import order from "./order";
+import notificationorder from "./notificationorder";
 
 const routes = [
   {
@@ -53,6 +54,7 @@ const routes = [
   ...currencyRoutes,
   ...bankRoutes,
   ...order,
+  ...notificationorder,
 ];
 
 const router = createRouter({

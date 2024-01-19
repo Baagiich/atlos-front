@@ -23,6 +23,7 @@ import contract from "./contract";
 import contracttemplate from "./contracttemplate";
 import country from "./country";
 import requests from "./requests";
+import notification from "./notification";
 
 export default {
   home: "Нүүр",
@@ -91,6 +92,7 @@ export default {
   bank,
   order,
   review,
+  notification,
   informationNotCompleted:
     "Мэдээлэл дутуу байна. Та мэдээллээ бүрэн оруулж байж баталгаажихыг анхаарна уу.",
   notAvailable: "Хоосон байна",

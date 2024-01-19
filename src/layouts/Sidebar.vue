@@ -149,6 +149,12 @@ const menuItems = [
     icon: "mdi-car-estate",
     roles: ["ROLE_ADMIN"],
   },
+  {
+    title: "notification.name",
+    routeName: "NotificationOrderList",
+    icon: "mdi-bell",
+    roles: ["ROLE_ADMIN"],
+  },
 ];
 
 const bgClass = computed(() => {
