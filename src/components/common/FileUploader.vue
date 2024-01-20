@@ -2,12 +2,17 @@
   <div class="uploader-wrapper">
     <div class="upload">
       <div class="table-responsive">
+        <v-text-field
+          :error="Boolean(violations)"
+          :error-messages="violations?.message"
+        ></v-text-field>
         <v-table class="table table-hover">
           <thead>
             <tr>
               <th>#</th>
               <th>{{ $t("fileuploader.thumb") }}</th>
               <th>{{ $t("fileuploader.name") }}</th>
+              <th>{{ $t("fileuploader.size") }}</th>
               <th>{{ $t("fileuploader.status") }}</th>
               <th>{{ $t("fileuploader.action") }}</th>
             </tr>
@@ -36,24 +41,8 @@
                 <div class="filename">
                   {{ file.name }}
                 </div>
-                <div
-                  v-if="file.active || file.progress !== '0.00'"
-                  class="progress"
-                >
-                  <div
-                    :class="{
-                      'progress-bar': true,
-                      'progress-bar-striped': true,
-                      'bg-danger': file.error,
-                      'progress-bar-animated': file.active,
-                    }"
-                    role="progressbar"
-                    :style="{ width: file.progress + '%' }"
-                  >
-                    {{ file.progress }}%
-                  </div>
-                </div>
               </td>
+              <td v-if="file.size">{{ formatSize(file.size) }}</td>
               <td v-if="file.error">{{ file.error }}</td>
               <td v-else-if="file.success">{{ $t("fileuploader.success") }}</td>
               <td v-else-if="file.active">{{ $t("fileuploader.active") }}</td>
@@ -119,7 +108,7 @@
           </tbody>
         </v-table>
       </div>
-      <div class="example-foorer">
+      <div class="example-footer">
         <v-btn color="green">
           <VueUploadComponent
             ref="upload"
@@ -156,18 +145,22 @@ import VueUploadComponent, { VueUploadItem } from "vue-upload-component";
 import { ref } from "vue";
 import { useMediaObjectCreateStore } from "@/store/mediaobject/create";
 import { Ref } from "vue";
+import { storeToRefs } from "pinia";
+import Compressor from "compressorjs";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+const props = defineProps<{
+  hasEmit?: boolean;
+}>();
 
-defineProps({
-  entityId: {
-    type: Number,
-    default: undefined,
-  },
-});
+const emit = defineEmits<{
+  (e: "sendResource", value: any): void;
+}>();
 
 const files: Ref<VueUploadItem[]> = ref([]);
 const upload = ref();
 const name = ref();
-
+const autoCompress = 1024 * 1024;
 function inputFilter(
   newFile: VueUploadItem,
   oldFile: VueUploadItem | undefined,
@@ -236,18 +229,63 @@ function inputFile(newFile: VueUploadItem, oldFile?: VueUploadItem) {
     }
   }
 }
-
+function formatSize(size: number) {
+  if (size > 1024 * 1024 * 1024 * 1024) {
+    return (size / 1024 / 1024 / 1024 / 1024).toFixed(2) + " TB";
+  } else if (size > 1024 * 1024 * 1024) {
+    return (size / 1024 / 1024 / 1024).toFixed(2) + " GB";
+  } else if (size > 1024 * 1024) {
+    return (size / 1024 / 1024).toFixed(2) + " MB";
+  } else if (size > 1024) {
+    return (size / 1024).toFixed(2) + " KB";
+  }
+  return size.toString() + " B";
+}
 const mediaObjectCreateStore = useMediaObjectCreateStore();
-
+const { violations } = storeToRefs(mediaObjectCreateStore);
 async function uploadFile(newFile: VueUploadItem) {
   const formData = new FormData();
-  if (newFile.file) {
-    formData.set("file", newFile.file);
+  if (
+    newFile.file &&
+    newFile.size &&
+    autoCompress > 0 &&
+    autoCompress < newFile.size
+  ) {
+    newFile.error = t("fileuploader.compressing");
+    new Compressor(newFile.file, {
+      maxWidth: 512,
+      maxHeight: 512,
+
+      success(result) {
+        formData.set("file", result);
+        newFile.error = undefined;
+        newFile.success = true;
+        newFile.size = result.size;
+
+        files.value.forEach((file, index) => {
+          if (file.name === newFile.name) {
+            files.value[index] = newFile;
+          }
+        });
+        uploader(formData);
+      },
+      error(err) {
+        newFile.error = err.message;
+        console.log(err.message);
+      },
+    });
+  } else {
+    newFile.file ? formData.set("file", newFile.file) : null;
+    uploader(formData);
   }
-
-  await mediaObjectCreateStore.create(formData);
-
   return newFile;
+}
+
+async function uploader(formData: FormData) {
+  await mediaObjectCreateStore.create(formData);
+  if (props.hasEmit) {
+    emit("sendResource", mediaObjectCreateStore.created);
+  }
 }
 </script>
 
@@ -281,7 +319,7 @@ async function uploadFile(newFile: VueUploadItem) {
 .uploader-wrapper .btn-is-option {
   margin-top: 0.25rem;
 }
-.uploader-wrapper .example-foorer {
+.uploader-wrapper .example-footer {
   padding: 0.5rem 0;
   border-top: 1px solid #e9ecef;
   border-bottom: 1px solid #e9ecef;

@@ -16,4 +16,6 @@ export default {
   retry: "Дахин хуулах",
   upload: "Хуулах",
   remove: "Арилгах",
+  size: "Хэмжээ",
+  compressing: "Хэмжээг шахаж байна",
 };
