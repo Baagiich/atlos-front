@@ -9,7 +9,7 @@
     <v-list-item class="text-center mb-2" nav>
       <v-img style="max-height: 30px" :src="logoAtlos" />
     </v-list-item>
-    <v-list-item>
+    <v-list-item v-if="!rail">
       <div class="d-inline-block text-black ml-16">
         <a
           href="#"

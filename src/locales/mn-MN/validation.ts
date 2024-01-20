@@ -7,4 +7,5 @@ export default {
   recievedCodeMustBe6Characters: "Баталгаажуулах код 6 оронтой тоо байх ёстой",
   maxlength: "{maxlength} тэмдэгтээс хэтэрсэн байна",
   recievedCodeRequired: "Баталгаажуулах код байх ёстой",
+  number: "Зөвхөн тоо оруулна уу",
 };
