@@ -62,7 +62,7 @@
 
         <v-card-subtitle align="center" justify="center">
           <router-link
-            class="d-inline text-capitalize align-middle text-decoration-none"
+            class="d-inline align-middle text-decoration-none"
             style="font-weight: bold; color: red"
             :to="{ name: 'ConsignorRegister' }"
             >{{ $t("register") }}
