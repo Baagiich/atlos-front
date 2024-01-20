@@ -7,4 +7,5 @@ export default {
   recievedCodeMustBe6Characters: "代码必须要超6个字符",
   maxlength: "必须小于字符",
   recievedCodeRequired: "需要代码",
+  number: "请仅输入数字",
 };

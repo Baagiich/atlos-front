@@ -14,6 +14,7 @@
           :error="Boolean(violations?.currency)"
           :error-messages="violations?.currency"
           :label="$t('wallet.currency.choice')"
+          :rules="currencyRules"
         >
         </v-select>
         <v-select
@@ -25,15 +26,17 @@
           :error="Boolean(violations?.toBank)"
           :error-messages="violations?.toBank"
           :label="$t('wallet.account.withdraw.bankNameChoice')"
+          :rules="bankRules"
         >
         </v-select>
         <v-text-field
           v-model="item.toAccount"
-          type="number"
+          type="text"
           variant="outlined"
           :error="Boolean(violations?.toAccount)"
           :error-messages="violations?.toAccount"
           :label="$t('wallet.account.withdraw.bankAccNo')"
+          :rules="accountRules"
         >
         </v-text-field>
         <v-text-field
@@ -42,6 +45,7 @@
           :error="Boolean(violations?.toAccountName)"
           :error-messages="violations?.toAccountName"
           :label="$t('wallet.account.withdraw.bankAccName')"
+          :rules="accountNameRules"
         >
         </v-text-field>
         <v-text-field
@@ -62,6 +66,7 @@
           :error="Boolean(violations?.amount)"
           :error-messages="violations?.amount"
           :label="$t('wallet.transaction.amount')"
+          :rules="amountRules"
         >
         </v-text-field>
       </v-card-text>
@@ -103,6 +108,12 @@ import { VForm } from "vuetify/components";
 import { useWalletListStore } from "@/store/wallet/list";
 import { Currency } from "@/types/currency";
 import { Bank } from "@/types/bank";
+import {
+  assertMaxLength,
+  assertMaxLengthNumber,
+  assertNumber,
+  assertRequired,
+} from "@/validations";
 
 const props = defineProps<{
   values?: WalletWithdraw;
@@ -118,6 +129,17 @@ const walletListStore = useWalletListStore();
 const { accounts } = storeToRefs(walletListStore);
 
 const item: Ref<WalletWithdraw> = ref({});
+const form: Ref<VForm | null> = ref(null);
+
+const currencyRules = [assertRequired()];
+const bankRules = [assertRequired()];
+const accountRules = [
+  assertRequired(),
+  assertNumber(),
+  assertMaxLengthNumber(12),
+];
+const accountNameRules = [assertRequired(), assertMaxLength(50)];
+const amountRules = [assertRequired(), assertNumber()];
 
 if (props.values) {
   item.value = {
@@ -135,11 +157,15 @@ const emit = defineEmits<{
   (e: "submit", item: WalletWithdraw): void;
 }>();
 
-function emitSubmit() {
-  emit("submit", item.value);
+async function emitSubmit() {
+  if (!form.value) {
+    return;
+  }
+  const { valid } = await form.value.validate();
+  if (valid) {
+    emit("submit", item.value);
+  }
 }
-
-const form: Ref<VForm | null> = ref(null);
 
 function setIsShowDialog(value: boolean) {
   walletWithdrawStore.setIsShowDialog(value);
