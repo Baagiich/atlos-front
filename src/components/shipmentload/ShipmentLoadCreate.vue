@@ -27,6 +27,7 @@ const { created, isLoading, violations, error } = storeToRefs(
 );
 const props = defineProps(["createdShipmentId"]);
 async function create(item: ShipmentLoad) {
+  if (!item.isPileUp) item.isPileUp = false;
   await shipmentloadCreateStore.create(item);
 
   if (!created?.value) {

@@ -96,25 +96,17 @@ const onCurrencySelect = () => {
   item.value.currency = selectedCurrency.value;
 };
 
-// const emit = defineEmits<{
-//   (e: "next-step"): void;
-// }>();
-// async function emitNextStep() {
-//   if (!form.value) {
-//     return;
-//   }
-//   const v = await form.value.validate();
-//   if (v.valid) {
-//     emit("next-step");
-//   }
-// }
+async function validateForm(): Promise<boolean> {
+  if (!form.value) {
+    return false;
+  }
+  const v = await form.value.validate();
+  return v.valid;
+}
 const form: Ref<VForm | null> = ref(null);
-
-// function resetForm() {
-//   if (!form.value) return;
-
-//   form.value.reset();
-// }
+defineExpose({
+  validateForm,
+});
 onBeforeUnmount(() => {
   newShipmentStore.$reset();
 });

@@ -105,28 +105,6 @@
         </v-text-field>
       </v-col>
     </v-row>
-
-    <!-- <v-row v-if="!disabled">
-      <v-col cols="12" sm="6" md="6">
-        <v-btn color="primary" variant="outlined" @click="emitBackStep">
-          {{ $t("shipmentload.return") }}
-        </v-btn>
-        <v-btn
-          v-if="item.loadType === 1"
-          color="primary"
-          class="ml-2"
-          @click="emitNextStep"
-          >{{ $t("shipmentload.continue") }}</v-btn
-        >
-        <v-btn
-          v-if="item.loadType === 2"
-          color="primary"
-          class="ml-2"
-          @click="emitFinish"
-          >{{ $t("shipmentload.continue") }}</v-btn
-        >
-      </v-col>
-    </v-row> -->
   </v-form>
 </template>
 
@@ -189,5 +167,15 @@ function onSelectChange() {
     item.value.postPayment = 100 - selectedPayment.prePayValue;
   }
 }
+async function validateForm(): Promise<boolean> {
+  if (!form.value) {
+    return false;
+  }
+  const v = await form.value.validate();
+  return v.valid;
+}
+defineExpose({
+  validateForm,
+});
 const form: Ref<VForm | null> = ref(null);
 </script>
