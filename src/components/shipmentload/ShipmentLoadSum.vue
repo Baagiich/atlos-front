@@ -49,14 +49,6 @@
           </div>
         </v-col>
       </v-row>
-      <!-- <v-row>
-      <v-col cols="12" sm="6" md="6">
-        <v-btn color="primary" variant="outlined" @click="resetForm">
-          {{ $t("shipmentload.return") }}
-        </v-btn>
-        <v-btn  color="primary" class="ml-2" @click="emitNextStep">{{ $t("shipmentload.continue") }}</v-btn>
-      </v-col>
-    </v-row> -->
     </v-form>
   </v-container>
 </template>
@@ -112,6 +104,16 @@ const onPriceWrited = () => {
   patchShipmentItem.value.mainQuantity = totalQuantity.value;
   patchShipmentItem.value.mainSize = totalCube.value;
 };
+async function validateForm(): Promise<boolean> {
+  if (!form.value) {
+    return false;
+  }
+  const v = await form.value.validate();
+  return v.valid;
+}
+defineExpose({
+  validateForm,
+});
 const form: Ref<VForm | null> = ref(null);
 </script>
 <style lang="scss" scoped>

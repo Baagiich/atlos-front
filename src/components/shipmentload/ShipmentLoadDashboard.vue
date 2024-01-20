@@ -16,22 +16,22 @@
                   :step="`Step {{ n }}`"
                   :value="n"
                 ></v-stepper-item>
-
-                <!-- <v-divider v-if="n !== steps" :key="n"></v-divider> -->
               </template>
             </v-stepper-header>
 
             <v-stepper-window>
               <v-stepper-window-item :key="step" :value="steps[0]">
-                <ShipmentForm />
+                <ShipmentForm ref="shipmentFormRef" />
               </v-stepper-window-item>
 
               <v-stepper-window-item :key="step" :value="steps[1]">
                 <ShipmentLocationCreateForm
+                  ref="fromAddressFormRef"
                   :address="fromAddress"
                   :title="t('shipmentload.loadLocation')"
                 />
                 <ShipmentLocationCreateForm
+                  ref="toAddressFormRef"
                   :address="toAddress"
                   :title="t('shipmentload.unloadLocation')"
                 />
@@ -42,7 +42,7 @@
                     />
                   </v-col>
                 </v-row>
-                <ShipmentPriceForm @finish="emitFinish" />
+                <ShipmentPriceForm ref="priceFormRef" />
               </v-stepper-window-item>
 
               <v-stepper-window-item :key="step" :value="steps[2]">
@@ -71,6 +71,7 @@
                 <br />
                 <ShipmentLoadSum
                   v-if="item && item.loadType === 1 && totalCreatedLoads > 0"
+                  ref="loadSumRef"
                   :created-loads="createdLoads"
                   :patch-shipment-item="patchShipmentItem"
                   :currency="item.currency"
@@ -156,7 +157,12 @@ const { updated: formAddressUpdated } = storeToRefs(addressUpdateStore);
 const shipmentUpdateStore = useShipmentUpdateStore();
 const { updated: shipmentUpdated } = storeToRefs(shipmentUpdateStore);
 const saveStore = ref(false);
-
+const shipmentFormRef = ref();
+const fromAddressFormRef = ref();
+const toAddressFormRef = ref();
+const priceFormRef = ref();
+const secondStepResult = ref(false);
+const loadSumRef = ref();
 async function saveShipment() {
   await saveFromAddress();
   await saveToAddress();
@@ -300,28 +306,54 @@ function prev() {
     gotoList();
   }
 }
-
-async function next() {
+function addStepper() {
   if (currentStep.value <= steps.value.length) {
     currentStep.value++;
   }
-  console.log("nextstep:", currentStep.value);
+}
+async function next() {
+  if (currentStep.value === 1) {
+    shipmentFormRef.value.validateForm().then(function (result: boolean) {
+      if (result) {
+        addStepper();
+      }
+    });
+  }
+  if (currentStep.value === 2) {
+    toAddressFormRef.value.validateForm().then(function (result: boolean) {
+      secondStepResult.value = result;
+    });
+    fromAddressFormRef.value.validateForm().then(function (result: boolean) {
+      secondStepResult.value = result;
+    });
+    priceFormRef.value.validateForm().then(function (result: boolean) {
+      secondStepResult.value = result;
+
+      if (result) {
+        addStepper();
+        if (item?.value?.loadType === 2) {
+          emitFinish();
+        } else {
+          if (isUpdateShipment.value === false) {
+            saveShipment();
+          }
+          if (isUpdateShipment.value === true) {
+            updateShipment();
+          }
+        }
+      }
+    });
+  }
   if (currentStep.value === 3) {
-    if (isUpdateShipment.value === false) {
-      await saveShipment();
-    }
-    if (isUpdateShipment.value === true) {
-      await updateShipment();
-    }
+    loadSumRef.value.validateForm().then(function (result: boolean) {
+      if (result) {
+        addStepper();
+        saveSumOnShipment();
+      }
+    });
   }
   if (currentStep.value === 4) {
-    await saveSumOnShipment();
-  }
-  if (currentStep.value === 5) {
-    // 2 alhamtai bolson uchir butsaad 1 ruu usrehed shiopmentiig shalgav
-    if (item?.value?.loadType === 2) {
-      await emitFinish();
-    }
+    addStepper();
     saveStore.value = true;
     await emitFinishDocument();
   }
