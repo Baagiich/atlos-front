@@ -16,4 +16,6 @@ export default {
   retry: "Retry upload",
   upload: "Upload",
   remove: "Remove",
+  size: "Size",
+  compressing: "Compressing",
 };

@@ -9,6 +9,40 @@
     <v-list-item class="text-center mb-2" nav>
       <v-img style="max-height: 30px" :src="logoAtlos" />
     </v-list-item>
+    <v-list-item v-if="!rail">
+      <div class="d-inline-block text-black ml-16">
+        <a
+          href="#"
+          :class="{ 'text-red': locale === 'en-US' }"
+          class="text-black text-decoration-none mx-1"
+          @click.prevent="locale = 'en-US'"
+          >EN</a
+        >
+        <v-divider
+          :style="{ height: '15px', verticalAlign: 'middle' }"
+          vertical
+        ></v-divider>
+        <a
+          href="#"
+          class="text-black text-decoration-none mx-1"
+          :class="{ 'text-red': locale === 'zh-Hans' }"
+          @click.prevent="locale = 'zh-Hans'"
+          >中文</a
+        >
+        <v-divider
+          :style="{ height: '15px', verticalAlign: 'middle' }"
+          color="bg-red"
+          vertical
+        ></v-divider>
+        <a
+          href="#"
+          :class="{ 'text-red': locale === 'mn-MN' }"
+          class="text-black text-decoration-none mx-1"
+          @click.prevent="locale = 'mn-MN'"
+          >MNG</a
+        >
+      </div>
+    </v-list-item>
     <v-list-item
       prepend-icon="mdi-account-circle"
       :class="bgClass"
@@ -47,7 +81,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import * as apiToken from "@/utils/apiToken";
 import { useI18n } from "vue-i18n";
@@ -57,6 +91,7 @@ import logoAtlos from "@/assets/logo-atlos.png";
 
 const router = useRouter();
 const { t } = useI18n();
+const { locale } = useI18n();
 
 const securityLoginStore = useSecurityLoginStore();
 const { userTokenData } = storeToRefs(securityLoginStore);
@@ -183,4 +218,8 @@ function logout() {
   securityLoginStore.setUserTokenData(undefined);
   router.push({ name: "Home" });
 }
+
+watch(locale, (newLocale) => {
+  localStorage.setItem("locale", newLocale);
+});
 </script>

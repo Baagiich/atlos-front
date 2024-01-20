@@ -117,6 +117,6 @@ export default {
   contactAddressAtlos:
     "7-р давхар, Minister Tower, Олимпийн гудамж, 1-р хороо, Сүхбаатар дүүрэг Улаанбаатар хот, Монгол улс",
 
-  register: "Шинээр Бүртгүүлэх",
+  register: "Шинээр бүртгүүлэх",
   registerVerification: "Бүртгэл баталгаажуулалт",
 };

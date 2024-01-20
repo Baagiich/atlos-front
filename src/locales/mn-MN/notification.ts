@@ -1,5 +1,5 @@
 export default {
-  name: "Мэдэгдэл",
+  name: "Мэдэгдэл илгээх",
   title: "Гарчиг",
   segment: "Сегмэнт",
   createdDate: "Үүсгэсэн огноо",

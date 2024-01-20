@@ -55,6 +55,6 @@ export default {
   seeShipmentImages: "Тээврийн зургууд харах",
   title: "Тээвэр",
   activeShipment: "Идэвхтэй тээвэр",
-  nonReviewedAlertMsg: "Доорх баталгаажаагүй тээврүүдийг заавал баталгана уу!",
+  nonReviewedAlertMsg: "Доорх баталгаажаагүй тээврүүдийг заавал батална уу!",
   add: "Тээвэр нэмэх",
 };
