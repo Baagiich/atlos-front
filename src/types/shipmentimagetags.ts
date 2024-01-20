@@ -1,6 +1,7 @@
 export enum ShipmentImageSectionTag {
   loadImages = "load_images",
   unloadImages = "unload_images",
+  files = "files",
 }
 
 export enum ShipmentImageTags {

@@ -16,11 +16,11 @@
             align="center"
           >
             <v-btn class="ma-2" rounded variant="plain">
-              {{ $t("shipmentimage." + image?.tag) }}
+              {{ $t("shipmentimage." + image.tag) }}
             </v-btn>
 
             <div v-if="image?.data.image">
-              <MediaObjectThumb :id="image?.data.image"></MediaObjectThumb>
+              <MediaObjectThumb :id="image.data.image"></MediaObjectThumb>
               <div v-if="files">
                 <div v-if="rejected">
                   <v-card-subtitle class="mt-2">
@@ -51,7 +51,12 @@
                 </div>
 
                 <div v-else>
-                  <div v-if="image?.data.status === 'pending' && !consignor">
+                  <div
+                    v-if="
+                      image?.data.status === 'pending' &&
+                      loggedUserType === 'consignor'
+                    "
+                  >
                     <v-btn
                       class="ma-2"
                       variant="outlined"
@@ -84,7 +89,7 @@
                       <div>
                         <div class="text-overline mb-1">
                           {{
-                            image?.data.status === "rejected"
+                            image.data.status === "rejected"
                               ? formatRejectedCauses(image?.data.rejectedCauses)
                               : $t("shipmentimage." + image?.data.status)
                           }}
@@ -92,28 +97,21 @@
                       </div>
                     </v-card-item>
                   </v-card>
-                  <v-btn
-                    v-if="consignor"
-                    class="ma-2 pa-2"
-                    icon="mdi-plus"
-                    size="small"
-                    @click="handleUpload(image?.tag)"
-                  ></v-btn>
                 </div>
               </div>
               <v-btn
-                v-else-if="consignor"
+                v-if="uploadable"
                 class="ma-2 pa-2"
                 icon="mdi-plus"
                 size="small"
-                @click="handleUpload(image?.tag)"
+                @click="handleUpload(image.tag)"
               ></v-btn>
             </div>
             <div v-else class="ma-2 pa-2 align-self-center">
               <v-btn
                 icon="mdi-plus"
                 size="small"
-                @click="handleUpload(image?.tag)"
+                @click="handleUpload(image.tag)"
               ></v-btn>
             </div>
           </v-card>
@@ -127,12 +125,7 @@
   </v-container>
 
   <v-overlay v-model="uploadOverlay" class="align-center justify-center">
-    <FileUploader></FileUploader>
-    <div justify="center" align="center" class="ma-4 mt-8">
-      <v-btn v-if="uploadedImg.image" color="green" @click="emitUpload">
-        {{ $t("shipmentimage.upload") }}
-      </v-btn>
-    </div>
+    <FileUploader :hasEmit="true" @sendResource="emitUpload"></FileUploader>
   </v-overlay>
 </template>
 
@@ -148,12 +141,16 @@ import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
 import { ShipmentImageRejectType } from "@/types/shipmentimage_reject_type";
 import { useI18n } from "vue-i18n";
+import * as apiToken from "@/utils/apiToken";
+import { UserType } from "@/types/usertype";
 const { t } = useI18n();
 const model = ref(null);
 const props = defineProps<{
   items?: ShipmentImage[];
   files?: boolean;
-  consignor?: boolean;
+  defaultImageTags?: string;
+  uploadable?: boolean;
+  imgUpdated?: boolean;
 }>();
 const emit = defineEmits<{
   (e: "submitImg", value: any): void;
@@ -174,6 +171,21 @@ const rejectType = enumHelper.getMap(ShipmentImageRejectType);
 rejectType.unshift({ key: "", value: "" });
 const rejectedCauses = ref([]);
 const imageBeingUpdated = ref(false);
+const payload = apiToken.getDecodedToken();
+if (!payload) {
+  throw new Error("Token payload invalid");
+}
+
+const userType = payload.user_type;
+const loggedUserType = computed(() => {
+  if (userType === UserType.CONSIGNOR) {
+    return "consignor";
+  } else if (userType === UserType.SHIPPER) {
+    return "shipper";
+  }
+  return "";
+});
+
 async function formatItems() {
   props.files ? await processData(fileTags) : await processData(imageTags);
 }
@@ -191,7 +203,7 @@ async function processData(arrayItem: { key: string; value: any }[]) {
         return;
       }
     });
-    if (!foundMatch && props.consignor) {
+    if (!foundMatch && props.uploadable === true) {
       images.value.push({
         data: {},
         tag: tag.value,
@@ -213,13 +225,11 @@ const uploadedImg = computed(() => {
 
 function handleUpload(tag: string) {
   uploadOverlay.value = true;
-  props.items?.forEach((item) => {
-    if (item.tags?.includes(tag)) {
-      selectedTag.value = item.tags;
-    } else {
-      selectedTag.value = [item.tags?.[0] as string, tag];
-    }
-  });
+  selectedTag.value = [
+    loggedUserType.value ?? "",
+    props.defaultImageTags ?? "",
+    tag,
+  ];
 }
 
 async function handleReject() {
@@ -227,9 +237,11 @@ async function handleReject() {
   imageBeingUpdated.value = true;
 }
 watch(
-  () => props.items,
-  () => {
-    formatItems();
+  () => props.imgUpdated,
+  (newVal) => {
+    if (newVal === true) {
+      formatItems();
+    }
   },
 );
 function formatRejectedCauses(data: any) {
