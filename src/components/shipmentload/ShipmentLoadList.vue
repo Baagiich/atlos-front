@@ -1,5 +1,6 @@
 <template>
   <Toolbar
+    v-if="!props.hideToolbar"
     :actions="['add']"
     :breadcrumb="breadcrumb"
     :is-loading="isLoading"
@@ -17,12 +18,6 @@
     <v-alert v-if="error" type="error" class="mb-4" :closable="true">
       {{ error }}
     </v-alert>
-
-    <DataFilter @filter="onSendFilter" @reset="resetFilter">
-      <template #filter>
-        <Filter :values="filters" />
-      </template>
-    </DataFilter>
 
     <v-data-table-server
       :headers="headers"
@@ -62,7 +57,7 @@
           {{ item.shipment }}
         </p>
       </template>
-      <template #item.packagetype="{ item }">
+      <template #item.packageType="{ item }">
         <router-link
           v-if="router.hasRoute('PackageTypeShow')"
           :to="{
@@ -89,8 +84,6 @@ import { storeToRefs } from "pinia";
 import { useShipmentLoadListStore } from "@/store/shipmentload/list";
 import { useShipmentLoadDeleteStore } from "@/store/shipmentload/delete";
 import Toolbar from "@/components/common/Toolbar.vue";
-import DataFilter from "@/components/common/DataFilter.vue";
-import Filter from "@/components/shipmentload/ShipmentLoadFilter.vue";
 import ActionCell from "@/components/common/ActionCell.vue";
 import { useMercureList } from "@/composables/mercureList";
 import { useBreadcrumb } from "@/composables/breadcrumb";
@@ -109,7 +102,7 @@ const shipmentloadListStore = useShipmentLoadListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(
   shipmentloadListStore,
 );
-const props = defineProps<{ shipmentId?: string }>();
+const props = defineProps<{ shipmentId?: string; hideToolbar?: boolean }>();
 const shipmentId = ref(props.shipmentId);
 const page = ref(1);
 const filters: Ref<Filters> = ref({});
@@ -135,12 +128,12 @@ useMercureList({
 sendRequest();
 
 const headers = [
-  {
-    title: t("actions"),
-    key: "actions",
-    sortable: false,
-  },
-  { title: t("id"), key: "@id" },
+  // {
+  //   title: t("actions"),
+  //   key: "actions",
+  //   sortable: false,
+  // },
+  // { title: t("id"), key: "@id" },
   {
     title: t("shipmentload.name"),
     key: "name",
@@ -171,11 +164,11 @@ const headers = [
     key: "weight",
     sortable: false,
   },
-  {
-    title: t("shipmentload.shipment"),
-    key: "shipment",
-    sortable: false,
-  },
+  // {
+  //   title: t("shipmentload.shipment"),
+  //   key: "shipment",
+  //   sortable: false,
+  // },
   {
     title: t("shipmentload.packageType"),
     key: "packageType",
@@ -192,16 +185,6 @@ function updatePage(newPage: number) {
 function updateOrder(newOrders: VuetifyOrder[]) {
   const newOrder = newOrders[0];
   order.value = { [newOrder.key]: newOrder.order };
-
-  sendRequest();
-}
-
-function onSendFilter() {
-  sendRequest();
-}
-
-function resetFilter() {
-  filters.value = {};
 
   sendRequest();
 }

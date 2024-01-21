@@ -108,6 +108,9 @@
             </GoogleMap>
           </v-col>
         </v-row>
+        <v-row>
+          <shipment-load-list :hide-toolbar="true"></shipment-load-list>
+        </v-row>
       </v-window-item>
       <v-window-item :key="2" :value="2">
         <GoogleMap
@@ -216,6 +219,7 @@ import { useRouter } from "vue-router";
 import ShipmentDetailState from "./ShipmentState.vue";
 import { GOOGLE_MAPS_API_KEY } from "@/utils/config";
 import ShipmentInfo from "@/components/shipment/ShipmentInfo.vue";
+import ShipmentLoadList from "@/components/shipmentload/ShipmentLoadList.vue";
 
 const tab = ref(null);
 const selectedLocation = ref(null);
