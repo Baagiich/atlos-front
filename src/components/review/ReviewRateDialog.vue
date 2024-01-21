@@ -34,8 +34,9 @@
           />
           <div class="mt-5">
             <v-select
+              v-if="formattedTags"
               v-model="item.tags"
-              :items="reviewTags"
+              :items="formattedTags"
               item-title="name"
               item-value="name"
               variant="outlined"
@@ -83,7 +84,10 @@ import { storeToRefs } from "pinia";
 import { Review } from "@/types/review";
 import { VForm } from "vuetify/components";
 import { Shipment } from "@/types/shipment";
-
+import * as enumHelper from "@/utils/enumHelper";
+import { ReviewTagType } from "@/types/reviewTagtype";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const reviewTagList = useReviewTagList();
 const reviewCreateStore = useReviewCreateStore();
 
@@ -112,6 +116,23 @@ const emit = defineEmits<{
 }>();
 
 const form: Ref<VForm | null> = ref(null);
+
+const reviewTagTypes = enumHelper.getMap(ReviewTagType);
+
+const formattedTags = computed(() => {
+  if (reviewTags?.value) {
+    return reviewTags.value.map((reviewTag) => {
+      let newTag = { name: reviewTag.name };
+      reviewTagTypes.forEach((tag) => {
+        if (tag.value == reviewTag.name) {
+          newTag = { name: t("review." + tag.key) };
+        }
+      });
+      return newTag;
+    });
+  }
+  return null;
+});
 
 function emitCancel() {
   item.value = {};
