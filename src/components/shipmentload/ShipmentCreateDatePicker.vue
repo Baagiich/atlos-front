@@ -1,16 +1,22 @@
 <template>
-  <VueDatePicker
-    v-model="date"
-    range
-    :format="formatRange"
-    :format-locale="mn"
-    @update:model-value="selectDate"
-  >
-  </VueDatePicker>
+  <form id="myForm">
+    <VueDatePicker
+      v-model="date"
+      range
+      placeholder="Ачих, буулгах огноо"
+      :format="formatRange"
+      :format-locale="mn"
+      required
+      @update:model-value="selectDate"
+    />
+    <span class="date-error" v-if="!date && showError">{{
+      $t("validation.required")
+    }}</span>
+  </form>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useCreateNewShipmentStore } from "@/store/shipmentload/newshipment";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
@@ -20,13 +26,8 @@ import dayjs from "dayjs";
 import { useI18n } from "vue-i18n";
 
 const date = ref();
+const showError = ref(false);
 const { t } = useI18n();
-
-onMounted(() => {
-  const startDate = new Date();
-  const endDate = new Date(new Date().setDate(startDate.getDate() + 7));
-  date.value = [startDate, endDate];
-});
 const newShipmentStore = useCreateNewShipmentStore();
 const { item } = storeToRefs(newShipmentStore);
 
@@ -38,6 +39,16 @@ function selectDate() {
   item.value.loadAt = dayjs(date.value[0]).toISOString();
   item.value.unloadAt = dayjs(date.value[1]).toISOString();
 }
+function validateForm() {
+  if (!date.value) {
+    showError.value = true;
+    return false;
+  }
+  return true;
+}
+defineExpose({
+  validateForm,
+});
 
 const formatRange = (range: any[]) => {
   const startDate = range[0];
@@ -67,3 +78,12 @@ const formatRange = (range: any[]) => {
   return resultArray.join(" ");
 };
 </script>
+<style lang="scss">
+.date-error {
+  color: rgb(var(--v-theme-error));
+  font-size: 12px;
+  min-height: 14px;
+  min-width: 1px;
+  position: relative;
+}
+</style>

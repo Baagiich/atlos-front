@@ -38,6 +38,7 @@
                 <v-row>
                   <v-col cols="3">
                     <ShipmentCreateDatePicker
+                      ref="datePickerFormRef"
                       :title="t('shipmentload.loadDate')"
                     />
                   </v-col>
@@ -161,8 +162,12 @@ const shipmentFormRef = ref();
 const fromAddressFormRef = ref();
 const toAddressFormRef = ref();
 const priceFormRef = ref();
-const secondStepResult = ref(false);
+const secondStepResult1 = ref(false);
+const secondStepResult2 = ref(false);
+const secondStepResult3 = ref(false);
+const secondStepResult4 = ref(false);
 const loadSumRef = ref();
+const datePickerFormRef = ref();
 async function saveShipment() {
   await saveFromAddress();
   await saveToAddress();
@@ -273,12 +278,14 @@ const page = ref(1);
 const filters: Ref<Filters> = ref({});
 const order = ref({});
 async function getCreatedLoads() {
-  filters.value.shipment = createdShipmentId.value;
-  await shipmentloadListStore.getItems({
-    page: +page.value,
-    order: order.value,
-    ...filters.value,
-  });
+  if (createdShipmentId.value) {
+    filters.value.shipment = createdShipmentId.value;
+    await shipmentloadListStore.getItems({
+      page: +page.value,
+      order: order.value,
+      ...filters.value,
+    });
+  }
 }
 async function saveSumOnShipment() {
   await shipmentUpdateStore.update(patchShipmentItem.value);
@@ -313,36 +320,34 @@ function addStepper() {
 }
 async function next() {
   if (currentStep.value === 1) {
-    shipmentFormRef.value.validateForm().then(function (result: boolean) {
-      if (result) {
-        addStepper();
-      }
-    });
+    const result = await shipmentFormRef.value.validateForm();
+    if (result) {
+      addStepper();
+    }
   }
   if (currentStep.value === 2) {
-    toAddressFormRef.value.validateForm().then(function (result: boolean) {
-      secondStepResult.value = result;
-    });
-    fromAddressFormRef.value.validateForm().then(function (result: boolean) {
-      secondStepResult.value = result;
-    });
-    priceFormRef.value.validateForm().then(function (result: boolean) {
-      secondStepResult.value = result;
-
-      if (result) {
-        addStepper();
-        if (item?.value?.loadType === 2) {
-          emitFinish();
-        } else {
-          if (isUpdateShipment.value === false) {
-            saveShipment();
-          }
-          if (isUpdateShipment.value === true) {
-            updateShipment();
-          }
+    secondStepResult1.value = await toAddressFormRef.value.validateForm();
+    secondStepResult2.value = await fromAddressFormRef.value.validateForm();
+    secondStepResult3.value = await datePickerFormRef.value.validateForm();
+    secondStepResult4.value = await priceFormRef.value.validateForm();
+    if (
+      secondStepResult1.value &&
+      secondStepResult2.value &&
+      secondStepResult3.value &&
+      secondStepResult4.value
+    ) {
+      if (item?.value?.loadType === 2) {
+        emitFinish();
+      } else {
+        if (isUpdateShipment.value === false) {
+          saveShipment();
+        }
+        if (isUpdateShipment.value === true) {
+          updateShipment();
         }
       }
-    });
+      addStepper();
+    }
   }
   if (currentStep.value === 3) {
     loadSumRef.value.validateForm().then(function (result: boolean) {
