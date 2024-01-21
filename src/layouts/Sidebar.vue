@@ -97,7 +97,7 @@ const securityLoginStore = useSecurityLoginStore();
 const { userTokenData } = storeToRefs(securityLoginStore);
 
 const drawer = ref(true);
-const rail = ref(true);
+const rail = ref(false);
 const menuItems = [
   {
     title: "shipment.add",

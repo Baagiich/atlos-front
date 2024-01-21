@@ -69,6 +69,7 @@ export default {
   password: "Нууц үг",
   checkEmail: "Та и-мэйлээ шалгана уу",
   successfull: "Амжилттай",
+  registrationSuccessText: "Таны бүртгэл амжилттай үүслээ.",
   enterNewPassword: "Шинэ нууц үгээ оруулна уу",
   submitAgain: "Дахин илгээх",
   back: "Буцах",
