@@ -17,7 +17,7 @@
             <a
               href="#"
               class="text-black text-decoration-none mx-1"
-              @click.prevent="locale = 'zh-Hans'"
+              @click.prevent="locale = 'zh-HANS'"
               >中文</a
             >
             <a
@@ -50,6 +50,12 @@
             {{ $t("signin") }}
           </v-card-subtitle>
         </div>
+        <v-alert
+          v-if="queryStatus === 'success'"
+          type="success"
+          :title="$t('successfull')"
+          :text="$t('registrationSuccessText')"
+        ></v-alert>
         <v-alert v-if="error" type="error" class="mb-4" :closable="true">
           {{ error }}
         </v-alert>
@@ -72,7 +78,7 @@
         <v-row class="mt-15">
           <v-col cols="12" sm="6" md="6" class="mt-auto mb-auto">
             <router-link
-              class="d-inline text-capitalize align-middle text-black text-decoration-none font-weight-medium"
+              class="d-inline align-middle text-black text-decoration-none font-weight-medium"
               :to="{ name: 'ConsignorLogin' }"
               >{{ $t("Consignor") }}
             </router-link>
@@ -105,7 +111,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount } from "vue";
+import { Ref, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import LoginForm from "@/components/security/LoginForm.vue";
 import { useSecurityLoginStore } from "@/store/security/login";
@@ -115,10 +121,15 @@ import { storeToRefs } from "pinia";
 import isUndefined from "lodash/isUndefined";
 import { useI18n } from "vue-i18n";
 import { watch } from "vue";
+import { ref } from "vue";
 
 const { locale } = useI18n();
 
 const router = useRouter();
+
+const queryStatus: Ref<string | undefined> = ref(undefined);
+
+queryStatus.value = router.currentRoute.value.query.status?.toString();
 
 const securityLoginStore = useSecurityLoginStore();
 

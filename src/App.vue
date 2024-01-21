@@ -15,9 +15,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 const showSidebar = computed(() => {
-  const routeName = router.currentRoute.value.name;
-  return routeName
-    ? !["Home", "ShipperLogin", "ConsignorLogin"].includes(routeName.toString())
-    : false;
+  const showSidebar = router.currentRoute.value.meta?.showSidebar;
+  return showSidebar !== undefined ? showSidebar : true;
 });
 </script>

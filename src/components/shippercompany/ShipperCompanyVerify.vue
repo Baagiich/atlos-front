@@ -17,7 +17,7 @@
             <a
               href="#"
               class="text-black text-decoration-none mx-1"
-              @click.prevent="locale = 'zh-Hans'"
+              @click.prevent="locale = 'zh-HANS'"
               >中文</a
             >
             <a
@@ -88,7 +88,7 @@ async function verify(item: AdminUserVerify) {
     return;
   }
 
-  router.push({ name: "ShipperLogin" });
+  router.push({ name: "ShipperLogin", query: { status: "success" } });
 }
 watch(locale, (newLocale) => {
   localStorage.setItem("locale", newLocale);

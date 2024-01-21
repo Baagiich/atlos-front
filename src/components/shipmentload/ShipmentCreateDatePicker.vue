@@ -23,9 +23,11 @@ import "@vuepic/vue-datepicker/dist/main.css";
 import { storeToRefs } from "pinia";
 import { mn } from "date-fns/locale";
 import dayjs from "dayjs";
+import { useI18n } from "vue-i18n";
 
 const date = ref();
 const showError = ref(false);
+const { t } = useI18n();
 const newShipmentStore = useCreateNewShipmentStore();
 const { item } = storeToRefs(newShipmentStore);
 
@@ -52,15 +54,28 @@ const formatRange = (range: any[]) => {
   const startDate = range[0];
   const endDate = range[1];
 
-  const startDay = startDate.getDate();
-  const startMonth = startDate.getMonth() + 1;
-  const startYear = startDate.getFullYear();
+  const resultArray = [];
 
-  const endDay = endDate.getDate();
-  const endMonth = endDate.getMonth() + 1;
-  const endYear = endDate.getFullYear();
+  if (startDate) {
+    const startDay = startDate.getDate();
+    const startMonth = startDate.getMonth() + 1;
+    const startYear = startDate.getFullYear();
 
-  return `АЧИХ: ${startYear}/${startMonth}/${startDay} | БУУЛГАХ: ${endYear}/${endMonth}/${endDay}`;
+    resultArray.push(t("shipment.loadAt").toLocaleUpperCase());
+    resultArray.push(`: ${startYear}/${startMonth}/${startDay}`);
+  }
+
+  if (endDate) {
+    const endDay = endDate.getDate();
+    const endMonth = endDate.getMonth() + 1;
+    const endYear = endDate.getFullYear();
+
+    resultArray.push("|");
+    resultArray.push(t("shipment.unloadAt").toLocaleUpperCase());
+    resultArray.push(`: ${endYear}/${endMonth}/${endDay}`);
+  }
+
+  return resultArray.join(" ");
 };
 </script>
 <style lang="scss">

@@ -9,12 +9,20 @@
         </template>
       </v-expansion-panel-title>
 
-      <v-expansion-panel-text>
+      <v-expansion-panel-text style="padding: 20px 0">
         <slot name="filter" />
 
-        <v-btn color="primary" @click="emitFilter">{{ $t("filter") }}</v-btn>
+        <v-btn color="primary" size="small" @click="emitFilter">{{
+          $t("filter")
+        }}</v-btn>
 
-        <v-btn color="primary" class="ml-2" variant="text" @click="emitReset">
+        <v-btn
+          color="primary"
+          size="small"
+          class="ml-2"
+          variant="text"
+          @click="emitReset"
+        >
           {{ $t("reset") }}
         </v-btn>
       </v-expansion-panel-text>
