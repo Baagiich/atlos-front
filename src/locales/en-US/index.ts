@@ -74,7 +74,7 @@ export default {
   logout: "Logout",
   "en-US": "US",
   "mn-MN": "MN",
-  "zh-Hans": "CN",
+  "zh-HANS": "CN",
   advance: "Advance",
   remaining: "Remaining payment",
   reasons: "Reasons",

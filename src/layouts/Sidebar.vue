@@ -25,8 +25,8 @@
         <a
           href="#"
           class="text-black text-decoration-none mx-1"
-          :class="{ 'text-red': locale === 'zh-Hans' }"
-          @click.prevent="locale = 'zh-Hans'"
+          :class="{ 'text-red': locale === 'zh-HANS' }"
+          @click.prevent="locale = 'zh-HANS'"
           >中文</a
         >
         <v-divider

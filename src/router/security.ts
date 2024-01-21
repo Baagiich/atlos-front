@@ -13,14 +13,7 @@ export default [
     component: () => import("@/views/security/ShipperLoginShow.vue"),
     meta: {
       breadcrumb: [],
-    },
-  },
-  {
-    name: names.login,
-    path: "/login",
-    component: () => import("@/views/security/LoginShow.vue"),
-    meta: {
-      breadcrumb: [],
+      showSidebar: false,
     },
   },
   {
@@ -29,6 +22,7 @@ export default [
     component: () => import("@/views/security/ConsignorLoginShow.vue"),
     meta: {
       breadcrumb: [],
+      showSidebar: false,
     },
   },
   {
@@ -37,6 +31,7 @@ export default [
     component: () => import("@/views/shippercompany/ViewRegister.vue"),
     meta: {
       breadcrumb: [],
+      showSidebar: false,
     },
   },
   {
@@ -45,6 +40,7 @@ export default [
     component: () => import("@/views/consignor/ViewRegister.vue"),
     meta: {
       breadcrumb: [],
+      showSidebar: false,
     },
   },
 ];

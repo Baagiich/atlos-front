@@ -125,7 +125,7 @@
   </v-container>
 
   <v-overlay v-model="uploadOverlay" class="align-center justify-center">
-    <FileUploader :hasEmit="true" @sendResource="emitUpload"></FileUploader>
+    <FileUploader :has-emit="true" @sendResource="emitUpload"></FileUploader>
   </v-overlay>
 </template>
 

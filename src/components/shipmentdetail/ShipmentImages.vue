@@ -16,18 +16,18 @@
       <v-window-item :key="consignor + '-' + 1" :value="consignor + '-' + 1">
         <ShipmentImageSlide
           :items="consignorLoadPictures"
-          :defaultImageTags="ShipmentImageSectionTag.loadImages"
+          :default-image-tags="ShipmentImageSectionTag.loadImages"
           :uploadable="isUserType(consignor)"
-          :imgUpdated="imgUpdated"
+          :img-updated="imgUpdated"
           @submitImg="emitUpload"
         ></ShipmentImageSlide>
       </v-window-item>
       <v-window-item :key="consignor + '-' + 2" :value="consignor + '-' + 2">
         <ShipmentImageSlide
           :items="consignorUnloadPictures"
-          :defaultImageTags="ShipmentImageSectionTag.unloadImages"
+          :default-image-tags="ShipmentImageSectionTag.unloadImages"
           :uploadable="isUserType(consignor)"
-          :imgUpdated="imgUpdated"
+          :img-updated="imgUpdated"
           @submitImg="emitUpload"
         ></ShipmentImageSlide>
       </v-window-item>
@@ -48,27 +48,27 @@
       <v-window-item :key="shipper + '-' + 1" :value="shipper + '-' + 1">
         <ShipmentImageSlide
           :items="shipperLoadPictures"
-          :defaultImageTags="ShipmentImageSectionTag.loadImages"
+          :default-image-tags="ShipmentImageSectionTag.loadImages"
           :uploadable="isUserType(shipper)"
-          :imgUpdated="imgUpdated"
+          :img-updated="imgUpdated"
           @submitImg="emitUpload"
         ></ShipmentImageSlide>
       </v-window-item>
       <v-window-item :key="shipper + '-' + 2" :value="shipper + '-' + 2">
         <ShipmentImageSlide
           :items="shipperUnloadPictures"
-          :defaultImageTags="ShipmentImageSectionTag.unloadImages"
+          :default-image-tags="ShipmentImageSectionTag.unloadImages"
           :uploadable="isUserType(shipper)"
-          :imgUpdated="imgUpdated"
+          :img-updated="imgUpdated"
           @submitImg="emitUpload"
         ></ShipmentImageSlide>
       </v-window-item>
       <v-window-item :key="shipper + '-' + 3" :value="shipper + '-' + 3">
         <ShipmentImageSlide
           :items="shipperFilePictures"
-          :defaultImageTags="ShipmentImageSectionTag.files"
+          :default-image-tags="ShipmentImageSectionTag.files"
           :uploadable="isUserType(shipper)"
-          :imgUpdated="imgUpdated"
+          :img-updated="imgUpdated"
           :files="true"
           @submitImg="emitUpload"
           @accept-file="emitAcceptFile"
