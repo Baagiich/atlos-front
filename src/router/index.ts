@@ -23,12 +23,28 @@ import walletRoutes from "./wallet";
 import currencyRoutes from "./currency";
 import bankRoutes from "./bank";
 import order from "./order";
+import notificationorder from "./notificationorder";
+import DefaultLayout from "@/layouts/default/Default.vue";
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: () => import("@/layouts/default/Default.vue"),
+    component: DefaultLayout,
+    meta: {
+      showSidebar: false,
+    },
+    children: [
+      {
+        path: "/",
+        name: "Home",
+        component: () => import("@/views/home/HomePage.vue"),
+      },
+      {
+        path: "/help",
+        name: "Help",
+        component: () => import("@/views/home/Faq.vue"),
+      },
+    ],
   },
   ...securityRoutes,
   ...contracttemplateRoutes,
@@ -53,6 +69,7 @@ const routes = [
   ...currencyRoutes,
   ...bankRoutes,
   ...order,
+  ...notificationorder,
 ];
 
 const router = createRouter({

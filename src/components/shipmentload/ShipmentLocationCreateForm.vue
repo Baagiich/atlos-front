@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" @submit.prevent="emitSubmit">
+  <v-form ref="form">
     <v-row>
       <v-col cols="6">
         <v-sheet class="d-flex align-end mb-6" height="100">
@@ -53,7 +53,7 @@
               :error="Boolean(violations?.register)"
               :error-messages="violations?.register"
               :label="$t('shipmentload.zipCode')"
-              :rules="requireRules"
+              :rules="zipCodeRules"
               variant="outlined"
               clearable
             >
@@ -68,7 +68,7 @@
               :error="Boolean(violations?.register)"
               :error-messages="violations?.register"
               :label="$t('shipmentload.phoneNumber')"
-              :rules="requireRules"
+              :rules="phoneNumberRules"
               variant="outlined"
               clearable
             >
@@ -131,13 +131,16 @@ import { useCountryListStore } from "@/store/shipmentload/countrylist";
 import { storeToRefs } from "pinia";
 import { GoogleMap, CustomMarker } from "vue3-google-map";
 import { Filters } from "@/types/list";
-import { assertRequired } from "@/validations";
 import { Address } from "@/types/address";
 import { SubmissionErrors } from "@/types/error";
 import { State } from "@/types/state";
 import { City } from "@/types/city";
 import { VForm } from "vuetify/lib/components/index.mjs";
-
+import {
+  assertRequired,
+  assertMaxLength,
+  assertPhoneNumber,
+} from "@/validations";
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const lat = ref(47.923293);
 const lng = ref(106.928076);
@@ -165,6 +168,12 @@ const onCountrySelect = () => {
   }
 };
 const requireRules = [assertRequired()];
+const phoneNumberRules = [
+  assertRequired(),
+  assertMaxLength(20),
+  assertPhoneNumber(),
+];
+const zipCodeRules = [assertRequired(), assertMaxLength(10)];
 const getCountryNames = () => {
   return countryItems.value.map((country) => country.name);
 };
@@ -219,13 +228,16 @@ const onMapClick = (event: google.maps.MapMouseEvent) => {
   showMarker.value = true;
 };
 
-const emit = defineEmits<{
-  (e: "submit", item: Address): void;
-}>();
-
-const emitSubmit = () => {
+async function validateForm(): Promise<boolean> {
+  if (!form.value) {
+    return false;
+  }
+  const v = await form.value.validate();
   showMarker.value = false;
-  emit("submit", address.value);
-};
+  return v.valid;
+}
+defineExpose({
+  validateForm,
+});
 const form: Ref<VForm | null> = ref(null);
 </script>

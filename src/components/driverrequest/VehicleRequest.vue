@@ -158,10 +158,8 @@ async function toggleBtns() {
 async function setup() {
   await checkRequest();
 
-  if (
-    Array.isArray(requestVehicleTotalItems.value) &&
-    requestVehicleTotalItems.value.length > 0
-  ) {
+  // buruu shalgaltiig zasav
+  if (requestVehicleTotalItems.value && requestVehicleTotalItems.value > 0) {
     filters.value = {};
     filters.value.plateNumber =
       requestVehicleItems.value[0].params?.plateNumber;
@@ -194,26 +192,26 @@ const headers = [
   },
 ];
 
-function updatePage(newPage: number) {
+async function updatePage(newPage: number) {
   page.value = newPage;
 
-  sendRequest();
+  await sendRequest();
 }
 
-function updateOrder(newOrders: VuetifyOrder[]) {
+async function updateOrder(newOrders: VuetifyOrder[]) {
   const newOrder = newOrders[0];
   order.value = { [newOrder.key]: newOrder.order };
 
-  sendRequest();
+  await sendRequest();
 }
 
-function onSendFilter() {
-  sendRequest();
+async function onSendFilter() {
+  await sendRequest();
 }
 async function createVehicleRequests(item: Requests) {
   if (requestVehicleTotalItems.value >= 1) {
     showCreateVehicleAlert = ref(true);
-    sendRequest();
+    await sendRequest();
     return;
   }
   await requestsCreateStore.create(item);
@@ -229,8 +227,8 @@ onBeforeUnmount(() => {
   vehicleListStore.$reset();
   requestsVehicleListStore.$reset();
 });
-function sendRequestToVehicle(item: Vehicle) {
-  createVehicleRequests(createVehicleRequest(item));
+async function sendRequestToVehicle(item: Vehicle) {
+  await createVehicleRequests(createVehicleRequest(item));
 }
 function createVehicleRequest(item: Vehicle): Requests {
   const req: Requests = {

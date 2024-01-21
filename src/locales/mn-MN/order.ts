@@ -1,5 +1,5 @@
 export default {
-  title: "Төлбөр",
+  title: "Төлбөрийн жагсаалт",
   checkoutTitle: "Төлбөр төлөлт",
   totalAmount: "Нийт",
   number: "Нэхэмжлэхийн дугаар",

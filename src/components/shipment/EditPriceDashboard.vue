@@ -11,9 +11,6 @@
       {{ error || deleteError }}
     </v-alert>
     <v-row>
-      <v-col class="driver-request-shipment-code" md="12">
-        {{ t("driverrequest.shipmentCode") }}{{ item?.shipmentCode }}
-      </v-col>
       <v-col cols="12" sm="6" md="6">
         <ShipmentInfo :info="false" />
       </v-col>

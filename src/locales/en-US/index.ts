@@ -74,7 +74,7 @@ export default {
   logout: "Logout",
   "en-US": "US",
   "mn-MN": "MN",
-  "zh-Hans": "CN",
+  "zh-HANS": "CN",
   advance: "Advance",
   remaining: "Remaining payment",
   reasons: "Reasons",
@@ -106,4 +106,5 @@ export default {
   contactAddressAtlos:
     "7th floor, Minister Tower, Olympic street, 1st khoroo, Sukhbaatar district, Ulaanbaatar, Mongolia",
   register: "Register",
+  registerVerification: "Register verification",
 };

@@ -18,7 +18,7 @@
             <a
               href="#"
               class="text-black text-decoration-none mx-1"
-              :class="{ 'text-red': locale === 'zh-Hans' }"
+              :class="{ 'text-red': locale === 'zh-HANS' }"
               @click.prevent="locale = 'zh-Hans'"
               >中文</a
             >
@@ -56,26 +56,23 @@
         <v-alert v-if="error" type="error" class="mb-4" :closable="true">
           {{ error }}
         </v-alert>
-        <v-row>
-          <v-col offset="2" cols="8" align-self="center">
-            <LoginForm
-              class="mt-10"
-              :errors="violations"
-              :loading="isLoading"
-              @submit="login"
-            />
-            <v-card-subtitle align="center" justify="center">
-              <router-link
-                class="d-inline text-capitalize align-middle text-decoration-none"
-                style="font-weight: bold; color: red"
-                :to="{ name: 'ConsignorRegister' }"
-                >{{ $t("register") }}
-              </router-link>
-            </v-card-subtitle>
-          </v-col>
-        </v-row>
+        <LoginForm
+          class="mt-10 mr-15 ml-15"
+          :errors="violations"
+          :loading="isLoading"
+          @submit="login"
+        />
 
-        <v-row style="position: absolute; bottom: 0; width: 50%" class="pb-15">
+        <v-card-subtitle align="center" justify="center">
+          <router-link
+            class="d-inline align-middle text-decoration-none"
+            style="font-weight: bold; color: red"
+            :to="{ name: 'ConsignorRegister' }"
+            >{{ $t("register") }}
+          </router-link>
+        </v-card-subtitle>
+
+        <v-row class="mt-15">
           <v-col cols="12" sm="6" md="6" class="mt-auto mb-auto">
             <router-link
               class="d-inline text-capitalize align-middle text-black text-decoration-none font-weight-medium"

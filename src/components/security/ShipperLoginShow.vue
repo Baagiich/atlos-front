@@ -17,7 +17,7 @@
             <a
               href="#"
               class="text-black text-decoration-none mx-1"
-              @click.prevent="locale = 'zh-Hans'"
+              @click.prevent="locale = 'zh-HANS'"
               >中文</a
             >
             <a
@@ -54,7 +54,7 @@
           {{ error }}
         </v-alert>
         <LoginForm
-          class="mt-10"
+          class="mt-10 mr-15 ml-15"
           :errors="violations"
           :loading="isLoading"
           @submit="login"
@@ -62,14 +62,14 @@
 
         <v-card-subtitle align="center" justify="center">
           <router-link
-            class="d-inline text-capitalize align-middle text-decoration-none"
+            class="d-inline align-middle text-decoration-none"
             style="font-weight: bold; color: red"
             :to="{ name: 'ShipperCompanyRegister' }"
             >{{ $t("register") }}
           </router-link>
         </v-card-subtitle>
 
-        <v-row style="position: absolute; bottom: 0; width: 50%" class="pb-15">
+        <v-row class="mt-15">
           <v-col cols="12" sm="6" md="6" class="mt-auto mb-auto">
             <router-link
               class="d-inline text-capitalize align-middle text-black text-decoration-none font-weight-medium"

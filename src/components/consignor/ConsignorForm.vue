@@ -166,9 +166,10 @@
         </template>
 
         <v-divider></v-divider>
-        <div class="mb-4 py-12 text-center">
-          {{ contractTemplate?.template }}
-        </div>
+        <div
+          class="mb-4 py-12 text-center"
+          v-html="contractTemplate?.template"
+        ></div>
         <v-divider></v-divider>
         <div class="pa-4 text-end">
           <v-btn

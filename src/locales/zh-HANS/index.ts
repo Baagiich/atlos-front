@@ -67,7 +67,7 @@ export default {
   email: "电子邮件",
   password: "密码",
   checkEmail: "查看密码",
-  successfull: "成功的",
+  successfull: "成功",
   enterNewPassword: "输入新密码",
   submitAgain: "重新发送",
   back: "后退",
@@ -78,7 +78,7 @@ export default {
   logout: "登出",
   "en-US": "EN",
   "mn-MN": "MN",
-  "zh-Hans": "CN",
+  "zh-HANS": "CN",
   advance: "预付款",
   remaining: "剩余",
   reasons: "原因",
@@ -113,4 +113,5 @@ export default {
   contactTitle: "联系信息",
   contactPhoneTitle: "联系电话",
   contactAddressAtlos: "蒙古国乌兰巴托市苏赫巴特区奥林匹克街部长大厦7楼",
+  registerVerification: "Бүртгэл баталгаажуулалт",
 };

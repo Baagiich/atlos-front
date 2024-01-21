@@ -7,4 +7,5 @@ export default {
   recievedCodeMustBe6Characters: "Code must be 6 characters",
   maxlength: "Must be less than {maxlength} characters",
   recievedCodeRequired: "Code is required",
+  number: "Please enter only numbers",
 };

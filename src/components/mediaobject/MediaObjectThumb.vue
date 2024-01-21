@@ -44,11 +44,14 @@ const props = defineProps<{
 
 const mediaObjectShowStore = useMediaObjectShowStore();
 const { retrieved, error } = storeToRefs(mediaObjectShowStore);
-
-await mediaObjectShowStore.retrieve(decodeURIComponent(props.id));
+const item = ref();
+retrieveImg(props.id);
 const overlay = ref(false);
-const item = retrieved?.value;
 
+async function retrieveImg(id: string) {
+  await mediaObjectShowStore.retrieve(decodeURIComponent(id));
+  item.value = retrieved?.value;
+}
 const selectedImage = ref();
 const zoomOut = (image: string | undefined) => {
   overlay.value = true;
@@ -57,4 +60,10 @@ const zoomOut = (image: string | undefined) => {
 watch(overlay, (newValue) => {
   newValue && setTimeout(() => (overlay.value = false), 3000);
 });
+watch(
+  () => props.id,
+  (newVal) => {
+    retrieveImg(newVal);
+  },
+);
 </script>

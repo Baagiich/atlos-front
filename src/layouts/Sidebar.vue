@@ -9,6 +9,40 @@
     <v-list-item class="text-center mb-2" nav>
       <v-img style="max-height: 30px" :src="logoAtlos" />
     </v-list-item>
+    <v-list-item v-if="!rail">
+      <div class="d-inline-block text-black ml-16">
+        <a
+          href="#"
+          :class="{ 'text-red': locale === 'en-US' }"
+          class="text-black text-decoration-none mx-1"
+          @click.prevent="locale = 'en-US'"
+          >EN</a
+        >
+        <v-divider
+          :style="{ height: '15px', verticalAlign: 'middle' }"
+          vertical
+        ></v-divider>
+        <a
+          href="#"
+          class="text-black text-decoration-none mx-1"
+          :class="{ 'text-red': locale === 'zh-HANS' }"
+          @click.prevent="locale = 'zh-HANS'"
+          >中文</a
+        >
+        <v-divider
+          :style="{ height: '15px', verticalAlign: 'middle' }"
+          color="bg-red"
+          vertical
+        ></v-divider>
+        <a
+          href="#"
+          :class="{ 'text-red': locale === 'mn-MN' }"
+          class="text-black text-decoration-none mx-1"
+          @click.prevent="locale = 'mn-MN'"
+          >MNG</a
+        >
+      </div>
+    </v-list-item>
     <v-list-item
       prepend-icon="mdi-account-circle"
       :class="bgClass"
@@ -47,7 +81,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import * as apiToken from "@/utils/apiToken";
 import { useI18n } from "vue-i18n";
@@ -57,6 +91,7 @@ import logoAtlos from "@/assets/logo-atlos.png";
 
 const router = useRouter();
 const { t } = useI18n();
+const { locale } = useI18n();
 
 const securityLoginStore = useSecurityLoginStore();
 const { userTokenData } = storeToRefs(securityLoginStore);
@@ -64,6 +99,12 @@ const { userTokenData } = storeToRefs(securityLoginStore);
 const drawer = ref(true);
 const rail = ref(true);
 const menuItems = [
+  {
+    title: "shipment.add",
+    routeName: "ShipmentLoadDashboard",
+    icon: "mdi mdi-plus-box",
+    roles: ["ROLE_CONSIGNOR"],
+  },
   {
     title: "order.title",
     routeName: "OrderList",
@@ -76,6 +117,7 @@ const menuItems = [
     icon: "mdi-wallet",
     roles: ["ROLE_CONSIGNOR", "ROLE_SHIPPER"],
   },
+
   {
     title: "bank.title",
     routeName: "BankList",
@@ -122,14 +164,14 @@ const menuItems = [
     title: "shipment.title",
     routeName: "ShipmentList",
     icon: "mdi-truck-delivery",
-    roles: ["ROLE_ADMIN", "ROLE_CONSIGNOR"],
-  },
-  {
-    title: "shipment.activeShipment",
-    routeName: "ShipmentOwnList",
-    icon: "mdi-truck-delivery",
     roles: ["ROLE_ADMIN", "ROLE_CONSIGNOR", "ROLE_SHIPPER"],
   },
+  // {
+  //   title: "shipment.activeShipment",
+  //   routeName: "ShipmentOwnList",
+  //   icon: "mdi-truck-delivery",
+  //   roles: ["ROLE_ADMIN", "ROLE_CONSIGNOR", "ROLE_SHIPPER"],
+  // },
   {
     title: "shppercompany.title",
     routeName: "ShipperCompanyList",
@@ -140,6 +182,12 @@ const menuItems = [
     title: "vehicle.title",
     routeName: "VehicleList",
     icon: "mdi-car-estate",
+    roles: ["ROLE_ADMIN"],
+  },
+  {
+    title: "notification.name",
+    routeName: "NotificationOrderList",
+    icon: "mdi-bell",
     roles: ["ROLE_ADMIN"],
   },
 ];
@@ -170,4 +218,8 @@ function logout() {
   securityLoginStore.setUserTokenData(undefined);
   router.push({ name: "Home" });
 }
+
+watch(locale, (newLocale) => {
+  localStorage.setItem("locale", newLocale);
+});
 </script>

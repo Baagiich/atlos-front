@@ -11,7 +11,7 @@ export default {
     create: "创建账户",
     empty: "无账户。重新创建",
     message: {
-      success: "成功",
+      success: "钱包创建成功",
     },
     deposit: {
       title: "充值账户",

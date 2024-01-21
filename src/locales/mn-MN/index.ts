@@ -23,6 +23,7 @@ import contract from "./contract";
 import contracttemplate from "./contracttemplate";
 import country from "./country";
 import requests from "./requests";
+import notification from "./notification";
 
 export default {
   home: "Нүүр",
@@ -78,7 +79,7 @@ export default {
   logout: "Гарах",
   "en-US": "EN",
   "mn-MN": "MN",
-  "zh-Hans": "CN",
+  "zh-HANS": "CN",
   advance: "Урьдчилгаа",
   remaining: "Үлдэгдэл",
   reasons: "Шалтгаан",
@@ -91,6 +92,7 @@ export default {
   bank,
   order,
   review,
+  notification,
   informationNotCompleted:
     "Мэдээлэл дутуу байна. Та мэдээллээ бүрэн оруулж байж баталгаажихыг анхаарна уу.",
   notAvailable: "Хоосон байна",
@@ -115,5 +117,6 @@ export default {
   contactAddressAtlos:
     "7-р давхар, Minister Tower, Олимпийн гудамж, 1-р хороо, Сүхбаатар дүүрэг Улаанбаатар хот, Монгол улс",
 
-  register: "Шинээр Бүртгүүлэх",
+  register: "Шинээр бүртгүүлэх",
+  registerVerification: "Бүртгэл баталгаажуулалт",
 };

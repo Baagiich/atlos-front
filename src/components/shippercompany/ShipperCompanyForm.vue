@@ -156,9 +156,10 @@
 
         <v-divider></v-divider>
 
-        <div class="py-12 text-center">
-          {{ contractTemplate?.template }}
-        </div>
+        <div
+          class="py-12 text-center"
+          v-html="contractTemplate?.template"
+        ></div>
 
         <v-divider></v-divider>
         <div class="pa-4 text-end">

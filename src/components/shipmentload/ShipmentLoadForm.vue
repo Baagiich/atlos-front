@@ -7,6 +7,7 @@
           :error="Boolean(violations?.name)"
           :error-messages="violations?.name"
           :label="$t('shipmentload.loadName')"
+          :rules="requireRules"
           variant="outlined"
         >
           <template #append-inner>
@@ -24,6 +25,7 @@
           v-model="packageTypeName"
           :label="$t('shipmentload.packageType')"
           :items="getTypeNames()"
+          :rules="requireRules"
           variant="outlined"
           @update:modelValue="onTypeSelected"
         ></v-select>
@@ -34,6 +36,8 @@
           :error="Boolean(violations?.quantity)"
           :error-messages="violations?.quantity"
           :label="$t('shipmentload.quantity')"
+          :rules="requireRules"
+          type="number"
           variant="outlined"
         >
           <template #append-inner>
@@ -52,6 +56,8 @@
           :error="Boolean(violations?.length)"
           :error-messages="violations?.length"
           :label="$t('shipmentload.length')"
+          :rules="requireRules"
+          type="number"
           variant="outlined"
         >
           <template #append-inner>
@@ -70,6 +76,8 @@
           :error="Boolean(violations?.width)"
           :error-messages="violations?.width"
           :label="$t('shipmentload.width')"
+          :rules="requireRules"
+          type="number"
           variant="outlined"
         >
           <template #append-inner>
@@ -88,6 +96,8 @@
           :error="Boolean(violations?.height)"
           :error-messages="violations?.height"
           :label="$t('shipmentload.height')"
+          :rules="requireRules"
+          type="number"
           variant="outlined"
         >
           <template #append-inner>
@@ -106,6 +116,8 @@
           :error="Boolean(violations?.weight)"
           :error-messages="violations?.weight"
           :label="$t('shipmentload.weight')"
+          :rules="requireRules"
+          type="number"
           variant="outlined"
         >
           <template #append-inner>
@@ -170,6 +182,7 @@ import type { SubmissionErrors } from "@/types/error";
 import { useShipmentLoadPackageTypeStore } from "@/store/shipmentload/packagetype";
 import { storeToRefs } from "pinia";
 import { Filters } from "@/types/list";
+import { assertRequired } from "@/validations";
 const props = defineProps<{
   values?: ShipmentLoad;
   errors?: SubmissionErrors;
@@ -183,6 +196,7 @@ const { items } = storeToRefs(shipmentloadTypeStore);
 const page = ref(1);
 const filters: Ref<Filters> = ref({});
 const order = ref({});
+const requireRules = [assertRequired()];
 
 function getTypeNames() {
   return items.value.map((type) => type.name);
@@ -235,11 +249,17 @@ const emit = defineEmits<{
   (e: "delete", item: ShipmentLoad): void;
 }>();
 
-function addPerLoad() {
+async function addPerLoad() {
   item.value.shipment = props.createdShipmentId;
-  emit("submit", item.value);
-  if (!isUpdate.value) {
-    resetForm();
+  if (!form.value) {
+    return;
+  }
+  const v = await form.value.validate();
+  if (v.valid) {
+    emit("submit", item.value);
+    if (!isUpdate.value) {
+      resetForm();
+    }
   }
 }
 function deleteItem() {
