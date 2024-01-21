@@ -7,7 +7,7 @@
           :error="Boolean(violations?.name)"
           :error-messages="violations?.name"
           :label="$t('shipmentload.name')"
-          :rules="priceRules"
+          :rules="percentNumberRules"
           type="string"
           variant="outlined"
           clearable
@@ -167,7 +167,7 @@ function onSelectChange() {
     item.value.postPayment = 100 - selectedPayment.prePayValue;
   }
 }
-async function validateForm(): Promise<boolean> {
+async function validateForm() {
   if (!form.value) {
     return false;
   }

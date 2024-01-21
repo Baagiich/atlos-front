@@ -228,7 +228,7 @@ const onMapClick = (event: google.maps.MapMouseEvent) => {
   showMarker.value = true;
 };
 
-async function validateForm(): Promise<boolean> {
+async function validateForm() {
   if (!form.value) {
     return false;
   }
