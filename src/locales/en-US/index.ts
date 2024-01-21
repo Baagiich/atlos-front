@@ -64,6 +64,7 @@ export default {
   password: "Password",
   checkEmail: "PLease check your email",
   successfull: "Successfull",
+  registrationSuccessText: "Registration successfull.",
   enterNewPassword: "Please enter new password",
   submitAgain: "Submit again",
   back: "Back",
