@@ -58,6 +58,11 @@
           {{ item.shipmentCode }}
         </p>
       </template>
+      <template #item.name="{ item }">
+        <p>
+          {{ item.name }}
+        </p>
+      </template>
       <template #item.fromAddress="{ item }">
         <p>
           {{ item.fromAddress.city.name }}
@@ -245,6 +250,11 @@ await checkNonReviewedShipments();
 const headers = [
   { title: t("id"), key: "@id" },
   {
+    title: t("shipment.name"),
+    key: "name",
+    sortable: false,
+  },
+  {
     title: t("shipment.fromAddress"),
     key: "fromAddress",
     sortable: false,
@@ -335,12 +345,6 @@ function gotoEditPriceDashboard(item: Shipment) {
     params: { id: item["@id"] },
   });
 }
-// function gotoEditShipmentDashboard(item: Shipment) {
-//   router.push({
-//     name: "ShipmentUpdate",
-//     params: { id: item["@id"] },
-//   })
-// }
 
 async function goToCheckoutPage(orderNumber: string) {
   router.push({
