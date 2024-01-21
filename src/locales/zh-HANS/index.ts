@@ -78,7 +78,7 @@ export default {
   logout: "登出",
   "en-US": "EN",
   "mn-MN": "MN",
-  "zh-Hans": "CN",
+  "zh-HANS": "CN",
   advance: "预付款",
   remaining: "剩余",
   reasons: "原因",
