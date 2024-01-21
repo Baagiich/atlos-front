@@ -5,7 +5,11 @@
         class="float-right d-inline-block font-weight-medium py-5"
         style="vertical-align: middle"
       >
-        <span>{{ $t("Help") }}</span>
+        <router-link
+          class="d-inline align-middle mr-7 text-black text-decoration-none font-weight-medium"
+          :to="{ name: 'Help' }"
+          >{{ $t("Help") }}</router-link
+        >
         <div class="d-inline-block text-black ml-16">
           <a
             href="#"
