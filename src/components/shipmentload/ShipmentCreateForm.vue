@@ -53,16 +53,6 @@
         ></v-select>
       </v-col>
     </v-row>
-    <!-- <v-row>
-      <v-col cols="12" sm="6" md="6">
-        <v-btn color="primary" variant="outlined" @click="gotoList">
-          {{ $t("shipmentload.cancel") }}
-        </v-btn>
-        <v-btn color="primary" class="ml-2" @click="emitNextStep">{{
-          $t("shipmentload.continue")
-        }}</v-btn>
-      </v-col>
-    </v-row> -->
   </v-form>
 </template>
 
@@ -96,7 +86,7 @@ const onCurrencySelect = () => {
   item.value.currency = selectedCurrency.value;
 };
 
-async function validateForm(): Promise<boolean> {
+async function validateForm() {
   if (!form.value) {
     return false;
   }
