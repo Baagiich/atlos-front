@@ -88,7 +88,7 @@ async function verify(item: AdminUserVerify) {
     return;
   }
 
-  router.push({ name: "ShipperLogin" });
+  router.push({ name: "ShipperLogin", query: { status: "success" } });
 }
 watch(locale, (newLocale) => {
   localStorage.setItem("locale", newLocale);
