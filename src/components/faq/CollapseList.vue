@@ -16,6 +16,7 @@
 <script setup lang="ts">
 import { useFaqItemListStore } from "@/store/faq/list";
 import { Faq } from "@/types/faq";
+import { FaqTranslation } from "@/types/faqTranslation";
 import { Filters } from "@/types/list";
 import { storeToRefs } from "pinia";
 import { ref, Ref } from "vue";
@@ -43,11 +44,17 @@ function getPropertyByLocale(
   property: string,
   locale: string,
 ): string {
-  if (item.translations && item.translations[locale]) {
-    return item.translations[locale][property];
+  if (
+    item.translations &&
+    item.translations[locale] &&
+    item.translations[locale][property as keyof FaqTranslation]
+  ) {
+    return item.translations[locale][
+      property as keyof FaqTranslation
+    ] as string;
   }
 
-  return item[property];
+  return item[property as keyof Faq] as string;
 }
 
 sendRequest();
