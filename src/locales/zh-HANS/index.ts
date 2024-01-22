@@ -23,6 +23,7 @@ import contract from "./contract";
 import contracttemplate from "./contracttemplate";
 import country from "./country";
 import requests from "./requests";
+import shipmentloadinfos from "./shipmentloadinfos";
 
 export default {
   home: "主页",
@@ -115,4 +116,5 @@ export default {
   contactPhoneTitle: "联系电话",
   contactAddressAtlos: "蒙古国乌兰巴托市苏赫巴特区奥林匹克街部长大厦7楼",
   registerVerification: "Бүртгэл баталгаажуулалт",
+  shipmentloadinfos,
 };

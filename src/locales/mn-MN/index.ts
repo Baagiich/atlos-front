@@ -24,6 +24,7 @@ import contracttemplate from "./contracttemplate";
 import country from "./country";
 import requests from "./requests";
 import notification from "./notification";
+import shipmentloadinfos from "./shipmentloadinfos";
 
 export default {
   home: "Нүүр",
@@ -37,7 +38,7 @@ export default {
   updated: "Засварлагдлаа",
   filters: "Шүүлтүүд",
   filter: "Шүүлт",
-  id: "Id",
+  id: "Д/д",
   actions: "Үйлдлүүд",
   itemCreated: "{0} үүссэн",
   itemUpdated: "{0} өөрчлөгдсөн",
@@ -120,4 +121,5 @@ export default {
 
   register: "Шинээр бүртгүүлэх",
   registerVerification: "Бүртгэл баталгаажуулалт",
+  shipmentloadinfos,
 };

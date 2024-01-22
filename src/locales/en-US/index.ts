@@ -19,6 +19,7 @@ import shipmentimage from "./shipmentimage";
 import review from "./review";
 import consignor from "./consignor";
 import shippercompany from "./shippercompany";
+import shipmentloadinfos from "./shipmentloadinfos";
 export default {
   home: "Home",
   submit: "Submit",
@@ -32,7 +33,7 @@ export default {
   filters: "Filters",
   filter: "Filter",
   actions: "Actions",
-  id: "Id",
+  id: "No",
   itemCreated: "{0} created",
   itemUpdated: "{0} updated",
   itemDeleted: "{0} deleted",
@@ -108,4 +109,5 @@ export default {
     "7th floor, Minister Tower, Olympic street, 1st khoroo, Sukhbaatar district, Ulaanbaatar, Mongolia",
   register: "Register",
   registerVerification: "Register verification",
+  shipmentloadinfos,
 };

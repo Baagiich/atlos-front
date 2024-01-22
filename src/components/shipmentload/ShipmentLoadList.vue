@@ -77,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount, Ref } from "vue";
+import { ref, onBeforeUnmount, Ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
@@ -127,7 +127,7 @@ useMercureList({
 
 sendRequest();
 
-const headers = [
+const headers = computed(() => [
   // {
   //   title: t("actions"),
   //   key: "actions",
@@ -174,7 +174,7 @@ const headers = [
     key: "packageType",
     sortable: false,
   },
-];
+]);
 
 function updatePage(newPage: number) {
   page.value = newPage;

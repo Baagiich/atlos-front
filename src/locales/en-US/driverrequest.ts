@@ -9,4 +9,9 @@ export default {
   plateNumber: "Plate number",
   vehicleType: "Vehicle type",
   vehicleCapacity: "Vehicle capacity",
+  sendBid: "Bid",
+  sent: "Sent",
+  accept: "Accept",
+  cancel: "Cancel",
+  cancelled: "Cancelled",
 };
