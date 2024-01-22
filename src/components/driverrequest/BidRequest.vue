@@ -147,9 +147,9 @@ async function setBidPrice() {
 await setBidPrice();
 async function buttonToggle() {
   // Tsaash urgeljlehgui bhar ni comment bolgov
-  if (!dealItems.value[0] || !dealItems.value[0].shipmentPriceBiddings) {
-    return;
-  }
+  // if (!dealItems.value[0] || !dealItems.value[0].shipmentPriceBiddings) {
+  //   return;
+  // }
   btn1.value = dealtotalItems.value == 0;
   btn2.value =
     dealtotalItems.value > 0 &&
