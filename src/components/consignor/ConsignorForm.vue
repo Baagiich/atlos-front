@@ -153,47 +153,38 @@
     </v-form>
 
     <v-fade-transition hide-on-leave>
-      <v-card
-        v-if="dialog"
-        max-height="400"
-        append-icon="$close"
-        class="mx-auto overflow-y-auto"
-        elevation="16"
-        :title="$t('terms')"
-      >
-        <template #append>
-          <v-btn icon="$close" variant="text" @click="dialog = false"></v-btn>
-        </template>
-
-        <v-divider></v-divider>
-        <div
-          class="mb-4 py-12 text-center"
-          v-html="contractTemplate?.template"
-        ></div>
-        <v-divider></v-divider>
-        <div class="pa-4 text-end">
-          <v-btn
-            class="text-none mr-2"
-            color="success"
-            min-width="92"
-            rounded
-            variant="outlined"
-            @click="handleAcceptContract"
-          >
-            {{ $t("accept") }}
-          </v-btn>
-          <v-btn
-            class="text-none"
-            color="medium-emphasis"
-            min-width="92"
-            rounded
-            variant="outlined"
-            @click="dialog = false"
-          >
-            {{ $t("close") }}
-          </v-btn>
-        </div>
-      </v-card>
+      <v-row justify="center">
+        <v-dialog v-model="dialog" width="800">
+          <v-card class="overflow-y-auto pt-6">
+            <v-card-title>
+              <span class="py-6 px-6 text-h5"> {{ $t("terms") }}</span>
+            </v-card-title>
+            <v-card-text>
+              <div
+                class="text-center"
+                v-html="contractTemplate?.template"
+              ></div>
+            </v-card-text>
+            <v-card-actions class="py-6 px-6">
+              <v-spacer></v-spacer>
+              <v-btn
+                color="medium-emphasis"
+                variant="text"
+                @click="dialog = false"
+              >
+                {{ $t("close") }}
+              </v-btn>
+              <v-btn
+                color="green-darken-1"
+                variant="text"
+                @click="handleAcceptContract"
+              >
+                {{ $t("accept") }}
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
     </v-fade-transition>
   </v-sheet>
 </template>
