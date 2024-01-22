@@ -8,7 +8,7 @@ export interface ShipmentShipperDeal extends Item {
     amount?: number;
     currency?: string;
   };
-  driver?: any;
+  driverUser?: any;
   vehicle?: any;
   shipmentPriceBiddings?: string | ShipmentPriceBidding[];
   status?: number;

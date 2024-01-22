@@ -9,7 +9,7 @@
       required
       @update:model-value="selectDate"
     />
-    <span class="date-error" v-if="!date && showError">{{
+    <span v-if="!date && showError" class="date-error">{{
       $t("validation.required")
     }}</span>
   </form>
