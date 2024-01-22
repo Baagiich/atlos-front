@@ -41,6 +41,12 @@ export default {
   replied: "Хариу үнэ илгээсэн",
   bidAttention:
     "Үнийн санал ирсний дараа мэдээлэл өөрчилбөл ирсэн бүх үнийн санал цуцлагдахыг анхаарна уу.",
+  created: "Үүссэн",
+  waiting_advance: "Урьдчилгаа хүлээгдэж байгаа",
+  delivery_approved: "Хүлээж авсан",
+  finished: "Дууссан",
+  canceled: "Цуцлагдсан",
+  failed: "Амжилтгүй",
   waiting_driver: "Ачилт хүлээж байна",
   ready_to_load: "Ачилт хийх газар ирсэн",
   transporting: "Ачилт хийсэн",
