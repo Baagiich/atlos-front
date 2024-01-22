@@ -189,7 +189,7 @@ async function createShipmentShipperDeal() {
         amount: +bidPrice.value,
         currency: currency.value,
       });
-    shipmentShipperDeal.value.driver = requestItems.value[0].toUser["@id"];
+    shipmentShipperDeal.value.driverUser = requestItems.value[0].toUser["@id"];
     shipmentShipperDeal.value.vehicle =
       requestVehicleItems.value[0].params?.iri;
     await dealCreateStore.create(shipmentShipperDeal.value);
