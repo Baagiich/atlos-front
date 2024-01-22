@@ -62,12 +62,15 @@
         <v-alert v-if="error" type="error" class="mb-4" :closable="true">
           {{ error }}
         </v-alert>
-        <LoginForm
-          class="mt-10 mr-15 ml-15"
-          :errors="violations"
-          :loading="isLoading"
-          @submit="login"
-        />
+        <v-row align="center" justify="center">
+          <v-col cols="6">
+            <LoginForm
+              :errors="violations"
+              :loading="isLoading"
+              @submit="login"
+            />
+          </v-col>
+        </v-row>
 
         <v-card-subtitle align="center" justify="center">
           <router-link
@@ -79,7 +82,14 @@
         </v-card-subtitle>
 
         <v-row class="mt-15">
-          <v-col cols="12" sm="6" md="6" class="mt-auto mb-auto">
+          <v-col
+            cols="12"
+            sm="6"
+            md="6"
+            align="center"
+            justify="center"
+            class="mt-auto mb-auto"
+          >
             <router-link
               class="d-inline align-middle text-black text-decoration-none font-weight-medium"
               :to="{ name: 'ShipperLogin' }"

@@ -12,7 +12,7 @@
     <v-table v-if="item" class="shipment-destination-table">
       <thead>
         <tr>
-          <td colspan="2">{{ "Ачилтын мэдээлэл" }}</td>
+          <td colspan="2">{{ $t("shipment.info") }}</td>
         </tr>
       </thead>
 

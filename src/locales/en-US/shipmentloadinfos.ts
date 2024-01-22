@@ -1,7 +1,7 @@
 export default {
   name: "Name",
   packageType: "Package type",
-  count: "Count",
+  count: "Quantity",
   weight: "Weight",
   cube: "Cube",
 };
