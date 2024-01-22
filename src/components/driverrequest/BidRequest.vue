@@ -1,44 +1,65 @@
 <template>
   <v-row>
-    <h4>{{ $t("driverrequest.sendBid") }}</h4>
-    <v-text-field
-      v-model="bidPrice"
-      type="number"
-      :disabled="!checkRequests || btn2 || btn3 || btn4 || btn5"
-      variant="outlined"
-      clearable
-    >
-    </v-text-field>
-    <div>{{ currency }}</div>
-    <div>
-      <v-btn v-if="btn1" :disabled="!checkRequests" @click="createBid">{{
-        $t("driverrequest.sendRequest")
-      }}</v-btn>
-    </div>
-    <div>
-      <v-btn v-if="btn2" variant="text" color="blue">{{
-        $t("driverrequest.sent")
-      }}</v-btn>
-    </div>
+    <v-container>
+      <v-row no-gutters>
+        <v-col cols="12" sm="2">
+          <v-sheet class="ma-2 pa-2">
+            <h4>{{ $t("driverrequest.sendBid") }}</h4>
+          </v-sheet>
+        </v-col>
+        <v-col cols="12" sm="2">
+          <v-text-field
+            v-model="bidPrice"
+            type="number"
+            :disabled="!checkRequests || btn2 || btn3 || btn4 || btn5"
+            variant="outlined"
+            clearable
+          >
+          </v-text-field>
+        </v-col>
+        <v-col cols="12" sm="1">
+          <v-sheet class="ma-2 pa-2">
+            <h4>{{ currency }}</h4>
+          </v-sheet>
+        </v-col>
+        <v-col cols="12" sm="4">
+          <v-sheet class="ma-1 pa-1">
+            <div>
+              <v-btn
+                v-if="btn1"
+                :disabled="!checkRequests"
+                @click="createBid"
+                >{{ $t("driverrequest.sendRequest") }}</v-btn
+              >
+            </div>
+            <div>
+              <v-btn v-if="btn2" variant="text" color="blue">{{
+                $t("driverrequest.sent")
+              }}</v-btn>
+            </div>
 
-    <div v-if="btn3">
-      <v-btn variant="outlined" color="green" @click="approveBid">{{
-        $t("driverrequest.accept")
-      }}</v-btn>
-      <v-btn variant="outlined" color="red" @click="cancelBid">{{
-        $t("driverrequest.cancel")
-      }}</v-btn>
-    </div>
-    <div>
-      <v-btn v-if="btn4" variant="text" color="green">{{
-        $t("driverrequest.approved")
-      }}</v-btn>
-    </div>
-    <div>
-      <v-btn v-if="btn5" variant="text" color="red">{{
-        $t("driverrequest.cancelled")
-      }}</v-btn>
-    </div>
+            <div v-if="btn3">
+              <v-btn variant="outlined" color="green" @click="approveBid">{{
+                $t("driverrequest.accept")
+              }}</v-btn>
+              <v-btn variant="outlined" color="red" @click="cancelBid">{{
+                $t("driverrequest.cancel")
+              }}</v-btn>
+            </div>
+            <div>
+              <v-btn v-if="btn4" variant="text" color="green">{{
+                $t("driverrequest.approved")
+              }}</v-btn>
+            </div>
+            <div>
+              <v-btn v-if="btn5" variant="text" color="red">{{
+                $t("driverrequest.cancelled")
+              }}</v-btn>
+            </div>
+          </v-sheet>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-row>
 </template>
 
@@ -126,9 +147,9 @@ async function setBidPrice() {
 await setBidPrice();
 async function buttonToggle() {
   // Tsaash urgeljlehgui bhar ni comment bolgov
-  // if (!dealItems.value[0] || !dealItems.value[0].shipmentPriceBiddings) {
-  //   return;
-  // }
+  if (!dealItems.value[0] || !dealItems.value[0].shipmentPriceBiddings) {
+    return;
+  }
   btn1.value = dealtotalItems.value == 0;
   btn2.value =
     dealtotalItems.value > 0 &&
@@ -143,6 +164,8 @@ async function buttonToggle() {
   ) {
     btn3.value = replied;
     bidPrice.value = dealItems.value[0].shipmentPriceBiddings[1].price.amount;
+  } else {
+    btn3.value = false;
   }
   if (dealtotalItems.value > 0) {
     btn4.value = dealItems.value[0].status === DealType.COMPLETED;
@@ -156,7 +179,7 @@ function checkReply() {
     dealItems.value[0] &&
     Array.isArray(dealItems.value[0].shipmentPriceBiddings) &&
     dealItems.value[0].shipmentPriceBiddings.length === 2 &&
-    dealItems.value[0].status === DealType.PENDING
+    dealItems.value[0].status === DealType.REPLIED
   ) {
     const iri = dealItems.value[0].shipmentPriceBiddings[1]["@id"];
     if (!iri) {
@@ -234,3 +257,8 @@ async function approveBid() {
   await buttonToggle();
 }
 </script>
+<style lang="scss">
+.bid-price {
+  margin: 0 auto;
+}
+</style>
