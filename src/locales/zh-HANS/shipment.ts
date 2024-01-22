@@ -40,6 +40,12 @@ export default {
   cancelled: "取消了",
   replied: "发了报价",
   bidAttention: "请注意�到报价后改变文件的话以前来的报价全部都取消。",
+  created: "Үүссэн",
+  waiting_advance: "Урьдчилгаа хүлээгдэж байгаа",
+  delivery_approved: "Хүлээж авсан",
+  finished: "Дууссан",
+  canceled: "Цуцлагдсан",
+  failed: "Амжилтгүй",
   waiting_driver: "等待加载",
   ready_to_load: "到加载地方",
   transporting: "加载了",
@@ -56,4 +62,5 @@ export default {
   activeShipment: "主动发货",
   nonReviewedAlertMsg: "吧下个没批准的运输一定要批准",
   add: "加运输",
+  info: "Load info",
 };

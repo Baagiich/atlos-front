@@ -13,4 +13,5 @@ export default {
   sent: "Илгээгдсэн",
   accept: "Зөвшөөрөх",
   cancel: "Цуцлах",
+  cancelled: "Цуцлагдсан",
 };
