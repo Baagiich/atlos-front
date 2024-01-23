@@ -260,7 +260,7 @@ async function checkNonReviewedShipments() {
 await checkNonReviewedShipments();
 
 const headers = [
-  { title: t("id"), key: "@id" },
+  { title: t("shipment.code"), key: "@id" },
   {
     title: t("shipment.name"),
     key: "name",

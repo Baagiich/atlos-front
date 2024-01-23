@@ -63,4 +63,5 @@ export default {
   nonReviewedAlertMsg: "吧下个没批准的运输一定要批准",
   add: "加运输",
   info: "Load info",
+  code: "Shipment code",
 };
