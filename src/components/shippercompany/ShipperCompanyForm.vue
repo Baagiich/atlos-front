@@ -149,10 +149,7 @@
               <span class="py-6 px-6 text-h5"> {{ $t("terms") }}</span>
             </v-card-title>
             <v-card-text>
-              <div
-                class="text-center"
-                v-html="contractTemplate?.template"
-              ></div>
+              <div class="py-6 px-6" v-html="contractTemplate?.template"></div>
             </v-card-text>
             <v-card-actions class="py-6 px-6">
               <v-spacer></v-spacer>

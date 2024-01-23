@@ -44,4 +44,5 @@ export default {
   add: "Add shipment",
   info: "Load info",
   name: "Name",
+  code: "Shipment code",
 };
