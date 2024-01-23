@@ -13,22 +13,23 @@
       />
     </v-col>
     <v-col cols="12" sm="4" md="4">
-      <v-text-field
+      <VueDatePicker
         v-model="item.loadAt"
-        :label="$t('shipment.loadAt')"
-        variant="outlined"
-        size="small"
-        type="dateTime"
-        density="compact"
+        :placeholder="$t('shipment.loadAt')"
+        format="yyyy/MM/dd"
+        no-today
+        auto-apply
+        :enable-time-picker="false"
       />
     </v-col>
     <v-col cols="12" sm="4" md="4">
-      <v-text-field
+      <VueDatePicker
         v-model="item.unloadAt"
-        :label="$t('shipment.unloadAt')"
-        variant="outlined"
-        type="dateTime"
-        density="compact"
+        :placeholder="$t('shipment.unloadAt')"
+        format="yyyy/MM/dd"
+        no-today
+        auto-apply
+        :enable-time-picker="false"
       />
     </v-col>
   </v-row>
@@ -40,8 +41,9 @@ import { Filters } from "@/types/list";
 import { ShipmentStateString } from "@/types/shipment_state";
 import * as enumHelper from "@/utils/enumHelper";
 import { useI18n } from "vue-i18n";
-const { t } = useI18n();
+import VueDatePicker from "@vuepic/vue-datepicker";
 
+const { t } = useI18n();
 const props = defineProps<{
   values: Filters;
 }>();

@@ -19,7 +19,6 @@
 import { ref } from "vue";
 import { useCreateNewShipmentStore } from "@/store/shipmentload/newshipment";
 import VueDatePicker from "@vuepic/vue-datepicker";
-import "@vuepic/vue-datepicker/dist/main.css";
 import { storeToRefs } from "pinia";
 import { mn } from "date-fns/locale";
 import dayjs from "dayjs";
