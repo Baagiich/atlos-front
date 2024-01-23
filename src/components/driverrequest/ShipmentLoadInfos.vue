@@ -91,8 +91,8 @@ const itemsPerPage = ref("10");
 
 const filters: Ref<Filters> = ref({});
 
-if (isString(route.params.shipmentId)) {
-  filters.value.shipment = route.params.shipmentId;
+if (route.params) {
+  filters.value.shipment = route.params.id.toString();
 }
 
 async function sendRequest() {

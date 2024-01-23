@@ -27,7 +27,7 @@
       <v-col md="6">
         <VehicleRequest :target-entity-id="getTargetEntityId()" />
       </v-col>
-      <v-col md="4">
+      <v-col md="12">
         <BidRequest :currency="item.currency" :shipmentid="item['@id']" />
       </v-col>
     </v-row>
