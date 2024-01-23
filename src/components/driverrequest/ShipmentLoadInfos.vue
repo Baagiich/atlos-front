@@ -63,9 +63,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from "vue";
+import { ref, onBeforeUnmount, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useShipmentLoadListStore } from "@/store/shipmentload/list";
 import { useShipmentLoadDeleteStore } from "@/store/shipmentload/delete";
@@ -75,7 +74,6 @@ import isString from "lodash/isString";
 import { Ref } from "vue";
 
 const { t } = useI18n();
-const route = useRoute();
 
 const shipmentLoadDeleteStore = useShipmentLoadDeleteStore();
 const { deleted, mercureDeleted } = storeToRefs(shipmentLoadDeleteStore);
@@ -84,17 +82,23 @@ const shipmentLoadListStore = useShipmentLoadListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(
   shipmentLoadListStore,
 );
-
+const props = defineProps<{ shipmentid?: string }>();
 const page = ref(1);
 const order = ref({});
 const itemsPerPage = ref("10");
 
 const filters: Ref<Filters> = ref({});
 
-if (route.params) {
-  filters.value.shipment = route.params.id.toString();
-}
+watch(
+  () => props.shipmentid,
+  () => {
+    if (props.shipmentid) {
+      filters.value.shipment = props.shipmentid;
 
+      sendRequest();
+    }
+  },
+);
 async function sendRequest() {
   await shipmentLoadListStore.getItems({
     page: +page.value,

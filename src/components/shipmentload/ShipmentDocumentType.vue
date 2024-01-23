@@ -80,7 +80,6 @@ watch(
   () => props.saveStore,
   () => {
     if (props.saveStore) {
-      console.log("saveStore");
       savetoStore();
     }
   },

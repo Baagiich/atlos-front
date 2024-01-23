@@ -69,13 +69,20 @@
         <tr></tr>
       </tbody>
     </v-table>
-    <v-rov>
+    <!-- <v-rov>
       <v-col>
         <v-btn class="ma-2" color="red" size="small">{{
           $t("shipment.cancelShipment")
         }}</v-btn>
         <v-btn class="ma-2" variant="outlined" color="blue" size="small">{{
           $t("shipment.editShipment")
+        }}</v-btn>
+      </v-col>
+    </v-rov> -->
+    <v-rov>
+      <v-col>
+        <v-btn class="ma-2" color="green" size="small" @click="startShipment">{{
+          $t("shipment.startShipment")
         }}</v-btn>
       </v-col>
     </v-rov>
@@ -85,12 +92,16 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount } from "vue";
+import { onBeforeUnmount, ref } from "vue";
 import { storeToRefs } from "pinia";
 import Loading from "@/components/common/Loading.vue";
 import { useShipmentDeleteStore } from "@/store/shipment/delete";
 import { useShipmentShowStore } from "@/store/shipment/show";
 import { formatDateInput } from "@/utils/date";
+import { useShipmentPatchStore } from "@/store/shipment/patch";
+import { ShipmentAction } from "@/types/shipmentaction";
+import { useRoute } from "vue-router";
+
 defineProps<{
   info?: boolean;
 }>();
@@ -99,10 +110,21 @@ const { retrieved: item, isLoading, error } = storeToRefs(shipmentShowStore);
 
 const shipmentDeleteStore = useShipmentDeleteStore();
 const { error: deleteError } = storeToRefs(shipmentDeleteStore);
-
+const shipmentPatchStore = useShipmentPatchStore();
+const route = useRoute();
+const shipmentId = ref();
+if (route.params) {
+  shipmentId.value = route.params.id;
+}
 onBeforeUnmount(() => {
   shipmentShowStore.$reset();
 });
+async function startShipment() {
+  await shipmentPatchStore.doAction(
+    +shipmentId.value.replace("/api/shipments/", ""),
+    ShipmentAction.DRIVER_LOADED,
+  );
+}
 </script>
 <style lang="scss">
 .shipment-destination-table {

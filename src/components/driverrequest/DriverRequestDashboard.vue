@@ -19,7 +19,7 @@
         <ShipmentInfo />
       </v-col>
       <v-col md="12">
-        <ShipmentLoadInfos />
+        <ShipmentLoadInfos :shipmentid="item['@id']" />
       </v-col>
       <v-col md="6">
         <DriverRequest :target-entity-id="getTargetEntityId()" />

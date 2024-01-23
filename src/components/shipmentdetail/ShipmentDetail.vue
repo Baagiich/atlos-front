@@ -109,7 +109,10 @@
           </v-col>
         </v-row>
         <v-row>
-          <shipment-load-list :hide-toolbar="true"></shipment-load-list>
+          <shipment-load-list
+            :hide-toolbar="true"
+            :shipmentid="shipmentId"
+          ></shipment-load-list>
         </v-row>
       </v-window-item>
       <v-window-item :key="2" :value="2">
@@ -234,6 +237,9 @@ const locations = computed(() => {
         lng: obj.coordinate.longitude,
       }))
     : [];
+});
+const shipmentId = computed(() => {
+  return retrieved && retrieved.value ? retrieved.value["@id"] : undefined;
 });
 async function emitSelected(value: any) {
   selectedLocation.value = value;
