@@ -80,7 +80,7 @@
         {{ formatDateTime(item.unloadAt) }}
       </template>
       <template #item.state="{ item }">
-        {{ item.state }}
+        <v-chip color="info">{{ $t("shipment." + item.state) }}</v-chip>
       </template>
       <template #item.advancePaid="{ item }">
         <v-chip v-if="item.advancePaid" color="green">{{
@@ -184,6 +184,7 @@ import * as apiToken from "@/utils/apiToken";
 import { ShipmentAction } from "@/types/shipmentaction";
 import { ShipmentStateString } from "@/types/shipment_state";
 import ReviewRateDialog from "@/components/review/ReviewRateDialog.vue";
+import dayjs from "dayjs";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -215,6 +216,17 @@ if (userType == UserType.SHIPPER) {
     : null;
 }
 async function sendRequest() {
+  if (filters.value.loadAt) {
+    atlosuserParam.value = {
+      loadAt: {
+        after: dayjs(filters.value.loadAt)
+          .startOf("day")
+          .startOf("hour")
+          .toDate(),
+        before: dayjs(filters.value.loadAt).endOf("day").endOf("hour").toDate(),
+      },
+    };
+  }
   await shipmentListStore.getItems({
     page: +page.value,
     order: order.value,
