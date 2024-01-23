@@ -77,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount, Ref, computed } from "vue";
+import { ref, onBeforeUnmount, Ref, computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
@@ -102,14 +102,9 @@ const shipmentloadListStore = useShipmentLoadListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(
   shipmentloadListStore,
 );
-const props = defineProps<{ shipmentId?: string; hideToolbar?: boolean }>();
-const shipmentId = ref(props.shipmentId);
+const props = defineProps<{ shipmentid?: string; hideToolbar?: boolean }>();
 const page = ref(1);
 const filters: Ref<Filters> = ref({});
-
-if (shipmentId.value) {
-  filters.value.shipment = shipmentId.value;
-}
 const order = ref({});
 
 async function sendRequest() {
@@ -119,21 +114,22 @@ async function sendRequest() {
     ...filters.value,
   });
 }
-
 useMercureList({
   store: shipmentloadListStore,
   deleteStore: shipmentloadDeleteStore,
 });
+watch(
+  () => props.shipmentid,
+  () => {
+    if (props.shipmentid) {
+      filters.value.shipment = props.shipmentid;
 
-sendRequest();
+      sendRequest();
+    }
+  },
+);
 
 const headers = computed(() => [
-  // {
-  //   title: t("actions"),
-  //   key: "actions",
-  //   sortable: false,
-  // },
-  // { title: t("id"), key: "@id" },
   {
     title: t("shipmentload.name"),
     key: "name",
@@ -164,11 +160,6 @@ const headers = computed(() => [
     key: "weight",
     sortable: false,
   },
-  // {
-  //   title: t("shipmentload.shipment"),
-  //   key: "shipment",
-  //   sortable: false,
-  // },
   {
     title: t("shipmentload.packageType"),
     key: "packageType",
