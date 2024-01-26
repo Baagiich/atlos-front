@@ -2,10 +2,11 @@
   <Suspense>
     <DetailFiles />
 
-    <template #fallback>{{ $t("loading") }}</template>
+    <template #fallback><Loading :visible="true" /></template>
   </Suspense>
 </template>
 
 <script setup lang="ts">
 import DetailFiles from "@/components/shipmentdetail/ShipmentImages.vue";
+import Loading from "@/components/common/Loading.vue";
 </script>

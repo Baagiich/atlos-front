@@ -22,7 +22,7 @@
             {{ $t("driverrequest.shipmentCode") }}
           </td>
           <td>
-            <p>{{ item.shipmentCode }},</p>
+            <p>#{{ item.shipmentCode }}</p>
           </td>
         </tr>
         <tr>
@@ -69,21 +69,32 @@
         <tr></tr>
       </tbody>
     </v-table>
-    <!-- <v-rov>
-      <v-col>
-        <v-btn class="ma-2" color="red" size="small">{{
-          $t("shipment.cancelShipment")
-        }}</v-btn>
-        <v-btn class="ma-2" variant="outlined" color="blue" size="small">{{
-          $t("shipment.editShipment")
-        }}</v-btn>
-      </v-col>
-    </v-rov> -->
     <v-rov>
       <v-col>
-        <v-btn class="ma-2" color="green" size="small" @click="startShipment">{{
-          $t("shipment.startShipment")
-        }}</v-btn>
+        <v-btn
+          v-if="item && item.state == ShipmentStateString.READY_TO_LOAD"
+          class="ma-2"
+          color="green"
+          size="small"
+          @click="startShipment"
+          >{{ $t("shipment.startShipment") }}</v-btn
+        >
+        <router-link
+          v-if="
+            userType === UserType.CONSIGNOR && route.name == 'ShipmentDetail'
+          "
+          :to="{ name: 'EditPriceDashboard' }"
+          :params="{ id: item?.id }"
+        >
+          <v-btn class="mr-2" color="info" size="small">{{
+            $t("shipment.showBid")
+          }}</v-btn>
+        </router-link>
+        <router-link :to="{ name: 'ShipmentDetailFiles' }">
+          <v-btn color="deep-purple-accent-4" size="small">
+            {{ $t("shipment.seeShipmentImages") }}
+          </v-btn>
+        </router-link>
       </v-col>
     </v-rov>
   </div>
@@ -101,12 +112,16 @@ import { formatDateInput } from "@/utils/date";
 import { useShipmentPatchStore } from "@/store/shipment/patch";
 import { ShipmentAction } from "@/types/shipmentaction";
 import { useRoute } from "vue-router";
+import { ShipmentStateString } from "@/types/shipment_state";
+import * as apiToken from "@/utils/apiToken";
+import { UserType } from "@/types/usertype";
 
 defineProps<{
   info?: boolean;
 }>();
 const shipmentShowStore = useShipmentShowStore();
 const { retrieved: item, isLoading, error } = storeToRefs(shipmentShowStore);
+const userType = apiToken.getDecodedToken()?.user_type;
 
 const shipmentDeleteStore = useShipmentDeleteStore();
 const { error: deleteError } = storeToRefs(shipmentDeleteStore);

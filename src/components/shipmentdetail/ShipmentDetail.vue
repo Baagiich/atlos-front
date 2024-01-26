@@ -13,13 +13,6 @@
             <shipment-location-list
               @selected="emitSelected"
             ></shipment-location-list>
-            <v-btn
-              class="ma-4"
-              color="deep-purple-accent-4"
-              @click="goToFilesPage"
-            >
-              {{ $t("shipment.seeShipmentImages") }}
-            </v-btn>
           </v-col>
           <v-col cols="6">
             <GoogleMap
@@ -218,7 +211,6 @@ import {
 } from "vue3-google-map";
 import { useShipmentDetailStore } from "@/store/shipment/detail";
 import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
 import ShipmentDetailState from "./ShipmentState.vue";
 import { GOOGLE_MAPS_API_KEY } from "@/utils/config";
 import ShipmentInfo from "@/components/shipment/ShipmentInfo.vue";
@@ -226,7 +218,6 @@ import ShipmentLoadList from "@/components/shipmentload/ShipmentLoadList.vue";
 
 const tab = ref(null);
 const selectedLocation = ref(null);
-const router = useRouter();
 const shipmentDetailStore = useShipmentDetailStore();
 const { retrieved } = storeToRefs(shipmentDetailStore);
 
@@ -243,11 +234,5 @@ const shipmentId = computed(() => {
 });
 async function emitSelected(value: any) {
   selectedLocation.value = value;
-}
-
-function goToFilesPage() {
-  router.push({
-    name: "ShipmentDetailFiles",
-  });
 }
 </script>

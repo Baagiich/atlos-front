@@ -87,7 +87,6 @@ export const useShipmentImageUpdateStore = defineStore("shipmentImageUpdate", {
 
     async approve(id: string) {
       this.toggleLoading();
-      console.log("id", id);
       try {
         const response = await api("shipment_images/" + id + "/approve", {
           method: "POST",

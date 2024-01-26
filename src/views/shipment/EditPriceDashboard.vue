@@ -1,11 +1,11 @@
 <template>
   <Suspense>
     <Create />
-
-    <template #fallback>{{ $t("loading") }}</template>
+    <template #fallback><Loading :visible="true" /></template>
   </Suspense>
 </template>
 
 <script setup lang="ts">
 import Create from "@/components/shipment/EditPriceDashboard.vue";
+import Loading from "@/components/common/Loading.vue";
 </script>
