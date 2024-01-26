@@ -73,6 +73,9 @@
           {{ item.toAddress.city.name }}
         </p>
       </template>
+      <template #item.createdAt="{ item }">
+        {{ formatDateTime(item.createdAt) }}
+      </template>
       <template #item.loadAt="{ item }">
         {{ formatDateTime(item.loadAt) }}
       </template>
@@ -128,24 +131,6 @@
         >
           {{ t("shipment.sendBid") }}
         </v-btn>
-        <v-btn
-          v-if="userType === UserType.CONSIGNOR"
-          color="secondary"
-          size="small"
-          class="ma-2"
-          @click="gotoEditPriceDashboard(item)"
-        >
-          {{ t("shipment.showBid") }}
-        </v-btn>
-        <!-- <v-btn
-          v-if="userType === UserType.CONSIGNOR"
-          color="secondary"
-          size="small"
-          class="ma-2"
-          @click="gotoEditShipmentDashboard(item)"
-        >
-          {{ t("edit") }}
-        </v-btn> -->
 
         <v-btn
           v-if="item.state === ShipmentStateString.DELIVERED"
@@ -231,7 +216,7 @@ async function sendRequest() {
     page: +page.value,
     order: order.value,
     page_size: +itemsPerPage.value,
-    groups: ["shipment:list"],
+    groups: ["shipment:list", "timestamp"],
     ...filters.value,
     ...atlosuserParam.value,
   });
@@ -244,7 +229,7 @@ async function getDeliveredShipments() {
     page: +page.value,
     order: order.value,
     page_size: +itemsPerPage.value,
-    groups: ["shipment:list"],
+    groups: ["shipment:list", "timestamp"],
     ...filterDelivered.value,
   });
 }
@@ -274,6 +259,11 @@ const headers = [
   {
     title: t("shipment.toAddress"),
     key: "toAddress",
+    sortable: false,
+  },
+  {
+    title: t("shipment.createdAt"),
+    key: "createdAt",
     sortable: false,
   },
   {
@@ -348,12 +338,6 @@ onBeforeUnmount(() => {
 function createPriceBidding(item: Shipment) {
   router.push({
     name: "DriverRequestDashboard",
-    params: { id: item["@id"] },
-  });
-}
-function gotoEditPriceDashboard(item: Shipment) {
-  router.push({
-    name: "EditPriceDashboard",
     params: { id: item["@id"] },
   });
 }

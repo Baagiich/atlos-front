@@ -122,7 +122,6 @@ import { usepatchShipmentStore } from "@/store/shipmentload/patchshipment";
 import ShipmentPriceForm from "./ShipmentPriceForm.vue";
 import { useAddressCreateStore } from "@/store/address/create";
 import { useShipmentCreateStore } from "@/store/shipment/create";
-import { useShipmentPatchStore } from "@/store/shipment/patch";
 import ShipmentLoadUpdate from "@/components/shipmentload/ShipmentLoadUpdate.vue";
 import { useShipmentLoadListStore } from "@/store/shipmentload/list";
 import { Filters } from "@/types/list";
@@ -149,14 +148,10 @@ const { created, isLoading, error } = storeToRefs(addressCreateStore);
 const createdShipmentId: Ref<string> = ref("");
 const shipmentCreateStore = useShipmentCreateStore();
 const { created: createdShipment } = storeToRefs(shipmentCreateStore);
-const shipmentPatchStore = useShipmentPatchStore();
-const { updated: patchShipment } = storeToRefs(shipmentPatchStore);
 const documentTypeCreateStore = useDocumentTypeCreateStore();
-const { created: documentCreated } = storeToRefs(documentTypeCreateStore);
 const addressUpdateStore = useAddressUpdateStore();
 const { updated: formAddressUpdated } = storeToRefs(addressUpdateStore);
 const shipmentUpdateStore = useShipmentUpdateStore();
-const { updated: shipmentUpdated } = storeToRefs(shipmentUpdateStore);
 const saveStore = ref(false);
 const shipmentFormRef = ref();
 const fromAddressFormRef = ref();
@@ -185,8 +180,6 @@ async function emitFinish() {
   gotoList();
 }
 async function emitFinishDocument() {
-  console.log("GG");
-
   await saveDocuments();
   gotoList();
 }
@@ -243,9 +236,6 @@ async function saveDocuments() {
     itemDocuments.value.forEach(async (document) => {
       document.shipment = createdShipmentId.value;
       await documentTypeCreateStore.create(document);
-      if (documentCreated?.value) {
-        console.log(documentCreated?.value);
-      }
     });
   }
 }
@@ -266,9 +256,6 @@ async function updateShipmentValue() {
     return;
   }
   await shipmentUpdateStore.update(item.value);
-  if (shipmentUpdated?.value) {
-    console.log(shipmentUpdated?.value);
-  }
 }
 const shipmentloadListStore = useShipmentLoadListStore();
 const { items: createdLoads, totalItems: totalCreatedLoads } = storeToRefs(
@@ -289,9 +276,6 @@ async function getCreatedLoads() {
 }
 async function saveSumOnShipment() {
   await shipmentUpdateStore.update(patchShipmentItem.value);
-  if (patchShipment?.value) {
-    console.log("shipment patched");
-  }
 }
 
 watch(

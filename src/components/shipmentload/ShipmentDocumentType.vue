@@ -53,7 +53,6 @@ const docTypes = enumHelper.getMap(DocumentTypeEnum);
 const docTypeRef: Ref<DocTypeRef[]> = ref([]);
 
 docTypes.forEach((doc) => {
-  console.log(doc);
   docTypeRef.value.push({ key: doc.key, value: doc.value, data: 0 });
 });
 const props = defineProps<{

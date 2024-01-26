@@ -11,13 +11,10 @@
       {{ error || deleteError }}
     </v-alert>
     <v-row>
-      <v-col cols="12" sm="6" md="6">
-        <ShipmentInfo :info="false" />
-      </v-col>
-      <v-col cols="12" sm="6" md="6" class="container">
-        <div class="bid-attention">
+      <v-col>
+        <v-alert type="warning">
           {{ t("shipment.bidAttention") }}
-        </div>
+        </v-alert>
       </v-col>
       <v-col md="12">
         <ShipmentDeals
@@ -42,7 +39,6 @@ import { useMercureItem } from "@/composables/mercureItem";
 import { useShipmentDeleteStore } from "@/store/shipment/delete";
 import { useShipmentShowStore } from "@/store/shipment/show";
 import { useBreadcrumb } from "@/composables/breadcrumb";
-import ShipmentInfo from "@/components/shipment/ShipmentInfo.vue";
 import ShipmentDeals from "@/components/shipment/ShipmentDeals.vue";
 const { t } = useI18n();
 const route = useRoute();

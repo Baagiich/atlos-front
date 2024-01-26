@@ -271,7 +271,7 @@ async function uploadFile(newFile: VueUploadItem) {
       },
       error(err) {
         newFile.error = err.message;
-        console.log(err.message);
+        console.error(err.message);
       },
     });
   } else {
