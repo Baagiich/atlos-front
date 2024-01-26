@@ -5,25 +5,30 @@ import { ENTRYPOINT } from "./config";
 import { useRouter } from "vue-router";
 import * as apiToken from "@/utils/apiToken";
 import { useDeviceShowStore } from "@/store/device/show";
-import { useDeviceCreateStore } from "@/store/device/create";
 import { useSecurityLoginStore } from "@/store/security/login";
-import { storeToRefs } from "pinia";
 
 const MIME_TYPE = "application/ld+json";
 
+export interface ApiOptions {
+  method?: string;
+  headers?: Headers;
+  auth?: boolean;
+  body?: any;
+  params?: { [key: string]: any };
+}
+
 export default async function api(
   id: string,
-  options: any = {},
+  options: ApiOptions = {},
 ): Promise<Response> {
   const router = useRouter();
   const deviceShowStore = useDeviceShowStore();
-  const deviceCreateStore = useDeviceCreateStore();
+  const securityLoginStore = useSecurityLoginStore();
 
   deviceShowStore.retrieveFromLocal();
-  const { retrieved } = storeToRefs(deviceShowStore);
 
-  if (typeof options.headers === "undefined") {
-    Object.assign(options, { headers: new Headers() });
+  if (typeof options.headers === "undefined" || !options.headers) {
+    options.headers = new Headers();
   }
 
   if (options.auth !== false) {
@@ -31,49 +36,24 @@ export default async function api(
   }
 
   if (options.auth) {
-    const { token } = apiToken.get() || { token: null };
+    const { token } = (await apiToken.get()) || { token: null };
     if (token) {
       options.headers.set("Authorization", `Bearer ${token}`);
+      securityLoginStore.setUserTokenData(apiToken.getDecodedToken());
     }
   }
 
-  let isRefreshed = false;
-
-  for (let i = 0; i < 2; i++) {
-    try {
-      return await internalApi(id, { ...options });
-    } catch (e) {
-      if (options.auth) {
-        if (e === 401) {
-          const tokenData = apiToken.get();
-
-          if (
-            !isRefreshed &&
-            tokenData &&
-            apiToken.isRefreshTokenAlive(tokenData) &&
-            retrieved &&
-            retrieved.value
-          ) {
-            try {
-              await apiToken.refreshToken(retrieved.value.deviceId);
-              deviceCreateStore.setCreated(retrieved.value);
-              isRefreshed = true;
-              continue;
-            } catch (e) {
-              console.error(e);
-            }
-          }
-
-          if (router.currentRoute.value.name !== "Home") {
-            apiToken.remove();
-            const securityLoginStore = useSecurityLoginStore();
-            securityLoginStore.setUserTokenData(undefined);
-            router.push({ name: "Home" });
-          }
+  try {
+    return await internalApi(id, { ...options });
+  } catch (e) {
+    if (options.auth) {
+      if (e === 401) {
+        if (router.currentRoute.value.name !== "Home") {
+          apiToken.remove();
+          securityLoginStore.setUserTokenData(undefined);
+          router.push({ name: "Home" });
         }
       }
-
-      throw e;
     }
   }
 

@@ -18,7 +18,7 @@ interface State {
 
 export const useSecurityLoginStore = defineStore("securityLogin", {
   state: (): State => ({
-    userTokenData: apiToken.getDecodedToken(),
+    userTokenData: undefined,
     isLoading: false,
     error: undefined,
     violations: undefined,

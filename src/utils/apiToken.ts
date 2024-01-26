@@ -14,16 +14,35 @@ export function save(tokenResponse: TokenResponse) {
   localStorage.setItem(TOKEN_KEY, JSON.stringify(_tokenData));
 }
 
-export function get(): TokenResponse | undefined {
-  if (_tokenData) {
-    return _tokenData;
+export function isAccessTokenAlive(): boolean {
+  const tokenData = getDecodedToken(_tokenData);
+  if (!tokenData || !tokenData.exp) {
+    throw new Error("no token data");
+  }
+  const now = dayjs();
+
+  return now.isBefore(dayjs.unix(tokenData.exp));
+}
+
+export async function get(): Promise<TokenResponse | undefined> {
+  if (!_tokenData) {
+    try {
+      _tokenData = JSON.parse(localStorage.getItem(TOKEN_KEY) || "?");
+    } catch (e) {
+      remove();
+      return undefined;
+    }
   }
 
-  try {
-    _tokenData = JSON.parse(localStorage.getItem(TOKEN_KEY) || "?");
-  } catch (e) {
+  const decodedToken = getDecodedToken(_tokenData);
+
+  if (!decodedToken?.deviceId) {
     remove();
     return undefined;
+  }
+
+  if (!isAccessTokenAlive()) {
+    await refreshToken(decodedToken.deviceId);
   }
 
   return _tokenData;
@@ -49,13 +68,12 @@ export async function setToken(payload: Auth) {
 }
 
 export async function refreshToken(deviceId: string) {
-  const tokenData = get();
-
-  if (!tokenData || !isRefreshTokenAlive(tokenData)) {
+  if (!_tokenData || !isRefreshTokenAlive(_tokenData)) {
+    remove();
     throw new Error("no token data");
   }
 
-  save(await callRefreshToken(deviceId, tokenData));
+  save(await callRefreshToken(deviceId, _tokenData));
 }
 
 export async function callAuth(payload: Auth) {
@@ -115,16 +133,18 @@ export async function callRefreshToken(
 
   return response.json();
 }
-export function getDecodedToken() {
-  const tokenData = get();
-  if (!tokenData || !isRefreshTokenAlive(tokenData)) {
+export function getDecodedToken(
+  tokenData?: TokenResponse,
+): AppJwtPayload | undefined {
+  tokenData = tokenData || _tokenData;
+  if (!tokenData) {
     return undefined;
   }
   return jwtDecode<AppJwtPayload>(tokenData.token);
 }
 
 export function isAdmin(): boolean {
-  const payload = getDecodedToken();
+  const payload = getDecodedToken(_tokenData);
   if (!payload) {
     return false;
   }
