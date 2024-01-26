@@ -66,7 +66,7 @@
         />
       </v-col>
       <v-col cols="12" sm="6" md="6">
-        <v-img cover height="100vh" src="@/assets/shipper-banner.png"></v-img>
+        <v-img cover height="100vh" src="@/assets/shipper-banner.jpg"></v-img>
       </v-col>
     </v-row>
   </v-container>
