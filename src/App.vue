@@ -16,6 +16,6 @@ const router = useRouter();
 
 const showSidebar = computed(() => {
   const showSidebar = router.currentRoute.value.meta?.showSidebar;
-  return showSidebar !== undefined ? showSidebar : true;
+  return showSidebar === undefined ? true : showSidebar;
 });
 </script>
