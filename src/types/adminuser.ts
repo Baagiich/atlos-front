@@ -1,4 +1,6 @@
 import type { Item } from "./item";
+import { Review } from "./review";
+import { ReviewUser } from "./reviewuser";
 
 export interface AdminUser extends Item {
   firstName?: string;
@@ -11,4 +13,6 @@ export interface AdminUser extends Item {
   status?: number;
   verified?: boolean;
   driver?: any;
+  review?: ReviewUser;
+  receivedReviews?: [Review];
 }

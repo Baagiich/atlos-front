@@ -1,4 +1,5 @@
 export default {
+  title: "Reviews",
   confirmTitle: "Please rate this shipment",
   confirmBtn: "Approve",
   quick: "Quick",
@@ -7,4 +8,6 @@ export default {
   lackOfInformation: "Lack of information",
   notPaid: "Did not paid",
   combination: "Combination",
+  overview: "Rating overview",
+  empty: "No reviews",
 };
