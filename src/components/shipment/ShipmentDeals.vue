@@ -29,14 +29,45 @@
           ({{ getAverageReview(item) }})
         </span>
 
-        <v-rating
-          :model-value="getAverageReview(item)"
-          color="grey"
-          active-color="yellow-accent-4"
-          half-increments
-          readonly
-          size="18"
-        ></v-rating>
+        <span>
+          <v-rating
+            :model-value="getAverageReview(item)"
+            color="grey"
+            active-color="yellow-accent-4"
+            half-increments
+            readonly
+            size="18"
+          ></v-rating>
+        </span>
+        <v-dialog width="1000">
+          <template #activator="{ props }">
+            <v-btn
+              v-bind="props"
+              variant="plain"
+              size="small"
+              append-icon="mdi-dots-horizontal-circle-outline"
+            >
+              <v-tooltip activator="parent" location="top">{{
+                $t("more")
+              }}</v-tooltip>
+            </v-btn>
+          </template>
+
+          <template #default="{ isActive }">
+            <v-card :title="$t('review.title')">
+              <v-card-text>
+                <ReviewDetail
+                  :review-user-data="item.shipper.review"
+                  :review-list="item.shipper.receivedReviews"
+                ></ReviewDetail>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn @click="isActive.value = false">Close Dialog</v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
+        </v-dialog>
       </template>
       <template #item.bidPrice="{ item }">
         <p>
@@ -219,6 +250,7 @@ import { useShipmentPriceBiddingCreateStore } from "@/store/shipmentpricebidding
 import isString from "lodash/isString";
 import { useShipmentShowStore } from "@/store/shipment/show";
 import router from "@/router";
+import ReviewDetail from "@/components/review/ReviewDetail.vue";
 
 const { t } = useI18n();
 const route = useRoute();

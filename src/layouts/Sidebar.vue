@@ -57,6 +57,13 @@
           @click.stop="rail = !rail"
         ></v-btn>
       </template>
+      <span
+        class="text-body-2"
+        style="cursor: pointer"
+        @click="goToProfileReviewPage()"
+        ><v-icon class="mr-1" icon="mdi-star" size="15"></v-icon
+        >{{ $t("review.title") }}</span
+      >
     </v-list-item>
     <v-divider></v-divider>
     <v-list density="compact" nav>
@@ -217,6 +224,12 @@ function logout() {
   apiToken.remove();
   securityLoginStore.setUserTokenData(undefined);
   router.push({ name: "Home" });
+}
+
+function goToProfileReviewPage() {
+  router.push({
+    name: "ProfileReview",
+  });
 }
 
 watch(locale, (newLocale) => {

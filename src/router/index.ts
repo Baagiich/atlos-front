@@ -25,6 +25,7 @@ import bankRoutes from "./bank";
 import order from "./order";
 import notificationorder from "./notificationorder";
 import DefaultLayout from "@/layouts/default/Default.vue";
+import profile from "./profile";
 
 const routes = [
   {
@@ -70,6 +71,7 @@ const routes = [
   ...bankRoutes,
   ...order,
   ...notificationorder,
+  ...profile,
 ];
 
 const router = createRouter({
