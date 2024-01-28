@@ -46,4 +46,9 @@ export default {
   return: "返回",
   loadTitle: "输入货物信息",
   documentTitle: "需要的文件",
+  REFRIGERATOR: "Refrigerator",
+  HEAVY: "Heavy",
+  TENT: "Tent",
+  TRAILER_METER13: "Trailer (Meter 13)",
+  TRAILER_METER17: "Trailer (Meter 17)",
 };

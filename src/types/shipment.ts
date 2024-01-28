@@ -9,7 +9,7 @@ export interface Shipment extends Item {
   action?: string;
   consignor?: string;
   shipmentCode?: string;
-  shipmentType?: string;
+  shipmentType?: number;
   shipmentShipperDeals?: any;
   reviews?: any;
   shipper?: any;
@@ -40,4 +40,5 @@ export interface Shipment extends Item {
   remainingPaid?: boolean;
   advanceOrderNumber?: string;
   remainingOrderNumber?: string;
+  vehicleTypes?: number[];
 }

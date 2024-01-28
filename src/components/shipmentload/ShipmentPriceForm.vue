@@ -13,14 +13,6 @@
           clearable
           @update:model-value="onPriceWrited"
         >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.name = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
         </v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="2">
@@ -35,14 +27,6 @@
           clearable
           @update:model-value="onPriceWrited"
         >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="price = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
         </v-text-field>
       </v-col>
       <v-col cols="2">
@@ -73,14 +57,6 @@
           clearable
           @update:model-value="onPriceWrited"
         >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.mainWeight = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
         </v-text-field>
       </v-col>
       <v-col v-if="item.loadType === 2" cols="12" sm="6" md="1">
@@ -94,14 +70,6 @@
           variant="outlined"
           clearable
         >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.mainSize = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
         </v-text-field>
       </v-col>
     </v-row>

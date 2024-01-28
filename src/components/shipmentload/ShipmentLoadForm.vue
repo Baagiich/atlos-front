@@ -10,14 +10,6 @@
           :rules="requireRules"
           variant="outlined"
         >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.name = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
         </v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="2">
@@ -40,14 +32,6 @@
           type="number"
           variant="outlined"
         >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.quantity = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
         </v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="2">
@@ -60,14 +44,6 @@
           type="number"
           variant="outlined"
         >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.length = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
         </v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="2">
@@ -80,14 +56,6 @@
           type="number"
           variant="outlined"
         >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.width = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
         </v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="2">
@@ -100,14 +68,6 @@
           type="number"
           variant="outlined"
         >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.height = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
         </v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="2">
@@ -120,14 +80,6 @@
           type="number"
           variant="outlined"
         >
-          <template #append-inner>
-            <v-icon
-              style="cursor: pointer"
-              @click.prevent.stop="item.weight = undefined"
-            >
-              mdi-close
-            </v-icon>
-          </template>
         </v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="2">
@@ -142,10 +94,9 @@
       </v-col>
       <v-col cols="12" sm="6" md="2">
         <v-btn
-          v-if="isUpdate"
           :key="item['@id']"
-          icon="mdi-pencil-circle"
-          color="green"
+          icon="mdi-content-save"
+          color="primary"
           @click="addPerLoad"
         ></v-btn>
         <v-btn
@@ -158,19 +109,6 @@
         ></v-btn>
       </v-col>
     </v-row>
-
-    <v-row>
-      <v-col cols="12" sm="6" md="6">
-        <v-btn
-          v-if="!isUpdate"
-          color="primary"
-          class="load-add-btn"
-          @click="addPerLoad"
-          >{{ $t("shipmentload.addLoad") }}</v-btn
-        >
-      </v-col>
-    </v-row>
-    <v-divider></v-divider>
   </v-form>
 </template>
 

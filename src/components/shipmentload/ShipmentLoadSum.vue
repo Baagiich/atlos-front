@@ -1,53 +1,45 @@
 <template>
   <v-container fluid class="load-sum-container">
     <v-form ref="form">
+      <row>
+        <h4>
+          {{ $t("shipmentload.sum") }}
+        </h4>
+      </row>
       <v-row class="row-sum">
-        <v-col cols="2">
-          <h4>
-            {{ $t("shipmentload.sum") }}
-          </h4>
-        </v-col>
-        <v-col cols="2">
-          <v-text-field
-            variant="outlined"
-            :label="$t('shipmentload.sumQuantity')"
-            :model-value="totalQuantity"
-            suffix="ш"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="2">
-          <v-text-field
-            variant="outlined"
-            :label="$t('shipmentload.sumWeight')"
-            :model-value="totalWeight"
-            suffix="кг"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="2">
-          <v-text-field
-            variant="outlined"
-            :label="$t('shipmentload.cube')"
-            :model-value="totalCube"
-            suffix="Мкуб"
-          ></v-text-field>
-        </v-col>
+        <v-text-field
+          variant="outlined"
+          :label="$t('shipmentload.sumQuantity')"
+          :model-value="totalQuantity"
+          suffix="ш"
+        ></v-text-field>
+
+        <v-text-field
+          variant="outlined"
+          :label="$t('shipmentload.sumWeight')"
+          :model-value="totalWeight"
+          suffix="кг"
+        ></v-text-field>
+
+        <v-text-field
+          variant="outlined"
+          :label="$t('shipmentload.cube')"
+          :model-value="totalCube"
+          suffix="Мкуб"
+        ></v-text-field>
       </v-row>
       <v-row>
-        <v-col cols="12" sm="6" md="4">
-          <v-text-field
-            v-model="loadPrice"
-            type="number"
-            variant="outlined"
-            :label="$t('shipmentload.loadPrice')"
-            :rules="priceRules"
-            @update:model-value="onPriceWrited"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6" md="6">
-          <div color="red">
-            {{ $t("shipmentload.loadAttention") }}
-          </div>
-        </v-col>
+        <v-text-field
+          v-model="loadPrice"
+          type="number"
+          variant="outlined"
+          :label="$t('shipmentload.loadPrice')"
+          :rules="priceRules"
+          @update:model-value="onPriceWrited"
+        ></v-text-field>
+        <div color="red">
+          {{ $t("shipmentload.loadAttention") }}
+        </div>
       </v-row>
     </v-form>
   </v-container>
@@ -118,8 +110,8 @@ const form: Ref<VForm | null> = ref(null);
 </script>
 <style lang="scss" scoped>
 .load-sum-container {
-  margin-top: 85px;
   .row-sum {
+    margin-top: 30px;
     pointer-events: none;
     h4 {
       text-align: right;

@@ -40,9 +40,6 @@
               variant="outlined"
               clearable
             >
-              <template #append-inner>
-                <v-icon style="cursor: pointer"> mdi-close </v-icon>
-              </template>
             </v-text-field>
           </v-col>
         </v-row>
@@ -57,9 +54,6 @@
               variant="outlined"
               clearable
             >
-              <template #append-inner>
-                <v-icon style="cursor: pointer"> mdi-close </v-icon>
-              </template>
             </v-text-field>
           </v-col>
           <v-col cols="4">
@@ -72,9 +66,6 @@
               variant="outlined"
               clearable
             >
-              <template #append-inner>
-                <v-icon style="cursor: pointer"> mdi-close </v-icon>
-              </template>
             </v-text-field>
           </v-col>
           <v-col cols="4">
@@ -87,9 +78,6 @@
               variant="outlined"
               clearable
             >
-              <template #append-inner>
-                <v-icon style="cursor: pointer"> mdi-close </v-icon>
-              </template>
             </v-text-field>
           </v-col>
         </v-row>

@@ -25,6 +25,7 @@ module.exports = {
     "lodash/prefer-lodash-method": "off",
     "lodash/prefer-lodash-typecheck": "off",
     "lodash/prefer-includes": "off",
+    "lodash/prefer-get": "off",
     "@typescript-eslint/ban-types": [
       "error",
       {
