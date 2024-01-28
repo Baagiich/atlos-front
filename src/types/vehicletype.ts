@@ -1,8 +1,7 @@
 export enum VehicleType {
-  REFRIGERATOR = 1,
-  TILT = 2,
-  OPEN = 3,
-  TOW = 4,
-  DUMP = 5,
-  HEAVY = 6,
+  TENT = 1,
+  REFRIGERATOR = 2,
+  HEAVY = 3,
+  TRAILER_METER17 = 4,
+  TRAILER_METER13 = 5,
 }

@@ -45,43 +45,64 @@
                 </v-row>
                 <ShipmentPriceForm ref="priceFormRef" />
               </v-stepper-window-item>
-
-              <v-stepper-window-item :key="step" :value="steps[2]">
+              <v-stepper-window-item
+                v-if="item?.loadType !== ShipmentLoadType.DANGEROUS"
+                :key="step"
+                :value="steps[2]"
+              >
                 <h3 class="load-title">
                   {{ $t("shipmentload.loadTitle") }}
                 </h3>
+                <v-row>
+                  <v-col cols="9">
+                    <div v-if="totalCreatedLoads > 0">
+                      <div
+                        v-for="createdLoad in createdLoads"
+                        :key="createdLoad['@id']"
+                      >
+                        <ShipmentLoadUpdate
+                          :key="createdLoad['@id']"
+                          :item="createdLoad"
+                          @updatelist="getCreatedLoads"
+                        />
+                      </div>
+                    </div>
 
-                <div v-if="totalCreatedLoads > 0">
-                  <div
-                    v-for="createdLoad in createdLoads"
-                    :key="createdLoad['@id']"
-                  >
-                    <ShipmentLoadUpdate
-                      :key="createdLoad['@id']"
-                      :item="createdLoad"
+                    <ShipmentLoadCreate
+                      v-if="item && item.loadType === ShipmentLoadType.REGULAR"
+                      :created-shipment-id="createdShipmentId"
                       @updatelist="getCreatedLoads"
                     />
-                  </div>
-                </div>
-
-                <ShipmentLoadCreate
-                  v-if="item && item.loadType === 1"
-                  :created-shipment-id="createdShipmentId"
-                  @updatelist="getCreatedLoads"
-                />
-                <br />
-                <ShipmentLoadSum
-                  v-if="item && item.loadType === 1 && totalCreatedLoads > 0"
-                  ref="loadSumRef"
-                  :created-loads="createdLoads"
-                  :patch-shipment-item="patchShipmentItem"
-                  :currency="item.currency"
-                />
+                  </v-col>
+                  <v-col cols="3">
+                    <ShipmentLoadSum
+                      v-if="item && item.loadType === ShipmentLoadType.REGULAR"
+                      ref="loadSumRef"
+                      :created-loads="createdLoads"
+                      :patch-shipment-item="patchShipmentItem"
+                      :currency="item.currency"
+                      :sticky="true"
+                      style="position: sticky"
+                    />
+                    <VehicleForm
+                      v-if="item && item.loadType === ShipmentLoadType.REGULAR"
+                      ref="vehicleFormRef"
+                    />
+                  </v-col>
+                </v-row>
               </v-stepper-window-item>
-              <v-stepper-window-item :key="step" :value="steps[3]">
+              <v-stepper-window-item
+                :key="step"
+                :value="
+                  item?.loadType === ShipmentLoadType.DANGEROUS
+                    ? steps[2]
+                    : steps[3]
+                "
+              >
                 <ShipmentDocumentType
+                  ref="documentTypeRef"
                   :item-documents="itemDocuments"
-                  :save-store="saveStore"
+                  :load-type="item?.loadType"
                 />
               </v-stepper-window-item>
             </v-stepper-window>
@@ -129,6 +150,10 @@ import router from "@/router";
 import { useDocumentTypeCreateStore } from "@/store/documenttype/create";
 import { useAddressUpdateStore } from "@/store/address/update";
 import { useShipmentUpdateStore } from "@/store/shipment/update";
+import { ShipmentType } from "@/types/shipment_type";
+import { ShipmentLoadType } from "@/types/shipment_load_type";
+import VehicleForm from "@/components/shipmentload/VehicleForm.vue";
+
 const { t } = useI18n();
 const breadcrumb = useBreadcrumb();
 const currentStep = ref(1);
@@ -152,7 +177,6 @@ const documentTypeCreateStore = useDocumentTypeCreateStore();
 const addressUpdateStore = useAddressUpdateStore();
 const { updated: formAddressUpdated } = storeToRefs(addressUpdateStore);
 const shipmentUpdateStore = useShipmentUpdateStore();
-const saveStore = ref(false);
 const shipmentFormRef = ref();
 const fromAddressFormRef = ref();
 const toAddressFormRef = ref();
@@ -162,7 +186,9 @@ const secondStepResult2 = ref(false);
 const secondStepResult3 = ref(false);
 const secondStepResult4 = ref(false);
 const loadSumRef = ref();
+const vehicleFormRef = ref();
 const datePickerFormRef = ref();
+const documentTypeRef = ref();
 async function saveShipment() {
   await saveFromAddress();
   await saveToAddress();
@@ -247,7 +273,6 @@ async function createNewShipment() {
   if (createdShipment?.value && createdShipment?.value["@id"]) {
     createdShipmentId.value = createdShipment?.value["@id"];
     patchShipmentItem.value.id = createdShipment?.value.id;
-    isUpdateShipment.value = true;
     item.value.id = createdShipment?.value.id;
   }
 }
@@ -281,10 +306,14 @@ async function saveSumOnShipment() {
 watch(
   () => item?.value?.loadType,
   () => {
-    if (item?.value?.loadType === 2) {
+    if (item?.value?.loadType === ShipmentLoadType.CARGO) {
       steps.value = [1, 2];
+    } else if (item?.value?.loadType === ShipmentLoadType.DANGEROUS) {
+      steps.value = [1, 2, 3];
+      item.value.shipmentType = ShipmentType.SECURE;
     } else {
       steps.value = [1, 2, 3, 4];
+      if (item && item.value) item.value.shipmentType = undefined;
     }
   },
 );
@@ -308,8 +337,7 @@ async function next() {
     if (result) {
       addStepper();
     }
-  }
-  if (currentStep.value === 2) {
+  } else if (currentStep.value === 2) {
     secondStepResult1.value = await toAddressFormRef.value.validateForm();
     secondStepResult2.value = await fromAddressFormRef.value.validateForm();
     secondStepResult3.value = await datePickerFormRef.value.validateForm();
@@ -321,30 +349,43 @@ async function next() {
       secondStepResult4.value
     ) {
       if (item?.value?.loadType === 2) {
-        emitFinish();
+        await emitFinish();
       } else {
         if (isUpdateShipment.value === false) {
-          saveShipment();
+          await saveShipment();
         }
         if (isUpdateShipment.value === true) {
-          updateShipment();
+          await updateShipment();
         }
       }
       addStepper();
     }
-  }
-  if (currentStep.value === 3) {
-    loadSumRef.value.validateForm().then(function (result: boolean) {
-      if (result) {
-        addStepper();
-        saveSumOnShipment();
+  } else if (currentStep.value === 3) {
+    if (item?.value?.loadType !== ShipmentLoadType.DANGEROUS) {
+      const result = await loadSumRef.value.validateForm();
+      const vehicleTypeResult = await vehicleFormRef.value.validateForm();
+      if (vehicleTypeResult) {
+        if (
+          patchShipmentItem &&
+          patchShipmentItem.value &&
+          patchShipmentItem.value.vehicleTypes === undefined
+        ) {
+          patchShipmentItem.value.vehicleTypes = [...vehicleTypeResult.value];
+        }
       }
-    });
-  }
-  if (currentStep.value === 4) {
-    addStepper();
-    saveStore.value = true;
+      if (result) {
+        await saveSumOnShipment();
+        addStepper();
+      }
+    } else {
+      await documentTypeRef.value.savetoStore();
+      await emitFinishDocument();
+      addStepper();
+    }
+  } else if (currentStep.value === 4) {
+    await documentTypeRef.value.savetoStore();
     await emitFinishDocument();
+    addStepper();
   }
 }
 </script>

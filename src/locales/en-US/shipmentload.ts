@@ -44,4 +44,9 @@ export default {
   return: "Return",
   loadTitle: "Insert shipment information",
   documentTitle: "Required documents",
+  REFRIGERATOR: "Refrigerator",
+  HEAVY: "Heavy",
+  TENT: "Tent",
+  TRAILER_METER13: "Trailer (Meter 13)",
+  TRAILER_METER17: "Trailer (Meter 17)",
 };

@@ -23,26 +23,17 @@
         </div>
       </v-col>
     </v-row>
-    <v-row>
-      <!-- <v-col cols="12" sm="6" md="6">
-        <v-btn color="primary" variant="outlined">
-          {{ $t("shipmentload.cancel") }}
-        </v-btn>
-        <v-btn color="primary" class="ml-2" @click="emitFinish">{{
-          $t("shipmentload.continue")
-        }}</v-btn>
-      </v-col> -->
-    </v-row>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref, watch } from "vue";
+import { onBeforeUnmount, ref } from "vue";
 import { DocumentTypeEnum } from "@/types/document_type";
 import { DocumentType } from "@/types/documenttype";
 import * as enumHelper from "@/utils/enumHelper";
 import { Ref } from "vue";
 import { useCreateNewDocumentStore } from "@/store/shipmentload/newdocument";
+import { ShipmentLoadType } from "@/types/shipment_load_type";
 
 interface DocTypeRef {
   key: string;
@@ -52,20 +43,32 @@ interface DocTypeRef {
 const docTypes = enumHelper.getMap(DocumentTypeEnum);
 const docTypeRef: Ref<DocTypeRef[]> = ref([]);
 
-docTypes.forEach((doc) => {
-  docTypeRef.value.push({ key: doc.key, value: doc.value, data: 0 });
-});
 const props = defineProps<{
   itemDocuments?: DocumentType[];
-  saveStore: boolean;
+  loadType: number;
 }>();
 const itemDocuments: Ref<DocumentType[]> = ref(props.itemDocuments || []);
 const newDocumentStore = useCreateNewDocumentStore();
+docTypes.forEach((doc) => {
+  if (
+    doc.value === DocumentTypeEnum.F &&
+    props.loadType == ShipmentLoadType.DANGEROUS
+  ) {
+    docTypeRef.value.push({ key: doc.key, value: doc.value, data: 1 });
+  } else if (
+    doc.value === DocumentTypeEnum.F &&
+    props.loadType != ShipmentLoadType.DANGEROUS
+  ) {
+    return;
+  } else {
+    docTypeRef.value.push({ key: doc.key, value: doc.value, data: 0 });
+  }
+});
 
 onBeforeUnmount(() => {
   newDocumentStore.$reset();
 });
-function savetoStore() {
+async function savetoStore() {
   docTypeRef.value.forEach((doc) => {
     if (doc.data > 0) {
       const docType: Ref<DocumentType> = ref({});
@@ -75,14 +78,9 @@ function savetoStore() {
     }
   });
 }
-watch(
-  () => props.saveStore,
-  () => {
-    if (props.saveStore) {
-      savetoStore();
-    }
-  },
-);
+defineExpose({
+  savetoStore,
+});
 </script>
 <style lang="scss" scoped>
 .doc-names {

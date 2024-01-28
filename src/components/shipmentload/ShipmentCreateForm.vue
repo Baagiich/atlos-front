@@ -16,9 +16,19 @@
             color="indigo"
             class="black-text"
           ></v-radio>
+          <v-radio
+            :label="$t('shipmentload.dangerousGood')"
+            :value="ShipmentLoadType.DANGEROUS"
+            color="indigo"
+            class="black-text"
+          ></v-radio>
         </v-radio-group>
         <div>{{ $t("shipmentload.choiceShipmentType") }}</div>
-        <v-radio-group v-model="item.shipmentType" :rules="requireRules">
+        <v-radio-group
+          v-model="item.shipmentType"
+          :rules="requireRules"
+          :disabled="item.loadType === ShipmentLoadType.DANGEROUS"
+        >
           <v-radio
             :label="$t('shipmentload.secureShipment')"
             :value="ShipmentType.SECURE"

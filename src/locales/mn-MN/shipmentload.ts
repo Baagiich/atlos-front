@@ -46,4 +46,10 @@ export default {
   return: "Буцах",
   loadTitle: "Ачааны мэдээлэл оруулах",
   documentTitle: "Шаардлагатай бичиг баримт",
+  dangerousGood: "Аюултай ачаа",
+  REFRIGERATOR: "Хөргүүр",
+  HEAVY: "Хүнд даацын трайлер",
+  TENT: "Тент",
+  TRAILER_METER13: "4.17м урт шаланз трайлер",
+  TRAILER_METER17: "5.13м урт стандарт шаланз",
 };
