@@ -1,4 +1,5 @@
 import { DeviceLocation } from "./devicelocation";
+import { DocumentType } from "./documenttype";
 import type { Item } from "./item";
 
 export interface ShipmentDetail extends Item {
@@ -12,4 +13,5 @@ export interface ShipmentDetail extends Item {
   fromAddress?: any;
   toAddress?: any;
   createdAt?: string;
+  documentTypes?: DocumentType[];
 }

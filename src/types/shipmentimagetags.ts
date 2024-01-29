@@ -21,8 +21,3 @@ export enum ShipmentImageTags {
   urdTal45 = "urd_tal_45",
   achaaniiZurag = "achaanii_zurag",
 }
-
-export enum ShipmentFileTags {
-  tir = "tir",
-  cmr = "cmr",
-}

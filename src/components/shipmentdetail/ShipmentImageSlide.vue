@@ -21,90 +21,12 @@
 
             <div v-if="image?.data.image">
               <MediaObjectThumb :id="image.data.image"></MediaObjectThumb>
-              <div v-if="files">
-                <div v-if="rejected">
-                  <v-card-subtitle class="mt-2">
-                    {{ $t("shipmentimage.selectTitle") }}
-                  </v-card-subtitle>
-                  <v-select
-                    v-model="rejectedCauses"
-                    multiple
-                    class="ma-2"
-                    :label="$t('shipmentimage.select')"
-                    :items="rejectType"
-                    variant="outlined"
-                    :item-title="
-                      (item) =>
-                        item.key ? $t('shipmentimage.' + item.key) : ''
-                    "
-                    item-value="value"
-                  ></v-select>
-
-                  <v-btn
-                    class="ma-2"
-                    variant="outlined"
-                    color="error"
-                    @click="emitReject(image.data)"
-                  >
-                    {{ $t("shipmentimage.reject") }}
-                  </v-btn>
-                </div>
-
-                <div v-else>
-                  <div
-                    v-if="
-                      image?.data.status === 'pending' &&
-                      loggedUserType === 'consignor'
-                    "
-                  >
-                    <v-btn
-                      class="ma-2"
-                      variant="outlined"
-                      color="success"
-                      @click="emitAccept(image.data)"
-                    >
-                      {{ $t("shipmentimage.accept") }}
-                    </v-btn>
-                    <v-btn
-                      class="ma-2"
-                      variant="outlined"
-                      color="error"
-                      @click="handleReject"
-                    >
-                      {{ $t("shipmentimage.reject") }}
-                    </v-btn>
-                  </div>
-                  <v-card
-                    v-else
-                    class="ma-1 pa-1"
-                    max-width="180"
-                    :color="
-                      image?.data.status === 'approved'
-                        ? 'success'
-                        : 'purple-accent-2'
-                    "
-                    variant="outlined"
-                  >
-                    <v-card-item>
-                      <div>
-                        <div class="text-overline mb-1">
-                          {{
-                            image.data.status === "rejected"
-                              ? formatRejectedCauses(image?.data.rejectedCauses)
-                              : $t("shipmentimage." + image?.data.status)
-                          }}
-                        </div>
-                      </div>
-                    </v-card-item>
-                  </v-card>
-                </div>
-              </div>
               <v-btn
                 v-if="uploadable"
                 class="ma-2 pa-2"
                 icon="mdi-plus"
                 size="small"
-                @click="handleUpload(image.tag)"
+                @click="handleFileUpload(image)"
               ></v-btn>
             </div>
             <div v-else class="ma-2 pa-2 align-self-center">
@@ -133,21 +55,18 @@
 import { ShipmentImage } from "@/types/shipmentimage";
 import { computed, Ref, ref, watch } from "vue";
 import MediaObjectThumb from "@/components/mediaobject/MediaObjectThumb.vue";
-import { ShipmentFileTags, ShipmentImageTags } from "@/types/shipmentimagetags";
+import { ShipmentImageTags } from "@/types/shipmentimagetags";
 import * as enumHelper from "@/utils/enumHelper";
 import FileUploader from "@/components/common/FileUploader.vue";
 import { useMediaObjectCreateStore } from "@/store/mediaobject/create";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
-import { ShipmentImageRejectType } from "@/types/shipmentimage_reject_type";
-import { useI18n } from "vue-i18n";
 import * as apiToken from "@/utils/apiToken";
 import { UserType } from "@/types/usertype";
-const { t } = useI18n();
+
 const model = ref(null);
 const props = defineProps<{
   items?: ShipmentImage[];
-  files?: boolean;
   defaultImageTags?: string;
   uploadable?: boolean;
   imgUpdated?: boolean;
@@ -160,17 +79,13 @@ const emit = defineEmits<{
 const route = useRoute();
 const rejected = ref(false);
 const imageTags = enumHelper.getMap(ShipmentImageTags);
-const fileTags = enumHelper.getMap(ShipmentFileTags);
 const uploadOverlay = ref(false);
 const images: Ref<{ data: ShipmentImage; tag: string }[]> = ref([]);
 const selectedTag: Ref<string[]> = ref([]);
 const mediaObjectCreateStore = useMediaObjectCreateStore();
 const { created } = storeToRefs(mediaObjectCreateStore);
 
-const rejectType = enumHelper.getMap(ShipmentImageRejectType);
-rejectType.unshift({ key: "", value: "" });
 const rejectedCauses = ref([]);
-const imageBeingUpdated = ref(false);
 const payload = apiToken.getDecodedToken();
 if (!payload) {
   throw new Error("Token payload invalid");
@@ -187,7 +102,9 @@ const loggedUserType = computed(() => {
 });
 
 async function formatItems() {
-  props.files ? await processData(fileTags) : await processData(imageTags);
+  rejectedCauses.value = [];
+  rejected.value = false;
+  await processData(imageTags);
 }
 async function processData(arrayItem: { key: string; value: any }[]) {
   images.value = [];
@@ -231,10 +148,9 @@ function handleUpload(tag: string) {
     tag,
   ];
 }
-
-async function handleReject() {
-  rejected.value = true;
-  imageBeingUpdated.value = true;
+function handleFileUpload(image: any) {
+  uploadOverlay.value = true;
+  handleUpload(image.tag);
 }
 watch(
   () => props.imgUpdated,
@@ -244,25 +160,9 @@ watch(
     }
   },
 );
-function formatRejectedCauses(data: any) {
-  const formattedData = data.map((item: any) => {
-    return t("shipmentimage." + item);
-  });
-
-  return formattedData.join(", ");
-}
 formatItems();
 function emitUpload() {
   uploadOverlay.value = false;
   emit("submitImg", uploadedImg);
-}
-
-function emitReject(image: any) {
-  emit("rejectFile", { image, rejectedCauses });
-}
-
-function emitAccept(data: any) {
-  imageBeingUpdated.value = true;
-  emit("acceptFile", data);
 }
 </script>
