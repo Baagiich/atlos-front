@@ -19,6 +19,7 @@ import shipmentimage from "./shipmentimage";
 import review from "./review";
 import consignor from "./consignor";
 import shippercompany from "./shippercompany";
+import shipmentload from "./shipmentload";
 import shipmentloadinfos from "./shipmentloadinfos";
 export default {
   home: "Home",
@@ -114,4 +115,5 @@ export default {
   register: "Register",
   registerVerification: "Register verification",
   shipmentloadinfos,
+  shipmentload,
 };
