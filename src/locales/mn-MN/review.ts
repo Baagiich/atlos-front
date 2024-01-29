@@ -10,4 +10,5 @@ export default {
   combination: "Бүгд",
   overview: "Тойм",
   empty: "Үр дүн олдсонгүй",
+  tag: "Таг",
 };

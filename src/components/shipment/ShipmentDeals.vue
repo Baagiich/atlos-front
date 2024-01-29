@@ -58,7 +58,7 @@
               <v-card-text>
                 <ReviewDetail
                   :review-user-data="item.shipper.review"
-                  :review-list="item.shipper.receivedReviews"
+                  :list-filters="{ recipient: item.shipper['@id'] }"
                 ></ReviewDetail>
               </v-card-text>
               <v-card-actions>

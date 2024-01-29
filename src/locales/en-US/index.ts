@@ -84,6 +84,7 @@ export default {
   more: "More",
   total: "Total",
   profile: "Profile",
+  date: "Date",
   vehicleimage,
   vehicle,
   wallet,

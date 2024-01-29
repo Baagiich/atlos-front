@@ -88,6 +88,7 @@ export default {
   more: "查看更多",
   total: "Total",
   profile: "Profile",
+  date: "Date",
   vehicle,
   vehicleimage,
   consignor,

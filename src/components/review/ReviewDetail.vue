@@ -1,6 +1,6 @@
 <template>
   <v-row class="mt-3">
-    <v-col cols="12" md="6">
+    <v-col cols="12" md="5">
       <v-card
         v-if="reviewData"
         class="d-flex flex-column mx-auto py-8"
@@ -139,44 +139,45 @@
         </v-list>
       </v-card>
     </v-col>
-    <v-col cols="12" sm="6" md="6">
-      <v-list
+    <v-col cols="12" md="7">
+      <v-data-table-server
         v-if="reviewList && reviewList.length > 0"
-        lines="two"
-        class="review-list"
+        :headers="headers"
+        :items="reviewList"
+        :items-length="totalItems"
+        :loading="isLoading"
+        :items-per-page="itemsPerPage"
+        :no-data-text="$t('review.empty')"
+        @update:page="updatePage"
+        @update:sortBy="updateOrder"
+        @update:items-per-page="updatePerPage"
       >
-        <v-list-item v-for="(item, index) in reviewList" :key="index">
-          <template #prepend>
-            <v-icon
-              color="grey-lighten"
-              icon="mdi-account-circle-outline"
-              size="large"
-            ></v-icon>
-          </template>
-          <v-list-item-title class="d-flex align-center">
-            <b class="mr-2">{{ getUserEmail(item) }}</b>
-            <v-rating
-              :model-value="item.rating"
-              :length="5"
-              :size="22"
-              color="yellow-darken-3"
-              half-increments
-              readonly
-            ></v-rating
-          ></v-list-item-title>
-
-          <v-list-item-subtitle class="mt-2">
-            {{ item.content }}
-            <template v-for="(tag, key) in item.tags" :key="key">
-              <v-chip size="small" class="ma-2"> {{ tag }} </v-chip>
-            </template>
-          </v-list-item-subtitle>
-          <span class="text-body-2 text-grey">{{
-            item.createdAt ? formatDateTimeFull(item.createdAt) : ""
-          }}</span>
-          <v-divider></v-divider>
-        </v-list-item>
-      </v-list>
+        <template #item.senderEmail="{ item }">
+          {{ item.senderEmail }}
+        </template>
+        <template #item.rating="{ item }">
+          <v-rating
+            :model-value="item.rating"
+            color="orange-darken-2"
+            density="compact"
+            size="small"
+            readonly
+          ></v-rating>
+        </template>
+        <template #item.tags="{ item }">
+          <v-chip
+            v-for="(tag, key) in item.tags"
+            :key="key"
+            size="small"
+            class="ma-2"
+          >
+            {{ $t(tag) }}
+          </v-chip>
+        </template>
+        <template #item.createdAt="{ item }">
+          {{ item.createdAt ? formatDateTimeFull(item.createdAt) : "" }}
+        </template>
+      </v-data-table-server>
       <v-container v-else class="text-center">
         <v-icon icon="mdi-package-variant" size="200" color="grey"></v-icon>
         <p class="text-grey">{{ $t("review.empty") }}</p>
@@ -186,15 +187,77 @@
 </template>
 
 <script lang="ts" setup>
-import { Review } from "@/types/review";
 import { ReviewUser } from "@/types/reviewuser";
 import { formatDateTimeFull } from "@/utils/date";
-import { computed, toRef } from "vue";
+import { computed, Ref, ref, toRef } from "vue";
+import { useReviewList } from "@/store/review/list";
+import { storeToRefs } from "pinia";
+import { Filters, VuetifyOrder } from "@/types/list";
+import { useI18n } from "vue-i18n";
+
+const reviewListStore = useReviewList();
+const { t } = useI18n();
+
+const {
+  items: reviewList,
+  totalItems,
+  isLoading,
+} = storeToRefs(reviewListStore);
 
 const props = defineProps<{
   reviewUserData: ReviewUser;
-  reviewList: [Review];
+  listFilters: Filters;
 }>();
+
+const page = ref(1);
+const itemsPerPage = ref(10);
+const ordering = ref({});
+const filters: Ref<Filters> = ref({});
+
+if (props.listFilters) {
+  filters.value = {
+    ...props.listFilters,
+  };
+}
+
+async function sendRequest() {
+  await reviewListStore.getItems({
+    page: +page.value,
+    order: ordering.value,
+    page_size: itemsPerPage.value,
+    ...filters.value,
+  });
+}
+
+sendRequest();
+
+const headers = [
+  {
+    title: t("email"),
+    key: "senderEmail",
+    sortable: false,
+  },
+  {
+    title: t("review.title"),
+    key: "rating",
+    sortable: true,
+  },
+  {
+    title: t("review.tag"),
+    key: "tags",
+    sortable: false,
+  },
+  {
+    title: t("description"),
+    key: "content",
+    sortable: false,
+  },
+  {
+    title: t("date"),
+    key: "createdAt",
+    sortable: false,
+  },
+];
 
 const reviewUserDataRef = toRef(props, "reviewUserData");
 const reviewData = computed(() => {
@@ -209,10 +272,24 @@ function calculatePercent(reviewData: ReviewUser, rate: number) {
   return rate === 0 ? 0 : Math.round((rate * 100) / reviewData.totalRateCount);
 }
 
-function getUserEmail(item: Review) {
-  return item.sender && typeof item.sender !== "string"
-    ? item.sender.email
-    : "";
+function updatePage(newPage: number) {
+  page.value = newPage;
+
+  sendRequest();
+}
+
+function updatePerPage(size: number) {
+  itemsPerPage.value = size;
+
+  sendRequest();
+}
+
+function updateOrder(newOrders: VuetifyOrder[]) {
+  const newOrder = newOrders[0];
+  if (newOrder) {
+    ordering.value = { [newOrder.key]: newOrder.order };
+    sendRequest();
+  }
 }
 </script>
 
