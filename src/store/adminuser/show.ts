@@ -23,12 +23,7 @@ export const useAdminUserShowStore = defineStore("adminuserShow", {
       this.toggleLoading();
 
       try {
-        const params = new URLSearchParams({
-          "groups[0]": "adminUser:list",
-          "groups[1]": "shipment:deal",
-        });
-        const url = `${id}?${params.toString()}`;
-        const response = await api(url);
+        const response = await api(id);
         const data: AdminUser = await response.json();
         const hubUrl = extractHubURL(response);
 

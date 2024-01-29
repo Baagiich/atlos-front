@@ -10,4 +10,5 @@ export default {
   combination: "Combination",
   overview: "Rating overview",
   empty: "No reviews",
+  tag: "标签",
 };

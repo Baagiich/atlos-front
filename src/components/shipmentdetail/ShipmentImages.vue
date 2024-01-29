@@ -65,7 +65,7 @@
       </v-window-item>
       <v-window-item :key="shipper + '-' + 3" :value="shipper + '-' + 3">
         <ShipmentFiles
-          :fileTags="fileTags"
+          :file-tags="fileTags"
           :items="shipperFilePictures"
           :uploadable="isUserType(shipper)"
           :img-updated="imgUpdated"

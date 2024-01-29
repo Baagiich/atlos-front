@@ -9,5 +9,6 @@ export interface Review extends Item {
   recipient?: string | AdminUser;
   shipment?: string | Shipment;
   tags?: string[];
+  senderEmail?: string;
   createdAt?: string;
 }

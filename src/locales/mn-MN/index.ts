@@ -89,6 +89,7 @@ export default {
   more: "Дэлгэрэнгүй",
   total: "Нийт",
   profile: "Профайл",
+  date: "Огноо",
   vehicle,
   vehicleimage,
   consignor,

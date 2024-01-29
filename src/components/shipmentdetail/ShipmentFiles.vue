@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-row align="center" justify="center" v-if="images.length > 0" dense>
+    <v-row v-if="images.length > 0" align="center" justify="center" dense>
       <v-col
         v-for="(image, index) in images"
         :key="index"
