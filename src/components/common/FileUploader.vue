@@ -2,10 +2,6 @@
   <div class="uploader-wrapper">
     <div class="upload">
       <div class="table-responsive">
-        <v-text-field
-          :error="Boolean(violations)"
-          :error-messages="violations?.message"
-        ></v-text-field>
         <v-table class="table table-hover">
           <thead>
             <tr>
@@ -145,7 +141,7 @@ import VueUploadComponent, { VueUploadItem } from "vue-upload-component";
 import { ref } from "vue";
 import { useMediaObjectCreateStore } from "@/store/mediaobject/create";
 import { Ref } from "vue";
-import { storeToRefs } from "pinia";
+// import { storeToRefs } from "pinia";
 import Compressor from "compressorjs";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
@@ -242,7 +238,7 @@ function formatSize(size: number) {
   return size.toString() + " B";
 }
 const mediaObjectCreateStore = useMediaObjectCreateStore();
-const { violations } = storeToRefs(mediaObjectCreateStore);
+// const { violations } = storeToRefs(mediaObjectCreateStore);
 async function uploadFile(newFile: VueUploadItem) {
   const formData = new FormData();
   if (

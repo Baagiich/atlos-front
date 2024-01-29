@@ -20,9 +20,6 @@ export default {
   urd_tal_45: "前面45度",
   achaanii_zurag: "货物图片",
 
-  cmr: "cmr",
-  tir: "tir",
-
   noImages: "没有图片",
   status: "状态",
 
@@ -44,4 +41,44 @@ export default {
   pending: "预期的",
   approved: "确认",
   rejected: "取消",
+
+  cmr_1: "approved CMR1",
+  cmr_2: "approved CMR2",
+  cmr_3: "approved CMR3",
+  cmr_4: "approved CMR4",
+
+  cmr_1_upload: "uploaded CMR1",
+  cmr_2_upload: "uploaded CMR2",
+  cmr_3_upload: "uploaded CMR3",
+  cmr_4_upload: "uploaded CMR4",
+
+  tir_1: "approved TIR1",
+  tir_2: "approved TIR2",
+  tir_3: "approved TIR3",
+  tir_4: "approved TIR4",
+
+  tir_1_upload: "uploaded TIR1",
+  tir_2_upload: "uploaded TIR2",
+  tir_3_upload: "uploaded TIR3",
+  tir_4_upload: "uploaded TIR4",
+
+  git_1: "approved GIT1",
+  git_2: "approved GIT2",
+  git_3: "approved GIT3",
+  git_4: "approved GIT4",
+
+  git_1_upload: "uploaded GIT1",
+  git_2_upload: "uploaded GIT2",
+  git_3_upload: "uploaded GIT3",
+  git_4_upload: "uploaded GIT4",
+
+  F_1: "approved F1",
+  F_2: "approved F2",
+  F_3: "approved F3",
+  F_4: "approved F4",
+
+  F_1_upload: "uploaded F1",
+  F_2_upload: "uploaded F2",
+  F_3_upload: "uploaded F3",
+  F_4_upload: "uploaded F4",
 };

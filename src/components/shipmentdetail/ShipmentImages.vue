@@ -64,16 +64,15 @@
         ></ShipmentImageSlide>
       </v-window-item>
       <v-window-item :key="shipper + '-' + 3" :value="shipper + '-' + 3">
-        <ShipmentImageSlide
+        <ShipmentFiles
+          :fileTags="fileTags"
           :items="shipperFilePictures"
-          :default-image-tags="ShipmentImageSectionTag.files"
           :uploadable="isUserType(shipper)"
           :img-updated="imgUpdated"
-          :files="true"
           @submitImg="emitUpload"
           @accept-file="emitAcceptFile"
           @reject-file="emitRejectFile"
-        ></ShipmentImageSlide>
+        ></ShipmentFiles>
       </v-window-item>
     </v-window>
   </v-card>
@@ -88,6 +87,7 @@ import { Filters } from "@/types/list";
 import { ShipmentImage } from "@/types/shipmentimage";
 import ShipmentDetailState from "./ShipmentState.vue";
 import ShipmentImageSlide from "./ShipmentImageSlide.vue";
+import ShipmentFiles from "./ShipmentFiles.vue";
 import { useShipmentImageCreateStore } from "@/store/shipmentimage/create";
 import { useShipmentImageUpdateStore } from "@/store/shipmentimage/update";
 import * as enumHelper from "@/utils/enumHelper";
@@ -95,6 +95,7 @@ import { ShipmentImageRejectType } from "@/types/shipmentimage_reject_type";
 import { ShipmentImageSectionTag } from "@/types/shipmentimagetags";
 import * as apiToken from "@/utils/apiToken";
 import { UserType } from "@/types/usertype";
+import { useShipmentDetailStore } from "@/store/shipment/detail";
 
 const consignortab = ref(null);
 const shippertab = ref(null);
@@ -113,6 +114,8 @@ filters.value.shipment = decodeURIComponent(route.params.id as string);
 const shipmentImageCreateStore = useShipmentImageCreateStore();
 const { created } = storeToRefs(shipmentImageCreateStore);
 const shipmentImageUpdateStore = useShipmentImageUpdateStore();
+const shipmentDetailStore = useShipmentDetailStore();
+const { retrieved } = storeToRefs(shipmentDetailStore);
 
 const rejectType = enumHelper.getMap(ShipmentImageRejectType);
 rejectType.unshift({ key: "", value: "" });
@@ -188,6 +191,7 @@ async function emitUpload(shipmentImage: any) {
 }
 
 async function emitAcceptFile(data: any) {
+  imgUpdated.value = false;
   await shipmentImageUpdateStore.approve(data.id as string);
   await shipmentImageListStore.getItems({
     page: page.value,
@@ -196,9 +200,10 @@ async function emitAcceptFile(data: any) {
   });
 
   classifyItem();
+  imgUpdated.value = true;
 }
-
 async function emitRejectFile(data: any) {
+  imgUpdated.value = false;
   let causes: string[] = [];
   data.rejectedCauses.value.forEach((item: number) => {
     causes.push(rejectType[item].key);
@@ -213,7 +218,27 @@ async function emitRejectFile(data: any) {
     ...filters.value,
   });
   classifyItem();
+  imgUpdated.value = true;
 }
+const fileTags = computed(() => {
+  let tags: string[] = [];
+  if (retrieved?.value) {
+    retrieved.value.documentTypes?.forEach((type) => {
+      let quantity = type.quantity;
+      if (!quantity) {
+        quantity = 1;
+      }
+      for (let i = 0; i < quantity; i++) {
+        tags.push(type.name + "_" + (i + 1));
+        tags.push(type.name + "_" + (i + 1) + "_upload");
+      }
+    });
+
+    return tags;
+  }
+  return tags;
+});
+
 function isUserType(userType: string) {
   return loggedUserType.value === userType;
 }
