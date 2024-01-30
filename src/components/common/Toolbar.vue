@@ -13,13 +13,15 @@
       >
         {{ $t("delete") }}
       </v-btn>
-
       <v-btn
         v-if="actions?.includes('add')"
         prepend-icon="mdi-plus-circle"
         color="primary"
         @click="emitAdd"
-        >{{ $t("shipment.add") }}</v-btn
+      >
+        {{
+          $route.name === "ShipmentList" ? $t("shipment.add") : $t("add")
+        }}</v-btn
       >
     </div>
 
