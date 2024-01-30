@@ -8,7 +8,7 @@ export default {
   notPaid: "未付",
   combination: "全部",
   title: "评论",
-  overview: "Rating overview",
-  empty: "No reviews",
+  overview: "评级概览",
+  empty: "暂无评价",
   tag: "标签",
 };
