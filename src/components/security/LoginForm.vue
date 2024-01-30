@@ -93,7 +93,7 @@ const violations = toRef(props, "errors");
 
 const item: Ref<Auth> = ref({});
 const visible = ref(false);
-const form: Ref<VForm | undefined> = ref(undefined);
+const form: Ref<VForm | null> = ref(null);
 const { locale } = useI18n();
 
 if (props.values) {
@@ -106,9 +106,14 @@ const emit = defineEmits<{
   (e: "submit", item: Auth): void;
 }>();
 
-function emitSubmit() {
-  if (!form.value) return;
-  emit("submit", item.value);
+async function emitSubmit() {
+  if (!form.value) {
+    return;
+  }
+  const { valid } = await form.value.validate();
+  if (valid) {
+    emit("submit", item.value);
+  }
 }
 
 function handlePasswordReset() {

@@ -9,7 +9,7 @@
   </v-alert>
   <Toolbar
     v-else
-    :actions="['add']"
+    :actions="userType === UserType.CONSIGNOR ? ['add'] : []"
     :breadcrumb="breadcrumb"
     :is-loading="isLoading"
     @add="goToCreatePage"
@@ -54,14 +54,26 @@
       @update:sortBy="updateOrder"
     >
       <template #item.@id="{ item }">
-        <p>
-          {{ item.shipmentCode }}
-        </p>
+        <b>
+          {{ item.shipmentCode?.toLocaleUpperCase() }}
+        </b>
       </template>
       <template #item.name="{ item }">
         <p>
           {{ item.name }}
         </p>
+      </template>
+      <template #item.shipmentType="{ item }">
+        <v-chip v-if="item.shipmentType == ShipmentType.REGULAR" size="small">
+          {{ $t("shipmentload.regularShipment") }}
+        </v-chip>
+        <v-chip
+          v-else-if="item.shipmentType == ShipmentType.SECURE"
+          color="info"
+          size="small"
+          >{{ $t("shipmentload.secureShipment") }}</v-chip
+        >
+        <v-chip v-else size="small">{{ item.shipmentType }}</v-chip>
       </template>
       <template #item.fromAddress="{ item }">
         <p>
@@ -83,10 +95,12 @@
         {{ formatDateTime(item.unloadAt) }}
       </template>
       <template #item.state="{ item }">
-        <v-chip color="info">{{ $t("shipment." + item.state) }}</v-chip>
+        <v-chip color="info" size="small">{{
+          $t("shipment." + item.state)
+        }}</v-chip>
       </template>
       <template #item.advancePaid="{ item }">
-        <v-chip v-if="item.advancePaid" color="green">{{
+        <v-chip v-if="item.advancePaid" color="green" size="small">{{
           $t("order.paid")
         }}</v-chip>
         <v-btn
@@ -98,12 +112,12 @@
         >
           {{ t("order.pay") }}
         </v-btn>
-        <v-chip v-else>
+        <v-chip v-else size="small">
           {{ t("order.unpaid") }}
         </v-chip>
       </template>
       <template #item.remainingPaid="{ item }">
-        <v-chip v-if="item.remainingPaid" color="green">{{
+        <v-chip v-if="item.remainingPaid" color="green" size="small">{{
           $t("order.paid")
         }}</v-chip>
         <v-btn
@@ -115,7 +129,7 @@
         >
           {{ t("order.pay") }}
         </v-btn>
-        <v-chip v-else>
+        <v-chip v-else size="small">
           {{ t("order.unpaid") }}
         </v-chip>
       </template>
@@ -170,6 +184,7 @@ import { ShipmentAction } from "@/types/shipmentaction";
 import { ShipmentStateString } from "@/types/shipment_state";
 import ReviewRateDialog from "@/components/review/ReviewRateDialog.vue";
 import dayjs from "dayjs";
+import { ShipmentType } from "@/types/shipment_type";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -249,6 +264,11 @@ const headers = [
   {
     title: t("shipment.name"),
     key: "name",
+    sortable: false,
+  },
+  {
+    title: t("shipment.shipmentType"),
+    key: "shipmentType",
     sortable: false,
   },
   {
