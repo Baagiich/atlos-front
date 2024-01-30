@@ -11,7 +11,7 @@
     v-else
     :actions="userType === UserType.CONSIGNOR ? ['add'] : []"
     :breadcrumb="breadcrumb"
-    :is-loading="isLoading"
+    :is-loading="isLoading || isLoadingCheckLimit"
     @add="goToCreatePage"
   />
 
@@ -30,8 +30,8 @@
       {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
     </v-alert>
 
-    <v-alert v-if="error" type="error" class="mb-4" closable>
-      {{ error }}
+    <v-alert v-if="error || errorCheckLimit" type="error" class="mb-4" closable>
+      {{ error || errorCheckLimit }}
     </v-alert>
 
     <DataFilter
@@ -170,6 +170,7 @@ import { storeToRefs } from "pinia";
 import { useShipmentListStore } from "@/store/shipment/list";
 import { useShipmentDeleteStore } from "@/store/shipment/delete";
 import { useShipmentPatchStore } from "@/store/shipment/patch";
+import { useAdminUserShipmentLimitStore } from "@/store/adminuser/checklimit";
 import Toolbar from "@/components/common/Toolbar.vue";
 import DataFilter from "@/components/common/DataFilter.vue";
 import Filter from "@/components/shipment/ShipmentFilter.vue";
@@ -198,6 +199,13 @@ const { items, totalItems, error, isLoading } = storeToRefs(shipmentListStore);
 const userType = apiToken.getDecodedToken()?.user_type;
 
 const shipmentPatchStore = useShipmentPatchStore();
+
+const adminUserShipmentLimitStore = useAdminUserShipmentLimitStore();
+const {
+  retrieved: checkLimitResponse,
+  error: errorCheckLimit,
+  isLoading: isLoadingCheckLimit,
+} = storeToRefs(adminUserShipmentLimitStore);
 
 const page = ref(1);
 const filters: Ref<Filters> = ref({});
@@ -341,7 +349,12 @@ function resetFilter() {
   sendRequest();
 }
 
-function goToCreatePage() {
+async function goToCreatePage() {
+  await adminUserShipmentLimitStore.getShipmentLimit();
+
+  if (checkLimitResponse?.value?.isLimitExceed) {
+    return;
+  }
   router.push({
     name: "ShipmentLoadDashboard",
   });
@@ -354,6 +367,7 @@ function goToShowPage(item: Shipment) {
 }
 onBeforeUnmount(() => {
   shipmentDeleteStore.$reset();
+  adminUserShipmentLimitStore.$reset();
 });
 function createPriceBidding(item: Shipment) {
   router.push({
