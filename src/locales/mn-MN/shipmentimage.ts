@@ -2,14 +2,14 @@ export default {
   load: "Ачилтын зураг",
   unload: "Ачаа буулгасан зураг",
   files: "Бичиг баримт",
-  upload: "Хуулах",
+  upload: "Илгээх",
 
   achaa_1: "ачаа 1",
   achaa_2: "ачаа 2",
   ard_tal: "ард тал",
   ard_tal_45: "ард тал 45 өнцөгөөс",
-  asuudaltai_1: "асуудалтай 1",
-  asuudaltai_2: "асуудалтай 2",
+  asuudaltai_1: "асуудалтай ачаа 1",
+  asuudaltai_2: "асуудалтай ачаа 2",
   behelgee_1: "бэхэлгээ 1",
   behelgee_2: "бэхэлгээ 2",
   baruun_tal: "баруун тал 1",
@@ -20,20 +20,24 @@ export default {
   urd_tal_45: "урд тал 45 өнцөгөөс",
   achaanii_zurag: "ачааны зураг",
 
+  cmr: "CMR",
+  tir: "TIR",
+
   noImages: "Зураг байхгүй",
   status: "Төлөв",
 
   accept: "Батлах",
   reject: "Цуцлах",
 
-  dimp: "бүдэг",
-  dim_stamp: "тамга бүдэг",
-  no_included_all: "бүгд ороогүй",
-  included_finger: "хуруу орсон",
-  not_included_date: "огноо ороогүй",
-  no_centered: "голлоогүй",
+  dimp: "Зурагны чанар хэтэрхий бүрсгэр байна.",
+  dim_stamp: "Тамга тод харагдахгүй байна",
+  no_included_all: "Бичиг баримтны бүх хэсэг ороогүй байна",
+  included_finger:
+    "Зурган дээр жолоочийн хуруу/өөр бусад нэмэлт зүйлс орсон байна",
+  not_included_date: "Он сар өдөр ороогүй байна",
+  no_centered: "Зургаа голлуулж авна уу.",
 
-  selectTitle: "цуцлах болсон шалтгаанаа сонгоно уу",
+  selectTitle: "Цуцлах болсон шалтгаанаа сонгоно уу",
   select: "сонгох",
 
   rejectedcauses: "Цуцлагдсан шалтгаанууд",

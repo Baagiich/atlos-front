@@ -8,6 +8,7 @@ export default {
   status: "Status",
   verified: "Verified",
   driver: "Driver",
+  edit: "EditAdminUser",
   plainPassword: "Password",
   plainPasswordConfirm: "Password confirmation",
   recievedCode: "Code",

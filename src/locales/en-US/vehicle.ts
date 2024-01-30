@@ -1,6 +1,6 @@
 export default {
   plateNumber: "PlateNumber",
-  shipper: "Shipper",
+  shipper: "Carrier",
   vehicleType: "VehicleType",
   vehicleCapacity: "VehicleCapacity",
   status: "Status",

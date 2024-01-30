@@ -1,8 +1,8 @@
 export default {
-  firstName: "名",
-  lastName: "性",
-  phoneNumber: "手机号码",
-  email: "电子邮件",
-  registerNumber: "注册号码",
+  firstName: "姓",
+  lastName: "名",
+  phoneNumber: "手机号",
+  email: "邮箱",
+  registerNumber: "身份证号",
   title: "司机",
 };

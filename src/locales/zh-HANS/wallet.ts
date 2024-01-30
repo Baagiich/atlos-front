@@ -9,14 +9,14 @@ export default {
     availableBalance: "剩余",
     credit: "信用",
     create: "创建账户",
-    empty: "无账户。重新创建",
+    empty: "钱包中没有注册账户。请创建一个新的钱包账户.",
     message: {
       success: "钱包创建成功",
     },
     deposit: {
       title: "充值账户",
       titleLong: "充值账户",
-      bankName: "银行名",
+      bankName: "银行名称",
       bankAccNo: "银行账号",
       bankAccName: "银行账户名称",
     },
@@ -26,7 +26,7 @@ export default {
       bankNameChoice: "选银行",
       bankAccNo: "银行账号",
       bankAccName: "银行账户名称",
-      successfullyMessage: "成功",
+      successfullyMessage: "您的提现已成功处理。感谢您使用我们的服务.",
     },
   },
   transaction: {
@@ -34,6 +34,6 @@ export default {
     amount: "数量",
     currency: "货币",
     date: "日期",
-    description: "交易目的",
+    description: "交易意义",
   },
 };

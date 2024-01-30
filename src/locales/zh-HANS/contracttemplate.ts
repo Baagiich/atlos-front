@@ -1,11 +1,11 @@
 export default {
   name: "名",
-  template: "模板",
+  template: "版本",
   userType: "用户类型",
-  contracts: "合同",
-  updatedAt: "更新",
+  contracts: "协议",
+  updatedAt: "更新日期",
   activeFrom: "开始积极的",
   activeTo: "结束积极的",
-  createdAt: "已创建",
+  createdAt: "创建日期",
   active: "积极的",
 };

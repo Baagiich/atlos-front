@@ -1,9 +1,9 @@
 export default {
   firstname: "名",
-  lastname: "性",
-  name: "运输公司名称",
+  lastname: "姓",
+  name: "公司名称",
   email: "电子邮件",
-  register: "运输公司登记",
+  register: "公司注册号码",
   phoneNumber: "电话号码",
-  title: "运输公司",
+  title: "载体",
 };

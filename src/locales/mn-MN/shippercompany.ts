@@ -3,7 +3,7 @@ export default {
   lastname: "Овог",
   name: "Компанийн нэр",
   email: "Имэйл",
-  register: "Компанийн регистр",
+  register: "Компанийн регистр дугаар",
   phoneNumber: "Утас",
   title: "Тээвэрлэгч",
 };

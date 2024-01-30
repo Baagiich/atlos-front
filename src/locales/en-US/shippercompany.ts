@@ -3,7 +3,7 @@ export default {
   lastname: "Lastname",
   name: "Name",
   email: "Email",
-  register: "Register",
+  register: "Company registration number",
   phoneNumber: "PhoneNumber",
-  title: "Shipper",
+  title: "Carrier",
 };

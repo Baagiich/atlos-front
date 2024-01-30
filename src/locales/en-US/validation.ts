@@ -1,7 +1,8 @@
 export default {
   required: "This field is required",
-  contractTemplateError: "Please agree the terms and conditions",
+  contractTemplateError: "Please agree to the terms of service. ",
   email: "Invalid email",
+  phoneNumberInvalid: "Phone number is invalid",
   phoneNumberRequired: "Phone number is required",
   plainPasswordNotMatch: "Passwords do not match",
   recievedCodeMustBe6Characters: "Code must be 6 characters",

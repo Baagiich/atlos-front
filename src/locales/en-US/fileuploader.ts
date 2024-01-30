@@ -12,7 +12,7 @@ export default {
   success: "Success",
   active: "Active",
   select: "Select",
-  startupload: "Start upload",
+  startupload: "Upload picture",
   retry: "Retry upload",
   upload: "Upload",
   remove: "Remove",
