@@ -7,9 +7,10 @@ export default {
   },
   account: {
     availableBalance: "Үлдэгдэл",
-    credit: "Зээл",
+    credit: "Зээлийн эрх",
     create: "Данс үүсгэх",
-    empty: "Данс олдсонгүй. Шинээр үүсгэнэ үү",
+    empty:
+      "Таны хэтэвчинд бүртгэгдсэн данс байхгүй байна. Шинэ данс үүсгэнэ үү. ",
     message: {
       success: "Хэтэвч амжилттай үүслээ",
     },
@@ -17,8 +18,8 @@ export default {
       title: "Цэнэглэх",
       titleLong: "Данс цэнэглэх",
       bankName: "Банкны нэр",
-      bankAccNo: "Банкны дансны дугаар",
-      bankAccName: "Банкны дансны нэр",
+      bankAccNo: "Дансны дугаар",
+      bankAccName: "Данс эзэмшигчийн нэр",
     },
     withdraw: {
       title: "Мөнгө татах",
@@ -26,7 +27,8 @@ export default {
       bankNameChoice: "Банк сонгох",
       bankAccNo: "Дансны дугаар",
       bankAccName: "Данс эзэмшигчийн нэр",
-      successfullyMessage: "Мөнгө таталт амжилттай!",
+      successfullyMessage:
+        "Гүйлгээ амжилттай. Манай үйлчилгээг ашигласан танд баярлалаа!",
     },
   },
   transaction: {

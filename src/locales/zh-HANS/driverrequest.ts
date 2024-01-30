@@ -1,11 +1,11 @@
 export default {
-  shipmentCode: "订单号：",
+  shipmentCode: "发货代码",
   sendRequest: "发送请求",
   pickDriver: "选司机",
   pickVehicle: "选车辆",
-  totalItemError: "一个货物上注册只一名司机",
+  totalItemError: "Total items is greater than or equal to 1",
   pending: "请求已发送",
-  approved: "请求已确认，",
+  approved: "请求已确认",
   plateNumber: "全国号码",
   vehicleType: "类型",
   vehicleCapacity: "吨位",
@@ -13,4 +13,5 @@ export default {
   sent: "已发送",
   accept: "同意",
   cancel: "取消",
+  cancelled: "已取消",
 };

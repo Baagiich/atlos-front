@@ -4,6 +4,6 @@ export default {
   tag: "таг",
   updatedAt: "Өөрчлөгдсөн",
   createdAt: "Үүсгэсэн",
-  license: "Гэрчилгээний зураг",
-  trail_license: "Тэвшний гэрчилгээний зураг",
+  license: "Чирэгч гэрчилгээний зураг",
+  trail_license: "Чиргүүл гэрчилгээний зураг",
 };

@@ -1,6 +1,6 @@
 export default {
   title: "银行",
-  name: "名",
-  nameEn: "英语名",
-  code: "银行代码",
+  name: "银行名",
+  nameEn: "银行名/英文",
+  code: "银行编码",
 };

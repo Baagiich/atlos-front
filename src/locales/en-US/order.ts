@@ -9,10 +9,11 @@ export default {
   },
   methodChoice: "Payment method",
   pay: "Pay now",
-  influenceBalance: "Influence balance!",
+  influenceBalance:
+    "Insufficient account balance. Please add funds to your wallet to proceed.",
   paid: "Paid",
   unpaid: "Not paid",
   paidAt: "Paid date",
   shipmentName: "Shipment name",
-  paymentSuccessMessage: "Successfully!",
+  paymentSuccessMessage: "Payment Successful!",
 };

@@ -4,5 +4,5 @@ export default {
   lastName: "LastName",
   phoneNumber: "PhoneNumber",
   email: "Email",
-  registerNumber: "RegisterNumber",
+  registerNumber: "National ID number",
 };

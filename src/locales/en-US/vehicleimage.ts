@@ -4,6 +4,6 @@ export default {
   tag: "Tag",
   updatedAt: "Updated at",
   createdAt: "Created at",
-  license: "License image",
-  trail_license: "Trail license image",
+  license: "Truck head license image",
+  trail_license: "Trailer license image",
 };

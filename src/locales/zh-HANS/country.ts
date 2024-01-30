@@ -1,8 +1,8 @@
 export default {
   title: "国家",
-  isoCode3: "ISO代码3",
+  isoCode3: "IsoCode3",
   name: "名",
-  states: "状态",
-  updatedAt: "更新",
-  createdAt: "已创建",
+  states: "省",
+  updatedAt: "更新日期",
+  createdAt: "创建日期",
 };

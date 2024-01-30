@@ -1,4 +1,4 @@
 export default {
-  street: "胡同",
+  street: "大街",
   city: "城市",
 };

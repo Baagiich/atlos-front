@@ -1,6 +1,5 @@
 export default {
-  title: "Үнэлгээ",
-  confirmTitle: "Тухайн тээвэрлэлтийг үнэлнэ үү",
+  confirmTitle: "Та тээвэрлэлтийг үнэлнэ үү",
   confirmBtn: "Батлах",
   quick: "Хурдан",
   trustworthy: "Итгэлтэй",
@@ -8,6 +7,7 @@ export default {
   lackOfInformation: "Мэдээлэл дутуу өгсөн",
   notPaid: "Төлбөр төлөөгүй",
   combination: "Бүгд",
+  title: "Үнэлгээ",
   overview: "Тойм",
   empty: "Үр дүн олдсонгүй",
   tag: "Таг",

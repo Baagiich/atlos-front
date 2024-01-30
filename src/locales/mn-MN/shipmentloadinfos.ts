@@ -3,5 +3,5 @@ export default {
   packageType: "Ачааны төрөл",
   count: "Тоо ширхэг",
   weight: "Жин /кг",
-  cube: "Эзэлхүүн",
+  cube: "Эзлэхүүн / m3",
 };

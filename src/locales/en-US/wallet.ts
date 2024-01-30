@@ -3,22 +3,23 @@ export default {
   currency: {
     name: "Currency",
     code: "Code",
-    choice: "Choice currency",
+    choice: "Currency choice",
   },
   account: {
-    availableBalance: "Balance",
-    credit: "Credit",
-    create: "Create a account",
-    empty: "Empty registered any account. Please create a wallet account",
+    availableBalance: "Available Balance",
+    credit: "Credit limit",
+    create: "Create an account",
+    empty:
+      "There is no registered account in the wallet. Please create a new account.",
     message: {
       success: "Your wallet has been created successfully",
     },
     deposit: {
-      title: "Desposit",
-      titleLong: "Desposit",
+      title: "Deposit",
+      titleLong: "Deposit",
       bankName: "Bank name",
       bankAccNo: "Bank account number",
-      bankAccName: "Bank account holder name",
+      bankAccName: "Account holder's name",
     },
     withdraw: {
       title: "Withdraw",
@@ -26,7 +27,8 @@ export default {
       bankNameChoice: "Bank name",
       bankAccNo: "Bank account number",
       bankAccName: "Bank account holder name",
-      successfullyMessage: "Withdraw successfully",
+      successfullyMessage:
+        "Your withdrawal has been processed successfully. Thank you for using our services",
     },
   },
   transaction: {

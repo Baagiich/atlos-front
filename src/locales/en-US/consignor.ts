@@ -1,11 +1,11 @@
 export default {
   firstName: "FirstName",
   lastName: "LastName",
-  name: "Name",
+  name: "Company Name",
   email: "Email",
   phoneNumber: "PhoneNumber",
-  register: "Register",
-  certificate: "Certificate",
+  register: "Company registration number ",
+  certificate: "Certificate picture",
   status: "Status",
   title: "Consignor",
 };

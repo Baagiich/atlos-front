@@ -1,8 +1,8 @@
 export default {
-  title: "合同",
-  adminUser: "管理员用户",
-  contractTemplate: "合同模板",
-  signed: "已注册",
-  updatedAt: "更新",
-  createdAt: "已创建",
+  title: "协议",
+  adminUser: "用户",
+  contractTemplate: "协议版本",
+  signed: "已有协议",
+  updatedAt: "更新日期",
+  createdAt: "创建日期",
 };
