@@ -13,11 +13,7 @@
                 class="ma-2"
                 rounded
                 variant="plain"
-                :color="
-                  index % 2 === 1 && image.data.status !== 'approved'
-                    ? 'orange'
-                    : 'success'
-                "
+                :color="image.tag.includes('_upload') ? 'orange' : 'success'"
               >
                 {{ $t("shipmentimage." + image.tag) }}
               </v-btn>
@@ -54,52 +50,50 @@
                     </v-btn>
                   </div>
 
-                  <div v-else-if="index % 2 === 1">
-                    <div
-                      v-if="
-                        image.data.status === 'pending' &&
-                        loggedUserType === 'consignor'
-                      "
-                    >
-                      <v-btn
-                        class="ma-2"
-                        variant="outlined"
-                        color="success"
-                        @click="emitAccept(image.data)"
-                      >
-                        {{ $t("shipmentimage.accept") }}
-                      </v-btn>
-                      <v-btn
-                        class="ma-2"
-                        variant="outlined"
-                        color="error"
-                        @click="handleReject(image.data.image)"
-                      >
-                        {{ $t("shipmentimage.reject") }}
-                      </v-btn>
-                    </div>
-                    <v-card
-                      v-else-if="image.data.status !== 'approved'"
-                      class="ma-1 pa-1"
-                      max-width="180"
-                      color="orange-lighten-2"
+                  <div
+                    v-if="
+                      image.data.status === 'pending' &&
+                      loggedUserType === 'consignor'
+                    "
+                  >
+                    <v-btn
+                      class="ma-2"
                       variant="outlined"
+                      color="success"
+                      @click="emitAccept(image.data)"
                     >
-                      <v-card-item>
-                        <div
-                          class="text-overline mb-1"
-                          align="center"
-                          justify="center"
-                        >
-                          {{
-                            image.data.status === "rejected"
-                              ? formatRejectedCauses(image?.data.rejectedCauses)
-                              : $t("shipmentimage." + image.data.status)
-                          }}
-                        </div>
-                      </v-card-item>
-                    </v-card>
+                      {{ $t("shipmentimage.accept") }}
+                    </v-btn>
+                    <v-btn
+                      class="ma-2"
+                      variant="outlined"
+                      color="error"
+                      @click="handleReject(image.data.image)"
+                    >
+                      {{ $t("shipmentimage.reject") }}
+                    </v-btn>
                   </div>
+                  <v-card
+                    v-else-if="image.data.status !== 'approved'"
+                    class="ma-1 pa-1"
+                    max-width="180"
+                    color="orange-lighten-2"
+                    variant="outlined"
+                  >
+                    <v-card-item>
+                      <div
+                        class="text-overline mb-1"
+                        align="center"
+                        justify="center"
+                      >
+                        {{
+                          image.data.status === "rejected"
+                            ? formatRejectedCauses(image?.data.rejectedCauses)
+                            : $t("shipmentimage." + image.data.status)
+                        }}
+                      </div>
+                    </v-card-item>
+                  </v-card>
                 </div>
               </div>
 

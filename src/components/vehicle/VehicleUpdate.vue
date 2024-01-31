@@ -23,10 +23,10 @@
       :closable="true"
     >
       <template v-if="updated">
-        {{ $t("itemUpdated", [updated["@id"]]) }}
+        {{ $t("vehicle.itemUpdated", [updated.plateNumber]) }}
       </template>
       <template v-else-if="created">
-        {{ $t("itemCreated", [created["@id"]]) }}
+        {{ $t("vehicle.itemCreated", [created.plateNumber]) }}
       </template>
     </v-alert>
 

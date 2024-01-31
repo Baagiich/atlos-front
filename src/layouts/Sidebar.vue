@@ -180,7 +180,7 @@ const menuItems = [
   //   roles: ["ROLE_ADMIN", "ROLE_CONSIGNOR", "ROLE_SHIPPER"],
   // },
   {
-    title: "shppercompany.title",
+    title: "shippercompany.title",
     routeName: "ShipperCompanyList",
     icon: "mdi-handshake",
     roles: ["ROLE_ADMIN"],

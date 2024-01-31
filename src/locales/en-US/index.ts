@@ -21,6 +21,7 @@ import consignor from "./consignor";
 import shippercompany from "./shippercompany";
 import shipmentload from "./shipmentload";
 import shipmentloadinfos from "./shipmentloadinfos";
+import city from "./city";
 export default {
   home: "Home",
   submit: "Submit",
@@ -116,5 +117,6 @@ export default {
   register: "Register",
   registerVerification: "Registration Verification",
   shipmentloadinfos,
+  city,
   shipmentload,
 };

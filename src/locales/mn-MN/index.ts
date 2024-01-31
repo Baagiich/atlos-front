@@ -25,6 +25,7 @@ import country from "./country";
 import requests from "./requests";
 import notification from "./notification";
 import shipmentloadinfos from "./shipmentloadinfos";
+import city from "./city";
 
 export default {
   home: "Нүүр",
@@ -126,4 +127,5 @@ export default {
   total: "Нийт",
   profile: "Профайл",
   date: "Огноо",
+  city,
 };

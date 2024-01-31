@@ -8,4 +8,6 @@ export interface Vehicle extends Item {
   vinNumber?: string;
   status?: string;
   adminEditable?: boolean;
+  fTypeVerified?: boolean;
+  fTypeExpireAt?: string;
 }

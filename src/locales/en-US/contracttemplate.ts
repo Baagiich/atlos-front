@@ -8,4 +8,5 @@ export default {
   activeTo: "ActiveTo",
   createdAt: "CreatedAt",
   active: "Active",
+  title: "Contract Template",
 };
