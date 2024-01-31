@@ -135,18 +135,6 @@
       </template>
       <template #item.actions="{ item }">
         <v-btn
-          v-if="
-            userType && [UserType.DRIVER, UserType.SHIPPER].includes(userType)
-          "
-          color="secondary"
-          size="small"
-          class="ma-2"
-          @click="createPriceBidding(item)"
-        >
-          {{ t("shipment.sendBid") }}
-        </v-btn>
-
-        <v-btn
           v-if="item.state === ShipmentStateString.DELIVERED"
           color="warning"
           size="small"
@@ -369,12 +357,6 @@ onBeforeUnmount(() => {
   shipmentDeleteStore.$reset();
   adminUserShipmentLimitStore.$reset();
 });
-function createPriceBidding(item: Shipment) {
-  router.push({
-    name: "DriverRequestDashboard",
-    params: { id: item["@id"] },
-  });
-}
 
 async function goToCheckoutPage(orderNumber: string) {
   router.push({

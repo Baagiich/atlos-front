@@ -3,7 +3,7 @@
     v-if="!props.hideToolbar"
     :actions="['add']"
     :breadcrumb="breadcrumb"
-    :is-loading="isLoading"
+    :is-loading="isLoading || packageTypeIsLoading"
     @add="goToCreatePage"
   />
 
@@ -15,8 +15,13 @@
       {{ $t("itemDeletedByAnotherUser", [mercureDeleted["@id"]]) }}
     </v-alert>
 
-    <v-alert v-if="error" type="error" class="mb-4" :closable="true">
-      {{ error }}
+    <v-alert
+      v-if="error || packageTypeError"
+      type="error"
+      class="mb-4"
+      :closable="true"
+    >
+      {{ error || packageTypeError }}
     </v-alert>
 
     <v-data-table-server
@@ -69,7 +74,11 @@
         </router-link>
 
         <p v-else>
-          {{ item.packageType }}
+          {{
+            shipmentLoadPackageTypeStore.getItemById(item?.packageType || "")
+              ?.translations?.[$i18n.locale.replace("-", "_")]?.name ||
+            item.packageType
+          }}
         </p>
       </template>
     </v-data-table-server>
@@ -83,6 +92,7 @@ import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useShipmentLoadListStore } from "@/store/shipmentload/list";
 import { useShipmentLoadDeleteStore } from "@/store/shipmentload/delete";
+import { useShipmentLoadPackageTypeStore } from "@/store/shipmentload/packagetype";
 import Toolbar from "@/components/common/Toolbar.vue";
 import ActionCell from "@/components/common/ActionCell.vue";
 import { useMercureList } from "@/composables/mercureList";
@@ -102,12 +112,20 @@ const shipmentloadListStore = useShipmentLoadListStore();
 const { items, totalItems, error, isLoading } = storeToRefs(
   shipmentloadListStore,
 );
+
+const shipmentLoadPackageTypeStore = useShipmentLoadPackageTypeStore();
+const { error: packageTypeError, isLoading: packageTypeIsLoading } =
+  storeToRefs(shipmentLoadPackageTypeStore);
+
 const props = defineProps<{ shipmentid?: string; hideToolbar?: boolean }>();
 const page = ref(1);
 const filters: Ref<Filters> = ref({});
 const order = ref({});
 
 async function sendRequest() {
+  await shipmentLoadPackageTypeStore.getItems({
+    page: 1,
+  });
   await shipmentloadListStore.getItems({
     page: +page.value,
     order: order.value,

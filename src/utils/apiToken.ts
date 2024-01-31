@@ -25,24 +25,31 @@ export function isAccessTokenAlive(): boolean {
 }
 
 export async function get(): Promise<TokenResponse | undefined> {
-  if (!_tokenData) {
-    try {
+  try {
+    if (!_tokenData) {
       _tokenData = JSON.parse(localStorage.getItem(TOKEN_KEY) || "?");
-    } catch (e) {
-      remove();
-      return undefined;
+
+      if (!_tokenData) {
+        throw new Error("no token data");
+      }
     }
-  }
 
-  const decodedToken = getDecodedToken(_tokenData);
+    const decodedToken = getDecodedToken(_tokenData);
 
-  if (!decodedToken?.deviceId) {
+    if (!decodedToken?.deviceId) {
+      throw new Error("no deviceId in token");
+    }
+
+    if (!isAccessTokenAlive()) {
+      if (!isRefreshTokenAlive(_tokenData)) {
+        throw new Error("refresh token is dead");
+      }
+
+      await refreshToken(decodedToken.deviceId);
+    }
+  } catch (e) {
     remove();
     return undefined;
-  }
-
-  if (!isAccessTokenAlive()) {
-    await refreshToken(decodedToken.deviceId);
   }
 
   return _tokenData;
