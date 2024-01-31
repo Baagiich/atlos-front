@@ -17,6 +17,8 @@
         v-if="actions?.includes('add')"
         prepend-icon="mdi-plus-circle"
         color="primary"
+        :disabled="isLoading"
+        :loading="isLoading"
         @click="emitAdd"
       >
         {{
