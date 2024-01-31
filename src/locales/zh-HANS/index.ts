@@ -24,6 +24,7 @@ import contracttemplate from "./contracttemplate";
 import country from "./country";
 import requests from "./requests";
 import shipmentloadinfos from "./shipmentloadinfos";
+import city from "./city";
 
 export default {
   home: "主页",
@@ -123,4 +124,5 @@ export default {
   contracttemplate,
   country,
   requests,
+  city,
 };

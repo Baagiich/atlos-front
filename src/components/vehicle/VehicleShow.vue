@@ -73,6 +73,24 @@
             {{ status }}
           </td>
         </tr>
+        <tr>
+          <td>
+            {{ $t("vehicle.fTypeVerified") }}
+          </td>
+
+          <td>
+            {{ $t("vehicle." + item.fTypeVerified + "") }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {{ $t("vehicle.fTypeExpireAt") }}
+          </td>
+
+          <td>
+            {{ formatDateTime(item.fTypeExpireAt) }}
+          </td>
+        </tr>
       </tbody>
     </v-table>
   </v-container>
@@ -99,6 +117,7 @@ import * as enumHelper from "@/utils/enumHelper";
 import { VehicleType } from "@/types/vehicletype";
 import { VehicleCapacityType } from "@/types/vehiclecapacitytype";
 import { VehicleStatus } from "@/types/vehiclestatus";
+import { formatDateTime } from "@/utils/date";
 
 const { t } = useI18n();
 const route = useRoute();

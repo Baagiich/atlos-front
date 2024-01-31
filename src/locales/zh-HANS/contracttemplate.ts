@@ -8,4 +8,5 @@ export default {
   activeTo: "结束积极的",
   createdAt: "创建日期",
   active: "积极的",
+  title: "Contract Template",
 };
