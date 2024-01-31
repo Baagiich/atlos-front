@@ -36,7 +36,7 @@
         <router-link style="vertical-align: middle" :to="{ name: 'Home' }">
           <v-img
             class="d-inline-block"
-            src="/assets/logo-atlos.png"
+            src="@/assets/logo-atlos.png"
             :height="40"
             :width="100"
           ></v-img>

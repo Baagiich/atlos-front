@@ -95,6 +95,15 @@
             {{ $t("shipment.seeShipmentImages") }}
           </v-btn>
         </router-link>
+        <v-btn
+          v-if="item && item.state === ShipmentStateString.DELIVERED"
+          color="warning"
+          size="small"
+          class="ma-2"
+          @click="showReviewDialog(item)"
+        >
+          {{ $t("shipment.approveDelivery") }}
+        </v-btn>
       </v-col>
     </v-rov>
   </div>
@@ -115,6 +124,7 @@ import { useRoute } from "vue-router";
 import { ShipmentStateString } from "@/types/shipment_state";
 import * as apiToken from "@/utils/apiToken";
 import { UserType } from "@/types/usertype";
+import { Shipment } from "@/types/shipment";
 
 defineProps<{
   info?: boolean;
@@ -139,6 +149,12 @@ async function startShipment() {
     +shipmentId.value.replace("/api/shipments/", ""),
     ShipmentAction.DRIVER_LOADED,
   );
+}
+
+async function showReviewDialog(shipment?: Shipment) {
+  if (!shipment) {
+    return;
+  }
 }
 </script>
 <style lang="scss">

@@ -87,6 +87,16 @@ export const useShipmentLoadPackageTypeStore = defineStore(
           return item["@id"] !== deletedItem["@id"];
         });
       },
+      getItemById(
+        id: string | ShipmentLoadPackageType,
+      ): ShipmentLoadPackageType | undefined {
+        if (!id) {
+          return {};
+        }
+        return this.items.find(
+          (item) => item["@id"] === (typeof id === "string" ? id : id["@id"]),
+        );
+      },
     },
   },
 );

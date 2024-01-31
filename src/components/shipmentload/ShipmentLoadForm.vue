@@ -14,12 +14,15 @@
       </v-col>
       <v-col cols="12" sm="6" md="2">
         <v-select
-          v-model="packageTypeName"
+          v-model="item.packageType"
           :label="$t('shipmentload.packageType')"
-          :items="getTypeNames()"
+          :items="packageTypes"
+          :item-title="
+            'translations.' + $i18n.locale.replace('-', '_') + '.name'
+          "
+          item-value="@id"
           :rules="requireRules"
           variant="outlined"
-          @update:modelValue="onTypeSelected"
         ></v-select>
       </v-col>
       <v-col cols="12" sm="6" md="2">
@@ -128,17 +131,12 @@ const props = defineProps<{
   isUpdate?: boolean;
 }>();
 const isUpdate = toRef(props, "isUpdate");
-const packageTypeName: Ref<string> = ref("");
 const shipmentloadTypeStore = useShipmentLoadPackageTypeStore();
-const { items } = storeToRefs(shipmentloadTypeStore);
+const { items: packageTypes } = storeToRefs(shipmentloadTypeStore);
 const page = ref(1);
 const filters: Ref<Filters> = ref({});
 const order = ref({});
 const requireRules = [assertRequired()];
-
-function getTypeNames() {
-  return items.value.map((type) => type.name);
-}
 
 async function sendRequest() {
   await shipmentloadTypeStore.getItems({
@@ -154,28 +152,8 @@ const item: Ref<ShipmentLoad> = ref({
   isPileUp: false,
 });
 
-function onTypeSelected(value: string | null) {
-  const selectedType = shipmentloadTypeStore.items.find(
-    (type) => type.name === value,
-  );
-  if (selectedType) {
-    item.value.packageType = selectedType["@id"];
-  }
-}
-async function setShipmentTypeName() {
-  if (item.value.packageType) {
-    const type = shipmentloadTypeStore.items.find(
-      (type) => type["@id"] === item.value.packageType,
-    );
-    if (type && type.name) {
-      packageTypeName.value = type.name;
-    }
-  }
-}
-
 async function setup() {
   await sendRequest();
-  await setShipmentTypeName();
 }
 setup();
 if (props.values) {
